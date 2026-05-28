@@ -136,7 +136,7 @@ Bounds for which the level of available verification is currently at minimal lev
 - [48](https://teorth.github.io/optimizationproblems/constants/48a.html) **solved:** $C_{48} = c_\star^2 \approx 5.33386$ by [Damek Davis and Sam Power](https://arxiv.org/abs/2604.03170), 3 Apr 2026.
 - [1a](https://teorth.github.io/optimizationproblems/constants/1a.html), [1b](https://teorth.github.io/optimizationproblems/constants/1b.html) **improved upper bounds:** $C_{1a} \leq 1.503871$ and $C_{1b} \leq 0.380868$ by [YLTLYSTYLLGDHZSWZSHMELCZX2026](https://arxiv.org/abs/2604.19341), 21 Apr 2026.
 - [3a](https://teorth.github.io/optimizationproblems/constants/3a.html), [3c](https://teorth.github.io/optimizationproblems/constants/3c.html) **improved upper bounds:** $C_{3a} \leq 1.1740744$ and $C_{3c} \leq 1.67473389$ by S. Griego, 13 May 2026.
-- [84](https://teorth.github.io/optimizationproblems/constants/84a.html) **improved lower bound (unverified):** $C_{84} \geq 1.03583*$ by [E. Naslund](https://mathoverflow.net/q/511514), 25 May 2026.
+- [84a](https://teorth.github.io/optimizationproblems/constants/84a.html) **improved lower bound (unverified):** $C_{84a} \geq 1.03583*$ by [E. Naslund](https://mathoverflow.net/q/511514), 25 May 2026.
 
 
 ## Maintainers
