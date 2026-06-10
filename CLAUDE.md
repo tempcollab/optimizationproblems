@@ -22,9 +22,24 @@ AlphaEvolve, ThetaEvolve, and others compete on.
 
 This is a research repo, not a code repo:
 
-- **Setup: none.** No build, no package, no test suite. Don't run `pip install` /
-  `npm ci` / `uv sync`. Agents *will* run numerical code to build and check bounds —
+- **Setup: install the research toolchain, once.** There's no app to build, so skip
+  `npm ci` / `uv sync` and don't install project packages. But this work needs two
+  things, so install them at the start of round 1:
+  - **A PDF text extractor** — reading the full papers behind the record bounds is
+    the core of exploration, not optional. Run
+    `apt-get install -y poppler-utils` (gives `pdftotext`). Then a saved PDF is read
+    with `pdftotext paper.pdf -`.
+  - **A scientific Python stack** for building and checking bounds:
+    `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` when an angle needs
+    an SDP solver or symbolic algebra).
+  Installing is allowed and expected here — the "no installs" instinct doesn't apply
+  to this repo. Beyond these, agents run numerical code to build and check bounds;
   that's the work, not a build step.
+- **Reading arXiv papers — do it, don't work from abstracts.** Prefer the full-text
+  HTML render `arxiv.org/html/<id>` (WebFetch reads it directly, no download). Fall
+  back to `arxiv.org/abs/<id>` for the abstract/metadata. **Do NOT WebFetch
+  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF and run `pdftotext`
+  instead.
 - **Goal & eval.** Beating a record on these constants can take many rounds — you
   do not improve a bound every round, and a binary "did we beat the record" metric
   would read 0 for most of a run and give the loop no signal. So the metric is
@@ -115,8 +130,15 @@ a verified advance.
 
 The reviewer enforces these:
 
-- **Beat the record, exactly.** State the current table value and the new value. An
-  "improvement" that doesn't strictly beat the table isn't one.
+- **Beat the best *verified* value, exactly.** State the current value and the new
+  value. The bar is the best **verified** bound — a starred / "unverified" entry is
+  NOT the value to beat (e.g. on 31a the bar is the verified 0.792665992, not an
+  unverified 0.79970). An "improvement" that doesn't strictly beat the best verified
+  bound isn't one.
+- **Reconcile the README against the file; use whichever is better.** The README
+  table and `constants/<id>.md` can disagree (a PR may have tightened one past the
+  other). Check both, and treat the genuinely best verified bound as the value to
+  beat.
 - **The check must be reproducible.** A bound from computation is only as good as the
   check the reviewer can re-run; one that can't be reproduced isn't established.
 - **No hand-waving on the load-bearing step.** The reviewer re-derives it; if it

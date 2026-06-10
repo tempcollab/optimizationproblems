@@ -13,13 +13,18 @@ For the constant the orchestrator assigns (an id like `1a`, `42a`):
 3. **Read prior progress.** Everything in `constants/<id>/` if it exists: the
    `current.md` snapshot, the literature digests, and every approach already tried
    (and why it stalled). Your value is building on this, not repeating it.
-4. **Fetch and digest the record's sources.** Use WebSearch / WebFetch to pull the
-   papers behind the current bounds (the cited arXiv refs, repository pages, and
-   any newer results you can find). Understand HOW each record bound was achieved —
-   the construction, the relaxation, the analytic estimate. Save a short digest of
-   each to `constants/<id>/literature/` so future rounds reuse it instead of
-   re-fetching. A digest says: what the method is, what value it gets, and where its
-   slack is.
+4. **Fetch and digest the record's sources — read the FULL paper, not the abstract.**
+   For each cited arXiv ref, read the actual paper:
+   - try the full-text HTML render `arxiv.org/html/<id>` via WebFetch first (no
+     download needed);
+   - else download the PDF and extract it with `pdftotext paper.pdf -` (poppler-utils
+     is installed at setup; do NOT WebFetch `arxiv.org/pdf/<id>` — it returns raw
+     bytes). `arxiv.org/abs/<id>` gives only the abstract — not enough to understand
+     a method.
+   Understand HOW each record bound was achieved — the construction, the relaxation,
+   the analytic estimate — from the body of the paper. Save a short digest of each to
+   `constants/<id>/literature/` so future rounds reuse it instead of re-fetching. A
+   digest says: what the method is, what value it gets, and where its slack is.
 5. **Triage — is this bound worth attacking at all?** "Softest target" means most
    *tractable*, not just the widest numerical gap. Before recommending an angle,
    judge the constant and say so plainly:
