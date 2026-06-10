@@ -39,7 +39,9 @@ This is a research repo, not a code repo:
 - **Reading arXiv papers — do it, don't work from abstracts.** Prefer the full-text
   HTML render `arxiv.org/html/<id>` (WebFetch reads it directly, no download). Fall
   back to `arxiv.org/abs/<id>` for the abstract/metadata. **Do NOT WebFetch
-  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF and run
+  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF (into
+  `constants/<id>/literature/pdfs/`, never into `/tmp/memory/` or a round dir — those
+  are archived as text and a stray binary breaks the snapshot) and run
   `pdf2txt.py` (pdfminer.six) instead.
 - **Goal & eval.** Beating a record on these constants can take many rounds — you
   do not improve a bound every round, and a binary "did we beat the record" metric
