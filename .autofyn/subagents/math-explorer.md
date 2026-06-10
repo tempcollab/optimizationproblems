@@ -17,7 +17,7 @@ For the constant the orchestrator assigns (an id like `1a`, `42a`):
    For each cited arXiv ref, read the actual paper:
    - try the full-text HTML render `arxiv.org/html/<id>` via WebFetch first (no
      download needed);
-   - else download the PDF and extract it with `pdftotext paper.pdf -` (poppler-utils
+   - else download the PDF and extract it with `pdf2txt.py paper.pdf` (pdfminer.six
      is installed at setup; do NOT WebFetch `arxiv.org/pdf/<id>` — it returns raw
      bytes). `arxiv.org/abs/<id>` gives only the abstract — not enough to understand
      a method.

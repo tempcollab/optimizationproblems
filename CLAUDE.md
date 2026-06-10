@@ -26,9 +26,10 @@ This is a research repo, not a code repo:
   `npm ci` / `uv sync` and don't install project packages. But this work needs two
   things, so install them at the start of round 1:
   - **A PDF text extractor** — reading the full papers behind the record bounds is
-    the core of exploration, not optional. Run
-    `apt-get install -y poppler-utils` (gives `pdftotext`). Then a saved PDF is read
-    with `pdftotext paper.pdf -`.
+    the core of exploration, not optional. The sandbox has no root/`sudo`, so the
+    `apt-get`/`poppler-utils` route is unavailable — use the pure-Python,
+    pip-installable extractor instead: `pip install --user pdfminer.six`. Then a
+    saved PDF is read with `pdf2txt.py paper.pdf` (or `extract_text` in Python).
   - **A scientific Python stack** for building and checking bounds:
     `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` when an angle needs
     an SDP solver or symbolic algebra).
@@ -38,8 +39,8 @@ This is a research repo, not a code repo:
 - **Reading arXiv papers — do it, don't work from abstracts.** Prefer the full-text
   HTML render `arxiv.org/html/<id>` (WebFetch reads it directly, no download). Fall
   back to `arxiv.org/abs/<id>` for the abstract/metadata. **Do NOT WebFetch
-  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF and run `pdftotext`
-  instead.
+  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF and run
+  `pdf2txt.py` (pdfminer.six) instead.
 - **Goal & eval.** Beating a record on these constants can take many rounds — you
   do not improve a bound every round, and a binary "did we beat the record" metric
   would read 0 for most of a run and give the loop no signal. So the metric is
