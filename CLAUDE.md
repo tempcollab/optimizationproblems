@@ -25,11 +25,33 @@ This is a research repo, not a code repo:
 - **Setup: none.** No build, no package, no test suite. Don't run `pip install` /
   `npm ci` / `uv sync`. Agents *will* run numerical code to build and check bounds —
   that's the work, not a build step.
-- **Goal & eval.** Maximize the number of constants where we hold a bound that beats
-  the value in `constants/<id>.md`, backed by a check that survives the reviewer.
-  The measure, per constant: did we move a bound, and how well verified is it?
-- **Depth over breadth.** One constant per run — the softest gap. Moving one bound
-  is the win.
+- **Goal & eval.** Beating a record on these constants can take many rounds — you
+  do not improve a bound every round, and a binary "did we beat the record" metric
+  would read 0 for most of a run and give the loop no signal. So the metric is
+  **verified progress**, not record-breaks: every round that genuinely advances the
+  frontier (reproduced the record method, built a feasible construction, closed a
+  certificate gap, tightened a verified bound, and ultimately beat the record) is a
+  milestone the reviewer logs. Beating the record is the headline milestone, not the
+  only one that counts.
+  - **Metric:** number of reviewer-verified progress milestones — the `- R<round>:`
+    lines the reviewer appends to the `## Progress log` of each attacked constant's
+    `current.md`. **Baseline: 0.** (Set the eval to a command that counts those
+    lines across `constants/*/current.md`.)
+  - A milestone is logged **only by the proof-reviewer, only for a round whose
+    advance it verified** — so the builder can't pad it. A round that produced
+    nothing new (re-digested the same paper, an unreproducible claim) logs no
+    milestone and the count plateaus.
+  - The rare actual record-break is additionally flagged: that constant's
+    `current.md` gets `## Status: improved` (else `none`).
+- **Depth over breadth.** One constant per run — the **most promising** one, not the
+  widest gap. Promising means *tractable*: a real, attackable opening with the right
+  kind of machinery available. A huge gap can be huge because the bound is hopeless
+  (moving it would settle a Millennium problem — e.g. the de Bruijn–Newman lower
+  bound ⇔ the Riemann Hypothesis), and some constants are already closed (upper =
+  lower, e.g. 11b). The explorer triages this first; skip the closed and the
+  conjecture-hard, and spend the run where verified progress is actually reachable.
+  Steady verified progress on one such constant is the win; an actual record-break is
+  the breakthrough.
 - **One folder per problem.** Everything for a constant lives in `constants/<id>/`,
   beside Tao's record file `constants/<id>.md`. The record is the current bound to
   beat; edit it only once an improvement is verified. The folder is the scratchpad —
@@ -68,11 +90,26 @@ stalled, so it builds on the work instead of repeating it.
 ## The `constants/<id>/` folder
 
 Each attacked constant gets a workspace beside its record file — research needs
-room. Roughly: a `current.md` snapshot (best bounds, the gap, what we hold), a place
-for the literature and our digests, one living document per attack angle (the idea,
-its status, and how it could be pushed further), and the construction/certificate
-artifacts. Shape it as the work needs. An approach is a document you revisit and
-strengthen, so nothing is lost between runs.
+room. It holds the literature digests (`literature/`), one living document per
+attack angle (`approaches/<slug>.md` — the idea, its status, and how to push it),
+the construction/certificate artifacts (`certificate/`), and the tracking file
+`current.md`. Shape the rest as the work needs; an approach is a document you
+revisit and strengthen, so nothing is lost between runs.
+
+### `current.md` — the tracking file (contract)
+
+The per-constant scratchpad the eval reads. It MUST contain these sections:
+
+```
+## Status            improved | none   (only the reviewer sets `improved`)
+## Bounds            table: <record to beat> · held: <best value WE have verified>
+## Progress log      - R<round>: <one-line verified advance>   (reviewer-appended)
+```
+
+`held` is the reviewer-verified value, never the builder's unverified claim (a
+numerical-search result is a conjecture — it goes in an approach doc, not `held`).
+The eval counts the `- R<round>:` lines; only the reviewer writes them, and only for
+a verified advance.
 
 ## Rigor rules
 

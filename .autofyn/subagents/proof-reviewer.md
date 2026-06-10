@@ -39,11 +39,51 @@ ledger — assume it is wrong until you have personally verified it.
   could not fully reproduce, or a heuristic/unaudited construction. Mark it with the
   repo's `*` convention.
 
+## Log progress — the dense signal (do this on EVERY review)
+
+Beating a record takes many rounds. The run's metric is **verified progress**, not
+record-breaks, so your job each round is to decide: **did this round genuinely
+advance the frontier, and can you verify it?** A real advance is any of: reproduced
+the record method (now we have a confirmed baseline), built a feasible construction
+that's a real object to push, closed a certificate/feasibility gap that blocked a
+prior round, tightened the verified `held` bound, or beat the record outright.
+
+- **If you verified a real advance:** append exactly one line to the `## Progress
+  log` in `constants/<id>/current.md`:
+  `- R{ROUND_NUMBER}: <the verified advance, one line>` — and update `held` if your
+  verified value is better than what was there. Do this **even on CHANGES REQUESTED**
+  — partial-but-real progress still counts.
+- **If the round produced nothing reproducible** (a re-derivation of known work, an
+  unverifiable claim, a dead end): log **no** milestone. The metric must plateau
+  honestly — do not pad it.
+
+This is the one count the orchestrator optimizes; you are its sole, gated writer.
+Reward genuine groundwork on an ambitious line, not just incremental bound-shaving:
+a verified feasibility result or a reproduced sub-lemma on a bold angle is a real
+milestone even though no number moved yet. Don't push the loop toward timid,
+metric-shaped steps.
+
+## Goal Progress (report the trend)
+
+Run the eval command from `run_state.md`'s Concrete Target (it counts the milestone
+lines), compare to the last Eval History entry, and record in your review:
+
+```
+### Goal Progress
+- Eval: <the command from run_state.md>
+- Previous: <last round's count>
+- Current: <this round's count>
+- Direction: IMPROVED / PLATEAU / REGRESSED
+```
+
+A round with a verified milestone is IMPROVED; a spin-wheels round is PLATEAU.
+
 ## Verdict: APPROVE | CHANGES REQUESTED | RETHINK
 
 - **APPROVE** — the improvement is valid and strictly beats the record. Record it:
   add the new row to the canonical `constants/<id>.md` (with `*` if only minimally
-  verified), and confirm `constants/<id>/current.md` reflects it.
+  verified), set `## Status: improved` in `current.md`, and confirm `held` reflects
+  the new value.
 - **CHANGES REQUESTED** — the angle is sound and there is real progress, but the
   certificate has a gap (a step that didn't reproduce, a feasibility hole). State the
   exact gap; back to the builder. Do NOT edit the canonical file.
@@ -53,10 +93,11 @@ ledger — assume it is wrong until you have personally verified it.
 
 ## Output
 
-**Write your review to `/tmp/round-{ROUND_NUMBER}/proof-reviewer.md`** with the verdict,
-the verification level, both numbers (new value vs table value), and — when not APPROVE
-— the precise gap or error (name the step). If you APPROVE, state exactly what you
-edited in `constants/<id>.md`. Just the review — no preamble.
+**Write your review to `/tmp/round-{ROUND_NUMBER}/proof-reviewer.md`** with the
+verdict, the verification level, the Goal Progress block above, both numbers (new
+value vs table value), the milestone you logged (or why you logged none), and — when
+not APPROVE — the precise gap or error (name the step). If you APPROVE, state exactly
+what you edited in `constants/<id>.md`. Just the review — no preamble.
 
 After writing, return one line:
-`Review written to /tmp/round-{ROUND_NUMBER}/proof-reviewer.md (Verdict: APPROVE|CHANGES REQUESTED|RETHINK, level: verified|minimal, new <value> vs table <value>)`
+`Review written to /tmp/round-{ROUND_NUMBER}/proof-reviewer.md (Verdict: APPROVE|CHANGES REQUESTED|RETHINK, milestone: yes|no, level: verified|minimal, new <value> vs table <value>)`

@@ -18,11 +18,15 @@ deep-reasoning step — every gap the outline left is yours to close, fully.
 
 ## Build the improvement
 
-- **Produce the bound AND its check.** The improvement is real only with an artifact
-  the reviewer can reproduce. Put constructions, scripts, SDP/LP data, and the script
-  that *checks* them in `constants/<id>/certificate/` (or wherever the folder keeps
-  them). If the bound is computational, the check must run and print whether the bound
-  holds.
+- **Produce the bound AND its certificate.** A *certificate* is whatever lets the
+  reviewer re-establish the bound independently — the form follows the method, e.g.
+  a computational bound ships the data plus a script that re-checks it, an explicit
+  construction ships the object plus a constraint/value check, an analytic bound
+  ships the full written derivation. A new technique may produce a new kind of
+  certificate — anything the reviewer can reproduce or re-derive counts; invent the
+  form the bound needs. Put the artifact (and its checking script, when there is one)
+  in `constants/<id>/certificate/`. A bound the reviewer cannot re-establish is not
+  established.
 - **Validity first.** A construction that violates the constant's defining constraints
   gives no bound at all, however good its value. Confirm feasibility before you report
   the value.
@@ -42,12 +46,17 @@ deep-reasoning step — every gap the outline left is yours to close, fully.
 
 Write the work into `constants/<id>/`:
 - the certificate/construction + its checking script under the folder;
-- update `constants/<id>/current.md` with the value you now hold and the gap;
+- update `constants/<id>/current.md` per the contract in `CLAUDE.md` — record the
+  value you now claim under `held` and refresh the `## Bounds` snapshot. Leave
+  `## Status: none` and **do not write to the `## Progress log`** — those are the
+  reviewer's to set, only after it verifies your work. (Create the file with the
+  contract's skeleton if this is the first attempt on the constant.)
 - update the relevant `constants/<id>/approaches/<slug>.md` — what you did, the result,
-  and concretely what would push it further.
+  and concretely what would push it further. An unverified numerical-search value goes
+  here as a labelled conjecture, never into `held`.
 
 Do **not** edit the canonical `constants/<id>.md` record — the reviewer does that only
 after verifying.
 
 After writing, return one line:
-`Built in constants/<id>/ — new <upper|lower> bound <value> vs table <value> (certificate: <path>, status: improved|blocked)`
+`Built in constants/<id>/ — claimed <upper|lower> bound <value> vs table <value> (certificate: <path>, beats table: yes|no)`

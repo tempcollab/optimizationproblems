@@ -19,7 +19,11 @@ small case, but your output is a plan, not a result.
 ## Design the attack — propose several angles, not one
 
 These constants are improved by genuinely different machinery. Survey the candidates
-rather than committing to a single line:
+rather than committing to a single line. The run's metric rewards verified progress
+each round, but **do not shrink your ambition to fit it** — a high-risk swing that
+may take several rounds to pay off (a new technique, a from-scratch construction) is
+exactly where the biggest jumps come from and is welcome. Rank a bold angle on its
+upside, not on how cheaply it logs a milestone.
 
 - **Strengthen the record** — push the prior construction/relaxation/estimate further.
 - **Borrow a technique** — a method that worked on an analogous constant (use the
