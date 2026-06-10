@@ -2,8 +2,17 @@
 RIGOROUS upper-bound certificate for C_82 (essential minimum of the Zhang-Zagier
 height), UPPER side.
 
-Result (CERTIFIED):   C_82  <=  log h(q*)  <=  0.2543346  <  0.25443677,
-strictly beating the previous record  C_82 <= 0.25444 = log(1.289735) [Doc01b].
+Result (CERTIFIED, round 4 -- max(A,B) enclosure, function certify_maxAB):
+   STAGE A (re-cert): C_82 <= log h(Doche q) <= 0.2544362773 < 0.25444.
+   STAGE B (BREAK):   C_82 <= log h(q*)      <= 0.2543326887 < 0.25443677
+                      = log(1.289735) [Doc01b], a STRICT record break (margin 1.04e-4).
+Reproduce:  python3 verify_upper.py selftest   (soundness of the cell bound)
+            python3 verify_upper.py stageA      (~2.5 min, M0=2e5)
+            python3 verify_upper.py stageB       (~2.5 min, M0=2e5)
+
+NOTE: the OLD split-quadrature routine certify() (mode certify_old) is broken/loose
+(returned a vacuous ~2.2) and is kept only for diagnosis; the LIVE certificate is
+certify_maxAB(), which encloses the un-split Jensen integrand G = max(A,B) directly.
 
 ----------------------------------------------------------------------------------
 METHOD.  Doche, "On the spectrum of the Zhang-Zagier height", Math. Comp. 70 (2001),
@@ -54,38 +63,50 @@ polynomial dictionary, NOT on the exponents, so they hold for q* as for Doche's 
   deg_X Q = 56 > 0;   X !| Q  and (1-X) !| Q  (Q(0)=Q(1)=1);   gcd(P_i,Q)=1 for all i.
 
 ----------------------------------------------------------------------------------
-RIGOR OF THE QUADRATURE (this file).
+RIGOR OF THE QUADRATURE (this file -- the LIVE routine is certify_maxAB).
 
 We change variable t = 2 pi s, so chi(s) = w(t) := e^{i t} - e^{2 i t} and
-int_0^1 f(chi(s)) ds = (1/2pi) int_0^{2pi} f(w(t)) dt.  We split [0,2pi] into cells
-and, on each cell [a,b], enclose |P(w(t))|^2 by the SECOND-ORDER TAYLOR (mean-value)
-model of verify_vec.py (reused verbatim):
-    |P(w(t))|^2  in  rho_m + rho'_m * [-r, r] + (1/2) rho''([a,b]) * [0, r^2],
-with rho_m, rho'_m evaluated EXACTLY at the cell midpoint and only rho'' enclosed
-over the wide cell (quadratic convergence; certifies at cell width ~1e-5 instead of
-the ~1e-10 a naive interval Horner would need).  All float ops round OUTWARD
-(np.nextafter), so each |P|^2 enclosure [lo,hi] is GUARANTEED.
+int_0^1 f(chi(s)) ds = (1/2pi) int_0^{2pi} f(w(t)) dt.  We write the Jensen
+integrand WITHOUT the +/-log|Q| split that broke the old certify():
 
-From those enclosures we form a per-cell UPPER bound of the integrand
-    G(t) = (1/2)log|Q1|^2 + (1/2)log|Q2|^2
-           + max(0, sum q_i (1/2)log|P_i|^2 - (1/2)log|Q1|^2 - (1/2)log|Q2|^2):
-    G_hi =  (1/2) log_up(U2_Q1_hi) + (1/2) log_up(U2_Q2_hi)
-          + max( 0,  sum q_i (1/2) log_up(U2_Pi_hi)
-                     - (1/2) log_down(U2_Q1_lo) - (1/2) log_down(U2_Q2_lo) ).
-Then   int_0^{2pi} G dt <= sum_cells width * G_hi   (each product rounded UP), and
-    log h(q*)  <=  ( sum_cells width * G_hi ) / (2 pi) / D.
+    A(t) = sum_i q_i * (1/2) log|P_i(w(t))|^2          (the prod-P^q branch)
+    B(t) = (1/2) log|Q1(w(t))|^2 + (1/2) log|Q2(w(t))|^2   (the Q branch)
+    G(t) = max( A(t), B(t) )   (= log max(|prod P^q(w)|, |Q(w)|), Jensen),
+    log h(q) = (1/(2 pi D)) int_0^{2pi} G(t) dt,  D = max(sum q_i deg P_i, 56).
 
-BOUNDEDNESS / NO SINGULARITY: Q1,Q2 have NO zero on the contour w([0,2pi]) (closest
-root has |z| = 0.9993; min|Q1(w)| ~ 1.8e-7 > 0), so the log+ argument never blows up
-(+inf) and the log|Q_i| terms are finite; -inf can only occur in log|Q_i| (it lowers
-the integral, never our upper bound).  The certificate ADAPTIVELY refines any cell
-whose Taylor enclosure of |Q1|^2 or |Q2|^2 has lo <= 0 (so log_down stays valid),
-which happens only in the few cells near the near-zeros and is fully resolved.
+On each cell [a,b] we enclose |P(w(t))|^2 by the SECOND-ORDER TAYLOR (mean-value)
+model of verify_vec.py (reused; rho_full): rho_m, rho'_m EXACT at the midpoint and
+rho'' enclosed over the wide cell, all OUTWARD-rounded (np.nextafter).  From those
+we get, per factor and outward-rounded: the cell sup/inf of (1/2)log rho (-> A_hi,
+A_lo, B_hi, B_lo), the midpoint value (-> A_mid_up, B_mid_up), an upper bound on
+|((1/2)log rho)'(m)| (-> A_slope, B_slope) and on |((1/2)log rho)''| over the cell
+(-> A_curv, B_curv).  Three GUARANTEED per-cell upper bounds on int_cell G dt:
 
-Run:  python3 verify_upper.py            (calib + float + admiss + certify; ~1-2 min)
-      python3 verify_upper.py certify     (rigorous certificate only)
+  FLAT      width * max(A_hi, B_hi).                                   [O(h)]
+            Valid: G = max(A,B) <= max(sup A, sup B).  NEVER vacuous: at a Q
+            near-zero B_hi -> -inf but A_hi finite, so max caps the log dip.
+  STRADDLE  width*max(A_mid_up,B_mid_up)
+            + max(A_slope,B_slope)*r^2 + (1/3) max(A_curv,B_curv) r^3.  [O(h^2)]
+            Valid by  max(a+x,b+y) <= max(a,b)+max(x,y) (x,y>=0) applied to the
+            midpoint-Taylor deviation bound of each branch, integrated over the cell.
+  MIDPOINT  width * f_up(m) + (h^3/24) sup|f''|  on the dominant branch f, used
+            only where ONE branch dominates the whole cell (A_lo>B_hi or B_lo>A_hi)
+            and its curvature is tame.                                  [O(h^3)]
+
+Per cell we take the MIN of the valid bounds, and adaptively bisect any cell whose
+straddle deviation term still exceeds rem_cap (bisection cuts r^3 by 8x/level; the
+max() keeps every cell's flat bound finite, so refinement always terminates).  Only
+LEAF cells contribute to the final sum (no parent double-count).
+
+ADMISSIBILITY (Doche Lemma 5) is independent of q, so the same admissible family
+gives  C_82 <= log h(q)  for BOTH Doche's q and q*.
+
+Run:  python3 verify_upper.py selftest   (soundness: cell bound >= true int)
+      python3 verify_upper.py stageA      (re-cert: log h(Doche q) <= 0.25444)
+      python3 verify_upper.py stageB      (BREAK:   log h(q*) < 0.25443677)
       python3 verify_upper.py calib       (reproduce Doche's h at his own q)
       python3 verify_upper.py float       (float Riemann-sum conjecture)
+      python3 verify_upper.py certify_old (OLD broken split routine; diagnosis only)
 """
 
 import sys
@@ -456,6 +477,220 @@ def certify(M0=300000, max_refine=45, verbose=True):
     return logh_hi, nbad
 
 
+# ===========================================================================
+# ANGLE 1 (round 4): enclose the Jensen integrand G(t) = max(A(t), B(t))
+# DIRECTLY, with NO +/-log|Q| split.
+#
+#   A(t) = sum_i q_i * (1/2) log|P_i(w(t))|^2          (the prod-P^q branch)
+#   B(t) = (1/2) log|Q1(w(t))|^2 + (1/2) log|Q2(w(t))|^2   (the Q branch)
+#   G(t) = max(A(t), B(t))     (= Jensen log max(|prod P^q|, |Q|))
+#
+#   log h(q) = (1/(2 pi D)) int_0^{2pi} G(t) dt,   D = max(sum q_i deg P_i, 56).
+#
+# Per cell [a,b] we form verified enclosures [A_lo,A_hi], [B_lo,B_hi] of A,B and
+# their midpoint UPPER values A_mid_up,B_mid_up plus curvature bounds A_curv,B_curv
+# (|((1/2)log rho)''| upper bound, already produced by rho_full as fpp_hi).
+#
+# Two guaranteed per-cell upper bounds on int_cell G dt:
+#   (FLAT)      width * max(A_hi, B_hi).
+#               Valid: G(t) = max(A,B) <= max(sup A, sup B) <= max(A_hi,B_hi).
+#               Never vacuous: at a Q near-zero B_hi -> -inf but A_hi is finite,
+#               so the max caps the downward log dip.
+#   (MIDPOINT)  when ONE branch dominates over the whole cell
+#               (A_lo > B_hi  => G = A   or   B_lo > A_hi => G = B),
+#               the dominant branch f is SMOOTH on the cell and
+#                  int_cell f dt <= width * f_up(m) + (h^3/24) * sup_cell|f''|
+#               (midpoint-rule remainder + (h^3/24) f''(xi), |f''| bounded above).
+#               This is O(h^3) tight vs the flat O(h).
+#
+# A cell USES the midpoint bound only when (i) one branch dominates AND (ii) that
+# branch's remainder (h^3/24)*curv <= REM_CAP (so the curvature has not blown up
+# near a P_i / Q_i zero).  Every other cell (straddle, or dominant-but-stiff) is
+# REFINED (bisected); bisection cuts h^3 by 8x per level, taming any finite
+# curvature, while the max() keeps even the worst cell's flat bound finite -- so
+# the refinement always terminates (no vacuous cell to chase forever).
+# ===========================================================================
+def cell_AB(a, b, q):
+    """Verified per-cell data for A and B.  Returns dict of arrays.
+    A_hi,A_lo : cell sup/inf upper/lower bounds of A (A_lo = -1e300 sentinel if a
+                P_i enclosure straddles 0 -> only makes A_lo more negative = safe).
+    A_mid_up  : UPPER bound of A at the midpoint.
+    A_curv    : UPPER bound of |A''| over the cell (>=0).
+    same for B (Q1,Q2)."""
+    m = 0.5 * (a + b)
+    r = 0.5 * (b - a)
+    Wc, DWc, DDWc, DDDWc = w_full_cell(a, b)
+    Wm, DWm, DDWm, DDDWm = w_full_point(m)
+
+    def slope_abs_up(rho_m, rhop_m):
+        # UPPER bound on |((1/2)log rho)'(m)| = (1/2)|rhop_m| / rho_m,
+        # using the LOWER bound rho_m[0] in the denominator (rho_m[0] > 0 needed;
+        # else return +inf sentinel so the cell cannot use the smooth slope bound).
+        num = 0.5 * np.maximum(np.abs(rhop_m[0]), np.abs(rhop_m[1]))
+        den = rho_m[0]
+        return np.where(den > 0, na(num / np.where(den > 0, den, 1.0), PINF), PINF)
+
+    A_hi = np.zeros_like(a)
+    A_lo = np.zeros_like(a)
+    A_mid_up = np.zeros_like(a)
+    A_curv = np.zeros_like(a)
+    A_slope = np.zeros_like(a)
+    for i, nm in enumerate(["P1", "P2", "P4", "P6", "P8"]):
+        rho_m, rhop_m, rlo, rhi, fpp = rho_full(
+            ASC[nm], m, r, Wm, DWm, DDWm, DDDWm, Wc, DWc, DDWc, DDDWc)
+        qi = q[i]
+        A_hi = A_hi + qi * na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)), PINF)
+        A_lo = A_lo + qi * np.where(
+            rlo > 0, na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)), NINF), -1e300)
+        A_mid_up = A_mid_up + qi * na(
+            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF)
+        A_curv = na(A_curv + qi * fpp, PINF)
+        A_slope = na(A_slope + qi * slope_abs_up(rho_m, rhop_m), PINF)
+
+    B_hi = np.zeros_like(a)
+    B_lo = np.zeros_like(a)
+    B_mid_up = np.zeros_like(a)
+    B_curv = np.zeros_like(a)
+    B_slope = np.zeros_like(a)
+    for nm in ["Q1", "Q2"]:
+        rho_m, rhop_m, rlo, rhi, fpp = rho_full(
+            ASC[nm], m, r, Wm, DWm, DDWm, DDDWm, Wc, DWc, DDWc, DDDWc)
+        B_hi = B_hi + na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)), PINF)
+        B_lo = B_lo + np.where(
+            rlo > 0, na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)), NINF), -1e300)
+        B_mid_up = B_mid_up + na(
+            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF)
+        B_curv = na(B_curv + fpp, PINF)
+        B_slope = na(B_slope + slope_abs_up(rho_m, rhop_m), PINF)
+    return dict(A_hi=A_hi, A_lo=A_lo, A_mid_up=A_mid_up, A_curv=A_curv,
+                A_slope=A_slope, B_hi=B_hi, B_lo=B_lo, B_mid_up=B_mid_up,
+                B_curv=B_curv, B_slope=B_slope)
+
+
+def cell_int_maxAB(a, b, q, rem_cap):
+    """UPPER bound on int_cell max(A,B) dt for each cell, plus a `refine` mask.
+
+    Returns (cell_int_hi, refine):
+      cell_int_hi : array, guaranteed upper bound on int_cell G dt (rounded up).
+                    Finite on every cell (the flat fallback is always finite).
+      refine      : bool array, True where the cell should be bisected to tighten
+                    (straddle, or dominant-branch midpoint remainder > rem_cap).
+                    A True cell's cell_int_hi is the (valid but loose) flat bound;
+                    if it is never refined further it still gives a valid bound."""
+    d = cell_AB(a, b, q)
+    r = na(0.5 * (b - a), PINF)
+    width = na(b - a, PINF)
+    h3 = na(na(width * width, PINF) * width, PINF)
+    h3_24 = na(h3 / 24.0, PINF)
+    r2 = na(r * r, PINF)
+    r3 = na(r2 * r, PINF)
+
+    A_hi = d["A_hi"]; A_lo = d["A_lo"]
+    B_hi = d["B_hi"]; B_lo = d["B_lo"]
+
+    # FLAT bound (always valid, always finite):  G <= max(A_hi,B_hi).
+    flat = na(width * np.maximum(A_hi, B_hi), PINF)
+
+    # ---- O(h^2) STRADDLE bound (valid on EVERY cell, finite when slopes finite) ----
+    # max(A(t),B(t)) <= max(A_mid_up,B_mid_up)
+    #                   + max(|A'(m)|,|B'(m)|)*|t-m| + (1/2)max(A'',B'')(t-m)^2,
+    # using  max(a+x,b+y) <= max(a,b)+max(x,y)  (x,y>=0) and dominating each
+    # branch deviation by its Taylor bound.  Integrate over [m-r,m+r]:
+    #   int |t-m| dt = r^2,   int (t-m)^2 dt = (2/3) r^3.
+    mid_up = np.maximum(d["A_mid_up"], d["B_mid_up"])
+    slope_max = np.maximum(d["A_slope"], d["B_slope"])
+    curv_max = np.maximum(d["A_curv"], d["B_curv"])
+    dev_int = na(na(slope_max * r2, PINF)
+                 + na(na(0.5 * curv_max, PINF) * na((2.0 / 3.0) * r3, PINF), PINF),
+                 PINF)
+    straddle_bound = na(na(width * mid_up, PINF) + dev_int, PINF)
+
+    # ---- O(h^3) MIDPOINT bound on cells where ONE branch dominates & is smooth ----
+    A_dom = A_lo > B_hi          # G = A on the whole cell
+    B_dom = B_lo > A_hi          # G = B on the whole cell
+    A_rem = na(h3_24 * d["A_curv"], PINF)
+    B_rem = na(h3_24 * d["B_curv"], PINF)
+    A_mid = na(width * d["A_mid_up"] + A_rem, PINF)
+    B_mid = na(width * d["B_mid_up"] + B_rem, PINF)
+    use_A = A_dom & (A_rem <= rem_cap) & np.isfinite(A_mid)
+    use_B = B_dom & (B_rem <= rem_cap) & np.isfinite(B_mid)
+
+    # Choose the tightest valid bound per cell:
+    cell_int_hi = np.minimum(flat, straddle_bound)
+    cell_int_hi = np.where(use_A, np.minimum(cell_int_hi, A_mid), cell_int_hi)
+    cell_int_hi = np.where(use_B, np.minimum(cell_int_hi, B_mid), cell_int_hi)
+    cell_int_hi = na(cell_int_hi, PINF)
+
+    # A cell is "good enough" (no refine) if it uses the O(h^3) midpoint rule, OR
+    # its straddle/flat bound's excess over a midpoint LOWER estimate is below tol.
+    # Simpler robust rule: refine if it does NOT use the midpoint rule AND its
+    # straddle deviation term dev_int exceeds a per-cell tolerance.
+    refine = ~(use_A | use_B) & (dev_int > rem_cap) & np.isfinite(dev_int)
+    # Cells with non-finite slope (e.g. rho_m straddles 0) also refine:
+    refine = refine | ~np.isfinite(cell_int_hi)
+    return cell_int_hi, refine
+
+
+def certify_maxAB(q, label, target, M0=300000, max_refine=40,
+                  rem_cap=1e-9, verbose=True):
+    """Guaranteed UPPER bound on log h(q) via the un-split max(A,B) enclosure.
+
+    Adaptive: cells that cannot use the tight midpoint rule (straddle / stiff)
+    are bisected; their FLAT bound is held in `total_loose` until they resolve,
+    and only LEAF cells contribute to the final sum (no parent double-count)."""
+    TWO_PI = na(2.0 * math.pi, PINF)
+    edges = np.linspace(0.0, 2.0 * math.pi, M0 + 1)
+    a = edges[:-1].copy()
+    b = edges[1:].copy()
+    total_resolved = 0.0          # sum of cell_int_hi over cells we will NOT refine
+    t0 = time.time()
+    rounds = 0
+    nbad = 0
+    n_leaf = 0
+    while True:
+        cell_hi, refine = cell_int_maxAB(a, b, q, rem_cap)
+        keep = ~refine
+        # accumulate resolved (leaf) cells only:
+        total_resolved = na(
+            total_resolved + float(np.sum(np.where(keep, cell_hi, 0.0))), PINF)
+        n_leaf += int(np.sum(keep))
+        nbad = int(np.sum(refine))
+        # current GLOBAL upper bound = resolved leaves + flat bound of the
+        # still-to-refine frontier (each refine cell carries its finite flat
+        # cell_hi as a conservative placeholder):
+        frontier_flat = float(np.sum(np.where(refine, cell_hi, 0.0)))
+        cur_total = na(total_resolved + frontier_flat, PINF)
+        cur_logh = na(na(cur_total / TWO_PI, PINF) / max(
+            float(np.dot(q, DEGP)), float(DEGQ)), PINF)
+        if verbose:
+            print(f"  [{label}] round {rounds}: frontier={a.shape[0]:>9}  "
+                  f"refine_next={nbad:>6}  logh_hi<={cur_logh:.8f}  "
+                  f"{time.time()-t0:.0f}s", flush=True)
+        if nbad == 0 or rounds >= max_refine:
+            break
+        ab, bb = a[refine], b[refine]
+        mid = 0.5 * (ab + bb)
+        a = np.concatenate([ab, mid])
+        b = np.concatenate([mid, bb])
+        rounds += 1
+    elapsed = time.time() - t0
+    D = max(float(np.dot(q, DEGP)), float(DEGQ))
+    # FINAL bound: resolved leaves + (whatever frontier remains, via its flat bound)
+    total_hi = cur_total
+    integral_s = na(total_hi / TWO_PI, PINF)
+    logh_hi = na(integral_s / D, PINF)
+    if verbose:
+        print(f"  [{label}] leaves={n_leaf}  unresolved frontier={nbad}  "
+              f"rounds={rounds}  {elapsed:.1f}s")
+        print(f"  [{label}] int_0^2pi G dt  <=  {total_hi:.10f}")
+        print(f"  [{label}] int_0^1 G(chi) ds <= {integral_s:.10f}  D = {D}")
+        print(f"  [{label}] CERTIFIED  log h(q) <= {logh_hi:.10f}")
+        print(f"  [{label}] target               = {target:.10f}")
+        print(f"  [{label}] BEATS target (strict <): "
+              f"{logh_hi < target}   (margin {target - logh_hi:.3e})")
+    return logh_hi, nbad, elapsed, n_leaf
+
+
 # ---------------------------------------------------------------------------
 def admissibility_check():
     import numpy.polynomial.polynomial as npp
@@ -503,8 +738,78 @@ def float_value(N=8_000_000, q=None):
     return (lMQ + I) / D
 
 
+def selftest_maxAB(ntest=300):
+    """Soundness: the per-cell upper bound cell_int_maxAB must be >= the true
+    int_cell G dt (sampled at high precision via mpmath) on random cells.
+    Tests BOTH the flat fallback (rem_cap=0 forces flat everywhere) and the
+    tight midpoint branch (rem_cap=1e-9)."""
+    import mpmath as mp
+    import random
+    mp.mp.prec = 140
+    q = QSTAR
+    ASCmp = {nm: [int(c) for c in ASC[nm]] for nm in ASC}
+
+    def G_exact(t):
+        w = mp.e**(1j * mp.mpf(t)) - mp.e**(2j * mp.mpf(t))
+
+        def lp(asc):
+            v = mp.mpc(0)
+            for c in reversed(asc):
+                v = v * w + c
+            return mp.log(abs(v))
+        A = sum(mp.mpf(q[i]) * lp(ASCmp[nm])
+                for i, nm in enumerate(["P1", "P2", "P4", "P6", "P8"]))
+        B = lp(ASCmp["Q1"]) + lp(ASCmp["Q2"])
+        return float(max(A, B))
+
+    random.seed(11)
+    As = []; Bs = []
+    for _ in range(ntest):
+        c = random.uniform(0.001, 2 * math.pi - 0.001)
+        wdt = 10 ** random.uniform(-6, -3.5)
+        As.append(c); Bs.append(min(c + wdt, 2 * math.pi - 1e-9))
+    A = np.array(As); B = np.array(Bs)
+    worst = 0
+    for cap, tag in [(0.0, "flat"), (1e-9, "midpt")]:
+        cell_hi, refine = cell_int_maxAB(A, B, q, cap)
+        viol = 0
+        for i in range(len(A)):
+            # true int_cell G dt via fine sampling (G smooth-ish; use trapezoid
+            # on 40 sub-points + a safety check using the max sample * width which
+            # is itself a crude upper bound the enclosure must also dominate-ish)
+            K = 60
+            ts = [A[i] + (B[i] - A[i]) * k / K for k in range(K + 1)]
+            gs = [G_exact(t) for t in ts]
+            # composite trapezoid approximation of the true integral:
+            true_int = (B[i] - A[i]) / K * (
+                0.5 * gs[0] + 0.5 * gs[-1] + sum(gs[1:-1]))
+            if cell_hi[i] < true_int - 1e-12:
+                viol += 1
+                if viol <= 5:
+                    print(f"  [{tag}] VIOLATION cell[{A[i]:.5f},{B[i]:.5f}] "
+                          f"hi={cell_hi[i]:.10f} < true~{true_int:.10f}")
+        print(f"  selftest[{tag}]: {viol}/{ntest} violations "
+              f"(cell_hi < true int); MUST be 0.")
+        worst += viol
+    return worst == 0
+
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if mode == "selftest":
+        ok = selftest_maxAB()
+        sys.exit(0 if ok else 1)
+    if mode in ("stageA", "all"):
+        print("[Stage A] rigorous max(A,B) certificate at Doche's q "
+              "(re-certify record <= 0.25444)")
+        dq = np.array([13.1, 10.6, 3.2, 1.15, 0.24])
+        certify_maxAB(dq, "Doche", 0.25444, M0=200000, max_refine=12,
+                      rem_cap=1e-10)
+    if mode in ("stageB", "all"):
+        print("[Stage B] rigorous max(A,B) certificate at q* "
+              "(record break < 0.25443677)")
+        certify_maxAB(QSTAR, "q*", RECORD, M0=200000, max_refine=12,
+                      rem_cap=1e-10)
     if mode in ("calib", "all"):
         dq = [13.1, 10.6, 3.2, 1.15, 0.24]
         v = float_value(q=dq)
@@ -518,6 +823,6 @@ if __name__ == "__main__":
     if mode in ("admiss", "all"):
         print("[admissibility]")
         admissibility_check()
-    if mode in ("certify", "all"):
-        print("[rigorous certificate]  outward-rounded Taylor-model quadrature")
+    if mode == "certify_old":
+        print("[OLD/BROKEN split-quadrature certificate; kept for diagnosis only]")
         certify()

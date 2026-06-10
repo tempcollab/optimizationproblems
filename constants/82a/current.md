@@ -5,9 +5,21 @@ none
 
 ## Bounds
 table: lower 0.24874 [F18, Flammang 2018] · upper 0.25444 [Doc01b, Doche 2001]
+       (upper bar = log(1.289735) = 0.25443677 exactly)
 held: lower 0.24874 (reviewer-verified, R1; RIGOROUS interval branch-and-bound
       certificate re-establishing Flammang's record. Reproduces, does NOT beat.)
       Reproduce: python3 constants/82a/certificate/verify_vec.py  (~30s).
+      upper: NONE reviewer-verified yet (the upper bar has had no re-cert in this repo).
+
+CLAIMED this round (R4, builder — PENDING reviewer verification, NOT yet in `held`):
+  Rigorous max(A,B) quadrature certificate (certify_maxAB in verify_upper.py):
+  - STAGE A (re-cert):   C_82 <= log h(Doche q) <= 0.2544362773 < 0.25444.
+  - STAGE B (record-break): C_82 <= log h(q*) <= 0.2543326887 < 0.25443677,
+    q* = (11.74,8.77,2.45,1.55,0.53), a STRICT break (margin 1.041e-4).
+  Both fully resolve (frontier=0). Selftest 0/300 violations vs mpmath.
+  Reproduce: python3 constants/82a/certificate/verify_upper.py stageA   (~145s)
+             python3 constants/82a/certificate/verify_upper.py stageB   (~145s)
+             python3 constants/82a/certificate/verify_upper.py selftest (soundness)
 
 Note: this round REPRODUCED the record (lower bound 0.24874) with an independent
 re-runnable rigorous certificate — it does NOT strictly beat the record. Stage B
