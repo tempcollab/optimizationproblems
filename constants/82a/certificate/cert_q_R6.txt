@@ -1,0 +1,44 @@
+=== certify_q for q = [11.73584, 8.77354, 2.44938, 1.55411, 0.53442] ===
+    M0=200000 max_refine=14 rem_cap=1e-10
+
+[float] q-independent calibration gate (Doche q -> 1.289735):
+    float_value(Doche q) = 1.28973421  (Doche published 1.289735)
+[float] log h(q) ~ 0.2543308006  h ~ 1.2895983337   (CONJECTURE)
+
+[admissibility] (Doche Lemma 5; q-independent)
+  deg_X Q = 56 (>0: True)
+  Q(0) = 1  -> X divides Q: False
+  Q(1) = 1  -> (1-X) divides Q: False
+  gcd(P1,Q) = 1  coprime: True
+  gcd(P2,Q) = 1  coprime: True
+  gcd(P4,Q) = 1  coprime: True
+  gcd(P6,Q) = 1  coprime: True
+  gcd(P8,Q) = 1  coprime: True
+  ALL admissibility (Doche Lemma 5 hypotheses) hold: True
+
+[selftest_q] soundness of per-cell bound for THIS q
+  selftest[flat]: 0/200 violations  (MUST be 0)
+  selftest[midpt]: 0/200 violations  (MUST be 0)
+    selftest passed: True
+
+[certify] rigorous max(A,B) quadrature enclosure
+  [q] round 0: frontier=   200000  refine_next= 75608  logh_hi<=0.25452265  28s
+  [q] round 1: frontier=   151216  refine_next= 96364  logh_hi<=0.25454523  50s
+  [q] round 2: frontier=   192728  refine_next=115906  logh_hi<=0.25443761  77s
+  [q] round 3: frontier=   231812  refine_next= 94038  logh_hi<=0.25433968  107s
+  [q] round 4: frontier=   188076  refine_next= 51076  logh_hi<=0.25433106  132s
+  [q] round 5: frontier=   102152  refine_next=   304  logh_hi<=0.25433091  147s
+  [q] round 6: frontier=      608  refine_next=     0  logh_hi<=0.25433091  148s
+  [q] leaves=633296  unresolved frontier=0  rounds=6  147.6s
+  [q] int_0^2pi G dt  <=  89.4884617019
+  [q] int_0^1 G(chi) ds <= 14.2425310296  D = 56.0
+  [q] CERTIFIED  log h(q) <= 0.2543309112
+  [q] target               = 0.2543326887
+  [q] BEATS target (strict <): True   (margin 1.777e-06)
+
+=== RESULT ===
+  CERTIFIED  log h(q) <= 0.2543309112
+  unresolved frontier cells = 0  (MUST be 0 for a clean bound)
+  R5 record (certified)     = 0.2543326887
+  beats R5 record (strict, frontier=0): True
+  margin below R5 record = 1.7775e-06
