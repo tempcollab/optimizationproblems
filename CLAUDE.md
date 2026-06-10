@@ -86,6 +86,10 @@ Each run, pick **one** constant and run the loop:
    Fetch and digest the papers behind the record bounds so we know the number to beat
    and don't repeat a dead end. Report where the slack is, which bound is softer, and
    any angle the prior work didn't try. Does NOT attempt the improvement.
+   You may run **several explorers in parallel** for wider
+   coverage — each taking a distinct angle (the record papers, techniques from an
+   analogous constant, the computational/relaxation side) so they surface
+   uncorrelated openings instead of one framing.
 2. **proof-outliner** — Propose several attack angles, not one — strengthen the
    record, borrow a technique from an analogous constant, an explicit construction, a
    computational relaxation. Rank them; name the hard step in each.
