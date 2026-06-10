@@ -1,0 +1,3751 @@
+Erd˝os’ minimum overlap problem
+
+Ethan Patrick White
+
+Abstract
+
+We obtain a substantially improved lower bound for the minimum overlap prob-
+lem asked by Erd˝os. Our approach uses elementary Fourier analysis to translate the
+problem to a convex optimization program.
+
+2
+2
+0
+2
+
+n
+a
+J
+
+4
+1
+
+]
+
+O
+C
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+4
+0
+7
+5
+0
+.
+1
+0
+2
+2
+:
+v
+i
+X
+r
+a
+
+1
+
+Introduction
+
+In 1955 Erd˝os posed the following problem [1]. Let n be a positive integer and A, B ⊂ [2n] be
+a partition of [2n] such that |A| = |B| = n. For any such partition and integer −2n < k < 2n,
+deﬁne Mk to be the number of solutions (a, b) ∈ A × B to a − b = k. Estimate the size of
+the function
+
+M (n) = min
+
+A∪B=[2n]
+
+max
+−2n<k<2n
+
+Mk,
+
+where the minimum is taken over all partitions of [2n] into equal-sized sets. Erd˝os proved
+that M (n) > n/4, a result that can be obtained by the following averaging argument. The
+sum over all −2n < k < 2n of |Mk| is exactly |A × B| = n2, and so the average value of
+|Mk| exceeds n/4. On the other hand, we can take A to be [n/2, 3n/2] giving the upper
+bound M (n) ≤ n/2. The minimum overlap problem appears in Richard Guy’s renown book,
+Unsolved Problems in Number Theory. See his book for a brief survey of the progress made
+by many authors on improved estimates of M (n) [2].
+
+Haugland proved that the limit
+
+µ := lim
+n→∞
+
+M (n)
+n
+
+,
+
+exists [3]. We will refer to µ as the minimum overlap constant. Prior to this work, the best
+estimates of µ were
+
+0.35639395869 ≈
+
+(cid:113)
+
+4 −
+
+√
+
+15 ≤ µ ≤ 0.3809268534330870.
+
+The author is grateful for support from the Killam Trusts, NSERC, and UBC.
+2020 Mathematics Subject Classiﬁcation: 05A17, 42A16, 90C90
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+The lower bound above is due to Moser [7], and the upper bound is due to Haugland [4].
+Moser and Murdeshwar were the ﬁrst to study the following function analogue of Erd˝os’
+original problem. For all measurable functions f : [−1, 1] → [0, 1] deﬁne the complementary
+function g : [−1, 1] → [0, 1] such that f (x) + g(x) = 1 for all x ∈ [−1, 1]. Estimate the value
+of
+
+inf
+f
+
+sup
+x∈[−2,2]
+
+(cid:90) 1
+
+−1
+
+f (t)g(x + t) dt,
+
+(1.1)
+
+where the minimum is taken over all measurable f : [−1, 1] → [0, 1] satisfying (cid:82) 1
+−1 f (x) dx = 1.
+A key step in Haugland’s method is a theorem of Swinnerton-Dyer proving that (1.1) is in
+fact also µ, see [3] for the proof. It will be easiest for us to work with (1.1) as our deﬁnition
+In this work we obtain a signiﬁcant improvement on the lower bound of µ, using
+of µ.
+elementary Fourier analysis combined with convex programming.
+
+Theorem 1. The minimum overlap constant µ is lower bounded by 0.379005.
+
+The bound in Theorem 1 can certainly be improved with more computation time for our
+
+convex program. The upper and lower bounds for µ now diﬀer by 0.5%.
+
+2 Outline
+
+Throughout this work, f (x), g(x), M (x) will always denote measurable functions satisfying
+the relationships
+
+f : [−1, 1] → [0, 1] such that
+
+f (x) dx = 1;
+
+(cid:90) 1
+
+−1
+
+g : [−1, 1] → [0, 1] such that f (x) + g(x) = 1 for all x ∈ [−1, 1];
+
+M : [−2, 2] → [0, 1] such that M (x) =
+
+(cid:90) 1
+
+−1
+
+f (t)g(x + t) dt.
+
+(2.1)
+
+The minimum overlap problem is to determine the largest µ such that (cid:107)M (cid:107)∞ ≥ µ for all
+functions M satisfying (2.1). Lower bounds on µ can be obtained by observing properties
+held by M (x). For example, a ﬁrst simple property held by M (x) is
+
+(cid:90) 2
+
+−2
+
+M (x) dx =
+
+(cid:90) 2
+
+(cid:90) 1
+
+−2
+
+−1
+
+f (t)g(x + t) dtdx =
+
+(cid:90) 1
+
+(cid:90) 2
+
+f (t)
+
+−1
+
+−2
+
+g(x + t) dxdt = 1.
+
+(2.2)
+
+Therefore the average value of M (x) is at least 0.25 and so µ ≥ 0.25. The discrete version of
+this argument was already mentioned in the introduction. A second property held by M (x),
+and the key insight in Moser and Murdeshwar’s method [7], [8] is that
+
+(cid:90) 2
+
+−2
+
+(x − E(M ))2M (x) dx ≤ 2/3, where E(M ) =
+
+(cid:90) 2
+
+−2
+
+xM (x) dx,
+
+(2.3)
+
+2
+
+is the expected value of M (x). In other words, the variance of M (x) is upper bounded by
+2/3. The variance of a function is minimized when as much mass as possible is centred at
+its mean. Therefore the variance of M (x) is at least the variance of
+
+˜M (x) =
+
+(cid:40)
+
+µ if − 1
+0
+
+otherwise.
+
+2µ ≤ x ≤ 1
+
+2µ
+
+The variance of ˜M is 1/(12µ2). Since 1/(12µ2) ≤ 2/3 we have µ ≥ 1/
+
+8.
+
+√
+
+The key idea behind our improvement is that Fourier analysis can be used to construct
+an inﬁnite number of new properties satisﬁed by M (x). The most important new property
+we ﬁnd and use is that all even cosine Fourier coeﬃcients of M (x) are nonpositive, i.e.
+
+(cid:90) 2
+
+−2
+
+cos(πkx)M (x) dx ≤ 0,
+
+for all k ≥ 1.
+
+(2.4)
+
+The way we take advantage of these new properties is by constructing a linear program
+where the variables represent the average value of M (x) over small intervals. With this
+programming technique we can transfer (2.2), (2.3), and (2.4) into constraints of a linear
+program. This short program is the subject of Section 4. Under the assumption that an
+optimal f (x) is even, the output of this program proves µ ≥ 0.375.
+
+In order to prove our larger lower bound in Theorem 1 and remove the assumption that
+an optimal f (x) is even, we use a more complicated convex program. This is the subject of
+Section 5. The new properties of f (x), M (x) pairs we ﬁnd are derived in Section 3. These
+new properties become the constraints used in the linear program of Section 4 and the convex
+program of Section 5. In Section 5 we discuss the data collected from the convex program
+and prove Theorem 1.
+
+3 Set up
+
+In this section we derive properties about f, g, M that will form key constraints in the
+programs used in later sections.
+
+3.1 Properties from Fourier analysis
+
+The properties derived in this subsection relate to the Fourier coeﬃcients of f, g, M . We ﬁrst
+consider f, g, M as functions on [−2, 2]. In the case of f and g we deﬁne f (x) = g(x) = 0
+for x (cid:54)∈ [−1, 1]. Their Fourier transforms are deﬁned for all k ∈ Z and given by
+
+ˆf (k) =
+
+1
+4
+
+(cid:90) 2
+
+−2
+
+e− πi
+
+2 kxf (x) dx,
+
+ˆg(k) =
+
+1
+4
+
+(cid:90) 2
+
+−2
+
+e− πi
+
+2 kxf (x) dx,
+
+ˆM (k) =
+
+1
+4
+
+(cid:90) 2
+
+−2
+
+e− πi
+
+2 kxM (x) dx.
+
+Lemma 2. For all f, M satisfying (2.1) and k ∈ Z \ {0} we have
+
+ˆM (k) =
+
+4
+kπ
+
+sin (kπ/2) ˆf (k) − 4| ˆf (k)|2,
+
+3
+
+where ˆf , ˆM denote the Fourier transforms of f, M on [−2, 2].
+
+Proof. Denote the indicator function of [−1, 1] by 1[−1,1]. We have
+
+ˆM (k) =
+
+(cid:90) 2
+
+−2
+(cid:90) 1
+
+1
+4
+1
+4
+−1
+= 4 ˆf (k)
+
+=
+
+e− πi
+
+2 kxM (x) dx =
+
+1
+4
+
+(cid:90) 2
+
+−2
+
+e− πi
+
+2 kx
+
+(cid:90) 1
+
+−1
+
+f (t)g(x + t) dt dx
+
+(cid:90) 2
+
+πi
+
+e− πi
+2 ktf (t)
+e
+(cid:16)ˆ1[−1,1](k) − ˆf (k)
+(cid:17)
+
+−2
+
+.
+
+2 k(x+t)g(x + t) dx dt = 4 ˆf (k)ˆg(k)
+
+Combining the above with
+
+ˆ1[−1,1](k) =
+
+1
+4
+
+(cid:90) 1
+
+−1
+
+e− πi
+
+2 kx =
+
+1
+kπ
+
+sin (kπ/2) ,
+
+gives the claimed identity.
+
+It will be advantageous to work with real Fourier coeﬃcients in our programs of the later
+sections. We will derive identities relating the coeﬃcients of the sine-cosine Fourier series of
+f (x) as a function on [−1, 1] with the sine-cosine Fourier series of f (x) and M (x) as functions
+on [−2, 2]. Let
+
+f (x) =
+
+1
+2
+
++
+
+∞
+(cid:88)
+
+∞
+(cid:88)
+
+k=1
+
+k=1
+
+ck cos(kπx) +
+
+dk sin(kπx),
+
+(3.1)
+
+be the sine-cosine Fourier series of f (x) on [−1, 1]. It will be notationally helpful to put
+c0 = 1/2. Also let
+
+f (x) =
+
+1
+4
+
++
+
+∞
+(cid:88)
+
+k=1
+
+ak cos(kπx/2) +
+
+∞
+(cid:88)
+
+k=1
+
+bk sin(kπx/2),
+
+and
+
+M (x) =
+
+1
+4
+
++
+
+∞
+(cid:88)
+
+k=1
+
+Ak cos(kπx/2) +
+
+∞
+(cid:88)
+
+k=1
+
+Bk sin(kπx/2)
+
+(3.2)
+
+be the sine-cosine Fourier series of f and M on [−2, 2].
+
+Lemma 3. Let f, M be as in (2.1) and their sine-cosine Fourier series be as in (3.1) and
+(3.2). Then for all m ≥ 1:
+
+am =
+
+(cid:40) 1
+
+2cm/2
+2m sin(πm/2)
+π
+
+(cid:80)∞
+
+k=0
+
+(−1)k
+m2−4k2 ck
+
+bm =
+
+(cid:40) 1
+
+2dm/2
+4 sin(πm/2)
+π
+
+(cid:80)∞
+
+k=1
+
+k(−1)k
+m2−4k2 dk
+
+if m is even
+if m is odd.
+
+if m is even
+if m is odd.
+
+4
+
+(3.3)
+
+(3.4)
+
+Am =
+
+4 sin (mπ/2)
+mπ
+
+am − 2(a2
+
+m + b2
+
+m), and in particular A2m ≤ 0.
+
+Bm = −
+
+4
+mπ
+
+sin (mπ/2) bm, and in particular B2m = 0.
+
+(3.5)
+
+(3.6)
+
+Proof. Note that the denominators in equations (3.3) and (3.4) are never zero since m is an
+odd integer while 4k2 is even. The convergence of the two inﬁnite sums in (3.3) and (3.4) is
+implied by Lemma 4 below. To derive (3.3) we use the following integral identities, valid for
+all m ≥ 1.
+
+(cid:90) 1
+
+−1
+
+cos(πmx/2) cos(πkx) dx =
+
+
+1
+
+0
+
+4m(−1)k sin(πm/2)
+πm2−4πk2
+
+if m is even and k = m/2
+if m is even and k (cid:54)= m/2
+if m is odd.
+
+We also have the identity (cid:82) 1
+identities with
+
+−1 cos(πmx/2) sin(πkx) dx = 0 for all k, m ∈ Z. Combining these
+
+am =
+
+1
+2
+
+(cid:90) 1
+
+−1
+
+cos(πmx/2)f (x) dx,
+
+gives (3.3). Similarly, we have for all m ≥ 1 the integral identity
+
+(cid:90) 1
+
+−1
+
+sin(πmx/2) sin(πkx) dx =
+
+
+
+
+
+
+1
+0
+8k(−1)k sin(πm/2)
+πm2−4πk2
+
+if m is even and k = m/2
+if m is even and k (cid:54)= m/2
+if m is odd.
+
+For all k, m ∈ Z we have (cid:82) 1
+with
+
+−1 sin(πmx/2) cos(πkx) dx = 0. Combining this and the above
+
+bm =
+
+1
+2
+
+(cid:90) 1
+
+−1
+
+sin(πmx/2)f (x) dx,
+
+gives (3.4). To derive (3.5) and (3.6) we need relations between the exponential Fourier
+coeﬃcients and the sine-cosine Fourier coeﬃcients. These are
+
+2 ˆf (m) = am−ibm,
+
+2 ˆf (−m) = am+ibm, Am = ˆM (m)+ ˆM (−m), Bm = i( ˆM (m)− ˆM (−m)).
+
+By Lemma 2 and the above identities we have
+
+Am = ˆM (m) + ˆM (−m)
+
+(cid:16) ˆf (m) + ˆf (−m)
+
+(cid:17)
+
+(cid:16)
+
+| ˆf (m)|2 + | ˆf (−m)|2(cid:17)
+
+− 4
+
+=
+
+=
+
+sin(kπ/2)
+
+4
+mπ
+4 sin (mπ/2)
+mπ
+
+am − 2(a2
+
+m + b2
+
+m).
+
+Equation (3.6) is derived similarly.
+
+5
+
+The identities in Lemma 3 will be used to construct constraints in our later programs. In
+order to work with the inﬁnite sums of (3.3) and (3.4) we will bound the tails of the series
+using Parseval’s identity and the Cauchy-Schwarz inequality.
+
+Lemma 4. Let T be a positive integer, and f (x) be as in (2.1) with sine-cosine Fourier
+series (3.1). Then for all integers 1 ≤ m < 2T we have
+
+and
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+2m
+π
+
+∞
+(cid:88)
+
+k=T +1
+
+(−1)k sin(πm/2)
+m2 − 4k2
+
+ck
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+≤
+
+1
+4 − m2/T 2 ·
+
+2m
+√
+
+6T 3
+
+,
+
+π
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+4
+π
+
+∞
+(cid:88)
+
+k=T +1
+
+k(−1)k sin(πm/2)
+m2 − 4k2
+
+dk
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+≤
+
+1
+4 − m2/T 2 ·
+
+4
+√
+2T
+
+π
+
+.
+
+Proof. Let ˆf denote the Fourier transform of f (x) on [−1, 1] deﬁned for k ∈ Z by
+
+ˆf (k) =
+
+1
+2
+
+(cid:90) 1
+
+−1
+
+e−iπkxf (x) dx.
+
+For k ≥ 1 we have ˆf (k) = (ck − idk)/2, and f (−k) = (ck + idk)/2. By Parseval’s identity
+and the fact ˆf (0) = 1/2 we obtain
+
+1 ≥
+
+(cid:90) 1
+
+−1
+
+f 2(x) dx = 2
+
+| ˆf (k)|2 =
+
+1
+2
+
++
+
+(cid:88)
+
+k∈Z
+
+∞
+(cid:88)
+
+(c2
+
+k + d2
+
+k).
+
+k=1
+
+(3.7)
+
+Fix an integer 1 ≤ m < 2T . By the triangle inequality
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+∞
+(cid:88)
+
+k=T +1
+
+(−1)k sin(πm/2)
+m2 − 4k2
+
+ck
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+≤
+
+∞
+(cid:88)
+
+k=T +1
+
+|ck|
+4k2 − m2 ≤
+
+1
+4 − m2/T 2
+
+∞
+(cid:88)
+
+k=T +1
+
+|ck|
+k2 .
+
+By the Cauchy-Schwarz inequality and (3.7)
+
+(cid:32) ∞
+(cid:88)
+
+k=T +1
+
+|ck|
+k2
+
+(cid:33)2
+
+(cid:32) ∞
+(cid:88)
+
+≤
+
+c2
+k
+
+(cid:33) (cid:32) ∞
+(cid:88)
+
+k=T +1
+
+k=T +1
+
+(cid:33)
+
+1
+k4
+
+≤
+
+1
+2
+
+(cid:90) ∞
+
+T
+
+1
+x4 dx =
+
+1
+6T 3 .
+
+Combining the two last above lines gives the ﬁrst tail estimate. We proceed similarly for
+
+the second. By the triangle inequality
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+k(−1)k sin(πm/2)
+m2 − 4k2
+
+∞
+(cid:88)
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+dk
+
+k=T +1
+
+∞
+(cid:88)
+
+≤
+
+k=T +1
+
+k|dk|
+4k2 − m2 ≤
+
+1
+4 − m2/T 2
+
+∞
+(cid:88)
+
+k=T +1
+
+|dk|
+k
+
+.
+
+By the Cauchy-Schwarz inequality and (3.7)
+
+(cid:32) ∞
+(cid:88)
+
+k=T +1
+
+|dk|
+k
+
+(cid:33)2
+
+(cid:32) ∞
+(cid:88)
+
+≤
+
+d2
+k
+
+(cid:33) (cid:32) ∞
+(cid:88)
+
+k=T +1
+
+k=T +1
+
+(cid:33)
+
+1
+k2
+
+≤
+
+1
+2
+
+(cid:90) ∞
+
+T
+
+1
+x2 dx =
+
+1
+2T
+
+.
+
+Combining the two last above lines gives the second tail estimate.
+
+6
+
+3.2 Properties using average values of M (x) on small intervals
+
+In our convex program, the Fourier coeﬃcients ck, dk described above will be variables.
+The other main type of variable will represent average values of M (x) on small intervals.
+Throughout the remainder of this work N will denote a large positive integer and we’ll also
+deﬁne L = 2/N . For each 1 ≤ j ≤ N deﬁne
+
+wj =
+
+1
+L
+
+(cid:90) jL
+
+(j−1)L
+
+M (x) dx and vj =
+
+1
+L
+
+(cid:90) −(j−1)L
+
+−jL
+
+M (x) dx.
+
+Note that
+
+1 =
+
+(cid:90) 2
+
+−2
+
+M (x) dx =
+
+N
+(cid:88)
+
+(cid:90) jL
+
+j=1
+
+(j−1)L
+
+(M (x) + M (−x)) dx = L
+
+N
+(cid:88)
+
+j=1
+
+(wj + vj).
+
+(3.8)
+
+In this subsection we will estimate the Fourier coeﬃcients, the second moment, and the
+j=1. Let R be a positive integer. For all
+j,m be upper and lower bounds of cos(πmx/2) on
+
+mean of M (x) using the average values {wj, vj}N
+1 ≤ j ≤ N and 1 ≤ m ≤ R, let α+
+the interval [(j − 1)L, jL], i.e.
+
+j,m and α−
+
+α+
+
+j,m ≥
+
+max
+(j−1)L≤x≤jL
+
+cos(πmx/2) and α−
+
+j,m ≤
+
+min
+(j−1)L≤x≤jL
+
+cos(πmx/2).
+
+(3.9)
+
+Similarly, deﬁne β+
+intervals:
+
+j,m and β−
+
+j,m to be upper and lower bounds of sin(πmx/2) on the same
+
+β+
+j,m ≥
+
+max
+(j−1)L≤x≤jL
+
+sin(πmx/2) and β−
+
+j,m ≤
+
+min
+(j−1)L≤x≤jL
+
+sin(πmx/2).
+
+(3.10)
+
+Next, we use the arrays {α+
+
+j,m, α−
+
+j,m} and {β+
+
+j,m, β−
+
+j,m} to give estimates on the Fourier
+
+coeﬃcients of M (x).
+
+Lemma 5. For all 1 ≤ m ≤ R
+
+L
+2
+
+N
+(cid:88)
+
+j=1
+
+α−
+
+j,m(wj + vj) ≤ Am ≤
+
+L
+2
+
+N
+(cid:88)
+
+(β−
+
+j,mwj − β+
+
+j,mvj) ≤ Bm ≤
+
+j=1
+
+L
+2
+
+L
+2
+
+N
+(cid:88)
+
+j=1
+
+N
+(cid:88)
+
+j=1
+
+α+
+
+j,m(wj + vj).
+
+(β+
+
+j,mwj − β−
+
+j,mvj).
+
+Proof. Let m ≥ 1. We can break the integrals deﬁning Ar into a sum of integrals on the
+small intervals:
+
+Am =
+
+=
+
+=
+
+1
+2
+1
+2
+
+1
+2
+
+(cid:90) 2
+
+−2
+(cid:90) 2
+
+−2
+N
+(cid:88)
+
+j=1
+
+cos(πmx/2)M (x) dx
+
+cos(πmx/2)(M (x) + M (−x)) dx
+
+(cid:90) jL
+
+(j−1)L
+
+cos(πmx/2)(M (x) + M (−x)) dx.
+
+(3.11)
+
+7
+
+By deﬁnition of α+
+
+j,m, for all 1 ≤ j ≤ N we have
+
+(cid:90) jL
+
+(j−1)L
+
+cos(πmx/2)(M (x) + M (−x)) dx ≤ α+
+j,m
+
+(cid:90) jL
+
+(j−1)L
+
+(M (x) + M (−x)) dx = Lα+
+
+j,m(wj + vj).
+
+Substituting the above back into (3.11) gives the stated upper bound on Am. The lower
+bound is similar. We can also break Bm into the following sum of integrals.
+
+Bm =
+
+1
+2
+
+N
+(cid:88)
+
+(cid:90) jL
+
+j=1
+
+(j−1)L
+
+sin(πmx/2)(M (x) − M (−x)) dx.
+
+For all 1 ≤ j ≤ N and (j − 1)L ≤ x ≤ jL we have
+
+β−
+j,mM (x) − β+
+
+j,mM (−x) ≤ sin(πmx/2)(M (x) − M (−x)) ≤ β+
+
+j,mM (x) − β−
+
+j,mM (−x).
+
+Substituting these estimates into the above expression for Bm gives the stated upper and
+lower bounds on Bm.
+
+Deﬁne the mean of f, g, M as follows.
+
+E(f ) =
+
+(cid:90) 1
+
+−1
+
+xf (x) dx, E(g) =
+
+(cid:90) 1
+
+−1
+
+xg(x) dx, E(M ) =
+
+(cid:90) 2
+
+−2
+
+xM (x) dx.
+
+We will use a bound on the second moment of M (x). A similar bound is used in the
+
+work of Moser and Murdeshwar [8].
+
+Lemma 6. For all M as in (2.1) we have
+
+(cid:90) 2
+
+−2
+
+x2M (x) dx =
+
+2
+3
+
++
+
+1
+2
+
+E(M )2.
+
+Proof. By changing the order of integration, we obtain
+
+E(M ) =
+
+(cid:90) 1
+
+(cid:90) 2
+
+f (t)
+
+−1
+
+−2
+
+(x + t)g(x + t) dxdt −
+
+(cid:90) 1
+
+(cid:90) 2
+
+tf (t)
+
+−1
+
+−2
+
+A similar change of order gives
+
+g(x + t) dxdt = E(g) − E(f ).
+
+(cid:90) 2
+
+−2
+
+x2M (x) dx =
+
+=
+
+=
+
+=
+
+(cid:90) 1
+
+−1
+(cid:90) 1
+
+−1
+(cid:90) 1
+
+−1
+(cid:90) 1
+
+−1
+
+f (t)
+
+f (t)
+
+(cid:90) 2
+
+−2
+(cid:90) 2
+
+−2
+
+x2g(x + t) dxdt
+
+((x + t)2 − 2t(x + t) + t2)g(x + t) dxdt
+
+x2g(x) dx − 2E(f )E(g) +
+
+(cid:90) 1
+
+−1
+
+t2f (t) dt
+
+x2(g(x) + f (x)) dx − 2E(f )E(g) =
+
+2
+3
+
+− 2E(f )E(g).
+
+8
+
+A simple calculation shows that E(f ) = −E(g) and so E(f ) = −E(M )/2. Substituting
+
+these identities into the above gives the claimed result.
+
+Now we give an estimation of the mean and second moment of M (x) using {wj, vj}N
+
+j=1.
+
+Lemma 7. Let h1 ≤ h2 be real numbers such that h1 ≤ E(M ) ≤ h2. Then
+
+h1 ≤ L2
+
+N
+(cid:88)
+
+(jwj − (j − 1)vj)
+
+j=1
+
+and L2
+
+N
+(cid:88)
+
+j=1
+
+((j − 1)wj − jvj) ≤ h2,
+
+and
+
+2/3 + h2
+
+1/2 ≤ L3
+
+N
+(cid:88)
+
+j=1
+
+j2(wj + vj) and L3
+
+N
+(cid:88)
+
+(j − 1)2(wj + vj) ≤ 2/3 + h2
+
+2/2.
+
+j=1
+
+Proof. Once again we break down the appropriate integral into a sum of integrals.
+
+E(M ) =
+
+(cid:90) 2
+
+−2
+
+xM (x) dx =
+
+N
+(cid:88)
+
+(cid:90) jL
+
+j=1
+
+(j−1)L
+
+x(M (x) − M (−x)) dx.
+
+For all 1 ≤ j ≤ N we can upper and lower bound the summand above.
+
+(j − 1)L2wj − jL2vj ≤
+
+(cid:90) jL
+
+(j−1)L
+
+x(M (x) − M (−x)) dx ≤ jL2wj − (j − 1)L2vj.
+
+Substituting this back into the above expression for E(M ) and then applying h1 ≤ E(M ) ≤
+h2 gives the upper and lower bounds stated. Secondly for the second moment:
+
+(cid:90) 2
+
+−2
+
+x2M (x) dx =
+
+N
+(cid:88)
+
+(cid:90) jL
+
+j=1
+
+(j−1)L
+
+x2(M (x) + M (−x)) dx.
+
+For all 1 ≤ j ≤ N we can again upper and lower bound the summand above.
+
+(j − 1)2L3(wj + vj) ≤
+
+(cid:90) jL
+
+(j−1)L
+
+x2(M (x) − M (−x)) dx ≤ j2L3(wj + vj).
+
+Substituting this estimate into the above expression for the second moment gives
+
+L3
+
+N
+(cid:88)
+
+j=1
+
+j2(wj + vj) ≤
+
+(cid:90) 2
+
+−2
+
+x2M (x) dx ≤ L3
+
+N
+(cid:88)
+
+j=1
+
+(j − 1)2(wj + vj).
+
+Applying Lemma 6 gives the two required inequalities.
+
+9
+
+4 Simpliﬁed linear program
+
+In this section we describe a simpliﬁed linear program version of our technique that is meant
+to convey the main idea of the more complex convex program in the following section. In
+this section we will derive a lower bound on (cid:107)M (cid:107)∞ under the additional assumption that M
+is even, i.e. M (x) = M (−x). The input of the linear program will be positive integers N, R
+and L = 2/N . We will also explicitly choose values for the array {α−
+j,m} deﬁned in (3.9). Set
+
+α−
+
+j,m = cos(πmL(j − 1/2)/2) − πmL/4,
+
+1 ≤ j ≤ N, 1 ≤ m ≤ 2R.
+
+Note that the above choice satisﬁes the deﬁnition (3.9) since the derivative of cos(πmx/2) is
+bounded in absolute value by πm/2. Our linear program is the following.
+
+Input: N, R, L = 2/N
+
+Variables: Ω, w1, . . . , wN
+Minimize: Ω
+
+Subject to: 0 ≤ wj ≤ Ω;
+
+1 ≤ j ≤ N,
+
+N
+(cid:88)
+
+j=1
+
+N
+(cid:88)
+
+j=1
+
+wj = N/4,
+
+α−
+
+j,2mwj ≤ 0;
+
+1 ≤ m ≤ R,
+
+N
+(cid:88)
+
+(j − 1)2wj ≤ 1/3.
+
+L3
+
+j=1
+
+(4.1)
+
+(4.2)
+
+(4.3)
+
+(4.4)
+
+Proposition 8. Let N, R be arbitrary positive integers, and M (x) be as in (2.1) with the
+If Ω∗ is the optimum of the above program, then
+additional property that M (x) is even.
+(cid:107)M (cid:107)∞ ≥ Ω∗.
+
+Proof. Our strategy is to show that any even M (x) gives a feasible assignment of variables
+such that Ω ≤ (cid:107)M (cid:107)∞. Let M (x) be even, ﬁx positive integers N, R. Put Ω = (cid:107)M (cid:107)∞ and
+(cid:82) jL
+wj = 1
+(j−1)L M (x) dx. Clearly this assignment of variables satisﬁes the constraints in (4.1).
+L
+Since M (x) is even, we have
+
+1
+2
+
+=
+
+(cid:90) 2
+
+0
+
+M (x) dx =
+
+N
+(cid:88)
+
+(cid:90) jL
+
+j=1
+
+(j−1)L
+
+M (x) dx = L
+
+N
+(cid:88)
+
+j=1
+
+wj,
+
+satisfying constraint (4.2). By Lemma 5 and (3.5) of Lemma 3, for all 1 ≤ m ≤ R we have
+
+L
+2
+
+N
+(cid:88)
+
+j=1
+
+α−
+
+j,2mwj ≤ A2m ≤ 0,
+
+10
+
+satisfying constraint (4.3). Lastly, from Lemma 6 we have
+
+L3
+
+N
+(cid:88)
+
+j=1
+
+(j − 1)2wj ≤
+
+(cid:90) 2
+
+0
+
+x2M (x) dx = 1/3,
+
+satisfying constraint (4.4).
+
+The optimum of this linear program increases with N and R. A linear program with
+hundreds of constraints and variables can be solved exactly. For our linear program, it
+is best to choose N ≥ 2000. At this scale of variables and constraints, exact-solvers are
+computationally slow, but numerical solvers are still very fast. The disadvantage of numerical
+solvers is that additional post-processing steps must be taken to ensure the reported results
+are correct. Our strategy will be to ﬁnd a feasible point in the dual program, which will
+give a lower bound on the minimum to the primal problem. To guarantee our dual solution
+is truly feasible, we will check that all inequalities that deﬁne the dual space are strictly
+satisﬁed by a margin that exceeds the worst-case-scenario for ﬂoating-point rounding errors.
+Choosing N = 80000 and R = 20 and running the dual program in CPLEX returns a
+feasible point in the dual space with objective 0.375169005340707. We have veriﬁed that all
+constraints are satisﬁed by a margin exceeding the worst-case ﬂoating point error accumu-
+lation. Therefore (cid:107)M (cid:107)∞ ≥ 0.375 for all even M . By increasing N and R this bound can be
+improved a little, but it seems that the limit of this approach is less than 0.3755. In the next
+section we will introduce nonlinear constraints that will give a substantial improvement.
+
+5 Full convex program
+
+In this section we give and discuss our main program that will be used to prove Theorem 1.
+The convex program we will use includes the ideas of the previous linear program, but will
+also add constraints coming from (3.6) which will be important since we no longer assume
+M (x) is even. We will also add quadratic constraints coming from (3.5). There will be
+several inputs to our convex program. Let N, R denote positive integers, their role will be
+roughly the same as in the simpliﬁed linear program. A positive integer T will also be an
+input, its role is as in Lemma 4 and determines when we truncate certain inﬁnite sums.
+Finally our last inputs will be real numbers h1 < h2, p1 < p2, q1 < q2. These inputs will act
+as bounds on the mean of M (x), ﬁrst cosine, and ﬁrst sine Fourier coeﬃcient of f (x). We
+will also explicitly choose values for the arrays {α−
+j,m} deﬁned in (3.9)
+and (3.10). Set
+
+j,m} and {β−
+
+j,m, α+
+
+j,m, β+
+
+j,m = cos(πmL(j − 1/2)/2) − πmL/4, α+
+α−
+β+
+β−
+j,m = sin(πmL(j − 1/2)/2) + πmL/4,
+j,m = sin(πmL(j − 1/2)/2) − πmL/4,
+
+j,m = cos(πmL(j − 1/2)/2) + πmL/4,
+
+for all 1 ≤ j ≤ N and 1 ≤ m ≤ 2R. As above, these choices satisfy the deﬁnitions of (3.9)
+and (3.10) since the derivatives of cos(πmx/2) and sin(πmx/2) are bounded by πm/2. Our
+full convex program is the following.
+
+11
+
+Input: N, L = 2/N, T, R, h1, h2, p1, p2, q1, q2
+
+Variables: Ω, {wj, vj}N
+
+j=1, {ck, dk}T
+
+k=1, {(cid:15)2m−1, δ2m−1}R
+
+j=1,
+
+Variable expressions: For 1 ≤ m ≤ 2R :
+
+am =
+
+bm =
+
+(cid:40) 1
+
+2cm/2
+(cid:15)m + 2m sin(πm/2)
+
+π
+
+(cid:16) 1
+2m2 + (cid:80)T
+
+k=1
+
+(−1)k
+m2−4k2 ck
+
+(cid:17)
+
+if m is even
+
+if m is odd
+
+(cid:40) 1
+
+2dm/2
+δm + 4
+π
+
+(cid:80)T
+
+k=1
+
+k(−1)k sin(πm/2)
+m2−4k2
+
+dk
+
+if m is even
+if m is odd
+
+Minimize: Ω
+
+Subject to: 0 ≤ wj, vj ≤ Ω ≤ 1;
+
+1 ≤ j ≤ N,
+
+L
+
+L2
+
+L3
+
+N
+(cid:88)
+
+j=1
+
+N
+(cid:88)
+
+j=1
+
+N
+(cid:88)
+
+j=1
+
+(wj + vj) = 1,
+
+(jwj − (j − 1)vj) ≥ h1
+
+(j − 1)2(wj + vj) ≤ 2/3 + h2
+
+2/2,
+
+L
+2
+
+N
+(cid:88)
+
+j=1
+
+α−
+
+j,m(wj + vj) ≤
+
+4 sin (mπ/2)
+mπ
+
+am − 2(a2
+
+m + b2
+
+m);
+
+(5.1)
+
+(5.2)
+
+(5.3)
+
+(5.4)
+
+1 ≤ m ≤ 2R,
+
+(5.5)
+
+N
+(cid:88)
+
+(β−
+
+j,mwj − β+
+
+j,mvj) ≤ −
+
+j=1
+
+N
+(cid:88)
+
+(β+
+
+j,mwj − β−
+
+j,mvj) ≥ −
+
+L
+2
+
+L
+2
+
+8
+mπ
+
+8
+mπ
+
+sin (mπ/2) bm;
+
+1 ≤ m ≤ 2R,
+
+sin (mπ/2) bm;
+
+1 ≤ m ≤ 2R,
+
+j=1
+
+|(cid:15)2m−1| ≤
+
+|δ2m−1| ≤
+
+2m
+√
+
+6T 3
+4
+√
+2T
+
+π
+
+π
+
+1 ≤ m ≤ R,
+
+1 ≤ m ≤ R,
+
+1
+4 − m2/T 2 ·
+1
+4 − m2/T 2 ·
+2
+π
+
+|ck|, |dk| ≤
+
+1 ≤ k ≤ T,
+
+T
+(cid:88)
+
+(c2
+
+k + d2
+
+k) ≤ 1/2,
+
+k=1
+p1 ≤ c1 ≤ p2,
+
+q1 ≤ d1 ≤ q2,
+
+L
+2
+
+N
+(cid:88)
+
+j=1
+
+α+
+
+j,2(wj + vj) ≥ −
+
+1
+2
+
+12
+
+(p2
+
+2 + max{q2
+
+1, q2
+
+2}).
+
+(5.6)
+
+(5.7)
+
+(5.8)
+
+(5.9)
+
+(5.10)
+
+(5.11)
+
+(5.12)
+
+(5.13)
+
+Our next proposition shows how the input and output of the convex program relate to
+
+an f (x), M (x) pair of functions.
+
+Proposition 9. Let N, T, R be arbitrary positive integers, and h1, h2, p1, p2, q1, q2 be real
+numbers. Let Ω∗ be the optimum of the above program with this choice of input. Suppose
+that f (x), M (x) is as in (2.1) and satisﬁes
+
+(i) 0 ≤ h1 ≤ E(M ) ≤ h2,
+(ii) 0 ≤ p1 ≤ (cid:82) 1
+
+−1 cos(πx)f (x) dx ≤ p2,
+
+(iii) q1 ≤ (cid:82) 1
+
+−1 sin(πx)f (x) dx ≤ q2.
+
+Then (cid:107)M (cid:107)∞ ≥ Ω∗.
+
+Proof. Our strategy is to show that any f (x), M (x) satisfying the above hypotheses gives a
+feasible assignment of variables such that Ω ≤ (cid:107)M (cid:107)∞. Let f (x), M (x) be as in (2.1) such
+that (i),(ii),(iii) above are also satisﬁed. We will show that the following choice of variables
+is feasible. Set the variable Ω = (cid:107)M (cid:107)∞. For each 1 ≤ j ≤ N set
+
+wj =
+
+1
+L
+
+(cid:90) jL
+
+(j−1)L
+
+M (x) dx and vj =
+
+1
+L
+
+(cid:90) −(j−1)L
+
+−jL
+
+M (x) dx.
+
+For all k ≥ 1 set
+
+ck =
+
+(cid:90) 1
+
+−1
+
+cos(πkx)f (x) dx and dk =
+
+(cid:90) 1
+
+−1
+
+sin(πkx)f (x) dx.
+
+(5.14)
+
+The variables of the program ck, dk only run from the indices 1 ≤ k ≤ T , but we deﬁne ck, dk
+for k ≥ T + 1 to aid in our deﬁnition of the last two types of variable. For each 1 ≤ m ≤ R
+set
+
+(cid:15)2m−1 =
+
+2m(−1)m+1
+π
+
+∞
+(cid:88)
+
+k=T +1
+
+(−1)k
+(2m − 1)2 − 4k2 ck,
+
+and
+
+δ2m−1 =
+
+4(−1)m+1
+π
+
+∞
+(cid:88)
+
+k=T +1
+
+k(−1)k
+(2m − 1)2 − 4k2 dk.
+
+We’ll now show that this assignment of variables is feasible. Constraint (5.1) follows
+immediately from the deﬁnitions; the average of M (x) on an interval cannot exceed the
+maximum. The other constraints are satisﬁed for reasons contained in the lemmas of Sec-
+tion 3, or hypotheses (i),(ii),(iii). The dependency of constraints on corresponding lemma(s)
+is outlined in Table 1.
+
+• Constraint (5.2) follows from (3.8), i.e. because (cid:82) 1
+
+−1 M (x) dx = 1.
+
+• Constraints (5.3) and (5.4) follow from Lemma 7 and hypothesis (i). The constraints
+
+represent bounds on the mean and second moment of M (x), respectively.
+
+13
+
+• By Lemma 3, the righthand side of constraint (5.5) is the mth cosine Fourier coeﬃcient
+of M (x). By Lemma 5, the lefthand side of (5.5) is a lower bound on this Fourier
+coeﬃcient.
+
+• By Lemma 3, the righthand side of constraints (5.6) and (5.7) are the mth sine Fourier
+coeﬃcient of M (x). By Lemma 5, the righthand sides of (5.6) and (5.7) are lower and
+upper bounds, respectively, on this Fourier coeﬃcient.
+
+• Constraints (5.8) and (5.9) follow from Lemma 4.
+
+• Constraint (5.10) follows from (5.14) since f (x) ∈ [0, 1] and (cid:107)f (cid:107)1 = 1.
+
+• Constraint (5.11) follows from Parseval’s identity, in particular equation (3.7).
+
+• The left constraint of (5.12) follows from hypothesis (ii), since the integer in (ii) is
+precisely c1. Similarly, the right constraint of (5.12) follows from hypothesis (iii).
+
+• By Lemma 3, in particular (3.3) and (3.5), the second cosine Fourier coeﬃcient of
+
+M (x) is
+
+A2 =
+
+1
+2
+
+(cid:90) 2
+
+−2
+
+cos(πx) dx = −
+
+1
+2
+
+(c2
+
+1 + d2
+
+1).
+
+From constraint (5.12) we see that − 1
+2(p2
+2}) is a lower bound on the
+righthand side above. Also, from Lemma 5 we see that the lefthand side of constraint
+(5.13) is an upper bound on the lefthand side above.
+
+2 + max{q2
+
+1, q2
+
+Constraint
+
+(5.2)
+
+(5.3), (5.4)
+
+Follows from
+
+(3.8)
+
+Lemma 7 and (i)
+
+(5.5)
+
+Lemma 3: (3.5) and Lemma 5
+
+(5.6), (5.7)
+
+(5.8), (5.9)
+
+(5.10)
+
+(5.11)
+
+(5.12)
+
+(5.13)
+
+Lemma 3: (3.6) and Lemma 5
+
+Lemma 4
+
+(5.14)
+
+(3.7)
+
+(ii) and (iii)
+
+Lemma 3: (3.5), Lemma 5, (ii) and (iii)
+
+Table 1: Constraint feasibility
+
+14
+
+For the remainder of this paper, let f ∗, M ∗ be an optimal pair in the sense that (cid:107)M ∗(cid:107)∞ = µ.
+
+Also denote the ﬁrst sine and cosine Fourier coeﬃcients of f ∗ by c∗
+
+1 and d∗
+
+1, i.e.
+
+c∗
+1 =
+
+(cid:90) 1
+
+−1
+
+cos(πx)f ∗(x) dx,
+
+d∗
+1 =
+
+(cid:90) 1
+
+−1
+
+sin(πx)f ∗(x) dx.
+
+Note that f ∗(x), f ∗(−x), and 1 − f ∗(x) are all also optimal. This means that without loss of
+1 ≥ 0. It’s also easy to see that E(M ∗) ≤ 2
+generality, we can assume that E(M ∗) ≥ 0 and c∗
+and |c∗
+1| ≤ 1. If we choose the inputs
+
+1|, |d∗
+
+(h1, h2) = (0, 2),
+
+(p1, p2) = (0, 1),
+
+(q1, q2) = (−1, 1),
+
+(5.15)
+
+then the optimum of our convex program with this input gives a lower bound on µ. However,
+the optimum ends up close to 0.25 for any choice of N, T, R. In order to use our program to
+give a good bound on µ, we will need a ‘divide and conquer’ strategy of breaking up the valid
+ranges of parameters shown in (5.15) into small chunks. The minimum of all the optimums
+over these smaller intervals will be our lower bound on µ.
+
+5.1 Dual program output
+
+As was the case with our simpler linear program in Section 4, it is best to choose the
+parameter N to be fairly large, i.e. at least 2000. This rules out the use of exact solver
+algorithms, but numerical solvers are still fast enough for this purpose. To guarantee the
+correctness of our output, we will ﬁnd feasible points in the interior of the dual program
+space, suﬃciently far from the boundary to compensate for any ﬂoating-point arithmetic
+errors. The dual of a convex quadratically constrained problem is easiest to calculate by
+ﬁrst reformulating the primal program as a second order cone program (SOCP). The dual
+of a SOCP is relatively simple to write down. We have placed the details of these steps in
+two appendices. In Appendix II we explicitly write down the dual program and discuss our
+post-processing veriﬁcation step to ensure that even if worst-case ﬂoating point arithmetic
+errors occur, the assignments of dual variables used are deﬁnitely feasible. In Table 2 we
+display the value of the objective function of the dual program for a veriﬁed feasible point in
+the dual space for several choices of input. Note that we have used the ‘divide and conquer’
+strategy mentioned above to narrow down the location of E(M ∗), c∗
+
+1 and d∗
+1.
+
+The data of the ﬁrst line of Table 2 shows that either µ ≥ 0.38 or E(M ∗) ≤ 0.75.
+
+Combining all data from Table 2 shows that either µ ≥ 0.37925 or
+
+0 ≤ E(M ∗) ≤ 0.06,
+
+0.35 ≤ c∗
+
+1 ≤ 0.45,
+
+and − 0.02 ≤ d∗
+
+1 ≤ 0.02.
+
+(5.16)
+
+We can proceed in the same way by dividing the above intervals into small pieces and
+ﬁnding feasible points for each of the corresponding inputs. The drawback to this approach
+is that in order to achieve a lower bound close to 0.379, many hundreds of feasible points
+need to be computed and veriﬁed. Instead, we can use the observation that the parameters
+they only aﬀect
+h1, h2, p1, p2 are not a part of the constraints in the dual program, i.e.
+
+15
+
+Parameter assignment
+N, T, R = 10000, 4000, 10
+
+Optimum lower bound
+
+(h1, h2), (p1, p2), (q1, q2) = (0.75, 2), (0, 1), (−1, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0.4, 0.75), (0, 1), (−1, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0.2, 0.4), (0, 1), (−1, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0.1, 0.2), (0, 1), (−1, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0.08, 0.1), (0, 1), (−1, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0, 1), (−1, −0.05)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0, 1), (−0.05, −0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0, 1), (0.05, 1)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0, 1), (0.025, 0.05)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0, 0.25), (−0.025, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0.25, 0.3), (−0.025, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0.3, 0.33), (−0.025, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0.5, 1), (−0.025, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0, 0.08), (0.45, 0.5), (−0.025, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0.06, 0.08), (0.33, 0.45), (−0.025, 0.025)
+N, T, R = 20000, 5000, 10
+
+(h1, h2), (p1, p2), (q1, q2) = (0.0, 0.06), (0.33, 0.45), (−0.025, −0.02)
+(h1, h2), (p1, p2), (q1, q2) = (0.0, 0.06), (0.33, 0.45), (0.02, 0.025)
+(h1, h2), (p1, p2), (q1, q2) = (0.0, 0.06), (0.33, 0.35), (−0.02, 0.02)
+
+Table 2: Dual program output I
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.38
+
+0.37925
+
+the objective function. As a result, for any choice of input N, T, R, h1, h2, p1, p2, q1, q2 and
+a feasible assignment of dual variables, we have a lower bound on the optimum of the
+dual program for any choice of h1, h2, p1, p2 by reusing the variable assignment, and simply
+re-computing the objective function with the changed values of h1, h2, p1, p2. A precise
+statement, proof, and example of this idea is given in Appendix II. We will apply this
+technique by ﬁrst calculating a feasible point in the dual with input such that h = h1 = h2
+and p = p1 = p2. Next we determine by how much can (h, p) change while keeping the rest
+of the feasible point data ﬁxed so that the objective function is always at least 0.379005.
+Since the dependence of the objective function on h and p is quadratic, the region for
+which the objective is at least 0.379005 will be an ellipse on (h, p)-axes. We compute seven
+feasible points such that the union of the ellipses described above covers the remaining region
+described in (5.16). The input of these feasible points is described in Table 3. The covering
+ellipses are shown in Figure 1.
+
+The full variable assignments of all feasible solutions used in this section are available
+upon request to the author. We conclude that the Theorem 1 bound µ ≥ 0.379005 is now
+veriﬁed.
+
+16
+
+Label/Colour in Figure 1
+
+Initial parameter assignment
+
+Initial objective value
+
+1/Green
+
+2/Blue
+
+3/Red
+
+4/Purple
+
+5/Light green
+
+6/Orange
+
+7/Light blue
+
+h = 0.015, p = 0.381
+
+h = 0.015, p = 0.385
+
+h = 0.02, p = 0.375
+
+h = 0.004, p = 0.3875
+
+h = 0, p = 0.4
+
+h = 0, p = 0.381
+
+h = 0.03, p = 0.375
+
+0.37905
+
+0.37905
+
+0.37905
+
+0.37905
+
+0.3791
+
+0.3791
+
+0.3794
+
+Table 3: Dual program output II
+N, T, R = 25000, 7000, 10, and (q1, q2) = (−0.02, 0.02)
+
+Figure 1: Lower bound of 0.379005
+
+6 Concluding remarks
+
+We expect that by computing more feasible solutions, using larger values of N, T, R, and
+using more accurate ﬂoating point calculations, that our lower bound of 0.379005 can be
+improved. Using the input N, T, R = 25000, 7000, 10 and
+
+h1 = h2 = 0.015,
+
+p1 = p2 = 0.381, −q1 = q2 = 0.02,
+
+17
+
+we were able to ﬁnd a feasible point with objective 0.37905, but not with objective 0.3791.
+This seems to indicate that the limit of this method is not much larger than 0.379. We also
+expect that the optimal function f ∗(x) is even. A proof of this would also improve the lower
+bound on µ, since we could always take h1 = h2 = q1 = q2 = 0 as part of the input in our
+convex program.
+
+Acknowledgements. The author thanks J´ozsef Solymosi and Josh Zahl for careful
+
+reading of this work and providing valuable suggestions.
+
+References
+
+[1] P. Erd˝os, Some remarks on number theory (Hebrew, English summary), Riveon Le-
+
+matematika, 9 (1955) 45–48; MR 17, 460.
+
+[2] R. K. Guy, Unsolved Problems in Number Theory, third ed., Problem Books in Math.,
+
+Springer-Verlag, New York, 2004, sect. C17; MR2076335.
+
+[3] J.K. Haugland, Advances in the minimum overlap problem, Journal of Number Theory
+
+58 (1996), no 1, 71–78. MR1387725
+
+[4] J.K. Haugland, The minimum overlap problem revisited, arXiv:1609.08000 [math.GM],
+
+(2016).
+
+[5] M.S. Lobo, L. Vandenberghe, S. Boyd, H. Lebret, Applications of second order cone
+
+programming, Linear Algebra Appl. 284 (1) (1998) 193–228. MR1655138
+
+[6] N.J. Higham, The accuracy of ﬂoating point summation, SIAM J. Sci. Comput. 14 (1993)
+
+78–799. MR1223274
+
+[7] L. Moser, On the minimum overlap problem of Erd˝os, Acta Arith. 5 (1959), 117–119.
+
+MR0106864
+
+[8] L. Moser and M. G. Murdeshwar, On the overlap of a function with the translation of
+
+its complement, Colloq. Math. 15 (1966), 93–97. MR0196023
+
+Department of Mathematics
+The University of British Columbia
+Room 121, 1984 Mathematics Road
+Vancouver, BC
+Canada V6T 1Z2
+epwhite@math.ubc.ca
+
+18
+
+7 Appendix I: Primal program as a SOCP
+
+In order to construct the dual program of the convex program in Section 5 we ﬁrst reformulate
+this primal program as a second order cone program (SOCP). In Appendix II, we reuse the
+data involved in the primal program to construct the dual SOCP. The input of both the
+primal and the dual is the same as the input of the convex program in Section 5. The
+constraints in the primal SOCP are the exact same as the constraints in Section 5. The only
+diﬀerence is notation of variables and that the quadratic constraints must be rearranged
+to become second order cone constraints. Throughout, it will be convenient to use square
+brackets to describe individual elements of vectors and arrays. For example A[i, j] = Aij
+denotes the i, jth entry.
+Input: N, L = 2/N, T, R, h1, h2, p1, p2, q1, q2
+Variables: A (2N +2T +2R+1)×1 vector variable X. The entries of X correspond to the
+variables in the original convex program. This correspondence is described in the following
+table of variable expressions. The entry X0 corresponds to variable Ω in the original program.
+Variable expressions and data: Variable expressions and data in the primal and dual
+(in Appendix II) will be arranged in arrays and vectors. See Table 4 for the expressions and
+Table 5 for the data. In the “Description” column we will indicate how the array or vector is
+indexed. We use the notation [a, b] to indicate the set of integers between a and b inclusively,
+and [1, a] = [a]. For example, an [a] × [2, b] array A will have entries A[i, j] for 1 ≤ i ≤ a
+and 2 ≤ j ≤ b.
+Objective: minimize ΦT X = X0
+Constraints:
+
+(cid:13)Acoscone[m]X + bcoscone[m](cid:13)
+(cid:13)
+(cid:13)
+(cid:13)AparX(cid:13)
+obndX + dobnd ≥ 0,
+
+(cid:13)2 ≤ cT
+(cid:13)2 ≤ dpar,
+
+cT
+
+coscone[m]X + dcoscone[m], for all 1 ≤ m ≤ 2R
+
+cT
+cT
+
+wbnd[i, j]X ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ j ≤ N,
+
+vbnd[i, j]X ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ j ≤ N,
+
+cT
+
+sum[i]X + dsum[i] ≥ 0, for all 1 ≤ i ≤ 2,
+cT
+cT
+
+meanX + dmean ≥ 0,
+
+momeX + dmome ≥ 0,
+cT
+cT
+
+sin-lower[m]X ≥ 0, for all 1 ≤ m ≤ 2R
+
+sin-upper[m]X ≥ 0, for all 1 ≤ m ≤ 2R
+
+ckbnd[i, k]X + dckbnd[i, k] ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ k ≤ T,
+
+dkbnd[i, k]X + ddkbnd[i, k] ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ k ≤ T,
+
+cT
+cT
+
+cT
+cT
+cT
+cT
+
+c1bnd[i]X + dc1bnd[i] ≥ 0, for all 1 ≤ i ≤ 2,
+
+d1bnd[i]X + dd1bnd[i] ≥ 0, for all 1 ≤ i ≤ 2,
+
+ep[i, m]X + dep[i, m] ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ m ≤ R,
+
+del[i, m]X + ddel[i, m] ≥ 0, for all 1 ≤ i ≤ 2, 1 ≤ m ≤ R,
+
+cT
+
+cosupX + dcosup ≥ 0.
+
+The set of constraints above is precisely the same as our program in Section 5. For
+
+19
+
+example, if both sides of the ﬁrst constraint above are squared and simpliﬁed, we will obtain
+the constraint from the original convex program (5.5).
+
+Name(s)
+
+Description
+
+Deﬁning property
+
+w, v
+
+[N ]-expression vector
+
+wj = Xj, vj = XN +j for 1 ≤ j ≤ N
+
+c, d
+
+(cid:15), δ
+
+a∗
+m
+
+[T ]-expression vector
+
+ck = X2N +k, dk = X2N +T +k for 1 ≤ k ≤ T
+
+[R]-expression vector
+
+[2R]-expression vector
+
+(cid:40) 1
+
+(cid:15)m = X2N +2T +m, δm = X2N +2T +R+m for 1 ≤ m ≤ R
+if m is even
+if m is odd
+
+a∗
+m =
+
+(cid:80)T
+
+(−1)k
+m2−4k2 ck
+
+bm
+
+[2R]-expression vector
+
+bm =
+
+FcosLB
+
+[2R]-expression vector
+
+FcosUB
+
+[2R]-expression vector
+
+FsinLB
+
+FsinUB
+
+[2R]-expression vector
+
+[2R]-expression vector
+
+if m is even
+if m is odd
+
+dk
+
+k=1
+
+π
+
+2cm/2
+(cid:15)m + 2m sin(πm/2)
+(cid:40) 1
+2dm/2
+δm + 4
+π
+FcosLB[m] = L
+2
+FcosUB[m] = L
+2
+(cid:80)N
+
+(cid:80)T
+
+k=1
+
+FsinUB[m] = L
+2
+FsinUB[m] = L
+2
+
+(cid:80)N
+
+k(−1)k sin(πm/2)
+m2−4k2
+(cid:80)N
+j=1 α−
+j=1 α+
+j=1(β−
+j=1(β+
+
+(cid:80)N
+
+j,m(wj + vj)
+
+j,m(wj + vj)
+j,mwj − β+
+j,mwj − β−
+
+j,mvj)
+
+j,mvj)
+
+Table 4: Variable expressions for SOCP
+
+Remark: we will continue to use the values assigned to αj,m, βj,m in Section 5.
+
+20
+
+Deﬁning property
+
+E = 2N + 2T + 2R
+
+Φ0 = 1, Φj = 0 if 1 ≤ j ≤ E
+
+m
+
+mπ
+
+Acoscone[m, 1]X = sin(mπ/2)a∗
+
+−FcosLB[m]/2
+Acoscone[m, 2]X = a∗
+m
+Acoscone[m, 3]X = bm
+bcoscone[m, 1] = −1/2 + 2 sin2(πm/2)/(mπ)2
+bcoscone [m, 2] = sin(πm/2)/(mπ)
+bcoscone [m, 3] = 0
+
+cT
+
+m
+
+coscone[m]X = sin(mπ/2)a∗
+dcoscone [m] = 1/2 + 2 sin2(πm/2)/(mπ)2
+Apar[k]X = ck, and
+Apar[T + k]X = dk for all 1 ≤ k ≤ T
+
+−FcosLB[m]/2
+
+mπ
+
+√
+
+dpar = 1/
+
+2
+
+cT
+
+obndX = −Ω
+
+dobnd= 1
+
+cT
+
+wbnd[1, j]X = Ω − wj , for all 1 ≤ j ≤ N , and
+
+cT
+
+cwbnd[2, j]X = wj
+
+vbnd[1, j]X = Ω − vj , for all 1 ≤ j ≤ N , and
+
+cvbnd[2, j]X = vj
+
+Name
+
+Description
+
+E
+
+Φ
+
+Integer
+
+[0, E]-vector
+
+Acoscone
+
+[2R] × [3] × [0, E] array
+
+bcoscone
+
+[2R] × [3] array
+
+[2R] × [0, E] array
+
+[2R]-vector
+
+[2T ] × [0, E] array
+
+Real
+
+[0, E]-vector
+
+Real
+
+[2] × [N ] × [0, E] array
+
+[2] × [N ] × [0, E] array
+
+ccoscone
+
+dcoscone
+
+Apar
+
+dpar
+
+cobnd
+
+dobnd
+
+cwbnd
+
+cvbnd
+
+csum
+
+dsum
+
+cmean
+
+dmean
+
+cmome
+
+dmome
+
+[2] × [0, E] array
+
+cT
+
+sum[i]X = (−1)i+1 (cid:80)N
+
+j=1(Xj + XN +j ), for i = 1, 2
+
+[2]-vector
+
+[0, E]-vector
+
+Real
+
+[0, E]-vector
+
+Real
+
+dsum[i] = (−1)iN/2, for i = 1, 2
+
+cT
+
+meanX = L (cid:80)N
+
+j=1(jXj − (j − 1)Xj−1)
+−h1N/2
+
+cT
+
+momeX = −L2 (cid:80)N
+
+j=1(j − 1)2(Xj + XN +j )
+
+(2/3 + h2
+
+2/2)N/2
+
+csin-lower
+
+csin-upper
+
+[2R] × [0, E] array
+
+[2R] × [0, E] array
+
+cT
+
+cT
+
+sin-lowerX = − 8
+sin-upperX = 8
+
+mπ sin (mπ/2) bm−FsinLB[m]
+mπ sin (mπ/2) bm+FsinLB[m]
+
+cckbnd
+
+dckbnd
+
+cdkbnd
+
+ddkbnd
+
+cc1bnd
+
+dc1bnd
+
+cd1bnd
+
+dd1bnd
+
+cep
+
+dep
+
+cdel
+
+ddel
+
+ccosup
+
+dcosup
+
+[2] × [T ] × [0, E] array
+
+cT
+
+ckbnd[i, k]X = (−1)i+1ck for i = 1, 2 and 1 ≤ k ≤ T
+
+[2] × [T ] array
+
+[2] × [T ] × [0, E] array
+
+dckbnd[i, k] = 2/π for i = 1, 2 and 1 ≤ k ≤ T
+dkbnd[i, k]X = (−1)i+1dk for i = 1, 2 and 1 ≤ k ≤ T
+
+cT
+
+[2] × [T ] array
+
+[2] × [0, E] array
+
+[2]-vector
+
+[2] × [0, E] array
+
+[2]-vector
+
+[2] × [R] × [0, E] array
+
+ddkbnd[i, k] = 2/π for i = 1, 2 and 1 ≤ k ≤ T
+
+cT
+
+c1bnd[i]X = (−1)i+1c1 for i = 1, 2
+
+dckbnd= [−p1, p2]
+d1bnd[i]X = (−1)i+1d1 for i = 1, 2
+
+cT
+
+ddkbnd= [−q1, q2]
+ep[i, m]X = (−1)i+1(cid:15)m for i = 1, 2 and 1 ≤ m ≤ R
+
+cT
+
+[2] × [R] array
+
+dckbnd[i, m] =
+
+1
+4−m2/T 2 ·
+
+π
+
+2m
+√
+
+6T 3 for i = 1, 2 and 1 ≤ m ≤ R
+
+[2] × [R] × [0, E] array
+
+cT
+
+del[i, m]X = (−1)i+1δm for i = 1, 2 and 1 ≤ m ≤ R
+
+[2] × [R] array
+
+ddkbnd[i, m] =
+
+[0, E]-vector
+
+Real
+
+for i = 1, 2 and 1 ≤ m ≤ R
+
+π
+
+1
+4−m2/T 2 ·
+cT
+dcosup= N
+
+4
+√
+2T
+cosupX =FcosUB[2]
+1, q2
+
+2 + max{q2
+
+2 (p2
+
+2}).
+
+Table 5: Data for SOCP
+
+21
+
+8 Appendix II: Dual SOCP
+
+The dual of a SOCP can be concisely stated using the data from the primal, see Section
+4.1 of [5] for details on dual SOCPs. The standard formulation of a dual SOCP involves
+equality constraints. We will eliminate some variables of the dual SOCP so that no equality
+constraints are used. This will allow us to check a particular variable assignment is far
+enough inside the interior of the dual space, thereby guaranteeing that assignment is feasible
+in spite of worst-case ﬂoating point arithmetic errors. We begin by reviewing the formulation
+of a SOCP and its dual. The standard formulation of a SOCP takes the form
+
+minimize: ΦT x
+
+subject to: (cid:107)Aix + bi(cid:107) ≤ cT
+
+i x + di,
+
+1 ≤ i ≤ N,
+
+(8.1)
+
+where x is a n-vector variable, Φ ∈ Rn, Ai is an ni × n matrix, bi ∈ Rni, ci ∈ Rn, and di ∈ R.
+We have formulated our Appendix I primal SOCP in this way. The dual to (8.1) is
+
+maximize: −
+
+N
+(cid:88)
+
+i=1
+
+(bT
+
+i zi + diyi)
+
+subject to:
+
+N
+(cid:88)
+
+(AT
+
+i z + ciyi) = Φ
+
+i=1
+(cid:107)zi(cid:107) ≤ yi,
+
+1 ≤ i ≤ N,
+
+(8.2)
+
+where zi is a ni-vector of variables, and yi is a nonnegative variable. There are n linear
+equations forming the equality constraints of (8.2). For our SOCP dual, we need to eliminate
+the equality constraints. Suppose that for some row 1 ≤ j ≤ n of the system of equality
+constraints in (8.2) there is an index 1 ≤ k ≤ N such that vector ck is all zero except for a
+nonzero entry at row j, then we can solve for the variable yk in terms of the other variables:
+
+yk =
+
+1
+ck[j]
+
+(cid:0)Φj −
+
+(cid:88)
+
+(AT
+
+i z + ciyi)[j](cid:1) ≥ 0.
+
+(8.3)
+
+1≤i≤N
+i(cid:54)=k
+
+After adding the inequality on the righthand side of (8.3) to the constraints of program
+(8.2), we can eliminate variable yk and the row j equality constraint from program (8.2).
+Our primal in Appendix I has E + 1 = 2N + 2T + 2R + 1 variables, and so the corresponding
+dual has E + 1 equality constraints, corresponding to the entries of vector Φ. For each
+0 ≤ j ≤ E, there is a ‘c’ vector with a unique nonzero entry in the jth row. This collection of
+‘c’ vectors allows us to eliminate all equality constraints. The ‘c’ vectors we use to eliminate
+the equality constraints are described in Table 6.
+
+22
+
+8.1 The SOCP dual
+
+Variables: See Table 7.
+Variable expressions: See Table 8.
+Objective: maximize obj (deﬁned in Table 8).
+Constraints:
+
+yeobnd ≥ 0
+
+yewbnd 2[j] ≥ 0 for all 1 ≤ j ≤ N
+yevbnd 2[j] ≥ 0 for all 1 ≤ j ≤ N
+yeckbnd 2[k] ≥ 0 for all 1 ≤ k ≤ T
+yedkbnd 2[k] ≥ 0 for all 1 ≤ k ≤ T
+yeep 2[m] ≥ 0 for all 1 ≤ m ≤ R
+yedel 2[m] ≥ 0 for all 1 ≤ m ≤ R
+
+(ycoscone[m])2 ≥
+
+(ypar)2 ≥
+
+3
+(cid:88)
+
+i=1
+2T
+(cid:88)
+
+k=1
+
+(zcoscone[m, i])2 for all 1 ≤ m ≤ 2R
+
+(zpar[k])2.
+
+Name
+
+cobnd
+
+cwbnd[2, j]
+
+cvbnd[2, j]
+
+cckbnd[2, j]
+
+cdkbnd[2, j]
+
+cep[2, j]
+
+cdel[2, j]
+
+Index of nonzero row
+
+0
+
+j for 1 ≤ j ≤ N
+
+N + j for 1 ≤ j ≤ N
+
+2N + j for 1 ≤ j ≤ T
+
+2N + T + j for 1 ≤ j ≤ T
+
+2N + 2T + j for 1 ≤ j ≤ R
+
+2N + 2T + R + j for 1 ≤ j ≤ R
+
+Table 6: c-vectors with one nonzero entry
+
+8.2 Feasibility veriﬁcation
+
+We will use a numerical solver to ﬁnd feasible points in the dual SOCP, thereby giving lower
+bounds to the primal optimum. Given an assignment of values to the variables of the dual,
+we need to verify that in spite of any ﬂoating point arithmetic errors, the constraints are
+satisﬁed. We use IBM’s CPLEX optimization software, which employs a barrier algorithm
+to solve SOCP. CPLEX uses double-precision (64-bit) arithmetic in its computations with
+a rounding error unit of u = 2−53. For any x ∈ R, let ﬂ(x) be its stored double-precision
+value. If no overﬂow or underﬂow occurs, we have the following bounds.
+
+23
+
+Name
+
+zcoscone
+
+ycoscone
+
+zpar
+
+ypar
+
+ywbnd 1
+
+yvbnd 1
+
+ysum
+
+ymean
+
+ymome
+
+ysin-lower
+
+ysin-upper
+
+yckbnd 1
+
+ydkbnd 1
+
+yc1bnd
+
+yd1bnd
+
+yep 1
+
+ydel 1
+
+ycosup
+
+Description
+
+[2R] × [3] variable array
+
+[2R]-vector of nonnegative variables
+
+[2T ]-vector of variables
+
+nonnegative variable
+
+[N ]-vector of nonnegative variables
+
+[N ]-vector of nonnegative variables
+
+[2]-vector of nonnegative variables
+
+nonnegative variable
+
+nonnegative variable
+
+[2R]-vector of nonnegative variables
+
+[2R]-vector of nonnegative variables
+
+[T ]-vector of nonnegative variables
+
+[T ]-vector of nonnegative variables
+
+[2]-vector of nonnegative variables
+
+[2]-vector of nonnegative variables
+
+[R]-vector of nonnegative variables
+
+[R]-vector of nonnegative variables
+
+nonnegative variable
+
+Table 7: Variables for dual SOCP
+
+• Let x, y ∈ R and (cid:63) ∈ {+, −, ×, ÷} be an operation where y = 0 and (cid:63) = ÷ do not
+
+both hold, then for sum |δ| ≤ u:
+
+ﬂ(x (cid:63) y) = (x (cid:63) y)(1 + δ).
+
+• Let n ∈ N. If x1, . . . , xn ∈ R, and Sn = (cid:80)n
+
+k=1 xk, then
+
+(cid:12)Sn − ﬂ(Sn)(cid:12)
+(cid:12)
+
+(cid:12) ≤
+
+(n − 1)u
+1 − (n − 1)u
+
+n
+(cid:88)
+
+k=1
+
+|xk|.
+
+Details of these estimates, and improvements on them can be found in [6]. Let n ∈ N,
+and xk, yk ∈ R for k = 1, . . . , n. The arithmetic expressions involved in the constraints of
+our dual SOCP take the form
+
+n
+(cid:88)
+
+S =
+
+xkyk.
+
+By the earlier two ﬂoating point estimates we have:
+
+k=1
+
+(cid:12)S − ﬂ(S)(cid:12)
+(cid:12)
+
+(cid:12) ≤
+
+(n − 1)u
+1 − (n − 1)u
+
+n
+(cid:88)
+
+k=1
+
+|ﬂ(xiyi)| ≤
+
+(n − 1)u(1 + u)
+1 − (n − 1)u
+
+n
+(cid:88)
+
+k=1
+
+|xiyi|.
+
+(8.4)
+
+24
+
+After receiving a proposed assignment of dual variable values from CPLEX, we verify that
+every constraint inequality is strictly satisﬁed by a margin of at least the above error bound.
+The error bound on the righthand side of (8.4) needs to be computed. We did this by
+roughly estimating the individual terms. For example, consider the ﬁnal constraint in our
+dual SOCP:
+
+2T
+(cid:88)
+
+(ypar)2 −
+
+(zpar[k])2 ≥ 0.
+
+(8.5)
+
+k=1
+
+For all feasible solutions to the dual SOCP we use in this paper, the maximum absolute
+value of {zpar[k]}2T
+k=1 is less than 0.0005. Therefore, the error bound for (8.5) is less that
+10−13. On the other hand, the minimum value of the lefthand side of (8.5) for all feasible
+solutions we use exceeds 10−11.
+
+8.3 Reusing a feasible solution
+
+By inspecting Table 5 we see that the parameters h1, h2, p1, p2 are only used in the ‘d’ type
+data (never in A, b, or c). From (8.1) and (8.2) we see this means that h1, h2, p1, p2 will only
+aﬀect the objective function of the dual, but not the constraints. Hence any single feasible
+solution to the dual, will give a lower bound on the optimum for any choice of h1, h2, p1, p2.
+We make this precise below.
+
+Lemma 10. Fix a choice of input N, T, R, h1, h2, p1, p2, q1, q2 for the dual program. Suppose
+there exists a feasible solution for this input and let ymean,ymome,yc1bnd, and ycosup be the values
+2 ∈ R
+of the dual variables ymean,ymome,yc1bnd, and ycosup for this solution. Let h(cid:48)
+2, p(cid:48)
+and obj(h(cid:48)
+2) be the value of the objective function for this solution and input choice
+2, p(cid:48)
+N, T, R, h(cid:48)
+2) is the optimum of the dual program with
+2, q1, q2.
+1, p(cid:48)
+2, p(cid:48)
+input N, T, R, h(cid:48)
+
+If opt(h(cid:48)
+2, q1, q2 then
+
+1, p(cid:48)
+1, p(cid:48)
+1, h(cid:48)
+
+1, h(cid:48)
+1, h(cid:48)
+
+1, h(cid:48)
+
+1, h(cid:48)
+
+2, p(cid:48)
+
+2, p(cid:48)
+
+1, p(cid:48)
+
+1, p(cid:48)
+
+opt(h(cid:48)
+
+1, h(cid:48)
+
+2, p(cid:48)
+
+1, p(cid:48)
+
+2) ≥ obj(h1, h2, p1, p2)
+(cid:0)2(h(cid:48)
+
++
+
+N
+4
++ (p(cid:48)
+
+1 − h1)ymean + (h2
+1 − p1)yc1bnd[1] + (p2 − p(cid:48)
+
+2 − (h(cid:48)
+
+2)yc1bnd[2].
+
+2)2)ymome + 2(p2
+
+2 − (p(cid:48)
+
+2)2ycosup
+
+(cid:1)
+
+(8.6)
+
+Proof. From the deﬁnitions of Table 5 and Table 8 the value of obj(h(cid:48)
+is precisely the quantity on the second two lines of (8.6). Since opt(h(cid:48)
+we have the claimed result.
+
+1, h(cid:48)
+1, h(cid:48)
+
+2, p(cid:48)
+2, p(cid:48)
+
+1, p(cid:48)
+1, p(cid:48)
+
+2)−obj(h1, h2, p1, p2)
+2) ≥ obj(h(cid:48)
+1, p(cid:48)
+2)
+
+1, h(cid:48)
+
+2, p(cid:48)
+
+We now discuss how Lemma 10 is applied. We can ﬁnd a feasible point for our dual
+
+SOCP with input N = 25000, T = 7000, R = 10 and
+
+h1 = h2 = 0.015,
+
+p1 = p2 = 0.385, −q1 = q2 = 0.02,
+
+obj = 0.37905.
+
+25
+
+This feasible point makes the following variable assignments:
+
+ymean = 0.0000014902
+ymome = 0.00010235
+ycosup = 0.000038011
+yc1bnd = (0.35962, 0).
+
+1, h(cid:48)
+
+Let opt(h(cid:48)
+
+2) be as deﬁned Lemma 10. We can use this feasible point to determine
+a set of h, p ∈ R such that h, p ∈ R has opt(h, h, p, p) ≥ 0.379005. By Lemma 10, if h, p ∈ R
+is such that
+
+1, p(cid:48)
+
+2, p(cid:48)
+
+25000
+4
+
+(cid:0)2(h − 0.015) · 0.0000014902 + (0.0152 − h2) · 0.00010235 + 2(0.3852 − p2) · 0.000038011(cid:1)
+
++ (0.385 − p) · 0.35962 ≥ 0.379005 − 0.37905,
+
+(8.7)
+
+then we can conclude opt(h, h, p, p) ≥ 0.379005. The set of (h, p) that satisfy the above
+inequality lie inside an ellipse, shown in Figure 2.
+
+Figure 2: A subset of the region in (h, p) space where opt(h, h, p, p) ≥ 0.379005.
+
+This gives a consequence on the original f, M functions of (2.1) by Proposition 9. For
+
+any f, M as in (2.1), put
+
+h = E(M ),
+
+p =
+
+(cid:90) 1
+
+−1
+
+cos(πx)f (x)dx,
+
+and q =
+
+(cid:90) 1
+
+−1
+
+sin(πx)f (x)dx.
+
+If −0.02 ≤ q ≤ 0.02 and (h, p) deﬁned above satisfy (8.7), then (cid:107)M (cid:107)∞ ≥ 0.379005.
+
+26
+
+Name
+
+Description
+
+Deﬁnition
+
+ATzcoscone
+
+[0, E]-expression vector
+
+cycoscone
+
+[0, E]-expression vector
+
+ATzpar
+
+[0, E]-expression vector
+
+cywbnd 1
+
+cyvbnd 1
+
+cysum
+
+cymean
+
+cymome
+
+[0, E]-expression vector
+
+[0, E]-expression vector
+
+[0, E]-expression vector
+
+[0, E]-expression vector
+
+[0, E]-expression vector
+
+cysine
+
+[0, E]-expression vector
+
+cycd
+
+[0, E]-expression vector
+
+cyepdel
+
+[0, E]-expression vector
+
+cycosup
+
+[0, E]-expression vector
+
+ATzcoscone[j] = (cid:80)2R
+
+m=1
+
+(cid:80)3
+
+i=1Acoscone[m, i, j]zcoscone[m, i]
+
+cycoscone[j] = (cid:80)2R
+
+ATzpar [j] = (cid:80)2T
+
+cywbnd 1 [j] = (cid:80)N
+cywbnd 1 [j] = (cid:80)N
+
+m=1ccoscone[m, j]ycoscone[m]
+k=1Apar[k, j]zpar[k]
+i=1cwbnd[1, i, j]ywbnd 1[i]
+i=1cvbnd[1, i, j]yvbnd 1[i]
+
+(cid:80)2
+
+i=1cysum [i, j] =csum[i, j]ysum[i]
+cymean [j] =cmean[j]ymean
+
+cymome [j] =cmome[j]ymome
+
+cysine[j] = (cid:80)2R
++ (cid:80)2R
+cycd[j] = (cid:80)T
++ (cid:80)T
+
+m=1csin-lower[m, j]ysin-lower[m]
+
+m=1csin-upper[m, j]ysin-upper[m]
+
+m=1cckbnd[1, k, j]yckbnd 1[k]
+
+k=1cdkbnd[1, k, j]yckbnd 1[k]
+i=1(cc1bnd[i, j]yc1bnd[i]+cd1bnd[i, j]yd1bnd[i])
+cyepdel[j] = (cid:80)R
++ (cid:80)R
+m=1cdel[1, m, j]ydel 1[m]
+cycosup [j] =ccosup[j]ycosup
+
+m=1cep[1, m, j]yep 1[m]
+
++ (cid:80)2
+
+subtotal
+
+[0, E]-expression vector
+
+subtotal is the sum of all previous [0, E]-expression vectors in this table
+
+yeobnd
+
+yewbnd 2
+
+yevbnd 2
+
+yeckbnd 2
+
+yedkbnd 2
+
+yeep 2
+
+yedel 2
+
+bTzcoscone
+
+dycoscone
+
+dypar
+
+dyobnd
+
+dysum
+
+dymean
+
+dymome
+
+expression
+
+[N ]-expression vector
+
+[N ]-expression vector
+
+[T ]-expression vector
+
+[T ]-expression vector
+
+[R]-expression vector
+
+1−subtotal[0]
+
+yewbnd 2[j] = − subtotal[j] for 1 ≤ j ≤ N
+
+yevbnd 2[j] = − subtotal[N + j] for 1 ≤ j ≤ N
+
+yeckbnd 2[j] = − subtotal[2N + j] for 1 ≤ j ≤ T
+
+yedkbnd 2[j] = − subtotal[2N + T + j] for 1 ≤ j ≤ T
+
+yeep 2[j] = − subtotal[2N + 2T + j] for 1 ≤ j ≤ R
+
+[R]-expression vector
+
+yedel 2[j] = − subtotal[2N + 2T + R + j] for 1 ≤ j ≤ R
+
+expression
+
+expression
+
+expression
+
+expression
+
+expression
+
+expression
+
+expression
+
+bTzcoscone= (cid:80)2R
+
+m=1
+
+(cid:80)3
+
+i=1bcoscone[m, i]zcoscone[m, i]
+
+dycoscone= (cid:80)2R
+
+k=1dcoscone[k]ycoscone[k]
+
+dypar=dparypar
+
+dyobnd=dobndyeobnd
+
+dysum= (cid:80)2
+
+i=1dsum[i]ysum[i]
+
+dymean=dmeanymean
+
+dymome=dmomeymome
+
+dycd
+
+expression
+
+dyepdel
+
+dycosup
+
+obj
+
+expression
+
+expression
+
+expression
+
+dycd= (cid:80)2
+k=1
+
++ (cid:80)T
+
+i=1(dc1bnd[i]yc1bnd[i]+dd1bnd[i]yd1bnd[i])
+(cid:0)dckbnd[1, k]yckbnd 1[k]+ddkbnd[1, k]ydkbnd 1[k]
+
++dckbnd[2, k]yeckbnd 2[k]+ddkbnd[2, k]yedkbnd 2[k](cid:1)
+
+dyepdel= (cid:80)R
++ (cid:80)R
+
+m=1(dep[1, m]yep 1[m]+ddel[1, m]ydel 1[m])
+
+m=1(dep[2, m]yeep 2[m]+ddel[2, m]yedel 2[m])
+
+dycosup=dcosupycosup
+
+−1 times the sum of the previous 10 expressions
+
+Table 8: Variable expressions for dual SOCP
+
+27
+
+
