@@ -1,0 +1,46 @@
+=== certify_q3  q=[12.04, 9.38, 2.462, 1.711, 0.581] qB=0.129 ===
+    M0=200000 max_refine=14 rem_cap=1e-10
+
+[admissibility] enlarged dictionary W=Q1*Q2*Q3 (Issue C)
+  deg_X Q3 = 24 (>0: True)
+  Q3(0) = 1  Q3(1) = 1
+  Q3 squarefree: True
+  deg_X W = 80  W(0) = 1  W(1) = 1
+  X !| W and (1-X) !| W: True
+  gcd(P1, W) coprime: True
+  gcd(P2, W) coprime: True
+  gcd(P4, W) coprime: True
+  gcd(P6, W) coprime: True
+  gcd(P8, W) coprime: True
+  gcd(Q1,Q3) coprime: True   gcd(Q2,Q3) coprime: True
+  ALL admissibility (Doche Lemma 5, enlarged dict) hold: True
+
+[float] log h(q,qB) ~ (CONJECTURE)
+    float log h = 0.2543184416  h = 1.2895823956
+
+[selftest_q3] soundness of per-cell bound on THIS integrand
+  selftest_q3[flat]: 0/200 violations  (MUST be 0)
+  selftest_q3[midpt]: 0/200 violations  (MUST be 0)
+    selftest passed: True
+
+[certify] rigorous max(A,B) quadrature enclosure
+  [q3] round 0: frontier=   200000  refine_next= 75802  logh_hi<=0.2545714461  31s
+  [q3] round 1: frontier=   151604  refine_next= 97106  logh_hi<=0.2545284110  55s
+  [q3] round 2: frontier=   194212  refine_next=117418  logh_hi<=0.2544168186  84s
+  [q3] round 3: frontier=   234836  refine_next= 95552  logh_hi<=0.2543276692  125s
+  [q3] round 4: frontier=   191104  refine_next= 51914  logh_hi<=0.2543187014  156s
+  [q3] round 5: frontier=   103828  refine_next=    16  logh_hi<=0.2543185491  172s
+  [q3] round 6: frontier=       32  refine_next=     0  logh_hi<=0.2543185491  172s
+  [q3] leaves=637808  unresolved frontier=0  rounds=6  172.4s
+  [q3] int_0^2pi G dt  <=  94.4313050433
+  [q3] int_0^1 G(chi) ds <= 15.0292089803  D = 59.096000000000004
+  [q3] CERTIFIED  log h(q,qB) <= 0.2543185491
+  [q3] target                  = 0.2543309112
+  [q3] BEATS target (strict <): True   (margin 1.236e-05)
+
+=== RESULT ===
+  CERTIFIED  log h(q,qB) <= 0.2543185491
+  unresolved frontier cells = 0  (MUST be 0)
+  held R6 certified         = 0.2543309112
+  beats held (strict, frontier=0): True
+  margin below held = 1.2362e-05
