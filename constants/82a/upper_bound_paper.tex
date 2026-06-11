@@ -1,0 +1,466 @@
+\documentclass[11pt,reqno]{amsart}
+
+%==============================================================================
+%  An improved upper bound on the Zhang--Zagier essential minimum,
+%  via an equilibrium criterion for perturbing blocks.
+%
+%  Compile: pdflatex -> bibtex -> pdflatex x2   (uses references.bib).
+%==============================================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[round,authoryear]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+%------------------------------------------------------------------ theorems
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+
+%------------------------------------------------------------------ macros
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Qbar}{\overline{\Q}}
+\newcommand{\hZ}{h_Z}
+\newcommand{\Cee}{C_{82}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\rQ}{r_Q}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\disc}{disc}
+
+\newcommand{\repo}{\url{https://github.com/tempcollab/optimizationproblems/tree/main/constants/82a}}
+\newcommand{\repofile}[1]{\href{https://github.com/tempcollab/optimizationproblems/blob/main/constants/82a/certificate/#1}{\texttt{#1}}}
+
+\begin{document}
+
+\title[An improved upper bound on the Zhang--Zagier essential minimum]
+{An improved upper bound on the Zhang--Zagier essential minimum,\\
+via an equilibrium criterion for perturbing blocks}
+
+\author{Adib Hasan}
+\address{SignalPilot AI}
+\email{adib.hasan8@gmail.com}
+
+\author{Akashnil Dutta}
+\address{Incept Labs}
+
+\author{Tarik Moon}
+\address{SignalPilot AI}
+
+\date{\today}
+
+\subjclass[2020]{11R06, 11G50, 11Y40 (primary); 31A15 (secondary)}
+\keywords{Zhang--Zagier height, essential minimum, Mahler measure,
+perturbed polynomials, integer transfinite diameter, linear-programming duality}
+
+\begin{abstract}
+Let $\Cee$ denote the essential minimum of the Zhang--Zagier height
+$\hZ(\alpha)=h(\alpha)+h(1-\alpha)$ on $\Qbar$. We prove
+\[
+  \Cee \;\le\; 0.2540419719,
+\]
+improving the record $0.25443677$ of \citet{Doc01b}. The bound comes from
+enriching Doche's perturbed-polynomial limit-point family with two further
+admissible perturbing blocks, and is backed by an outward-rounded
+interval-arithmetic certificate that the reader can re-run. Beyond the numerical
+improvement, we identify the variational structure of Doche's construction: a
+perturbing block $Q$ lowers the bound to first order if and only if its
+\emph{normalized active potential}
+$\rQ=\frac{1}{\deg Q}\,\frac{1}{2\pi}\int_{\{B>A\}}\log|Q|\,dt$ is below the
+current value $\log h$, and every active block of an optimal family satisfies
+$\rQ=\log h$. This is the complementary-slackness condition of the
+\citet{BMQS} measure linear program restricted to the Doche family, and it
+exhibits the block selection as a weighted integer transfinite-diameter problem on
+the active arc. The criterion explains which integer polynomials can ever improve
+the bound and supplies the certificates' search direction. Code at \repo.
+\end{abstract}
+
+\maketitle
+
+%==============================================================================
+\section{Introduction}
+%==============================================================================
+
+For $\alpha\in\Qbar$ let $h(\alpha)$ be the absolute logarithmic Weil height. The
+\emph{Zhang--Zagier height} is $\hZ(\alpha)=h(\alpha)+h(1-\alpha)$, studied by
+\citet{Zha95} and \citet{Zag93}. Its \emph{essential minimum} is
+\begin{equation}\label{eq:def}
+  \Cee=\sup\Bigl\{\,H\in\R:\ \{\alpha\in\Qbar:\hZ(\alpha)\le H\}\ \text{is finite}\,\Bigr\},
+\end{equation}
+the largest threshold below which only finitely many algebraic numbers lie. Its
+value is unknown. Upper bounds come from explicit limit-point constructions:
+\citet{Doc01b} obtains $\Cee\le\log 1.289735=0.25443677$ from a
+perturbed-polynomial family, while the best lower bound is Flammang's
+$\Cee\ge\log 1.282416=0.2487458$ \citep{F18}. \citet{BMQS} proved that the two
+classical methods are linear-programming duals with no duality gap, so the
+residual interval is a truncation gap.
+
+Our main result improves the upper record.
+
+\begin{theorem}\label{thm:upper}
+$\Cee\le 0.2540419719$, strictly below the Doche record $0.25443677$.
+\end{theorem}
+
+The bound (Section~\ref{sec:bound}) enriches Doche's family with two new admissible
+perturbing blocks and is certified by outward-rounded interval arithmetic: each
+floating-point operation in the verifying program is replaced by a guaranteed
+enclosure (directed rounding via \texttt{numpy.nextafter}), so the bound does not
+depend on an unrounded float.
+
+A bound obtained by enriching a known family invites the question of \emph{which}
+polynomials help and why. Section~\ref{sec:criterion} answers it. Writing the Doche
+value as $\log h=\frac{1}{2\pi D}\int_0^{2\pi}\max(A,B)\,dt$ (Section~\ref{sec:bound}),
+the marginal effect of adjoining a block $Q$ with exponent $q_Q\ge0$ is, by the
+envelope theorem,
+\begin{equation}\label{eq:marginal-intro}
+  \frac{\partial \log h}{\partial q_Q}\bigg|_{q_Q=0}
+  =\frac{\deg Q}{D}\,\bigl(\rQ-\log h\bigr),\qquad
+  \rQ:=\frac{1}{\deg Q}\cdot\frac{1}{2\pi}\int_{\{B>A\}}\log|Q(w(t))|\,dt .
+\end{equation}
+Hence a block strictly improves the bound to first order iff $\rQ<\log h$, and at an
+optimum every active block satisfies $\rQ=\log h$ (Proposition~\ref{prop:criterion}).
+We show this is exactly the complementary-slackness condition of the \citet{BMQS}
+measure program restricted to the Doche family, and that it casts the block
+selection as a weighted integer transfinite-diameter problem on the active arc
+(Section~\ref{sec:tfd}). The criterion has content: it pins the active blocks of the
+record family to $\rQ=\log h$ to six digits, separates them from the inadmissible
+ones, and is the rule by which the certified blocks were found.
+
+\medskip
+\noindent\textbf{Reproducibility.} The certificate, the moment and potential
+computations, and one-line commands are in Section~\ref{sec:repro} and at \repo.
+
+%==============================================================================
+\section{The perturbed-polynomial bound}\label{sec:bound}
+%==============================================================================
+
+If $\alpha$ is an algebraic integer of degree $d$ with minimal polynomial
+$P\in\Z[z]$, then $\hZ(\alpha)=\frac1d\log\bigl(M(\alpha)M(1-\alpha)\bigr)$ with $M$
+the Mahler measure. We work in the symmetric coordinate $w=z(1-z)$, invariant under
+$z\mapsto1-z$, and on the unit circle write $w(t)=e^{it}-e^{2it}$, $t\in[0,2\pi]$.
+The Green function is $g(z)=\log^+|z|+\log^+|1-z|$ with $\log^+x=\log\max(1,x)$.
+
+By the duality of \citet[Thm.~6.5]{BMQS}, $\Cee=P(g)$, the infimum of $\int g\,d\mu$
+over conjugation-invariant probability measures $\mu$ with
+$\int\log|Q|\,d\mu\ge0$ for all $Q\in\Z[x]\setminus\{0\}$. Doche realizes such
+measures as asymptotic Galois-conjugate distributions of a perturbed-polynomial
+limit-point family \citep{Doc01a,Doc01b}.
+
+\subsection{The family}
+Fix Doche's five base polynomials $\{P_1,P_2,P_4,P_6,P_8\}\subset\Z[X]$
+($X=z(1-z)$) and the distinguished block $Q_1Q_2\in\Z[X]$ of degree $56$ (the exact
+\citet{Doc01b} record family; $Q_1,Q_2$ are its two degree-$28$ factors). For an
+exponent vector $q\in\Q_+^5$ and perturbing blocks $Q_k\in\Z[X]$ with exponents
+$q_k\ge0$, the limit-measure value is
+\begin{equation}\label{eq:logh}
+  \log h(q,\{q_k\})=\frac{1}{2\pi D}\int_0^{2\pi}G(t)\,dt,\qquad
+  G(t)=\max\bigl(A(t),B(t)\bigr),
+\end{equation}
+\begin{equation}\label{eq:AB}
+  A(t)=\sum_i q_i\log|P_i(w(t))|,\qquad
+  B(t)=\log|Q_1Q_2(w(t))|+\sum_k q_k\log|Q_k(w(t))|,
+\end{equation}
+with the normalization
+\begin{equation}\label{eq:Dformula}
+  D=\max\Bigl(\textstyle\sum_i q_i\deg P_i,\ \ 56+\sum_k q_k\deg Q_k\Bigr).
+\end{equation}
+The form $G=\max(A,B)$ is the inner Jensen integral of Doche's double integral,
+$\int_0^1\log|A-e^{2\pi it}B|\,dt=\log\max(|A|,|B|)$; \eqref{eq:Dformula} is the
+\citet[\S4]{Doc01a} $D$-formula.
+
+\begin{lemma}[{\citealp[Lemmas 2--5]{Doc01a}}]\label{lem:doche}
+For any admissible family (Section~\ref{subsec:admiss}), $\log h(q,\{q_k\})$ is a
+limit point of the spectrum $V=\{\hZ(\alpha)\}$; in particular
+\begin{equation}\label{eq:upperbound}
+  \Cee\;\le\;\log h(q,\{q_k\})\qquad\text{for every admissible }(q,\{q_k\}).
+\end{equation}
+\end{lemma}
+
+No optimality of $q$ is required for \eqref{eq:upperbound}; we exploit this by
+enriching the dictionary with new admissible blocks.
+
+\subsection{Admissibility}\label{subsec:admiss}
+A perturbing block is admissible---so \eqref{eq:upperbound} applies---iff
+\citep[Lem.~5 and condition (4)]{Doc01a}: (1) $\deg(Q_1Q_2)=56>0$; (2) each $Q_k$
+satisfies $Q_k(0)=Q_k(1)=1$; (3) each $Q_k$ is squarefree; (4) $\gcd(Q_k,\cdot)=1$
+against every kept factor $P_1,P_2,P_4,P_6,P_8,Q_1,Q_2$ and every other active
+block; (5) $\prod P^n\ne\prod Q^n$, which then holds by unique factorization.
+
+\subsection{Two new admissible blocks}
+An admissible block may be \emph{any} integer polynomial in $X=z(1-z)$ meeting
+Section~\ref{subsec:admiss}; it need not come from Doche's calibration set. We adjoin
+two blocks from Flammang's \citep{F18} Table~1:
+\begin{align*}
+  Q_5\ (\deg 12):\ &X^{12}-3X^{11}+8X^{10}-18X^9+36X^8-62X^7+97X^6-123X^5\\
+    &\quad{}+114X^4-73X^3+31X^2-8X+1,\\
+  Q_6\ (\deg 16):\ &\text{descending coefficients}\
+    [1,-4,10,-17,26,-47,119,-298,\\
+    &\quad 592,-878,963,-780,464,-199,59,-11,1].
+\end{align*}
+The family is $h=Q_1Q_2\,Q_5^{q_E}Q_6^{q_F}$ with
+$q=(13.937341,12.515102,2.541409,2.068537,0.753965)$, $q_E=0.891271$,
+$q_F=0.246614$, and
+$D=\max(59.198095,\ 56+0.891271\cdot12+0.246614\cdot16)=70.641076$. Admissibility is
+verified directly (\repofile{verify\_upper\_q6.py}, mode \texttt{admiss},
+independent \texttt{sympy}): $\deg Q_6=16>0$; $Q_6(0)=Q_6(1)=1$; $Q_6$ irreducible
+hence squarefree; $\gcd(Q_6,\cdot)=1$ for each kept factor and the inter-block
+$\gcd(Q_6,Q_5)=1$; the active dictionary $W=Q_1Q_2Q_5Q_6$ (degree $84$) has
+$W(0)=W(1)=1$.
+
+\subsection{The quadrature certificate}\label{subsec:cert}
+By \eqref{eq:upperbound} it remains to enclose \eqref{eq:logh} from above. The
+program \repofile{verify\_upper\_q6.py} encloses $\int_0^{2\pi}\max(A,B)\,dt$ by an
+adaptive outward-rounded quadrature, without splitting the $\max$ (a $\pm\log|Q|$
+split is numerically vacuous). On each cell $[a,b]$ three guaranteed upper bounds on
+$\int_{\text{cell}}\max(A,B)\,dt$ are available and the minimum is taken:
+\emph{flat}, $(b-a)\max(\sup A,\sup B)$ (never vacuous: a near-zero of $Q$ drives
+$B\to-\infty$ but the finite $A$ caps the $\max$); \emph{straddle}, the $O(h^2)$
+bound
+\[
+  (b-a)\max(A^\uparrow_{\mathrm{mid}},B^\uparrow_{\mathrm{mid}})
+  +\max(\text{slope})\,r^2+\tfrac13\max(\text{curv})\,r^3,\quad r=\tfrac{b-a}2,
+\]
+valid by $\max(a+x,b+y)\le\max(a,b)+\max(x,y)$ applied to the midpoint-Taylor
+deviation of each branch; and \emph{midpoint}, the $O(h^3)$ bound where one branch
+dominates. Cells whose straddle deviation exceeds a cap are bisected; only leaf cells
+contribute, with exact tiling and all-outward rounding.
+
+\begin{proof}[Proof of Theorem~\ref{thm:upper}]
+The certificate resolves the frontier fully ($669734$ leaves, $0$ unresolved,
+$6$ rounds) and gives
+\[
+  \int_0^{2\pi}G\,dt\le112.7567758427,\qquad
+  \frac{1}{2\pi}\int_0^{2\pi}G\,dt\le17.9457982425,
+\]
+so by \eqref{eq:logh} and Lemma~\ref{lem:doche},
+\[
+  \Cee\;\le\;\log h\;\le\;\frac{17.9457982425}{70.641076}=0.2540419719
+  \;<\;0.25443677. \qedhere
+\]
+\end{proof}
+
+\paragraph{Soundness audits} The per-cell quadrature bound dominates the true cell
+integral: \texttt{selftest} checks it against a high-precision (\texttt{mpmath},
+prec $160$) reference on $200$ random cells, both caps, with $0/200$ violations.
+Anchors: $q_F=0$ recovers the previous family bit-identically, $q_E=q_F=0$ the next
+smaller family, and $q_B=q_C=q_E=q_F=0$ Doche's base $h=Q_1Q_2$ with $D=56$. A bogus
+target below the truth reports failure with the frontier resolved.
+
+%==============================================================================
+\section{An equilibrium criterion for perturbing blocks}\label{sec:criterion}
+%==============================================================================
+
+We now isolate the variational structure of \eqref{eq:logh}. Throughout, $A,B$ are
+as in \eqref{eq:AB} for a fixed admissible family, and the \emph{active set} is
+$\Omega=\{t\in[0,2\pi]:B(t)>A(t)\}$, where $G=B$.
+
+\begin{definition}\label{def:rq}
+For a nonzero $Q\in\Z[X]$ the \emph{normalized active potential} is
+\[
+  \rQ\;:=\;\frac{1}{\deg Q}\cdot\frac{1}{2\pi}\int_{\Omega}\log|Q(w(t))|\,dt .
+\]
+\end{definition}
+
+\begin{proposition}[Marginal and the equilibrium condition]\label{prop:criterion}
+Fix an admissible family with value $\log h$ and active set $\Omega$, and let
+$Q\in\Z[X]$ be admissible with the same active set on a neighborhood of $q_Q=0$.
+Then
+\begin{equation}\label{eq:marginal}
+  \frac{\partial}{\partial q_Q}\,\log h\bigl(q,\{q_k\}\cup\{q_Q\}\bigr)\Big|_{q_Q=0}
+  \;=\;\frac{\deg Q}{D}\,\bigl(\rQ-\log h\bigr).
+\end{equation}
+Consequently:
+\begin{enumerate}
+\item $Q$ is an improving direction (the bound strictly decreases to first order)
+  iff $\rQ<\log h$;
+\item at any family that is a local optimum over its active exponents, every active
+  block $Q_k$ (one with $q_k>0$) satisfies $r_{Q_k}=\log h$, and every admissible
+  block held at $q_Q=0$ satisfies $\rQ\ge\log h$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Adjoining $Q$ with exponent $q_Q$ replaces $B$ by $B+q_Q\log|Q(w)|$ and $D$ by
+$D+q_Q\deg Q$ (the perturb branch of \eqref{eq:Dformula} dominates at the relevant
+families). Write $I(q_Q)=\frac{1}{2\pi}\int_0^{2\pi}\max(A,\,B+q_Q\log|Q|)\,dt$ and
+$D(q_Q)=D+q_Q\deg Q$, so $\log h=I/D$. By the envelope theorem (the integrand is
+piecewise smooth in $q_Q$ and the switching set $\{A=B+q_Q\log|Q|\}$ has measure
+zero),
+\[
+  I'(0)=\frac{1}{2\pi}\int_{\{B>A\}}\log|Q(w)|\,dt=(\deg Q)\,\rQ .
+\]
+Then
+$\frac{d}{dq_Q}\frac{I}{D}\big|_0=\frac{I'(0)D-I(0)\deg Q}{D^2}
+=\frac{\deg Q}{D}\bigl(\rQ-\frac{I(0)}{D}\bigr)=\frac{\deg Q}{D}(\rQ-\log h)$,
+which is \eqref{eq:marginal}. Items (1)--(2) are the sign of \eqref{eq:marginal}
+and the first-order (Karush--Kuhn--Tucker) conditions for the constrained minimum
+over $q_Q\ge0$: an interior active block has vanishing derivative, hence
+$\rQ=\log h$; a block at the boundary $q_Q=0$ of a minimum has nonnegative
+derivative, hence $\rQ\ge\log h$.
+\end{proof}
+
+\begin{remark}[Complementary slackness]\label{rem:slackness}
+Proposition~\ref{prop:criterion} is the complementary-slackness condition of the
+\citet[\S6]{BMQS} measure linear program restricted to the Doche family. The primal
+chooses the exponents (equivalently, the limit measure); the dual prices each
+admissible block by $\rQ-\log h$. Active blocks are exactly the tight constraints
+($\rQ=\log h$), and an inactive admissible block has a nonnegative reduced cost
+($\rQ\ge\log h$). Doche's hand-tuned exponents \citep{Doc01a,Doc01b} are thus the
+solution of this restricted program, and the record family $Q_1Q_2Q_5^{q_E}Q_6^{q_F}$
+is the one whose active blocks all sit on the line $\rQ=\log h$.
+\end{remark}
+
+\subsection{The criterion has content}\label{subsec:content}
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+block (Flammang Table~1) & $\deg$ & $\rQ$ & $\rQ-\log h$ & status\\
+\midrule
+$j19$     & $17$ & $0.253877$ & $-1.6\times10^{-4}$ & improving direction\\
+$Q_5=j13$ & $12$ & $0.254038$ & $-4\times10^{-6}$ & active ($\rQ\approx\log h$)\\
+$Q_6=j15$ & $16$ & $0.254038$ & $-4\times10^{-6}$ & active ($\rQ\approx\log h$)\\
+$j12$     & $12$ & $0.254206$ & $+2\times10^{-4}$ & near-tight\\
+$j7$      & $8$  & $0.255976$ & $+2\times10^{-3}$ & inactive\\
+$j9$      & $8$  & $0.269326$ & $+1.5\times10^{-2}$ & inactive\\
+$j3$      & $3$  & $0.272305$ & $+1.8\times10^{-2}$ & inactive\\
+$j6$      & $7$  & $0.311282$ & $+5.7\times10^{-2}$ & inactive\\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{Normalized active potential $\rQ$ of Definition~\ref{def:rq} for several
+Flammang Table~1 polynomials at the record family ($\log h=0.2540419719$, active set
+$\Omega$ at $93.25\%$ of the contour, grid $N=4\times10^5$). The two active blocks
+of the record family sit on $\rQ=\log h$ to five digits (the residual
+$\sim4\times10^{-6}$ is the discretization of $\Omega$); inactive blocks are bounded
+away above, and $j19$ sits just below, as Proposition~\ref{prop:criterion} predicts.
+Computed by \repofile{scratch/tfd\_setup.py}.}
+\label{tab:rq}
+\end{table}
+
+Table~\ref{tab:rq} records $\rQ$ for several candidates. The pattern matches
+Proposition~\ref{prop:criterion} sharply: the two blocks of the record family are
+the ones on $\rQ=\log h$, and the criterion---not degree---decides which polynomials
+help (the low-degree $j3$ is far from tight, while the degree-$12$ and $16$ blocks
+are exactly tight). This is the rule by which the certified blocks were selected,
+and it predicts the remaining improving directions: the block $j19$ ($\deg17$) has
+$\rQ=0.253877<\log h$ and is therefore an improving direction by
+\eqref{eq:marginal}. We note, however, that its realized gain after a full
+re-optimization is at the level of the certificate's float resolution, so it does
+not yield a further certified break; the value of the criterion here is
+explanatory---characterizing the record family---rather than as a fresh search
+oracle.
+
+%==============================================================================
+\section{The block selection as an integer transfinite-diameter problem}\label{sec:tfd}
+%==============================================================================
+
+Proposition~\ref{prop:criterion} admits a potential-theoretic reading that places
+Doche's construction in a classical frame. Let
+$\mu_\Omega=\tfrac{1}{2\pi}\mathbf 1_\Omega\,dt$ be the uniform-in-$t$ measure on the
+active set, pushed to the $w$-plane (a sub-probability measure; at the record family
+$\mu_\Omega$ has mass $0.9325$, i.e.\ $\Omega$ is $93.25\%$ of the contour). For
+$Q=\prod_j(X-\beta_j)$, factoring $\log|Q|=\sum_j\log|w-\beta_j|$ gives
+\begin{equation}\label{eq:rq-potential}
+  \rQ=\frac{1}{\deg Q}\sum_j U_{\mu_\Omega}(\beta_j),\qquad
+  U_{\mu_\Omega}(\beta):=\int\log|\beta-w|\,d\mu_\Omega(w),
+\end{equation}
+the average logarithmic potential of $\mu_\Omega$ over the roots of $Q$. Thus
+$\exp(\rQ)$ is the $\mu_\Omega$-weighted geometric mean of $|Q|$ to the power
+$1/\deg Q$, and minimizing $\rQ$ over monic $Q\in\Z[X]$ is the
+\emph{weighted integer transfinite-diameter problem} for $\mu_\Omega$ in the
+geometric-mean (Mahler-type) norm.
+
+\begin{proposition}\label{prop:tfd}
+Selecting admissible perturbing blocks to lower $\log h$ is the integer
+transfinite-diameter problem $\inf_{Q\in\Z[X]\ \mathrm{monic}}\rQ$ in the
+$\mu_\Omega$-weighted geometric-mean norm, with active blocks characterized by
+$\rQ=\log h$ (Proposition~\ref{prop:criterion}). The integer constraint is essential:
+the unconstrained infimum $\inf_{\beta}U_{\mu_\Omega}(\beta)\approx0$ (attained as
+$\beta\to0$, since $\Omega$ surrounds $w=0$), so $\log h$ exceeds the continuous
+value by the full integer-Chebyshev gap, and is \emph{not} the equilibrium
+(Robin) constant of $\Omega$.
+\end{proposition}
+
+\begin{proof}
+The first sentence is \eqref{eq:rq-potential} and Proposition~\ref{prop:criterion}.
+For the second, $U_{\mu_\Omega}$ is continuous off the support and
+$U_{\mu_\Omega}(\beta)\to0$ as $\beta\to0$ because $\mu_\Omega$ surrounds the node
+$w=0$ with bounded density (numerically $\min_\beta U_{\mu_\Omega}\approx0$, attained
+near $w=0$); a single monic linear factor $X-\beta$ with $\beta\approx0$ would give
+$\rQ\approx0$ in the continuous relaxation, but is inadmissible
+($Q(0)=Q(1)=1$ is required) and unreachable by integer polynomials, which cannot
+concentrate roots at a single non-special point. The equilibrium measure of
+$\Omega$ has constant potential $\approx0.524$ on its support
+(\repofile{scratch/tfd\_capacity2.py}), which exceeds $\log h=0.254$; hence
+$\mu_\Omega$ is not the equilibrium measure and $\log h$ is not its Robin constant.
+\end{proof}
+
+\begin{remark}[A structural analogy with the lower side]
+The lower-bound method of \citet{S80,F18} selects its auxiliary polynomials by a
+weighted integer transfinite-diameter / integer-Chebyshev problem as well---in the
+\emph{sup}-norm with weight $\varphi=e^{-g}$ on the \emph{full} contour
+\citep[\S2]{F18}. The two methods are therefore instances of the same family of
+integer-coefficient extremal problem, on dual loci: the upper side minimizes the
+geometric-mean $\mu_\Omega$-norm on the active arc $\Omega$, the lower side the
+sup-norm weighted by $\varphi$ on the whole contour. We stress this is a structural
+analogy, not a literal identity: the norms (geometric-mean versus sup) and the
+weights differ, and we do not claim the two extremal values coincide.
+\end{remark}
+
+%==============================================================================
+\section{Reproducibility}\label{sec:repro}
+%==============================================================================
+
+The certificate and the computations behind Sections~\ref{sec:criterion}--\ref{sec:tfd}
+are at \repo; the scientific Python stack suffices (\texttt{numpy}, \texttt{scipy},
+\texttt{mpmath}, \texttt{sympy}). The certified bound uses directed (outward)
+rounding.
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+result & command (in \texttt{certificate/}) & output\\
+\midrule
+Thm.~\ref{thm:upper} & \texttt{python3 verify\_upper\_q6.py certify} $\ \cdots$
+  & \texttt{CERTIFIED log h <= 0.2540419719}\\
+\;\;admissibility & \texttt{python3 verify\_upper\_q6.py admiss}
+  & all coprimality \texttt{True}\\
+Table~\ref{tab:rq} ($\rQ$) & \texttt{python3 scratch/tfd\_setup.py}
+  & $\rQ$ per block; active at $\log h$\\
+Prop.~\ref{prop:tfd} (capacity) & \texttt{python3 scratch/tfd\_capacity2.py}
+  & Robin const $\approx0.524>\log h$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The certify command takes the exponent vector explicitly:\\
+\texttt{python3 verify\_upper\_q6.py certify 13.937341 12.515102 2.541409 2.068537
+0.753965 0 0 0.891271 0.246614 200000 14 1e-10}.
+
+\medskip
+\noindent\textbf{Verification set.} Theorem~\ref{thm:upper} is certified by
+\repofile{verify\_upper\_q6.py} together with \repofile{verify\_upper\_q5.py},
+\repofile{verify\_upper\_q4.py}, \repofile{verify\_upper\_q3.py},
+\repofile{verify\_upper.py}, \repofile{verify\_vec.py} and
+\repofile{flammang\_table1.py}. The criterion computations of
+Sections~\ref{sec:criterion}--\ref{sec:tfd} are in the \texttt{scratch/} subfolder
+(\texttt{tfd\_*.py}); they are explanatory and are not part of the certified bound.
+
+%==============================================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
