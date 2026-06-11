@@ -1,9 +1,14 @@
 # R4 approach — min-vs-mean / effective-equidistribution route for the C_82a LOWER bound
 
-Status: **OPEN / no cheap or screenable lever found this round.** Verified-NEGATIVE on
-the only known tool (FR06 / Petsche effective equidistribution), plus a load-bearing
-CORRECTION of the wrong R3 root-location diagnosis. This is NOT a blanket closure of
-the min-vs-mean mechanism.
+Status: **CLOSED (R6).** Was OPEN after R4 (the persistent mean gap was uncaptured and
+no pointwise/screenable lever was found). R6 closes it: §6 below certifies the POINTWISE
+containment lemma is FALSE on the natural family, which removes the last degree of freedom
+and forces any salvage into the already-barred mean/equidistribution walls. NO raise; held
+lower stays Flammang 0.2487458, Status none.
+
+[R4 status, retained for the record:] OPEN / no cheap or screenable lever found that round.
+Verified-NEGATIVE on the only known tool (FR06 / Petsche effective equidistribution), plus a
+load-bearing CORRECTION of the wrong R3 root-location diagnosis.
 
 Target to beat: **C_82 >= 0.2487458 = log(1.282416)** [Flammang F18, verified R1].
 No raise is claimed. Deliverable = a reproducible verified-NEGATIVE milestone.
@@ -242,10 +247,123 @@ pointwise exclusion. No such lemma is known; constructing one is open research, 
 screenable lever. Until one appears, the lower bound stays at Flammang 0.2487458 for
 this route.
 
+---
+
+## 6. CLOSURE (R6): the pointwise containment lemma is FALSE; the route is closed
+
+R4 (§5) named the exact missing ingredient that would push this route: a **height-
+independent POINTWISE containment lemma** — a deterministic region R, from the integer/
+coefficient structure of ZZ-minimal polynomials alone, holding every conjugate of every
+ZZ-minimal alpha OFF the single binding lobe `w* = z*(1-z*)`, `z* = 0.8383 + 0.5453i`,
+`w* = 0.4329 - 0.3689i` (the circle-min locus). If it existed, `mean_nu f >= min_R f >
+circle-min` would give a raise. R6 closes the route in two parts.
+
+### Part (i) — the pointwise lemma is FALSE on Flammang's natural family (the NEW milestone)
+
+Certificate: `../certificate/screen_containment.py` (`certify` / `selftest` / `tamper`).
+Re-derived cleanly from the conjugate roots (recompute of min and mean of the EXCL-self
+aux f over the conjugates z of `Q_j(z(1-z)) = 0`), honest density
+`sigma_ZZ = log max(1,|z|) + log max(1,|1-z|)` [F18 eq 2.1]. Reproducible facts:
+
+- Of the **13** Flammang Table-1 polynomials with `deg_w >= 12`, **exactly 7**
+  (`j = 14, 15, 16, 18, 20, 21, 22`) have a **NEGATIVE worst-conjugate `min_gap`**:
+  at least one individual conjugate `z_i` has `f(z_i) < circle-min f = 0.2487462`. Their
+  worst conjugates land ON / just below the binding-lobe locus (the `worst_w` column is
+  `|w| ~ |w*|`, `arg ~ ±arg(w*)`; e.g. j=21 `w = 0.3474 - 0.3649i`, j=22 `w = 0.5504 -
+  0.3571i`, j=14 `w = 0.4406 + 0.3706i` — the conjugate-reflected lobe).
+- The absolute smallest single-conjugate value over the substantive family is
+  **`f = 0.23032` at j=5**, far below circle-min.
+- Yet **ALL 13** retain a **POSITIVE `mean_gap`** (range `+0.00356 .. +0.04431`): the
+  conjugate f-MEAN stays above the circle MIN even though individual conjugates pass below it.
+
+So individual conjugates **DO reach and pass the binding lobe** — the hypothesised
+pointwise exclusion is FALSE. The 7/13 count is robust to the root-finding method: an
+independent recompute via `numpy.polynomial` composition + companion-matrix `polyroots`
+(distinct from the script's `np.convolve` accumulation) reproduces the identical set
+`{14,15,16,18,20,21,22}`. `tamper` checks that a bogus "pointwise lemma holds" (no
+`min_gap<0`) is rejected and that the core check genuinely bites the data (it FAILS on
+forged "lemma-true" data).
+
+**Consequence.** Any salvage of the min-vs-mean route can no longer be a pointwise
+containment statement. It MUST be an AVERAGED / equidistribution statement that forbids the
+conjugate measure `nu` from concentrating its f-mass at the lobe — even though individual
+conjugates reach the lobe. That is precisely the object Part (ii) shows is barred or circular.
+
+**SCOPE CAVEAT (load-bearing, do not drop).** Flammang's Table-1 polynomials are
+near-extremal **AUXILIARY** polynomials, NOT the minimal polynomials of actual small-height
+ZZ numbers. Part (i) therefore disproves the pointwise lemma on the natural **suggestive**
+family; it is NOT "the lemma is false for all ZZ-minimal alpha as a theorem." The
+family-INDEPENDENT closure is Part (ii): even granting the lemma, the only salvage is a
+mean/equidistribution statement, which is barred (energy) or circular (height).
+
+### Part (ii) — the structural dichotomy (CITED prior-art synthesis, made DECISIVE by (i))
+
+This is **not a new theorem this round.** It is the R4 two-bucket synthesis
+(`literature/R4_nonenergy_methods_digest.md`, "one-line synthesis", lines 87–94) assembled
+with the R1/R3/R4/R5 closures; Part (i) is what makes it decisive (it removes the pointwise
+escape the bucket dichotomy did not by itself rule out).
+
+Statement. A height-independent, degree-uniform MEAN containment floor
+`(1/d) sum_i f(z_i) >= circle-min + delta` (uniform in d, all ZZ-minimal P) is, by Part (i),
+necessarily an **equidistribution/discrepancy** bound on `nu`. Its only admissible inputs are:
+
+- **(a) integer invariants of the root CONFIGURATION** — the only sign-definite-usable
+  drop-out columns:
+  - **power sums / w-moments** `int w^k dnu = S_k/d` — **R5-CLOSED**: sign-indefinite across
+    ZZ polys (never a `>= 0` column) AND non-integer off the `a = 1` locus (the `a^deg`
+    leading-coeff wall that also retracted OSS in R1). [`screen_powersum.py`, R5]
+  - **discriminant / resultants** = the **LOG-ENERGY cone** — **R1-BARRED** (`I(nu) =
+    (1/d^2) log|disc| < 0` for non-integer ZZ alpha, e.g. `P = 10z^2-6z+1` gives `-0.80`),
+    and its capacity-1 transfinite-diameter LP **IS Flammang's own contour method**,
+    **R3-CEILINGed at 0.2487857**. [`ceiling_primal.py`, R3]
+  No third sign-definite integer root-configuration invariant exists (symmetric functions of
+  the roots are exhausted by power sums and the discriminant/resultant family).
+- **(b) the Weil height `h`** — FR06 / Bilu / Petsche effective equidistribution — **R4-
+  CIRCULAR**: the error term `~ (4h)^{1/2}` contains the very height being bounded
+  (quantitatively vacuous, leverage 0.0508 vs `(4·0.249)^{1/2} = 0.998`), and equidistributes
+  to `lambda_{S^1}` on a SINGLE circle (capacity-1, wrong target for the two-circle ZZ
+  support). [§3 above, FR06 Thm 3.1 verbatim]
+
+There is no third admissible object, so the only admissible proof-FORM for a mean floor is
+barred (energy) or circular (height). The adversarial escape hunt (a ONE-SIDED,
+non-equidistribution averaged inequality from integer-coefficient structure) was run and is
+**not real**: every such inequality in the literature (Fili–Petsche energy integral
+arXiv:1306.3544; Bombieri–Zannier / totally-p-adic / Pottmeyer arXiv:2404.11559; Garza-type)
+is either (1) conditioned on a SPLITTING hypothesis (totally real / totally p-adic) ABSENT
+for the ZZ ess-min class (which ranges over all algebraic numbers), or (2) a log-ENERGY
+integral on the Berkovich line (barred, capacity-1 at the archimedean place). They instantiate
+the dichotomy; they do not escape it. The p-adic |Res|≥1 residue (Zagier) reaches only
+0.2406 < Flammang effectively and is toolless (R5/R6 OPEN-but-toolless, no screenable lever).
+
+### Part (iii) — a-fortiori cap (cited, no new compute)
+
+Even granting a hypothetical successful averaged column in case (a), the R3 primal-measure
+ceiling (reviewer-verified feasible `mu_hat`, LP strong duality, `ceiling_primal.py`) already
+caps the ENTIRE `log|Q|` / `Z[w]` contour span at **0.2487857** — only `+4e-5` above
+Flammang. So no `log|Q|`-cone realisation of the mean gap can raise more than `+4e-5`, and the
+energy realisation is barred outright.
+
+### Net
+
+The last OPEN lower-bound angle is CLOSED. The min-vs-mean mean gap is real and persistent on
+the family we can compute, but Part (i) shows it cannot be cashed pointwise, and Part (ii)
+shows every averaged realisation lands in an already-closed wall. No raise; held lower stays
+Flammang 0.2487458, Status none. This logs a verified-NEGATIVE milestone (the pointwise-FALSE
+certificate + the OPEN→CLOSED conversion), not a record-break.
+
+---
+
 ## Sources
 - Favre & Rivera-Letelier [FR06] Thm 3.1, via D'Andrea-Narvaez-Clauss-Sombra
   arXiv:1606.04299 §3 (PDF `literature/pdfs/frl_equidist_jtnb.pdf`), transcribed
   verbatim in 3.1.
 - V. Flammang, "On the Zhang-Zagier measure", Int. J. Number Theory 14 (2018), Table 1
   (aux function, record lower bound) — `flammang_table1.py`, `flammang_F18_digest.md`.
+- R4 non-energy methods synthesis — `literature/R4_nonenergy_methods_digest.md`
+  (the two-bucket dichotomy cited in Part (ii); Fili–Petsche 1306.3544, Bombieri–Zannier /
+  2404.11559, Pritsker 2101.06708, PD-kernel/Arakelov all checked there).
+- R1 energy bar / R3 contour-LP ceiling 0.2487857 (`ceiling_primal.py`) / R5 power-sum
+  closure (`screen_powersum.py`) — the buckets assembled in Part (ii).
+- R6 certificate `../certificate/screen_containment.py` (Part (i): pointwise lemma FALSE,
+  7/13 negative min_gap, certify/selftest/tamper).
 - run_state R3 Rule (the wrong lemniscate diagnosis) — corrected here.
