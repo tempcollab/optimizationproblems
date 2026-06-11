@@ -207,7 +207,11 @@ def potential_at_nodes_clean(z_nodes, centers, masses, L, nsub=40):
 
 # ---- main freeze -----------------------------------------------------------
 
-def freeze(N=2000, B=80, verbose=True):
+def freeze(N=2000, B=55, verbose=True):
+    # B=55 is the COMMITTED R17 record measure (15 arcs, L=0.057120) that
+    # verify_vec_energy.py loads from frozen_energy.npz. The default MUST match the
+    # committed npz so a bare `freeze_energy.py` regenerates the SAME measure and
+    # does not silently overwrite the record with a different (e.g. B=80) freeze.
     t, z, w, g = contour(N)
     A = column_matrix(w)
     m0, p0, cj0, _ = solve_primal(g, A)
@@ -247,13 +251,24 @@ def dump(d, path="frozen_energy.npz"):
     print(f"[dump] -> {path}")
 
 
-def check(d):
-    """Cross-checks: (1) Ihat <= reference I(mu0); (2) eigenvalue validity on the
-    FROZEN coarsened mu0 kernel; (3) anchor lambda0=0 recovers m0."""
+def check(d=None, path="frozen_energy.npz"):
+    """Cross-checks on the COMMITTED frozen measure (the one verify_vec_energy.py
+    loads), NOT a freshly recomputed dict: (1) Ihat <= reference I(mu0);
+    (2) eigenvalue validity on the FROZEN coarsened mu0 kernel.
+
+    `d` is ignored if a frozen_energy.npz is present on disk -- we always validate
+    the committed npz so this check can never drift from what the certificate uses.
+    Pass d explicitly only to check an in-memory freeze before dumping it."""
+    if d is None:
+        fz = np.load(path)
+        d = dict(centers=fz["centers"], masses=fz["masses"], L=float(fz["L"]),
+                 Ihat=float(fz["Ihat"]), B=int(fz["B"]))
+        print(f"[check] validating COMMITTED {path}: B={d['B']} "
+              f"arcs={len(d['centers'])} L={d['L']:.6f}")
     centers, masses, L = d["centers"], d["masses"], d["L"]
     ref = I_mu0_reference(centers, masses, L)
-    print(f"[check] Ihat={d['Ihat']:.8f} <= I(mu0)_ref={ref:.8f} ? "
-          f"{d['Ihat'] <= ref}  (margin {ref-d['Ihat']:.6f})")
+    print(f"[check] Ihat={d['Ihat']:.10f} <= I(mu0)_ref={ref:.10f} ? "
+          f"{d['Ihat'] <= ref}  (margin {ref-d['Ihat']:.2e})")
 
     # validity eigenvalue check (P1 numerical WITNESS, not the proof): build the
     # conj-symmetric energy MATRIX whose quadratic form q^T G q = I(measure) for the
@@ -286,8 +301,10 @@ def check(d):
 
 
 if __name__ == "__main__":
-    d = freeze()
     if len(sys.argv) > 1 and sys.argv[1] == "check":
-        check(d)
+        # Validate the COMMITTED frozen_energy.npz (what the certificate loads),
+        # without recomputing a freeze -- so `check` can never disagree with the cert.
+        check()
     else:
-        dump(d)
+        # Bare run regenerates the COMMITTED measure (B=55 default) and dumps it.
+        dump(freeze())
