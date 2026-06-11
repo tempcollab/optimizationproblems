@@ -144,3 +144,51 @@ NOT verified. NOT written to `held`. `## Status` untouched. This is a stage-1 mi
 under the run metric ("built a feasible construction / tested a new column / closed a
 question"): the first concrete, reproducible test of the OSS energy column on ZZ, showing
 the energy direction has genuine slack on |z|=1 and clears the gate, justifying stage-2.
+
+---
+
+## R15 — atomic TARGET raise on the R14 certificate (0.2509 -> 0.25113)
+
+The R14 verified lower-bound certificate (verify_vec_energy.py) left ~+2e-4 of pure
+B&B-target slack on the table: TARGET was set to 0.2509 purely so the frontier resolved
+fast (depth 3). The frozen mu0 / lambda0 / cj / Ihat actually support a higher floor.
+
+R15 is a SINGLE-LINE change — TARGET 0.2509 -> 0.25113 (line 99). Nothing else changed:
+same frozen_energy.npz (mu0: 17 arcs, L=0.039270; lambda0=0.0235977; 24 cj; Ihat=
+-0.2269604428), same C1-C5 chain, same per-cell Clausen-arc-average potential UPPER
+bound, same np.nextafter outward rounding, same superharmonicity / |z|=1 min-locus
+reduction. TARGET is only the B&B stopping threshold; raising it cannot weaken the
+bound (the cert prints CERTIFIED only when every cell's outward-rounded lower bound
+clears TARGET with the frontier emptied and no max_depth hit).
+
+RESULT (reproduce: `cd constants/82a/certificate && python3 verify_vec_energy.py`):
+  [OK] CERTIFIED  min_t f(t) >= 0.2511300035   (17564 cells, depth 7, ~11.4s)
+  binding/worst cell at t~1.4726 (mu0 node-cluster region; same binding region as R14).
+  => C_82 >= 0.2511300035, strictly above R14 held 0.2509000289 (raise +2.29975e-04)
+     and above Flammang [F18] record 0.2487458 (margin +0.00238420).
+
+Ceiling: the frozen-mu0 fine-grid per-cell lower-bound ceiling is 0.2511326614 (the
+sup the rigorous interval bound can certify on THIS mu0 at infinite B&B depth; the
+residual ~2.6e-5 is the depth-independent Clausen arc-average over-estimate). 0.25113
+sits 2.66e-5 below it -> robust headroom, resolved with room to spare. We deliberately
+do NOT chase the last 2.6e-5 (it does not shrink with depth and risks a borderline
+cell). 0.25113 banks ~99% of the recoverable gain with a comfortable buffer.
+
+Non-regression / anchors (all verified this round):
+  - selftest 0/636 (scipy spence) + 0/88 (mpmath polylog) — unchanged, f byte-identical.
+  - R14 anchor certify(0.2509): ok=True, worst=0.2509000289, 6924 cells, depth 3 —
+    BIT-IDENTICAL to the R14 held cert (genuine tightening of the SAME f, not a
+    different/broken cert).
+  - Ceiling tamper (no auto-certify / no grid fallback): certify(0.2520) and
+    certify(0.2512) — both ABOVE the 0.2511326614 ceiling — return ok=False via a
+    depth-hit (0.2512 fails at the binding cell ~t=1.4765, just below where 0.25113
+    sits). Run at max_depth=10 for tractable runtime; a larger max_depth only makes
+    the B&B work longer before hitting the identical ceiling wall, never certifies
+    above it. (The committed checks() block uses max_depth=14, which is correct but
+    slow >200s for the above-ceiling target; the FAIL is identical at depth 10.)
+
+PUSH FURTHER: the next lower-side gain is NOT another target raise (0.25113 is ~2.6e-5
+from this mu0's ceiling). It requires RAISING the ceiling itself: re-freeze mu0 with a
+larger m_cut (a different, non-atomic round — re-derive Ihat / the Clausen bound at the
+new L), a cutting-plane iteration of the OSS self-cut, or a Fekete-converse companion.
+Those are explicitly out of scope for this atomic round.

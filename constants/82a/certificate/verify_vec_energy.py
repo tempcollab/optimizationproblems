@@ -66,6 +66,32 @@ have the LARGEST f and bisect normally; nothing auto-certifies (P4).
 
 Run:  python3 verify_vec_energy.py            (full certification)
       python3 verify_vec_energy.py selftest   (soundness vs mpmath, incl. potential)
+
+=============================================================================
+R15 RESULT (TARGET raised 0.2509 -> 0.25113; ONLY the TARGET line changed):
+=============================================================================
+  [OK] CERTIFIED  min_t f(t) >= 0.2511300035   (cells=17564, depth=7, ~11.4s)
+       worst/binding cell at t~1.4726 (mu0 node-cluster region; same binding
+       region as R14), frontier fully resolved (0 unresolved cells).
+       => C_82 >= 0.2511300035 > 0.2509000289 (R14 held) > 0.2487458 [Flammang F18].
+       Margin over Flammang record +0.00238420; raise over R14 held +2.29975e-04.
+  Non-regression / anchors (all unchanged f / mu0 / cj / lambda0 / Ihat):
+    - selftest: 0/636 (scipy spence) + 0/88 (mpmath polylog) violations  (== R14).
+    - R14 anchor certify(0.2509): ok=True, worst=0.2509000289, 6924 cells, depth 3
+      (BIT-IDENTICAL to the R14 held cert -> this is a genuine tightening of the
+      SAME f, not a different/broken certificate).
+    - Ceiling tamper (proves NO auto-certify / NO grid fallback): a TARGET above the
+      frozen-mu0 fine-grid ceiling 0.2511326614 correctly FAILS to resolve (ok=False
+      via a depth-hit, never auto-certified):
+        certify(0.2520, ...) -> ok=False  (depth-hit cell ~t=0.4712)
+        certify(0.2512, ...) -> ok=False  (depth-hit cell ~t=1.4765, the binding
+                                            ceiling cell just below where 0.25113 sits)
+      [run with max_depth=10 for tractable runtime; at the original max_depth=14 the
+       SAME cells still fail -- a larger max_depth only makes the B&B work longer
+       before hitting the identical ceiling wall, it can NEVER certify above it.]
+0.25113 sits 2.66e-5 below the ceiling -> robust headroom (resolved with room to
+spare); we deliberately do NOT chase the last ~2.6e-5 (Clausen arc-average per-cell
+over-estimate, depth-independent).  See approaches/lower_oss_energy_cut.md (R15).
 """
 
 import sys
@@ -94,9 +120,13 @@ assert np.all(CJ >= 0) and LAM0 >= 0 and np.all(MASSES >= 0)
 assert abs(MASSES.sum() - 1.0) < 1e-9
 
 # conservative target strictly above the record (0.2487458) but below the true min
-# of f (~0.25099) so every cell resolves and the B&B reports the true worst cell.
-# 0.2509 resolves in ~7k cells / depth 3; the certified worst cell is ~0.2509.
-TARGET = 0.2509
+# of f (~0.25115) so every cell resolves and the B&B reports the true worst cell.
+# R15 raise: 0.25113 resolves in ~17.5k cells / depth ~7; the certified worst cell
+# is ~0.2511300035, sitting ~2.66e-5 below the frozen-mu0 fine-grid ceiling
+# 0.2511326614 (so it resolves with robust headroom). The +2e-4 left in R14 (0.2509)
+# was pure B&B-target slack; raising TARGET tightens the SAME f/mu0/cj/Ihat cert.
+# (R14 anchor: TARGET=0.2509 still resolves to 0.2509000289 — see checks().)
+TARGET = 0.25113
 
 
 # ---- per-cell UPPER bound on 2*lambda0*U_mu0(t) (the added potential loop) ----
