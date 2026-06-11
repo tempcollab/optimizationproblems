@@ -9,6 +9,19 @@ table: lower 0.24874 [F18, Flammang 2018] · upper 0.25444 [Doc01b, Doche 2001]
 held: lower 0.24874 (reviewer-verified, R1; RIGOROUS interval branch-and-bound
       certificate re-establishing Flammang's record. Reproduces, does NOT beat.)
       Reproduce: python3 constants/82a/certificate/verify_vec.py  (~30s).
+      upper 0.2543185491 (REVIEWER-VERIFIED, R7 — see below). R8 BUILDER CLAIM
+      (UNVERIFIED, pending reviewer): upper 0.2542657872 via a SECOND free-exponent
+      perturbing block Q4=Qb (deg 24), q=(13.5067,9.9134,2.7258,1.7086,0.7364),
+      qB=0.1092, qC=0.2437, D=max(53.8833, 56+0.1092*24+0.2437*24)=64.4696; frontier
+      fully resolved (665192 leaves, 0 unresolved, 6 rounds), int_0^1 G ds <=
+      16.3924135920, 16.3924135920/64.4696 = 0.2542657872, a STRICT tightening of held
+      R7 by 5.276e-5 (still < Doc01b 0.25443677). Admissibility of W=Q1*Q2*Q3*Q4 incl.
+      the new gcd(Qa,Qb)=1, anchor (qC=0 -> R7 family to >=10 digits, D=59.096),
+      selftest_q4 0/200 on the CHANGED integrand, and tamper test (bogus 0.25425 ->
+      BEATS=False) all PASS. Reproduce: python3 constants/82a/certificate/
+      verify_upper_q4.py certify 13.5067 9.9134 2.7258 1.7086 0.7364 0.1092 0.2437
+      200000 14 1e-10 (~3.5 min). [held stays the R7-verified value until reviewer
+      confirms the R8 claim.]
       upper 0.2543185491 (REVIEWER-VERIFIED, R7 — RECORD BREAK tightening the
       reviewer-verified R6 held 0.2543309112 by 1.236e-5, still < Doc01b
       0.25443677). Rigorous outward-rounded max(A,B) quadrature enclosure of log h(q,qB)
