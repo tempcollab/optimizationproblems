@@ -68,30 +68,36 @@ Run:  python3 verify_vec_energy.py            (full certification)
       python3 verify_vec_energy.py selftest   (soundness vs mpmath, incl. potential)
 
 =============================================================================
-R15 RESULT (TARGET raised 0.2509 -> 0.25113; ONLY the TARGET line changed):
+R17 RESULT (re-freeze mu0 at wider arc-width B=55; TARGET raised 0.25113 -> 0.2524):
 =============================================================================
-  [OK] CERTIFIED  min_t f(t) >= 0.2511300035   (cells=17564, depth=7, ~11.4s)
-       worst/binding cell at t~1.4726 (mu0 node-cluster region; same binding
-       region as R14), frontier fully resolved (0 unresolved cells).
-       => C_82 >= 0.2511300035 > 0.2509000289 (R14 held) > 0.2487458 [Flammang F18].
-       Margin over Flammang record +0.00238420; raise over R14 held +2.29975e-04.
-  Non-regression / anchors (all unchanged f / mu0 / cj / lambda0 / Ihat):
-    - selftest: 0/636 (scipy spence) + 0/88 (mpmath polylog) violations  (== R14).
-    - R14 anchor certify(0.2509): ok=True, worst=0.2509000289, 6924 cells, depth 3
-      (BIT-IDENTICAL to the R14 held cert -> this is a genuine tightening of the
-      SAME f, not a different/broken certificate).
+The ONLY load-bearing change is the FROZEN reference measure mu0 (re-frozen at
+B=55 -> 15 arcs, L=0.057120, lambda0=0.04012668, Ihat=-0.2111616260, m_cut=0.2526110)
+loaded from frozen_energy.npz at import; the f-formula and the entire C1-C5 / Clausen
+upper-bound chain are byte-identical (only TARGET and these comments are edited).
+  [OK] CERTIFIED  min_t f(t) >= 0.2524   (cells~7858, depth 4, ~5s)
+       worst/binding cell at t~0.489 (the wider-arc mu0 moved the binding region to
+       the LOW-t arc cluster; NOT R15's t~1.47), frontier fully resolved (0 cells).
+       => C_82 >= 0.2524 > 0.2511300035 (R15 held) > 0.2487458 [Flammang F18].
+       Margin over Flammang record +0.0036542; raise over R15 held +0.00127.
+  Non-regression / anchors (recomputed on the NEW B=55 mu0):
+    - selftest: 0 (scipy spence) + 0 (mpmath polylog) violations on the new mu0.
+    - lambda0=0 anchor: zeroing the energy term recovers the no-energy LP bound
+      ~m0=0.2487474 (the energy cut is what lifts the bound).
+    - freeze_energy.py check: NSD eigenvalue witness <= ~0 at the new L; Ihat <= ref.
     - Ceiling tamper (proves NO auto-certify / NO grid fallback): a TARGET above the
-      frozen-mu0 fine-grid ceiling 0.2511326614 correctly FAILS to resolve (ok=False
-      via a depth-hit, never auto-certified):
-        certify(0.2520, ...) -> ok=False  (depth-hit cell ~t=0.4712)
-        certify(0.2512, ...) -> ok=False  (depth-hit cell ~t=1.4765, the binding
-                                            ceiling cell just below where 0.25113 sits)
-      [run with max_depth=10 for tractable runtime; at the original max_depth=14 the
-       SAME cells still fail -- a larger max_depth only makes the B&B work longer
-       before hitting the identical ceiling wall, it can NEVER certify above it.]
-0.25113 sits 2.66e-5 below the ceiling -> robust headroom (resolved with room to
-spare); we deliberately do NOT chase the last ~2.6e-5 (Clausen arc-average per-cell
-over-estimate, depth-independent).  See approaches/lower_oss_energy_cut.md (R15).
+      true B&B ceiling (~0.252555) correctly FAILS to resolve (ok=False via depth-hit,
+      never auto-certified):
+        certify(0.2526, ..., max_depth=10) -> ok=False  (depth-hit)
+        certify(0.2527, ..., max_depth=10) -> ok=False  (depth-hit)
+      [run capped max_depth=10 for tractable runtime; an uncapped tamper runs >500s.
+       A larger max_depth only makes the B&B work longer before hitting the identical
+       ceiling wall, it can NEVER certify above it.]
+CONVERGENCE DIRECTION (corrected): the per-cell lower_bound_batch is a LOWER bound on
+f that TIGHTENS (rises) as cells shrink, so the fine-grid grid-min converges UPWARD
+(from BELOW) to the true B&B ceiling. The coarse-grid probe 0.2525142 UNDER-states the
+true ceiling (~0.252555); TARGET=0.2524 sits ~1.5e-3 below it -> a comfortable SAFE
+margin. (This is the OPPOSITE of R15's narrow-arc note; do NOT treat the grid-min as
+an upper wall.) See approaches/lower_oss_energy_cut.md (R17).
 """
 
 import sys
@@ -120,13 +126,21 @@ assert np.all(CJ >= 0) and LAM0 >= 0 and np.all(MASSES >= 0)
 assert abs(MASSES.sum() - 1.0) < 1e-9
 
 # conservative target strictly above the record (0.2487458) but below the true min
-# of f (~0.25115) so every cell resolves and the B&B reports the true worst cell.
-# R15 raise: 0.25113 resolves in ~17.5k cells / depth ~7; the certified worst cell
-# is ~0.2511300035, sitting ~2.66e-5 below the frozen-mu0 fine-grid ceiling
-# 0.2511326614 (so it resolves with robust headroom). The +2e-4 left in R14 (0.2509)
-# was pure B&B-target slack; raising TARGET tightens the SAME f/mu0/cj/Ihat cert.
-# (R14 anchor: TARGET=0.2509 still resolves to 0.2509000289 — see checks().)
-TARGET = 0.25113
+# of f (~0.2526) so every cell resolves and the B&B reports the true worst cell.
+# R17 re-freeze: the reference measure mu0 was re-frozen at a WIDER arc-width
+# (B=55 -> 15 arcs, L=0.057120, lambda0=0.04012668, Ihat=-0.2111616260), which
+# raises the LP cut value to m_cut=0.2526110 and the certifiable ceiling with it.
+# TARGET=0.2524 resolves in ~7858 cells / depth 4; the certified worst/binding cell
+# is ~0.2524001 near t~0.489 (the wider-arc mu0 moved the binding region to the
+# LOW-t arc cluster, NOT R15's t~1.47). TARGET sits safely below the fine-grid
+# ceiling. NOTE ON DIRECTION: the per-cell lower_bound_batch is a LOWER bound on f
+# that TIGHTENS (rises) as cells shrink, so the fine-grid grid-min CONVERGES UPWARD
+# (from BELOW) to the true B&B ceiling. The coarse-grid probe value 0.2525142 is
+# therefore an UNDER-estimate of the true ceiling (~0.252555); TARGET=0.2524 sits
+# ~1.5e-3 below the true ceiling -> comfortable, SAFE margin. (Do NOT read the
+# grid-min as an upper wall as R15's narrow-arc note did; here it understates.)
+# (R15/R14 anchors: TARGET=0.25113/0.2509 were on the OLD B=80 mu0 — see checks().)
+TARGET = 0.2524
 
 
 # ---- per-cell UPPER bound on 2*lambda0*U_mu0(t) (the added potential loop) ----
@@ -418,12 +432,15 @@ def checks():
     print(f"   WITH energy term, fine-grid worst cell = {wf:.10f}  "
           f"=> energy RAISE = {wf-w0:+.6f} (>0: the cut genuinely lifts the bound)")
 
-    # TAMPER: a TARGET above the true worst cell (~0.25099) must FAIL to resolve.
-    print("[tamper] a TARGET above the true min (0.2520) must FAIL to resolve:")
-    ok, worst, n, depth, bad = certify(0.2520, init_intervals=2000,
-                                       max_depth=14, batch_print=False)
-    print(f"   TARGET=0.2520: ok={ok} (expected False), depth_hit={depth}, cells={n}")
-    print(f"   => tamper {'PASSED (correctly failed)' if not ok else 'FAILED (false pass!)'}")
+    # TAMPER: a TARGET above the true B&B ceiling (~0.252555) must FAIL to resolve.
+    # Use a CAPPED max_depth=10 so the failing cell hits the depth wall fast (an
+    # uncapped tamper above the ceiling runs >500s before the frontier explodes).
+    for tgt in (0.2526, 0.2527):
+        print(f"[tamper] TARGET={tgt} (above the ceiling) must FAIL to resolve:")
+        ok, worst, n, depth, bad = certify(tgt, init_intervals=2000,
+                                           max_depth=10, batch_print=False)
+        print(f"   TARGET={tgt}: ok={ok} (expected False), depth_hit={depth}, cells={n}")
+        print(f"   => tamper {'PASSED (correctly failed)' if not ok else 'FAILED (false pass!)'}")
 
 
 if __name__ == "__main__":

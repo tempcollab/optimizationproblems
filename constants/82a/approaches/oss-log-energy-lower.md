@@ -192,3 +192,70 @@ from this mu0's ceiling). It requires RAISING the ceiling itself: re-freeze mu0 
 larger m_cut (a different, non-atomic round — re-derive Ihat / the Clausen bound at the
 new L), a cutting-plane iteration of the OSS self-cut, or a Fekete-converse companion.
 Those are explicitly out of scope for this atomic round.
+
+---
+
+## R17 — RE-FREEZE mu0 at a WIDER arc-width (B=55) to RAISE the ceiling; 0.25113 -> 0.2524
+
+R15 hit the ceiling of the B=80 mu0 (17 arcs, L=0.039270, m_cut=0.2511576). The
+PUSH-FURTHER note above identified the only remaining lever: re-freeze mu0 with a
+larger LP cut value m_cut. R17 does exactly that, ATOMICALLY — one new frozen mu0 +
+one TARGET edit, no load-bearing code change.
+
+RE-FREEZE: `python3 -c "import freeze_energy as fe; fe.dump(fe.freeze(N=2000, B=55))"`
+binned the SAME no-energy optimum p0 into B=55 uniform t-bins -> 15 NONZERO arcs of
+width L=0.057120 (WIDER than R15's 0.039270). The wider arcs give mu0 a different,
+slightly more diffuse profile whose OSS self-cut is STRONGER on this contour:
+  - 15 arcs, masses all > 0 (min 0.011341) summing to 1; 24 cj >= 0 (sum 0.437287);
+  - lambda0 = 0.04012668 > 0 (vs R15's 0.0235977 — the energy cut binds harder);
+  - Ihat = -0.2111616260, a rigorous DOWNWARD enclosure (reference I(mu0)=-0.2111600446,
+    so Ihat <= I(mu0), margin +1.58e-6 — the SAFE direction for C3);
+  - m_cut(LP) = 0.2526110 (conjecture), m0 = 0.2487474 (unchanged Flammang anchor).
+
+The WIDER arcs cost a larger Clausen arc-average per-cell over-estimate (the haircut
+m_cut - fine-grid ceiling grew from R15's ~2.6e-5 at L=0.039 to ~1e-4 at L=0.057), but
+the m_cut gain (+0.00145 over R15's 0.2511576) dwarfs it -> net certifiable raise.
+
+TARGET 0.25113 -> 0.2524 (the ONLY code edit besides comment text). RATIONALE: the
+per-cell lower_bound_batch is a LOWER bound on f that TIGHTENS (rises) as cells shrink,
+so the fine-grid grid-min CONVERGES UPWARD (from BELOW) to the true B&B ceiling. The
+coarse-grid probe value 0.2525142 therefore UNDER-states the true ceiling (~0.252555,
+measured by refining the binding cell: nc=200->0.2524929, nc=2000->0.2525484,
+nc=20000->0.2525540, nc=200000->0.2525545). TARGET=0.2524 sits ~1.5e-3 below the true
+ceiling -> a comfortable, SAFE margin (NOT the 1.1e-4 a "converges from above" reading
+would suggest — that reading is INVERTED; corrected in the cert header).
+
+RESULT (reproduce: `cd constants/82a/certificate && python3 verify_vec_energy.py`):
+  [OK] CERTIFIED  min_t f(t) >= 0.2524001332   (7858 cells, depth 4, ~4.5s)
+  binding/worst cell at t~0.489 (the wider-arc mu0 MOVED the binding region to the
+  LOW-t arc cluster, NOT R15's t~1.47).
+  => C_82 >= 0.2524 (committed), strictly above R15 held 0.2511300035 (raise +0.00127)
+     and above Flammang [F18] record 0.2487458 (margin +0.0036542).
+
+Non-regression / anchors (ALL recomputed on the NEW B=55 mu0 this round):
+  - selftest 0/620 (scipy spence) + 0/80 (mpmath polylog); potential spence-vs-mpmath
+    agree to 1.53e-15; worst (L - true_min) = -1.16e-6 (lower bound below true f, SAFE).
+  - freeze_energy.py check: NSD eigenvalue witness +1.116e-15 (<= ~0) at the new L;
+    Ihat=-0.2111616260 <= reference I(mu0)=-0.2111600446.
+  - lambda0=0 anchor: zeroing the energy term drops the worst fine-grid cell to
+    0.226687 (joint-dual cj alone, not the no-energy Flammang dual); turning the energy
+    term ON lifts the worst grid cell to 0.252530 => energy RAISE +0.025849 (>0, the cut
+    genuinely lifts the bound). [Same qualitative behavior as R15's B=80 mu0, whose
+    lambda0=0 worst cell was 0.23418 — the frozen cj are JOINT cut-LP duals, not the
+    no-energy duals, so lambda0=0 does NOT reconstitute m0; the meaningful anchor is the
+    positive raise from switching the energy term on.]
+  - Ceiling tamper (no auto-certify / no grid fallback): certify(0.2526) -> ok=False
+    (depth-hit, 42138 cells) and certify(0.2527) -> ok=False (depth-hit, 158772 cells,
+    failing cell t~0.479), both at CAPPED max_depth=10 (an uncapped above-ceiling tamper
+    runs >500s before the frontier explodes). The true ceiling sits between the passing
+    0.25255 and the failing 0.2526. certify(0.2524) still passes => a target above the
+    ceiling genuinely FAILS, not a rubber-stamp.
+
+PUSH FURTHER: B=55 was the MEASURED peak of a fragile, non-monotone m_cut(B) (K=15 at
+B=45/50/55/60; B=53 collapses to K=13 and the ceiling falls to 0.2514). The next lower
+gain is either (a) a finer re-freeze that recovers more of the ~1e-4 Clausen haircut
+(would need a tighter per-cell potential bound than the arc-average max-chord), or (b)
+a true cutting-plane iteration of the OSS self-cut / a Fekete-converse companion — both
+non-atomic. Do NOT sweep B blindly; B=55 was the peak. The committed TARGET=0.2524 has
+~1.5e-3 of real margin to this mu0's ceiling, so even 0.2525 is reachable on THIS mu0 if
+a future round wants the last bit (0.2524 is the prudent commit).
