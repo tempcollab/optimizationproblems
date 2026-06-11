@@ -1,0 +1,103 @@
+# Approach: OSS log-energy / discriminant dual column on the 82a LOWER bound (PATH B)
+
+Status: **STAGE-1 CONJECTURE built and gate-clearing (R12).** NOT verified, NOT in `held`.
+Target to RAISE: lower 0.2487458 = log(1.282416) [Flammang F18].
+
+## The idea
+
+The lower bound for the Zhang–Zagier essential minimum is a BMQS primal measure LP:
+
+    m = min_p  sum_n p_n g_n
+    s.t.  sum_n p_n log|Q_j(w_n)| >= 0  (Flammang's 24 columns),  sum p = 1,  p >= 0,
+
+over the contour w(t) = e^{it} − e^{2it}, g_n = log+|w_n|. Flammang's optimum gives
+0.2487458. Orloski–Sardari–Smith (arXiv:2401.03252) add a column Flammang never used —
+the logarithmic energy / discriminant constraint
+
+    I(mu) = ∫∫ log|z1 − z2| dmu dmu  >= 0,
+
+valid because the discriminant of a min-poly is a NONZERO INTEGER (so its log is >= 0),
+off a finite exceptional set — the SAME finite-exception integrality argument R1-verified
+for the c_j columns. This column gave the biggest Schur–Siegel–Smyth jump in 40 years. It
+is an independent constraint that can only RAISE the lower bound; adding constraints to the
+primal can only raise the min.
+
+## Why a LINEAR self-cut (not the hard quadratic constraint)
+
+I(mu) is concave in mu (gradient 2 K mu). Linearizing at any reference mu0 (OSS eq.8) gives
+the supergradient outer cut
+
+    I(mu) <= L_{mu0}(mu) := 2 U_{mu0}·mu − I(mu0)   for ALL mu,    {I>=0} ⊂ {L>=0}.
+
+Adding the single LINEAR constraint L_{mu0}(p) >= 0 at the no-energy optimum mu0:
+- can NEVER be infeasible (a linear cut on a non-empty polytope is at worst slack), so it
+  sidesteps the unit-circle log-capacity-0 trap that makes a literal hard p^T K p >= 0
+  constraint infeasible / vacuous on |z|=1;
+- is a VALID outer relaxation: m0 <= m_cut <= m_true <= C_82 (it under-estimates the true
+  energy optimum, can never over-shoot C_82);
+- only ADDS a constraint to the no-energy primal, so m_cut >= m0.
+
+This is a plain LP — `scipy.linprog` (HiGHS), no QCQP/SDP needed at stage-1.
+
+## Kernel (the load-bearing modeling object)
+
+A real min-poly's conjugate set is closed under conjugation, so the conjugate measure ν in
+z is conjugation-symmetric. We fold it onto the half-arc t in (0, π) with
+
+    K_{ab} = ½ ( log|z_a − z_b| + log|z_a − conj z_b| ),
+
+diagonal of the singular first term excluded; the second term is regular. A self-test in
+`energy_lp.py` confirms K reproduces the full-circle symmetric energy ∫∫ log|z1−z2| dν dν
+EXACTLY for a symmetric ν (|diff| = 1.0e-17). So K is the right energy object.
+
+## Stage-1 result (R12, CONJECTURE)
+
+`constants/82a/certificate/energy_lp.py` (runs ~2s). Numbers:
+
+| N    | m0        | I(mu0) symK | m_cut     | lambda_0 | m_cut − 0.2487458 | gate  |
+|------|-----------|-------------|-----------|----------|-------------------|-------|
+| 1000 | 0.2487517 | −0.11994    | 0.2503843 | 0.0183   | +0.001638         | FIRES |
+| 2000 | 0.2487474 | −0.09709    | 0.2502900 | 0.0294   | +0.001544         | FIRES |
+| 4000 | 0.2487464 | −0.10395    | 0.2500158 | 0.0257   | +0.001270         | FIRES |
+
+- The energy cut is ACTIVE (lambda_0 > 0) at every N.
+- I(mu0) ≈ −0.10 under the symmetric K: the column genuinely PRUNES the concentrated
+  Flammang optimum. (This corrects the outline's P3 claim that the circle sits at capacity
+  for mu0 — true only for the uniform/equilibrium measure, not the relevant non-uniform mu0.)
+- I(mu_cut) ≈ +0.05–0.07 > 0: EXPECTED for an outer linearization (cut over-relaxes; optimum
+  sits strictly inside {I>=0}). Do NOT iterate to drive I→0 or switch to the hard constraint —
+  that would over-claim m_cut above m_true and risk the infeasibility crash. The single outer
+  cut is the valid, conservative form.
+- Raise +0.0013 to +0.0016, stable across discretization, order of magnitude above the +1e-4
+  gate. **Gate FIRES.**
+
+## CONTOUR-VS-SUPPORT caveat (the stage-2 load-bearing item)
+
+The +0.0013 raise is a CONJECTURE, not a verified bound, because:
+1. The LP optimum over a finite N-node grid on the contour is numerical — the energy term
+   has no rigorous discretization-error bound yet (the no-energy part has the R1 interval
+   B&B; the energy term does not).
+2. The conjugate measure is modeled on the LITERAL contour |z|=1, whereas ν truly lives on a
+   capacity-1 lemniscate slightly off it. The raise does NOT depend on this (it comes from
+   pruning the concentrated mu0, valid on |z|=1 itself), but a rigorous certificate must
+   justify the support choice or carry the correction.
+
+## What stage-2 (rigorous certificate) must do
+
+- Extend the R1 interval branch-and-bound (verify_vec.py / fastiv.py) to carry the fixed
+  potential term lambda_0 · U_mu (the same log-kink discipline already used for the −c_j log|Q_j|
+  terms; note the potential is regular away from the diagonal so no blow-up).
+- Apply the OSS Prop 6.1 discretization haircut (m − δ·lambda_0·log R) to convert the grid
+  optimum to a true lower bound.
+- Resolve / bound the |z|=1-vs-lemniscate support modeling.
+- This stage-2 round would, if it gates, raise the verified lower bound past 0.24874 toward
+  ~0.2500 — the first lower-bound move of the run and the novel publishable advance the R11
+  user redirect asked for.
+
+## Result label
+
+CONJECTURE (m_cut ≈ 0.2500–0.2504, raise +0.0013 to +0.0016 over Flammang's 0.2487458).
+NOT verified. NOT written to `held`. `## Status` untouched. This is a stage-1 milestone
+under the run metric ("built a feasible construction / tested a new column / closed a
+question"): the first concrete, reproducible test of the OSS energy column on ZZ, showing
+the energy direction has genuine slack on |z|=1 and clears the gate, justifying stage-2.
