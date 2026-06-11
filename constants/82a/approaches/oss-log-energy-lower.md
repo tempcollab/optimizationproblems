@@ -1,7 +1,50 @@
 # Approach: OSS log-energy / discriminant dual column on the 82a LOWER bound (PATH B)
 
-Status: **STAGE-1 CONJECTURE built and gate-clearing (R12).** NOT verified, NOT in `held`.
+Status: **STAGE-2 RIGOROUS CERTIFICATE built (R13), builder claim m_energy = 0.2509
+> record 0.2487458 (margin +0.00215).** Awaiting reviewer verification before `held`.
 Target to RAISE: lower 0.2487458 = log(1.282416) [Flammang F18].
+
+## STAGE-2 (R13): rigorous diffuse-mu0 interval certificate — builder claim
+
+`constants/82a/certificate/verify_vec_energy.py` (cert) + `freeze_energy.py` (freeze).
+The RETHINK gap (atomic mu0 => I(mu0) = -inf, cut not an eq.6 consequence) is fixed by a
+DIFFUSE finite-energy histogram reference mu0; the cut (C3) becomes a genuine consequence of
+the CONTINUOUS log-kernel negative-definiteness (Ahlfors Lemma 2.1 / OSS eq.6).
+
+- **mu0 = histogram** (Fallback B): piecewise-constant density on coarse uniform t-bins,
+  17 support arcs of t-width L=0.03927, masses from the no-energy LP optimum. FINITE energy.
+- **I(mu0) EXACT closed form** (P3): for uniform arcs, every block mean of log|e^{is}-e^{is'}|
+  is `B1(d,L) = (F2(|d|-L)+F2(|d|+L)-2 F2(|d|))/L^2` with `F2(x)=Re Li3(e^{ix})-zeta(3)`
+  (derivation: F2''=log(2 sin(x/2)); the singular self block is the d=0 case, finite). So
+  `I(mu0) = sum_{a,b} m_a m_b (1/2)(B1(c_a-c_b,L)+B1(c_a+c_b,L))` is EXACT; rounding the
+  mpmath value DOWN to a float gives the rigorous `Ihat = -0.2269604428 <= I(mu0)`
+  (matches an independent Riemann reference to 1e-6). NO "log(dt)-1.5" approximation.
+- **Cut LP dual weights frozen CLEANLY** (P2): the cut row uses the histogram potential
+  computed with a grid OFFSET by an irrational fraction (no coincidence, no -10 fudge); the
+  cut LP gives dual c_j >= 0 (24 cols) and lambda0 = 0.023598 >= 0.
+- **Potential term per cell** (the one added loop, P4): U_mu0(t) = sum_k m_k (1/2)(P1_k+P2_k),
+  with EXACT arc-average `P_k(t) = (Cl2(t-mu-L/2)-Cl2(t-mu+L/2))/L` (Cl2 = Clausen = Im Li2).
+  Upper-bounded per cell via a rigorous Cl2 interval enclosure (monotone between extrema at
+  +-pi/3+2pi k, value +-1.0149; scipy spence for endpoints, padded). This is TIGHT (converges
+  with cell width; slack ~1e-6 at the worst region) — unlike the loose max-chord bound, which
+  has a constant ~0.1 slack near nodes and loses the margin. Near-node cells are the hardest
+  (subtracted U->-inf) and bisect normally; nothing auto-certifies (P4 trap stays deleted).
+- **P1 (continuous NSD is the proof):** cut validity rests on the CONTINUOUS negative-
+  definiteness, not the discrete diagonal. Numerical WITNESS (freeze_energy.py check): the
+  EXACT-block conj-symmetric energy matrix has top eigenvalue +1.1e-15 on the mass-zero
+  subspace (NSD), whereas the naive diagonal-zeroed kernel gives +2.85 (the R12 artifact).
+- **Result:** verify_vec_energy.py certifies `min_t f(t) >= 0.2509` (TARGET=0.2509 resolves
+  in ~6924 cells, depth 3, frontier=0, ~5s); true worst cell ~0.25099. So
+  **C_82 >= 0.2509 > 0.2487458 = record (margin +0.00215).**
+- **Sanity:** selftest 0/636 (spence f) + 0/88 (mpmath polylog f) violations incl. near-node
+  cells; lambda0=0 anchor recovers the no-energy LP-dual bound; tamper TARGET=0.2520 (above
+  true min) fails to resolve. No Prop-6.1 log-R haircut (C4 certified directly on |z|=1).
+
+To push further: a more diffuse mu0 (larger bin width / h=0.04-0.08) raises the LP cut value
+to ~0.2520-0.2535 (probe), so the same machinery with a coarser/wider mu0 could certify a
+higher lower bound; the I(mu0) closed form and the Cl2 potential bound carry over unchanged.
+
+## STAGE-1 (R12)
 
 ## The idea
 
