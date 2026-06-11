@@ -119,3 +119,147 @@ outline named for Angle 2, and it is the same order as the R7/R9/R10 structural 
 - Push the D-formula: the A-branch sum-q-deg-P branch now dominates (71.99 vs the
   perturb branch); rebalancing q to bring the two D-branches closer (the kink of the
   max) is the standard next squeeze.
+
+================================================================================
+
+## R4 explorer — admissibility table of UNUSED low-degree A-base candidates
+
+Active dictionary after R2: base {P1,P2,P4,P6,P8,j3} | perturbers {Q1,Q2,Q5=j13,Q6=j15}.
+Cross-checked Flammang Table-1 blocks NOT yet used, for use as a NEW A-BASE block
+(sympy, R4). A-base does NOT require P(0)=P(1)=1; it requires deg>0, squarefree,
+coprime to every active poly (condition (4)).
+
+| cand | deg | P(0),P(1) | coprime to active | sqfree | admissible as A-base |
+|------|-----|-----------|-------------------|--------|----------------------|
+| j6   | 7   | 1,1       | YES               | yes    | **YES**  (best next: lowest new deg) |
+| j7   | 8   | 1,1       | YES               | yes    | YES |
+| j9   | 8   | 1,1       | YES               | yes    | YES |
+| j11  | 11  | 1,1       | YES               | yes    | YES |
+| j8   | 8   | 1,1       | NO (shares factor w/ P6/P8) | yes | NO |
+| j12  | 12  | 1,1       | NO (shares factor w/ Q5=j13)| yes | NO |
+
+NEXT LEVER (R4 recommendation): clone verify_upper_q7A.py, add **j6 (deg7)** as a
+SECOND new A-base block (exponent qH), extend the FIRST D-argument by +qH*7, add
+qH*(1/2)log|j6|^2 to A; joint Nelder-Mead multistart over (q1..q5,qE,qF,qG_j3,qH_j6)
+seeded at the R2 optimum with qH=0. Make-or-break risk: qH may saturate to ~0 like the
+B-branch did (A-base may already be near-saturated after j3) — outline-check the joint
+FLOAT drop > 5e-6 BEFORE the ~8 min certify run. B-branch blocks remain DRY (R2 Angle-1).
+
+================================================================================
+
+## R4 proof-outliner — joint FLOAT screen of a SECOND A-base block (pre-certify gate)
+
+The R4 explorer's lead candidate was j6 (deg 7) as a SECOND A-base block. I ran the
+mandatory pre-certify FLOAT gate (joint Nelder-Mead multistart over (q1..q5,qE,qF,
+qG_j3,qH_block) seeded at the R2 optimum with the new exponent =0), then re-evaluated
+each optimum at N=4M to remove Riemann-grid discretization noise (j9 has roots near
+the lemniscate, so low-N float is unreliable — a 250k-grid "drop" for j9 evaporated to
+0.25404 at a stale seed; the GENUINE joint optimum is stable across N=400k and N=4M).
+
+| 2nd A-base block | deg | joint-opt qH | float val (stable N=4M) | margin vs cert 0.2538925359 | verdict |
+|------------------|-----|--------------|-------------------------|------------------------------|---------|
+| j6 | 7 | 0.000 (saturates) | 0.2538923368 | +1.99e-7 | **DRY** (qH->0; = R2 value) |
+| j7 | 8 | 0.000 (saturates) | 0.2538923368 | +1.99e-7 | **DRY** (qH->0; = R2 value) |
+| **j9** | 8 | **0.0662 (ACTIVE)** | **0.2538891103** | **+3.43e-6** | **LIVE but THIN** |
+
+- **j6/j7 are DRY as a second A-base block** — exactly the explorer's predicted make-or-
+  break failure: the A-base is near-saturated after j3, the new exponent collapses to 0,
+  the qH=0 anchor IS the optimum (same dry mode as the B-branch in R2 Angle 1). Do NOT
+  certify j6 or j7 as a second A-base block; the float does not drop.
+- **j9 (deg 8) GENUINELY ACTIVATES**: qH=0.0662 (NOT 0 — dropping it, qH=0, gives a much
+  worse 0.2539669816), float val 0.2538891103 STABLE at N=4M. So j9 is structurally
+  different from j6/j7: it carves a small extra notch in the A>B band that j3 alone
+  doesn't reach. But the float drop is only **+3.43e-6 below the held cert** — BELOW the
+  ~5e-6 safe-cert margin. The certificate is an UPWARD enclosure (cert > float by ~1e-7..
+  1e-6 of B&B/outward-rounding slack), so a 3.43e-6 float drop may certify to ~0.2538895..
+  0.2538905 — a strict beat of 0.2538925359 by only ~2e-6..3e-6, RIGHT AT the slack edge.
+  Plausibly a real (thin) record break, but NOT a safe one — the build must first push the
+  float margin or accept the risk that the certified value lands above the held value.
+
+Reliable joint optimum for j9 (N=4M-confirmed, for the builder to seed the certify):
+  base q=(14.283862,13.947194,2.593425,2.283539,0.249084) [R2 values; co-opt may shift],
+  qE~0.578, qF~0.566, qG_j3~0.8935, qH_j9~0.0662  (re-tighten at higher N before certify).
+
+NEXT-LEVER ranking (R4):
+  1. **j9 as a second A-base block** — the only LIVE candidate; +3.43e-6 float, thin.
+     Worth a certify ONLY after tightening the float margin (finer joint opt + higher-N
+     re-check) to confirm it clears the held value by more than the cert slack. If the
+     tightened float margin stays < ~4e-6, the expected certified value is too close to
+     the held 0.2538925359 to be a SAFE strict beat — treat as high-risk.
+  2. j6/j7 second A-base block — DRY, do not certify.
+  3. D-kink rebalance of the held j3 family alone — float reopt did not drop below the
+     R2 value (seed already at the kink optimum); no gain without a new block.
+
+================================================================================
+
+## R4 proof-builder — BUILT & CERTIFIED: j9 as a SECOND A-base block (LIVE BREAK)
+
+Harness: `certificate/verify_upper_q8A.py` (clone of verify_upper_q7A.py; adds Q8 = j9
+on the **A-branch** with weight qH, extends D's FIRST argument by +qH*deg j9 = +qH*8,
+adds qH*(1/2)log|j9|^2 to A; comparison target SET to the CURRENT held 0.2538925359,
+NOT the stale R11 0.2540419719). New scratch optimizer `opt_q8_scratch.py`.
+
+**Status: BUILDER CLAIM — CERTIFIED 0.2538893183, strict beat of held R2 0.2538925359,
+margin +3.218e-6** (awaiting reviewer verification; NOT written to current.md held).
+
+### Admissibility (sympy, from scratch) — PASS
+j9 = X^8 - X^7 - 3X^5 + 15X^4 - 22X^3 + 16X^2 - 6X + 1 (descending [1,-1,0,-3,15,-22,
+16,-6,1], deg 8) matches flammang_table1.py j=9 exactly. squarefree, IRREDUCIBLE,
+distinct from j3, gcd(j3,j9)=1, gcd(j9, each of {P1,P2,P4,P6,P8,Q1,Q2,Q5,Q6})=1, and
+j3 still coprime to all perturbers. Condition (4) holds (full coprimality + the
+always-present deg-56 Q1*Q2 factor => prod P^n / prod Q^n != +-1). A-base does NOT
+require j9(0)=j9(1)=1 (it happens to, but irrelevant).
+
+### ANCHOR (qH=0) — PASS, bit-identical
+float_value_q8A(R2 q,qE,qF,qG, qH=0) = 0.253892336877 == float_value_q7A(...) (== True);
+D_q8A(qH=0)=71.986516 == D_q7A; per-cell enclosure np.array_equal True AND refine-mask
+match True. Proves the second A-block genuinely EXTENDS the held R2 cert (valid integrand).
+
+### Joint 9-exponent float re-optimization (N=80k opt, N=4M re-eval) — GATE PASS
+3 Nelder-Mead starts seeded at R2 q + qH=0.0662, all converge to the SAME basin:
+  start0: 0.2538891350 (qH=0.0695)   start1: 0.2538892584 (qH=0.0527)
+  start2: 0.2538891202 (qH=0.0669)  <- best, used to certify
+Best (rounded) vector q=(14.0115,13.44393,2.64359,2.29988,0.25242), qE=0.57508,
+qF=0.56880, qG=0.89159, qH=0.06686; float N=4M = 0.2538891201, margin +3.416e-6 below
+held, STABLE (80k vs 4M differ ~5e-10). qH active (NOT 0): forcing qH=0 recovers the R2
+value. ~17x the harness's observed cert slack (~2e-7) -> SAFE beat.
+
+### selftest (mpmath prec-160, CHANGED A-integrand with qG*log|j3|+qH*log|j9|) — PASS
+0/200 violations on BOTH caps; worst (cell_hi - true_int) = +3.309e-12 (flat) /
++1.441e-17 (midpt) >= 0 (safe outward side).
+
+### CERTIFIED rigorous bound (the claim)
+`python3 verify_upper_q8A.py certify 14.011500 13.443930 2.643590 2.299880 0.252420 0 0
+ 0.575080 0.568800 0.891590 0.066860 200000 14 1e-10`:
+  - CERTIFIED  log h <= **0.2538893183**
+  - frontier FULLY RESOLVED: 0 unresolved, 742266 leaves, 6 rounds, ~437s
+  - int_0^2pi G dt <= 114.8596292764; int_0^1 G ds <= 18.2804777610;
+    D = max(61.65784, 72.00176) = 72.00176 (the PERTURBER B-branch 56+qE*12+qF*16 WINS;
+    the A-branch sum-q-deg-P+qG*3+qH*8 = 61.65784 does NOT — watch the report mislabel).
+    Hand arithmetic 18.2804777610 / 72.00176 = 0.253889318275.
+  - BEATS held 0.2538925359 (strict, frontier=0): True; margin +3.2176e-6.
+  - cert (0.2538893183) - independent N=4M float (0.2538891201) slack = +1.98e-7
+    (squarely in the harness's logged ~1.2e-7..2.0e-7 band — confirms a SAFE beat).
+  - Sits +0.00149 ABOVE the verified lower bound 0.2524001332 (two-sided consistent).
+
+### TAMPER — PASS
+bogus target 0.2538893100 (below the true certified 0.2538893183) -> BEATS=False,
+frontier fully resolved (no grid fallback). Same value 0.2538893183 reproduced
+deterministically.
+
+### Why j9 works where j6/j7 are DRY (mechanism)
+The A-base after j3 alone is nearly saturated, so j6/j7 (deg 7,8) drive qH->0 (DRY,
+recover R2). j9 (deg 8) has roots near the lemniscate (min|j9(X(t))| ~ 0.0106) so its
+log|j9| dips deeply in a narrow band; that extra A-mass carves a notch in a sub-band of
+{A>B} that j3 alone underfills, making qH=0.067>0 a genuine interior optimum and the
+whole q-vector rebalance. The gain is small (+3.2e-6) because the base is already
+nearly saturated after j3.
+
+### What would push it further
+- A THIRD A-base block: the next admissible low-deg Flammang block with lemniscate-near
+  roots (the property that made j9 live vs DRY j6/j7) — screen for min|Q| dips, not just
+  low degree. j11 (deg 11) is admissible but its +qH*11 D-penalty makes it a long shot.
+- Now that the B-branch D-arg (72.00176) again strictly wins the D-kink, a perturber
+  block that re-balances the two D-args (bring 61.66 closer to 72.00) is the standard
+  squeeze; but the A-branch is far below, so a new A-base block is the more direct lever.
+- Returns are clearly diminishing: R2 j3 gave +1.49e-4, R4 j9 only +3.2e-6.
