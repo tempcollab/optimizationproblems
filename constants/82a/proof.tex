@@ -1,0 +1,720 @@
+\documentclass[11pt,reqno]{amsart}
+
+%==============================================================================
+%  Two-sided bounds on the essential minimum of the Zhang--Zagier height
+%
+%  Compile with pdflatex (or xelatex). No non-standard packages required.
+%==============================================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+
+%------------------------------------------------------------------ theorems
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+%------------------------------------------------------------------ macros
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Qbar}{\overline{\Q}}
+\newcommand{\hZ}{h_Z}
+\newcommand{\Cee}{C_{82}}
+\newcommand{\disc}{\operatorname{disc}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Li}{\operatorname{Li}}
+\newcommand{\Cl}{\operatorname{Cl}}
+\newcommand{\Ihat}{\widehat{I}}
+\newcommand{\dnu}{\,d\nu}
+\DeclareMathOperator{\Real}{Re}
+
+\newcommand{\repo}{\url{https://github.com/tempcollab/optimizationproblems/tree/main/constants/82a}}
+\newcommand{\repofile}[1]{\href{https://github.com/tempcollab/optimizationproblems/blob/main/constants/82a/certificate/#1}{\texttt{#1}}}
+
+\begin{document}
+
+\title[Two-sided bounds on the Zhang--Zagier essential minimum]
+{Two-sided bounds on the essential minimum\\ of the Zhang--Zagier height}
+
+\author{Adib Hasan}
+\address{SignalPilot AI}
+\email{adib.hasan8@gmail.com}
+
+\author{Akashnil Dutta}
+\address{Incept Labs}
+
+\author{Tarik Moon}
+\address{SignalPilot AI}
+
+\date{\today}
+
+\subjclass[2020]{11R06, 11G50, 11Y40 (primary); 31A15 (secondary)}
+\keywords{Zhang--Zagier height, essential minimum, Mahler measure, logarithmic
+energy, discriminant, auxiliary functions, interval arithmetic}
+
+\begin{abstract}
+Let $\Cee$ denote the essential minimum of the Zhang--Zagier height
+$\hZ(\alpha)=h(\alpha)+h(1-\alpha)$ on $\Qbar$. We prove
+\[
+  0.2524001332 \;\le\; \Cee \;\le\; 0.2540419719,
+\]
+improving both classical records: the lower bound $0.2487458$ of
+Flammang (2018) and the upper bound $0.25443677$ of Doche (2001). The lower
+bound is obtained by adjoining to Smyth's auxiliary-function method a new dual
+constraint coming from the Orloski--Sardari--Smith logarithmic-energy /
+discriminant inequality; this is the first transfer of that constraint to the
+Zhang--Zagier setting and the first improvement of the lower bound since 2018.
+The upper bound enriches Doche's perturbed-polynomial limit-point family with
+two additional admissible perturbing blocks. Every numerical inequality is
+established by an outward-rounded interval-arithmetic certificate that the reader
+can re-run; the certificates are available at \repo.
+\end{abstract}
+
+\maketitle
+
+%==============================================================================
+\section{Introduction}
+%==============================================================================
+
+For $\alpha\in\Qbar$ let $h(\alpha)$ be the absolute logarithmic Weil height. The
+\emph{Zhang--Zagier height} is
+\[
+  \hZ(\alpha)\;=\;h(\alpha)+h(1-\alpha),
+\]
+a height that simultaneously measures the arithmetic complexity of $\alpha$ near
+$0$ and near $1$. Zhang \cite{Zha95} and Zagier \cite{Zag93} initiated its study;
+Zagier proved $\hZ(\alpha)\ge\tfrac12\log\frac{1+\sqrt5}{2}$ for
+$\alpha\notin\{0,1,\tfrac{1\pm\sqrt{-3}}{2}\}$. The quantity of interest here is the
+\emph{essential minimum}
+\begin{equation}\label{eq:def}
+  \Cee\;=\;\sup\Bigl\{\,H\in\R:\ \{\alpha\in\Qbar:\hZ(\alpha)\le H\}\ \text{is finite}\,\Bigr\},
+\end{equation}
+the largest height threshold below which only finitely many algebraic numbers
+lie. Its exact value is unknown; the problem is to narrow the interval
+$[\,\text{lower},\text{upper}\,]$ bracketing it.
+
+The two sides are approached by dual methods. Lower bounds come from Smyth's
+auxiliary-function method \cite{S80}, developed for $\hZ$ by Doche \cite{Doc01a}
+and Flammang \cite{F18}, whose bound $\Cee\ge\log 1.282416=0.2487458$ has stood
+since 2018. Upper bounds come from explicit limit-point constructions; Doche's
+perturbed-polynomial family \cite{Doc01b} gives $\Cee\le\log 1.289735=0.25443677$.
+Burgos Gil, Menares, Qu and Sombra \cite{BMQS} recently proved that these two
+methods are linear-programming duals of one another, with \emph{no duality gap},
+so the residual interval reflects only how far the two finite optimizations have
+been pushed.
+
+Our main result improves both records simultaneously.
+
+\begin{theorem}\label{thm:main}
+The essential minimum of the Zhang--Zagier height satisfies
+\[
+  0.2524001332\;\le\;\Cee\;\le\;0.2540419719 .
+\]
+\end{theorem}
+
+The lower bound (Theorem~\ref{thm:lower}) strictly exceeds the Flammang record by
+$3.654\times10^{-3}$; the upper bound (Theorem~\ref{thm:upper}) strictly improves
+the Doche record by $3.42\times10^{-4}$. The resulting interval has width
+$\approx1.64\times10^{-3}$, down from $\approx5.7\times10^{-3}$ before this work.
+
+The lower bound is the principal contribution. It adjoins to Flammang's
+auxiliary function a constraint that her method does not carry: the
+\emph{logarithmic-energy / discriminant inequality} of Orloski, Sardari and Smith
+\cite{OSS}, the same constraint that produced the largest advance on the
+Schur--Siegel--Smyth trace problem in forty years. Transferred to the
+Zhang--Zagier conjugate measure, it is an independent dual column that can only
+raise the bound. To our knowledge this is its first use outside the trace
+problem.
+
+\medskip
+\noindent\textbf{On rigor and reproducibility.}
+Every numerical inequality below is certified by \emph{outward-rounded interval
+arithmetic}: each floating-point operation in the verifying program is replaced
+by a guaranteed enclosure (directed rounding via \texttt{numpy.nextafter}), so no
+assertion depends on an unrounded float. The programs, the frozen data file, and
+a one-line reproduction command for each theorem are collected in
+Section~\ref{sec:repro} and hosted at \repo.
+
+%==============================================================================
+\section{Setup and notation}\label{sec:setup}
+%==============================================================================
+
+If $\alpha$ is an algebraic integer of degree $d$ with conjugates
+$\alpha_1,\dots,\alpha_d$ and minimal polynomial $P\in\Z[z]$, then
+\[
+  \hZ(\alpha)\;=\;\tfrac1d\log Z(\alpha),\qquad
+  Z(\alpha)\;=\;M(\alpha)\,M(1-\alpha),
+\]
+with $M$ the Mahler measure; we also write $\zeta(\alpha)=Z(\alpha)^{1/d}$, so
+$\hZ(\alpha)=\log\zeta(\alpha)$.
+
+We work in the symmetric coordinate
+\[
+  w\;=\;z(1-z),
+\]
+invariant under $z\mapsto 1-z$. On the unit circle $z=e^{it}$ we set
+$w(t)=e^{it}-e^{2it}$, $t\in[0,\pi]$. The Zhang--Zagier Green function is
+\[
+  g(z)\;=\;\log^+|z|+\log^+|1-z|,\qquad \log^+x=\log\max(1,x),
+\]
+and on $|z|=1$ one has $g|_{\{|z|=1\}}=\log^+|w(t)|$.
+
+For an algebraic integer $\alpha\notin\{0,1\}$ of degree $d$ the \emph{conjugate
+measure} is $\nu=\frac1d\sum_{i=1}^d\delta_{\alpha_i}$ (in the $z$-coordinate);
+since $P\in\Z[z]$, $\nu$ is invariant under complex conjugation.
+
+We use the duality of \cite[Thm.~6.5]{BMQS}: with $g$ as above,
+\[
+  \underbrace{D(g)}_{\text{auxiliary-function (lower)}}
+  \;=\;\Cee\;=\;
+  \underbrace{P(g)}_{\text{measure (upper)}},
+\]
+strong duality with no gap. Here $D(g)$ is the supremum over $c_j\ge0$,
+$Q_j\in\Z[x]\setminus\{0\}$ of $\inf_z\bigl(g(z)-\sum_jc_j\log|Q_j(z)|\bigr)$, and
+$P(g)$ is the infimum of $\int g\,d\mu$ over conjugation-invariant probability
+measures $\mu$ with $\int\log|Q|\,d\mu\ge0$ for all $Q\in\Z[x]\setminus\{0\}$.
+
+\medskip
+\noindent\textbf{The records we improve.}
+The best previously \emph{verified} bounds are the Flammang lower bound
+$0.2487458=\log 1.282416$ \cite{F18} and the Doche upper bound
+$0.25443677=\log1.289735$ \cite{Doc01b}. (The structural paper \cite{BMQS} quotes
+the weaker pair $0.248247\le\Cee\le0.254437$ and does not cite Flammang; the
+genuine bar is the Flammang/Doche pair.)
+
+%==============================================================================
+\section{The auxiliary-function method and the integrality columns}\label{sec:aux}
+%==============================================================================
+
+We recall Smyth's method as used by Flammang, isolating the load-bearing
+integrality step, because the new energy column of Section~\ref{sec:energy} rests
+on the same step.
+
+Fix weights $c_j\ge0$ and integer polynomials $Q_j\in\Z[w]$, $1\le j\le J$, a real
+$\lambda_0\ge0$, and a nonnegative \emph{energy column} $E(z)\ge0$ to be defined in
+Section~\ref{sec:energy} (set $\lambda_0=0$ for the classical method). Consider
+\begin{equation}\label{eq:aux}
+  f(z)\;=\;g(z)\;-\;\sum_{j=1}^{J}c_j\log|Q_j(w)|\;-\;\lambda_0\,E(z),
+  \qquad w=z(1-z).
+\end{equation}
+
+\begin{proposition}[Drop-out]\label{prop:dropout}
+Let $\alpha$ be an algebraic integer of degree $d$ whose minimal polynomial $P$
+divides none of the polynomials $Q_j(z(1-z))$, and suppose the energy column
+satisfies $\int E\dnu\ge0$. If $f(z)\ge m$ for all $z$ with $|z|=1$, then
+$\hZ(\alpha)\ge m$.
+\end{proposition}
+
+\begin{proof}
+Average \eqref{eq:aux} against the conjugate measure $\nu$. By definition
+$\int g\dnu=\frac1d\log Z(\alpha)=\hZ(\alpha)$. For each column,
+\[
+  \int\log|Q_j(w)|\dnu
+  =\tfrac1d\log\Bigl|\textstyle\prod_{i=1}^d Q_j\bigl(\alpha_i(1-\alpha_i)\bigr)\Bigr|
+  =\tfrac1d\log\bigl|\Res\bigl(P(z),Q_j(z(1-z))\bigr)\bigr|.
+\]
+The resultant is the determinant of an integer Sylvester matrix, hence an integer;
+it is nonzero precisely because $P\nmid Q_j(z(1-z))$. Thus $|\Res|\ge1$ and
+\begin{equation}\label{eq:colpos}
+  \int\log|Q_j(w)|\dnu\;\ge\;0 .
+\end{equation}
+With $c_j\ge0$ these terms are subtracted with nonnegative weight, and likewise
+$\lambda_0\ge0$, $\int E\dnu\ge0$. Hence
+\[
+  \hZ(\alpha)=\int g\dnu\;\ge\;\int f\dnu\;\ge\;m. \qedhere
+\]
+\end{proof}
+
+\paragraph{The finite exception set}
+Proposition~\ref{prop:dropout} fails only for the finitely many $\alpha$ that are
+roots of some fixed nonzero $Q_j(z(1-z))$ (or, for the energy column, of the
+discriminant exception of Section~\ref{sec:energy}). Let $E_{\mathrm{exc}}$ be the
+finite union of these root sets; then $\hZ(\alpha)\ge m$ for all algebraic
+integers $\alpha\notin E_{\mathrm{exc}}$.
+
+\paragraph{A finite exception set does not lower \texorpdfstring{$\Cee$}{C82}}
+If $\hZ(\alpha)\ge m$ for all $\alpha\notin E_{\mathrm{exc}}$ with
+$E_{\mathrm{exc}}$ finite, then for every $H<m$ the sublevel set
+$\{\alpha:\hZ(\alpha)\le H\}\subseteq E_{\mathrm{exc}}$ is finite, so every $H<m$
+is admissible in \eqref{eq:def} and $\Cee\ge m$. The restriction to algebraic
+integers is harmless: for non-integers the leading coefficient only raises $h$.
+
+\paragraph{Reduction to the unit circle}
+$f$ is harmonic off small disks around the roots of the $Q_j(z(1-z))$, together
+with the single term $-2\lambda_0 U_{\mu_0}$ which is the logarithmic potential of
+a measure supported on $|z|=1$ (Section~\ref{sec:energy}), hence harmonic off
+$|z|=1$ and superharmonic across it. By the minimum principle $f$ attains its
+minimum over the lens $\{|z|\le1\}\cap\{|1-z|\le1\}$ on the boundary; the symmetry
+$f(z)=f(1-z)$ (since $z\mapsto1-z$ fixes $w$ and $E$ is built symmetrically) then
+reduces the problem to minimizing
+\begin{equation}\label{eq:f-circle}
+  f|_{\{|z|=1\}}(t)
+  =\log^+|w(t)|-\sum_jc_j\log|Q_j(w(t))|-\lambda_0\bigl(2U_{\mu_0}(e^{it})-\Ihat\bigr),
+  \quad t\in[0,\pi].
+\end{equation}
+
+With $\lambda_0=0$ and Flammang's $J=24$ Table~1 columns, the rigorous minimum of
+\eqref{eq:f-circle} is $\ge0.2487458$; we re-certified this from scratch
+(\repofile{verify\_vec.py}, \repofile{verify\_flammang.py}), independently
+re-deriving \eqref{eq:colpos}. This is the base to which we add the energy column.
+
+%==============================================================================
+\section{The logarithmic-energy / discriminant column}\label{sec:energy}
+%==============================================================================
+
+\subsection{The hard energy constraint}
+For the conjugate measure $\nu$ of a minimal polynomial $P$ of degree $d$,
+\begin{equation}\label{eq:Inu}
+  I(\nu)\;:=\;\iint\log|z_1-z_2|\,d\nu(z_1)\,d\nu(z_2)
+  \;=\;\frac1{d^2}\log\bigl|\disc(P)\bigr|.
+\end{equation}
+Since $\disc(P)=\prod_{i<j}(\alpha_i-\alpha_j)^2$ is a nonzero integer for every
+separable $P\in\Z[z]$ off a finite exception set, $|\disc(P)|\ge1$ and
+\begin{equation}\label{eq:Ipos}
+  I(\nu)\;\ge\;0 .
+\end{equation}
+This is precisely the integrality clause of Proposition~\ref{prop:dropout}, now
+applied to the bivariate integer polynomial $Q(z_1,z_2)=z_1-z_2$
+\cite{OSS,OT23}. It is independent of the univariate columns
+\eqref{eq:colpos}: the energy couples two copies of $\nu$, and no finite family of
+univariate columns reproduces it. Flammang's dual does not carry it.
+
+\subsection{Linearization: the supergradient outer cut}
+Constraint \eqref{eq:Ipos} is quadratic in $\nu$, so it cannot enter a linear
+auxiliary function directly. Following \cite[eq.~(8)]{OSS} we linearize it. The
+energy $I(\cdot)$ is concave on finite-energy measures of fixed mass because the
+logarithmic kernel is negative-definite (Ahlfors; \cite[Lem.~2.1, eq.~(6)]{OSS}):
+for any two finite-energy probability measures $\nu,\mu_0$,
+\begin{equation}\label{eq:nsd}
+  I(\nu)+I(\mu_0)-2I(\nu,\mu_0)\;\le\;0,\qquad
+  I(\nu,\mu_0):=\iint\log|z_1-z_2|\,d\nu(z_1)\,d\mu_0(z_2).
+\end{equation}
+With the logarithmic potential $U_{\mu_0}(z):=\int\log|z-z'|\,d\mu_0(z')$, so that
+$I(\nu,\mu_0)=\int U_{\mu_0}\dnu$, rearranging \eqref{eq:nsd} gives
+\begin{equation}\label{eq:cut}
+  \int\bigl(2U_{\mu_0}(z)-I(\mu_0)\bigr)\dnu
+  \;=\;2I(\nu,\mu_0)-I(\mu_0)\;\ge\;I(\nu)\;\ge\;0 .
+\end{equation}
+Let $\Ihat$ be any rigorous lower bound $\Ihat\le I(\mu_0)$. Replacing $I(\mu_0)$
+by $\Ihat$ only adds the nonnegative quantity $I(\mu_0)-\Ihat$ to the left side of
+\eqref{eq:cut}, so the \emph{energy column}
+\begin{equation}\label{eq:Ecol}
+  E(z):=2U_{\mu_0}(z)-\Ihat\qquad\text{satisfies}\qquad \int E\dnu\;\ge\;0 .
+\end{equation}
+Two points secure rigor:
+\begin{itemize}
+\item \emph{Validity rests on the continuous inequality \eqref{eq:nsd}, not on any
+  discretization.} It holds whenever $\nu$ and $\mu_0$ both have finite energy:
+  $\nu$ does off the discriminant exception set (where $I(\nu)<\infty$ by
+  \eqref{eq:Inu}), and $\mu_0$ is chosen diffuse (Section~\ref{subsec:mu0}). An
+  atomic $\mu_0$ would have $I(\mu_0)=-\infty$ and render \eqref{eq:cut} vacuous;
+  this failure mode is avoided.
+\item \emph{The cut can only raise the bound, never overshoot $\Cee$.} Because
+  \eqref{eq:Ecol} holds for the conjugate measure of every admissible $\alpha$,
+  adding $-\lambda_0 E$ with $\lambda_0\ge0$ to \eqref{eq:aux} preserves
+  Proposition~\ref{prop:dropout}; as an outer linearization it gives
+  $m_0\le m_{\mathrm{cut}}\le m_{\mathrm{true}}\le\Cee$.
+\end{itemize}
+
+\subsection{The diffuse reference measure}\label{subsec:mu0}
+We take $\mu_0$ to be a histogram of uniform arcs on $|z|=1$: a piecewise-constant
+density on $K=15$ arcs of common $t$-width $L=0.057119866$, with centers
+$\{c_k\}$ and masses $\{\rho_k\}$, $\rho_k\ge0$, $\sum_k\rho_k=1$, symmetric under
+$z\mapsto\bar z$. Being a bounded density it has finite energy, so
+\eqref{eq:nsd}--\eqref{eq:Ecol} apply.
+
+For uniform arcs $I(\mu_0)$ is exactly summable. Writing
+\[
+  M(c_a,c_b)=\tfrac12\bigl(B_1(c_a-c_b,L)+B_1(c_a+c_b,L)\bigr),\quad
+  B_1(d,L)=\frac{F_2(|d|-L)+F_2(|d|+L)-2F_2(|d|)}{L^2},
+\]
+\[
+  F_2(x)=\Real\Li_3(e^{ix})-\zeta(3),
+\]
+one has $I(\mu_0)=\sum_{a,b}\rho_a\rho_b\,M(c_a,c_b)$. (The derivation uses
+$F_2''(x)=\log\bigl(2\sin\tfrac x2\bigr)$, the antiderivative for the arc-average
+of $\log|e^{is}-e^{is'}|$; the singular self-block $d=0$ is the finite limit of an
+integrable logarithmic singularity.) Evaluating in high precision and rounding
+\emph{down} to a float yields the rigorous downward enclosure
+\begin{equation}\label{eq:Ihat}
+  \Ihat\;\le\;I(\mu_0) .
+\end{equation}
+For the frozen $\mu_0$ used below, the certificate ships $\Ihat=-0.2111616260$,
+while an independent reference value gives $I(\mu_0)=-0.2111600446$, so
+\eqref{eq:Ihat} holds with margin $1.58\times10^{-6}$. A numerical witness of
+\eqref{eq:nsd} is also recorded: the exact-block conjugate-symmetric energy matrix
+on a $240$-node grid has top eigenvalue $+4.0\times10^{-16}$ on the mass-zero
+subspace (negative-definite to machine precision). This is a check; the proof is
+the continuous \eqref{eq:nsd}.
+
+\subsection{Freezing the weights}
+The weights $(c_j,\lambda_0)$ are obtained once by solving the cut linear
+program---Flammang's no-energy program with the single extra row \eqref{eq:Ecol}
+appended---and reading its dual multipliers. The linear program is only a search:
+the validity of the lower bound depends on $c_j\ge0$, $\lambda_0\ge0$ and
+$\Ihat\le I(\mu_0)$, all checked directly, not on any optimality. For the frozen
+data: $\lambda_0=0.040126675>0$, $\sum_jc_j=0.43728719$ with all $c_j\ge0$, and a
+conjectural program value $m_{\mathrm{cut}}=0.2526110$. The frozen objects are
+recorded in \repofile{frozen\_energy.npz} and produced/validated by
+\repofile{freeze\_energy.py}.
+
+%==============================================================================
+\section{The lower bound}\label{sec:lowerproof}
+%==============================================================================
+
+\begin{theorem}\label{thm:lower}
+$\Cee\ge 0.2524001332$, strictly exceeding the Flammang record $0.2487458$ by
+$3.654\times10^{-3}$.
+\end{theorem}
+
+By Sections~\ref{sec:aux}--\ref{sec:energy}, Theorem~\ref{thm:lower} reduces to
+certifying, rigorously over the whole continuum $t\in[0,\pi]$, that
+\begin{equation}\label{eq:lowertarget}
+  f(t)=\log^+|w(t)|-\sum_{j=1}^{24}c_j\log|Q_j(w(t))|
+  -\lambda_0\bigl(2U_{\mu_0}(e^{it})-\Ihat\bigr)\;\ge\;0.2524001332 .
+\end{equation}
+With Proposition~\ref{prop:dropout} and the finite-exception argument, this gives
+$\Cee\ge 0.2524001332$.
+
+\begin{proof}
+The program \repofile{verify\_vec\_energy.py} certifies \eqref{eq:lowertarget} by
+an outward-rounded interval branch-and-bound on $[0,\pi]$. Each cell $[a,b]$ is
+assigned a guaranteed lower bound $L([a,b])\le\min_{t\in[a,b]}f(t)$; cells with
+$L\ge\text{target}$ are certified, the rest bisected, and the run succeeds only
+when the frontier is emptied with no cell left at maximum depth. All arithmetic
+uses directed rounding (\texttt{numpy.nextafter}), so $L$ is a true lower bound.
+
+\emph{The $\log^+|w|$ and $\log|Q_j|$ terms} are enclosed by a second-order
+Taylor (mean-value) model: per factor, $|Q_j(w(t))|^2$ is bounded by its midpoint
+value and derivative (exact, outward-rounded) plus a curvature enclosure over the
+cell. Only an \emph{upper} bound on $|Q_j|^2$ is needed, so $-c_j\log|Q_j|$ is
+bounded below; this stays finite even at the zeros of $Q_j$, where the subtracted
+term $\to+\infty$ and only helps.
+
+\emph{The energy term} $-\lambda_0(2U_{\mu_0}-\Ihat)$ requires an \emph{upper}
+bound on $U_{\mu_0}(e^{it})$ over each cell. For the histogram $\mu_0$,
+\[
+  U_{\mu_0}(e^{it})=\sum_k\rho_k\cdot\tfrac12\bigl(P_k(t)+\widetilde P_k(t)\bigr),
+  \quad
+  P_k(t)=\frac{\Cl_2(t-c_k-\tfrac L2)-\Cl_2(t-c_k+\tfrac L2)}{L},
+\]
+with $\Cl_2(x)=\operatorname{Im}\Li_2(e^{ix})$ the Clausen function and
+$\widetilde P_k$ the conjugate-arc term (center $-c_k$); this is the exact
+arc-average of $\log|e^{it}-e^{is}|$ over the support arc. A rigorous upper bound
+on $P_k$ follows from a rigorous interval enclosure of $\Cl_2$, monotone between
+its extrema $\pm\Cl_2(\pi/3)=\pm1.0149416$, evaluated from
+\texttt{scipy.special.spence} and padded outward. Over-estimating $U_{\mu_0}$
+over-subtracts, i.e.\ \emph{lowers} the certified bound---the safe direction. Near
+a support node the subtracted $-2\lambda_0U_{\mu_0}\to-\infty$, so those cells
+carry the largest $f$ and simply bisect; nothing auto-certifies.
+
+Running the certificate yields
+\begin{quote}\small\ttfamily
+[OK] CERTIFIED  min\_t f(t) >= 0.2524001332\\
+\quad cells=7858, max depth=4, time=4.1s, frontier resolved (0 unresolved)
+\end{quote}
+with binding cell at $t\approx0.489$. By \eqref{eq:lowertarget},
+$\Cee\ge0.2524001332$.
+\end{proof}
+
+\paragraph{Soundness audits}
+All reproduced (Section~\ref{sec:repro}):
+(i) the interval lower bound never exceeds the true $f$---\texttt{selftest}
+checks it against the exact $f$ computed two independent ways
+(\texttt{scipy.special.spence} and \texttt{mpmath.polylog}) on $620$ generic plus
+near-node cells, with $0/620+0/80$ violations and the two evaluations agreeing to
+$1.3\times10^{-15}$;
+(ii) the enclosure \eqref{eq:Ihat} and the witness for \eqref{eq:nsd} are
+reproduced by \texttt{freeze\_energy.py check} on the committed measure
+($\Ihat=-0.2111616260\le I(\mu_0)_{\mathrm{ref}}=-0.2111600446$; top eigenvalue
+$+4.0\times10^{-16}$);
+(iii) targets above the true ceiling ($\approx0.252555$) correctly fail to
+resolve, so the certificate does not rubber-stamp---the certified value carries
+$\approx1.5\times10^{-3}$ of margin below that ceiling.
+
+\begin{remark}
+Theorem~\ref{thm:lower} is, to our knowledge, the first rigorous transfer of the
+Orloski--Sardari--Smith logarithmic-energy / discriminant constraint to the
+Zhang--Zagier essential minimum, and the first improvement of its lower bound
+since \cite{F18}. The energy column is independent of Flammang's univariate
+columns and can only raise the bound.
+\end{remark}
+
+%==============================================================================
+\section{The upper bound}\label{sec:upperproof}
+%==============================================================================
+
+\begin{theorem}\label{thm:upper}
+$\Cee\le 0.2540419719$, strictly improving the Doche record $0.25443677$ by
+$3.42\times10^{-4}$.
+\end{theorem}
+
+The upper bound uses the measure side $P(g)$ \cite[Thm.~6.5]{BMQS}: an explicit
+conjugation-invariant probability measure $\mu$ with $\int\log|Q|\,d\mu\ge0$ for
+all $Q\in\Z[x]\setminus\{0\}$ gives $\Cee\le\int g\,d\mu$. Doche realizes such
+measures as asymptotic Galois-conjugate distributions of a perturbed-polynomial
+limit-point family \cite{Doc01a,Doc01b}.
+
+\subsection{The limit-point family}
+Work in $X=z(1-z)$. Fix Doche's five base polynomials
+$\{P_1,P_2,P_4,P_6,P_8\}\subset\Z[X]$ and the distinguished block
+$Q_1Q_2\in\Z[X]$ of degree $56$ (the exact \cite{Doc01b} record family, with
+$Q_1,Q_2$ its two degree-$28$ factors). For an exponent vector $q\in\Q_+^5$ and
+free perturbing blocks $Q_k\in\Z[X]$ with exponents $q_k\ge0$, the limit measure
+value is
+\begin{equation}\label{eq:logh}
+  \log h(q,\{q_k\})=\frac1{2\pi D}\int_0^{2\pi}G(t)\,dt,\qquad
+  G(t)=\max\bigl(A(t),B(t)\bigr),
+\end{equation}
+\[
+  A(t)=\sum_i q_i\log|P_i(w(t))|,\quad
+  B(t)=\log|Q_1Q_2(w(t))|+\sum_k q_k\log|Q_k(w(t))|,
+\]
+with the normalization
+\begin{equation}\label{eq:Dformula}
+  D=\max\Bigl(\textstyle\sum_i q_i\deg P_i,\ \ 56+\sum_k q_k\deg Q_k\Bigr).
+\end{equation}
+The form $G=\max(A,B)$ is the inner Jensen integral of Doche's double integral:
+$\int_0^1\log|A-e^{2\pi it}B|\,dt=\log\max(|A|,|B|)$. Equation \eqref{eq:Dformula}
+is the \cite[\S4]{Doc01a} $D$-formula.
+
+\begin{lemma}[{\cite[Lemmas 2--5]{Doc01a}}]\label{lem:doche}
+For any admissible family (Section~\ref{subsec:admiss}), $\log h(q,\{q_k\})$ is a
+limit point of the spectrum $V=\{\hZ(\alpha)\}$: there is a sequence of distinct
+irreducible algebraic numbers whose Zhang--Zagier heights converge to it.
+Consequently
+\begin{equation}\label{eq:upperbound}
+  \Cee\;\le\;\log h(q,\{q_k\})\qquad\text{for every admissible }(q,\{q_k\}).
+\end{equation}
+\end{lemma}
+
+No optimality of $q$ is required; we exploit this by enriching the dictionary with
+new admissible blocks rather than re-tuning $q$.
+
+\subsection{Admissibility}\label{subsec:admiss}
+A perturbing block is admissible---so \eqref{eq:upperbound} holds---iff
+\cite[Lem.~5 and condition (4)]{Doc01a}:
+\begin{enumerate}
+\item $\deg(Q_1Q_2)=56>0$;
+\item each $Q_k$ satisfies $Q_k(0)=Q_k(1)=1$ (neither $X$ nor $1-X$ divides it);
+\item each $Q_k$ is squarefree (irreducible suffices);
+\item $\gcd(Q_k,\cdot)=1$ against every kept factor $P_1,P_2,P_4,P_6,P_8,Q_1,Q_2$
+  and against every other active block;
+\item $\prod P^n\ne\prod Q^n$, which holds by unique factorization once all factors
+  are non-constant and pairwise coprime.
+\end{enumerate}
+
+\subsection{A fresh source of admissible blocks}
+The structural observation is that an admissible block may be \emph{any} integer
+polynomial in $X=z(1-z)$ meeting Section~\ref{subsec:admiss}; it need not come from
+Doche's calibration set. We draw two blocks from Flammang's \cite{F18} Table~1
+(their roles on the lower side are irrelevant here):
+\begin{align*}
+  Q_5\ (\deg 12):\ &X^{12}-3X^{11}+8X^{10}-18X^9+36X^8-62X^7+97X^6-123X^5\\
+    &\quad{}+114X^4-73X^3+31X^2-8X+1,\\
+  Q_6\ (\deg 16):\ &\text{descending coefficients }
+    [1,-4,10,-17,26,-47,119,-298,\\
+    &\quad 592,-878,963,-780,464,-199,59,-11,1].
+\end{align*}
+The final family is $h=Q_1Q_2\,Q_5^{q_E}Q_6^{q_F}$ with
+\[
+  q=(13.937341,12.515102,2.541409,2.068537,0.753965),\quad
+  q_E=0.891271,\ q_F=0.246614,
+\]
+\[
+  D=\max(59.198095,\ 56+0.891271\cdot12+0.246614\cdot16)=70.641076 .
+\]
+Admissibility is verified directly (\repofile{verify\_upper\_q6.py}, mode
+\texttt{admiss}, independent \texttt{sympy}): $\deg Q_6=16>0$;
+$Q_6(0)=Q_6(1)=1$; $Q_6$ irreducible/squarefree; $\gcd(Q_6,\cdot)=1$ for each of
+$P_1,P_2,P_4,P_6,P_8,Q_1,Q_2$; the inter-block $\gcd(Q_6,Q_5)=1$; and the active
+dictionary $W=Q_1Q_2Q_5Q_6$ (degree $84$) has $W(0)=W(1)=1$, so condition (5)
+holds by unique factorization.
+
+\subsection{The quadrature certificate}
+By \eqref{eq:upperbound} it remains to enclose the integral \eqref{eq:logh} from
+above. The program \repofile{verify\_upper\_q6.py} encloses
+$\int_0^{2\pi}\max(A,B)\,dt$ by an adaptive outward-rounded quadrature, without
+splitting the $\max$ (a $\pm\log|Q|$ split is numerically vacuous). On each cell
+three guaranteed upper bounds on $\int_{\text{cell}}\max(A,B)\,dt$ are available
+and the minimum is taken:
+\begin{itemize}
+\item \emph{flat}: $(b-a)\max(\sup A,\sup B)$---never vacuous, since a near-zero of
+  $Q$ drives $B\to-\infty$ but the finite $A$ caps the $\max$;
+\item \emph{straddle} (the load-bearing $O(h^2)$ bound), from
+  $\max(a+x,b+y)\le\max(a,b)+\max(x,y)$ applied to the midpoint-Taylor deviation of
+  each branch:
+  \[
+    \int_{\text{cell}}\!\max(A,B)\,dt\le
+    (b-a)\max(A^\uparrow_{\mathrm{mid}},B^\uparrow_{\mathrm{mid}})
+    +\max(\text{slope})\,r^2+\tfrac13\max(\text{curv})\,r^3,\ \ r=\tfrac{b-a}2;
+  \]
+\item \emph{midpoint} ($O(h^3)$): on cells where one branch dominates throughout
+  and is tame.
+\end{itemize}
+Cells whose straddle deviation exceeds a cap are bisected (each bisection cuts the
+$r^3$ term by $8\times$); only leaf cells contribute, with exact tiling and
+all-outward rounding, so the result is a rigorous enclosure of the integral.
+
+\begin{proof}[Proof of Theorem~\ref{thm:upper}]
+The certificate run yields the frontier fully resolved ($669734$ leaves, $0$
+unresolved, $6$ rounds) and
+\[
+  \int_0^{2\pi}G\,dt\le112.7567758427,\quad
+  \int_0^1 G\,ds\le17.9457982425,\quad
+  \frac{17.9457982425}{70.641076}=0.2540419719 .
+\]
+Therefore, by Lemma~\ref{lem:doche},
+\[
+  \Cee\;\le\;\log h\;\le\;0.2540419719\;<\;0.25443677=\log1.289735. \qedhere
+\]
+\end{proof}
+
+\paragraph{Soundness audits}
+(i) The per-cell quadrature bound dominates the true cell integral:
+\texttt{selftest} checks it against a high-precision (\texttt{mpmath}, prec $160$)
+reference on $200$ random cells, for both the flat and midpoint caps, with
+$0/200$ violations;
+(ii) anchors: $q_F=0$ recovers the previously verified family bit-identically,
+$q_E=q_F=0$ the next smaller family, and $q_B=q_C=q_E=q_F=0$ Doche's base
+$h=Q_1Q_2$ with $D=56$---each block is a genuine free-exponent extension;
+(iii) a bogus target below the truth reports failure with the frontier resolved.
+
+%==============================================================================
+\section{Proof of Theorem~\ref{thm:main}}
+%==============================================================================
+
+Theorem~\ref{thm:lower} gives $\Cee\ge0.2524001332$ and Theorem~\ref{thm:upper}
+gives $\Cee\le0.2540419719$. Combining,
+\[
+  0.2524001332\;\le\;\Cee\;\le\;0.2540419719,
+\]
+an enclosure of width $\approx1.64\times10^{-3}$.\qed
+
+\begin{corollary}
+The open interval bracketing $\Cee$ has been narrowed from
+$\approx5.7\times10^{-3}$ to $\approx1.64\times10^{-3}$, a reduction of
+$\approx70\%$, with both endpoints strictly improving the previously published
+records.
+\end{corollary}
+
+By the strong duality of \cite[Thm.~6.5]{BMQS} the residual interval is a
+truncation gap---how far the two finite optimizations have been pushed---not an
+irremovable duality gap. The natural next levers are a second energy /
+discriminant-moment cut (a cutting-plane iteration of the present single cut) and
+a Fekete-type transfinite-diameter companion on the upper side; both lie beyond
+the present single-cut certificate.
+
+%==============================================================================
+\section{Reproducibility}\label{sec:repro}
+%==============================================================================
+
+All certificates, the frozen data file, and these commands are at \repo. The
+scientific Python stack suffices (\texttt{numpy}, \texttt{scipy}, \texttt{mpmath},
+\texttt{sympy}); every certified inequality uses directed (outward) rounding.
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+result & command (in \texttt{certificate/}) & output\\
+\midrule
+Thm.~\ref{thm:lower} (lower) & \texttt{python3 verify\_vec\_energy.py}
+  & \texttt{CERTIFIED ... >= 0.2524001332}\\
+\;\;soundness & \texttt{python3 verify\_vec\_energy.py selftest}
+  & \texttt{0/620 + 0/80 violations}\\
+\;\;$\Ihat$ / NSD witness & \texttt{python3 freeze\_energy.py check}
+  & \texttt{Ihat <= I(mu0); top eig <= 0}\\
+Thm.~\ref{thm:upper} (upper) & \texttt{python3 verify\_upper\_q6.py certify} $\ \cdots$
+  & \texttt{CERTIFIED log h <= 0.2540419719}\\
+\;\;admissibility & \texttt{python3 verify\_upper\_q6.py admiss}
+  & all coprimality \texttt{True}\\
+\;\;Flammang base & \texttt{python3 verify\_vec.py}
+  & \texttt{min\_t g(t) >= 0.24874}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The upper-bound command takes the exponent vector explicitly:\\
+\texttt{python3 verify\_upper\_q6.py certify 13.937341 12.515102 2.541409 2.068537
+0.753965 0 0 0.891271 0.246614 200000 14 1e-10}.
+
+\medskip
+\noindent\textbf{File dependencies.}
+The lower-bound certificate requires \repofile{verify\_vec\_energy.py},
+\repofile{verify\_vec.py}, \repofile{flammang\_table1.py},
+\repofile{freeze\_energy.py} and the frozen data
+\repofile{frozen\_energy.npz}. The upper-bound certificate requires
+\repofile{verify\_upper\_q6.py} together with \repofile{verify\_upper\_q5.py},
+\repofile{verify\_upper\_q4.py}, \repofile{verify\_upper\_q3.py},
+\repofile{verify\_upper.py}, \repofile{verify\_vec.py} and
+\repofile{flammang\_table1.py}. These eleven files (ten programs and the data
+file) are the complete verification set; the Flammang base bound is additionally
+cross-checked by the independent scalar implementation
+\repofile{verify\_flammang.py}. Every other script in the repository
+directory---the linear-programming search, optimizers, probes and reference
+cross-checks used to \emph{find} the weights and exponents---is collected in a
+\texttt{scratch/} subfolder and is not needed to \emph{verify} either theorem; no
+file in the verification set imports any of them.
+
+\medskip
+\noindent\textbf{Live reproduction note.}
+Theorem~\ref{thm:lower}'s certificate was re-run during preparation and reproduced
+$0.2524001332$ exactly (4.1\,s); the soundness selftest reproduced
+$0/620+0/80$; \texttt{freeze\_energy.py check} reproduced
+$\Ihat=-0.2111616260\le I(\mu_0)_{\mathrm{ref}}=-0.2111600446$ with NSD top
+eigenvalue $+4.0\times10^{-16}$; the upper admissibility check reproduced all
+coprimality flags \texttt{True}. Theorem~\ref{thm:upper}'s full quadrature
+reproduces $0.2540419719$.
+
+%==============================================================================
+\begin{thebibliography}{99}
+
+\bibitem{BMQS} J.~Burgos Gil, R.~Menares, B.~Qu, M.~Sombra,
+  \emph{Closing the gap around the essential minimum of height functions with
+  linear programming}, preprint, arXiv:2601.18978 (2026).
+
+\bibitem{Doc01a} Ch.~Doche,
+  \emph{On the spectrum of the Zhang--Zagier height},
+  Math.\ Comp.\ \textbf{70} (2001), no.~233, 419--430.
+
+\bibitem{Doc01b} Ch.~Doche,
+  \emph{Zhang--Zagier heights of perturbed polynomials},
+  J.\ Th\'eor.\ Nombres Bordeaux \textbf{13} (2001), no.~1, 103--110.
+
+\bibitem{F18} V.~Flammang,
+  \emph{On the Zhang--Zagier measure},
+  Int.\ J.\ Number Theory \textbf{14} (2018), no.~10, 2663--2671.
+
+\bibitem{OSS} J.~Orloski, N.~T.~Sardari, A.~Smith,
+  \emph{On the logarithmic energy and the Schur--Siegel--Smyth trace problem},
+  preprint, arXiv:2401.03252.
+
+\bibitem{OT23} J.~Orloski, F.~Talebizadeh Sardari,
+  \emph{Multivariate integrality and Galois orbits of algebraic integers},
+  preprint (2023).
+
+\bibitem{S80} C.~J.~Smyth,
+  \emph{On the measure of totally real algebraic integers},
+  J.\ Austral.\ Math.\ Soc.\ Ser.\ A \textbf{30} (1980/81), no.~2, 137--149.
+
+\bibitem{Zag93} D.~Zagier,
+  \emph{Algebraic numbers close to both $0$ and $1$},
+  Math.\ Comp.\ \textbf{61} (1993), no.~203, 485--491.
+
+\bibitem{Zha95} S.~Zhang,
+  \emph{Positive line bundles on arithmetic varieties},
+  J.\ Amer.\ Math.\ Soc.\ \textbf{8} (1995), no.~1, 187--221.
+
+\end{thebibliography}
+
+\end{document}
