@@ -1,0 +1,166 @@
+# R21 explore triage — 82a UPPER (Zhang-Zagier essential minimum)
+
+Explorer: math-explorer, round 21. READ-ONLY start-of-round RE-CONFIRMATION triage — no
+improvement attempted, no new PDF fetches, no multi-minute computation. On-disk material only
+(current.md, R20+R19+R12 triages, approaches/ + certificate/ + literature/ listings, git log,
+role memory).
+
+Held VERIFIED upper bound to STRICTLY beat: **0.2538893183** (R4 this campaign,
+verify_upper_q8A.py; Doche Doc01a §4 limit-point family + j3 deg-3 + j9 deg-8 A-base blocks,
+B-perturbers Q1*Q2*Q5^qE*Q6^qF). The campaign already sits ~5.5e-3 below the original Doche bar
+0.25444; the two-sided gap to the held LOWER 0.2524001332 (R17) is now only ~0.00149.
+
+This is the **ELEVENTH** consecutive round-start UPPER triage (R11–R20 all DRY; now R21).
+
+## On-disk change check (verified, not on faith)
+`git log -- constants/82a/certificate/`: newest committed cert artifact is
+`verify_dual_loci_decomposition.py`, [Round 10] (commit 239b19b, 2026-06-12 02:21:57). Rounds
+11–20 added ONLY triage write-ups in literature/ (R11–R20). No new capacity/identity script, no
+new digest, no new approach doc, no new certificate since R10. The standing UPPER package is
+exactly as banked through R10, re-confirmed dry R11–R20.
+
+The round-21 dispatch carries NO new idea — it is bit-for-bit the R1 BMQS Thm 4.5 density framing
++ R6 integer-transfinite-diameter thesis + R7 "minimize r_Q over Z[X]" design principle, all three
+already recorded and adversarially closed in R12–R20. Confirmed: nothing on disk changed since
+R10/R20; no new user idea has arrived.
+
+================================================================================
+## Q1 — Any concrete NEW WITD-independent computed artifact a proof-reviewer would BANK as a
+## milestone (survives the WITD-independence objection; NOT capacity/transfinite-diameter tying a
+## Q-independent set property to the verified marginals; NOT prose re-assembly of R6–R10)?
+## ANSWER: **NO.**  VERDICT: **DRY.**
+
+Every artifact category collapses to a reviewer-verified dead end (carried forward authoritative):
+
+1. **Numeric upper (A-base or B-branch Doche enrichment).** DEAD by TWO reviewer-verified
+   maximal-firing-set theorems. A-base (R7): cheapest coprime original monic factor w^2-w+1 costs
+   r_tilde >= +0.0131 > |best firing margin 0.0052|; borrowed block j16 -> float drop 2.94e-6 <
+   5e-6 gate. B-branch (R8): every firing block inadmissible; all 263 admissible atoms have
+   int/deg >= 0.2631 > log h = 0.2539. Per-step gain decayed ~47x (j3 +1.49e-4 -> j9 +3.2e-6);
+   next projects ~1e-7, at/below cert slack. Hard rule, not an opening.
+
+2. **A second fixed-q numerator identity (R10-style).** NONE LEFT. R10 banked the ONE clean
+   fixed-q identity (active-arc partition 1_{A>B}+1_{B>A}=1 a.e. + numerator split). The R9 unified
+   one-sided first-variation theorem covers every derivative direction across all three D-regimes
+   incl. the tie. Decomposition + engine jointly EXHAUST the splittable structure.
+
+3. **Capacity / transfinite diameter / equilibrium measure of ACT(A)/ACT(B).** REFUTED — do NOT
+   re-propose. NEW as a number but BACKS NOTHING: capacity is a property of the plane SET alone,
+   independent of any Q; r_tilde/m_B are weighted log-norms of a FIXED integer Q. Tying them IS the
+   open WITD equality inf_Q r_tilde_Q = -log d_inf(ACT(A)), which R7 PROVED FAILS in the
+   load-bearing direction (firing integer roots strictly inside the unit disk, |zeta| in
+   [0.43,0.79], away from the deepest U^nu wells, so the integer inf sits STRICTLY ABOVE the
+   continuous -log d_inf). Also anchor/exponent dependent (|ACT(A)|=0.428 at R4 vs 0.0686 under R10
+   convention) — not one well-defined number. Exactly the trap the dispatch warns against.
+
+4. **Second-order / Hessian first-variation expansion.** New arithmetic but load-bearing only for a
+   numeric improvement the firing-set theorems prove cannot exist. Banks nothing.
+
+5. **WITD equality as a real theorem.** OPEN, multi-round; R7 proved the obstruction in the
+   load-bearing direction. Not one-round reachable.
+
+6. **Consolidate R6–R10 into one theorem.** Prose re-assembly of already-banked facts, no NEW
+   identity/script — reviewer rejected this category R9–R20. Banks nothing.
+
+No category yields a concrete, new, one-round, WITD-independent, non-re-run artifact.
+
+================================================================================
+## Q2 — Does the BMQS Thm 4.5 density family (the user's standing emphasis) unlock ANY non-Doche
+## construction that is not (a) a bare single-pair mu_{P,Q} (hopeless R1, 0.34–0.69) nor (b) the
+## saturated weighted-product Doche recast pinned by BMQS Thm 6.5 strong duality?
+## ANSWER: **NO.**  VERDICT: **DRY.**
+
+The dispatch framing is the R1 framing, already closed R12–R20. The dichotomy is exact (re-checked
+against the §4 / §7.3 / Thm 6.5 digests via the R20+R19+R11 triages and bmqs_2026_digest.md):
+
+(a) **Strong duality pins the optimum to the saturated cone.** BMQS Thm 6.5: P(g)=inf_mu int g dmu
+    = ess(h_g) = D(g). The Doche weighted-product family IS the V=prod P_m^{q_m} interior cone
+    direction (Rmk 4.6 / §1.4); BOTH branches proven saturated within reach (R7/R8). The pullback
+    phi_{P,Q}=P^{deg Q+1}/Q^{deg P} defining mu_{P,Q} is exactly the weighted ratio whose log is the
+    Doche auxiliary integrand — density says these APPROXIMATE the optimum, it does NOT supply a
+    sub-Doche feasible point.
+
+(b) **Bare single-pair mu_{P,Q} is the ONLY genuinely-non-Doche member, and it is hopeless.** R1
+    numeric PoC: every valid coprime-irreducible low-degree pair gives 0.34–0.69 (best ~0.340) vs
+    held 0.2539. Multi-pair/weighted mu' (Rmk 4.6) is NOT a new object — it IS the Doche
+    V=prod P^q recast. No third kind.
+
+(c) **The density limit has no efficient compass and is high-degree.** Thm 4.5 promises convergence
+    only via mu_{P_n,P_{n+1}} for a minimal-poly sequence equidistributing to the optimal measure —
+    degrees in the tens, sequence known a priori. BMQS state their own wall (§1.7): "enormous size
+    of the search space and the lack of an efficient criterion"; "far from being practical." A
+    multi-round directed-search gamble, not a one-round construction; and if a sequence
+    equidistributes, R7's geometric obstruction (firing roots strictly inside the disk vs the locus
+    arc) says integer realizations cannot reach the deepest wells — the same wall that saturates the
+    Doche family.
+
+No non-Doche mu_{P,Q} construction is feasible in one round. Definitively re-confirmed (R1 scope,
+R12–R20).
+
+================================================================================
+## Q3 — Is "minimize r_Q over Z[X]" (R7 design principle) anything other than the WITD primal
+## problem already closed by both maximal-firing-set theorems (A-base R7, B-branch R8)?
+## ANSWER: **NO — fully closed.**  VERDICT: **DRY.**
+
+The R7 design problem (minimize the certified first-variation marginal r_tilde_Q over integer
+polynomials Q) IS the construction (primal) side of the WITD problem. Exercised and refuted by R7's
+A-base maximal-firing-set theorem (design_block*.py: 73845 originals -> 0 firing; cheapest coprime
+original monic factor w^2-w+1 costs r_tilde=+0.01311 > |best reachable firing margin j16 -0.00521|).
+The B-branch analog (m_B firing iff <0) is closed by R8's B-branch maximal-firing-set theorem (every
+firing block inadmissible; all 263 admissible atoms above the firing gate). Both branches
+reviewer-verified saturated within reach (deg<=16, ~80k candidates, LLL/CVP/well-rounding, R2+R4
+anchors). No unexercised sub-case. The direction is closed.
+
+================================================================================
+## NET VERDICT: **DRY (PLATEAU).** No concrete artifact to name. No builder dispatch justified.
+
+Adversarial self-check of every "PROCEED" I was tempted by — each collapses:
+- "compute the locus capacity" -> secretly the open WITD equality; R7 proved it fails (Q1.3). DRY.
+- "second numerator identity" -> none left; engine covers all directions (Q1.2). DRY.
+- "new BMQS mu_{P,Q} from density" -> bare hopeless or saturated Doche recast (Q2). DRY.
+- "add/swap one more block" -> both branches proven maximal firing sets (Q1.1, Q3). DRY.
+- "second-order Hessian expansion" -> backs only an impossible numeric break (Q1.4). DRY.
+- "consolidate R6–R10 into one theorem" -> prose re-assembly, banks nothing (Q1.6). DRY.
+
+ELEVENTH consecutive dry-well triage. The standing UPPER package is publication-complete:
+R4 record 0.2538893183 + both-branch maximal-firing-set saturation (R7/R8) + fully unified rigorous
+first-variation engine (R6 DCT / R8 B-branch cross-term / R9 unified one-sided theorem) + R10
+dual-loci numerator decomposition. Any further one-round UPPER milestone requires a QUALITATIVELY
+NEW idea from the user (a genuinely non-Doche construction, or new machinery for the OPEN
+multi-round WITD equality). The repeated identical BMQS Thm 4.5 / R6 thesis / R7 design-principle
+dispatch supplies no such idea.
+
+Honest action: do NOT force a low-value structural artifact the reviewer will reject (rejected prose
+re-assembly through R11–R20). No valid builder dispatch -> no build -> no reviewer. END round
+PLATEAU. Strongly recommend the user either (1) pivot this campaign to WRITE-UP of the verified
+UPPER package, or (2) re-target the LOWER side (live: R17 held lower 0.2524001332 via the OSS
+log-energy certificate — a DIFFERENT dispatch, off-limits in THIS upper dispatch; the gap to the
+held upper is now only ~0.00149, so the lower side is where the live frontier is), or (3) re-target
+a DIFFERENT registry constant with an open verifiable-advance well.
+
+================================================================================
+## Dead ends (carried forward, authoritative — do NOT retry)
+- A-base enrichment (any block): PROVEN saturated, R7 maximal firing set. [hard rule]
+- B-branch enrichment (any block): PROVEN saturated, R8 maximal firing set. [hard rule]
+- Bare single-pair mu_{P,Q}: 0.34–0.69, hopeless. [R1]
+- Weighted/multi-pair mu_{P,Q} / mu' (Rmk 4.6): = Doche V=prod P^q recast, saturated. [R1]
+- Limit-of-mu_{P,Q} density object: multi-round, no compass, high-degree, same R7 wall. [R1/R7]
+- Design-principle "minimize r_Q over Z[X]": = WITD primal side, refuted R7/R8. [R7/R8]
+- Same-family q-only tuning: sub-cert-slack. [R6]
+- Capacity / transfinite diameter / equilibrium measure of ACT(A)/ACT(B): un-theorem'd,
+  anchor-dependent, geometrically mismatched with j3/j9 roots, IS the open WITD equality. Backs
+  nothing. [R11–R20, decisive]
+- Consolidate R6/R7/R8/R9/R10 into one theorem: prose re-assembly, banks nothing. [R9/R10]
+- Second-order/Hessian expansion: backs only an impossible numeric break. [R11]
+- WITD equality inf_Q r_tilde = -log d_inf as a full theorem: open, multi-round. [R7/R11]
+- Lower side: OFF-LIMITS by user directive in THIS UPPER dispatch. [hard rule for UPPER]
+- Re-running any existing verified script as a "milestone": banks nothing.
+
+## Files read (no new artifacts fetched)
+- constants/82a/current.md (held upper 0.2538893183 / Bounds / full Progress log R1–R17)
+- constants/82a/literature/R20_explore_triage.md (full); R19 + R12 + R11 referenced
+- /tmp/memory/math-explorer.md (role memory — corroborates every dead-end)
+- git log -- constants/82a/certificate/ (newest cert = R10 verify_dual_loci_decomposition.py,
+  commit 239b19b; nothing new since R10) + approaches/ + literature/ + certificate/ dir listings
+
+VERDICT: DRY — no valid builder dispatch (11th consecutive)
