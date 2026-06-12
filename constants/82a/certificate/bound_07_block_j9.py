@@ -158,13 +158,17 @@ def cell_AB_q8A(a, b, q, qB, qC, qE, qF, qG, qH):
     for nm, ascc, wt in Afactors:
         rho_m, rhop_m, rlo, rhi, fpp = vu.rho_full(
             ascc, m, r, Wm, DWm, DDWm, DDDWm, Wc, DWc, DDWc, DDDWc)
-        A_hi = A_hi + wt * na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)), PINF)
-        A_lo = A_lo + wt * np.where(
-            rlo > 0, na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)), NINF), -1e300)
-        A_mid_up = A_mid_up + wt * na(
-            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF)
-        A_curv = na(A_curv + wt * fpp, PINF)
-        A_slope = na(A_slope + wt * slope_abs_up(rho_m, rhop_m), PINF)
+        # Upper sums: weight (>=0) and accumulate with rounding toward +inf.
+        A_hi = na(A_hi + na(wt * na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)),
+                                    PINF), PINF), PINF)
+        # Lower sum: weight and accumulate toward -inf (safe-low).
+        A_lo = na(A_lo + np.where(
+            rlo > 0, na(wt * na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)),
+                                NINF), NINF), -1e300), NINF)
+        A_mid_up = na(A_mid_up + na(wt * na(
+            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF), PINF), PINF)
+        A_curv = na(A_curv + na(wt * fpp, PINF), PINF)
+        A_slope = na(A_slope + na(wt * slope_abs_up(rho_m, rhop_m), PINF), PINF)
 
     # ---- B branch: Q1 + Q2 (fixed) + qB*Q3 + qC*Q4 + qE*Q5 + qF*Q6 (UNCHANGED) ----
     B_hi = np.zeros_like(a)
@@ -181,13 +185,15 @@ def cell_AB_q8A(a, b, q, qB, qC, qE, qF, qG, qH):
     for nm, ascc, wt in Bfactors:
         rho_m, rhop_m, rlo, rhi, fpp = vu.rho_full(
             ascc, m, r, Wm, DWm, DDWm, DDDWm, Wc, DWc, DDWc, DDDWc)
-        B_hi = B_hi + wt * na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)), PINF)
-        B_lo = B_lo + wt * np.where(
-            rlo > 0, na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)), NINF), -1e300)
-        B_mid_up = B_mid_up + wt * na(
-            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF)
-        B_curv = na(B_curv + wt * fpp, PINF)
-        B_slope = na(B_slope + wt * slope_abs_up(rho_m, rhop_m), PINF)
+        B_hi = na(B_hi + na(wt * na(0.5 * vv.log_up(np.maximum(rhi, 1e-300)),
+                                    PINF), PINF), PINF)
+        B_lo = na(B_lo + np.where(
+            rlo > 0, na(wt * na(0.5 * vv.log_down(np.maximum(rlo, 1e-300)),
+                                NINF), NINF), -1e300), NINF)
+        B_mid_up = na(B_mid_up + na(wt * na(
+            0.5 * vv.log_up(np.maximum(rho_m[1], 1e-300)), PINF), PINF), PINF)
+        B_curv = na(B_curv + na(wt * fpp, PINF), PINF)
+        B_slope = na(B_slope + na(wt * slope_abs_up(rho_m, rhop_m), PINF), PINF)
     return dict(A_hi=A_hi, A_lo=A_lo, A_mid_up=A_mid_up, A_curv=A_curv,
                 A_slope=A_slope, B_hi=B_hi, B_lo=B_lo, B_mid_up=B_mid_up,
                 B_curv=B_curv, B_slope=B_slope)

@@ -8,7 +8,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[numbers]{natbib}
+\usepackage[numbers, sort]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{booktabs}
 \usepackage[margin=1in]{geometry}
@@ -30,6 +30,8 @@
 \newcommand{\essmin}{\mu^{\mathrm{ess}}(\hZ)}
 \newcommand{\rQ}{r_Q}
 \newcommand{\dplus}{\partial^{+}}
+\newcommand{\dA}{D_A}
+\newcommand{\dB}{D_B}
 \DeclareMathOperator{\ACT}{ACT}
 \newcommand{\repo}{\href{https://github.com/tempcollab/optimizationproblems/tree/main/constants/82a}{\texttt{github.com/tempcollab/optimizationproblems}}}
 
@@ -37,14 +39,16 @@
 
 \title{A first-variation criterion for Doche's Zhang--Zagier upper bound}
 
-\author{Adib Hasan}
-\address{Adib Hasan, SignalPilot AI}
+\author{Anonymous Authors}
 
-\author{Akashnil Dutta}
-\address{Akashnil Dutta, Incept Labs}
+% \author{Adib Hasan}
+% \address{Adib Hasan, SignalPilot AI}
 
-\author{Tarik Moon}
-\address{Tarik Moon, SignalPilot AI}
+% \author{Akashnil Dutta}
+% \address{Akashnil Dutta, Incept Labs}
+
+% \author{Tarik Moon}
+% \address{Tarik Moon, SignalPilot AI}
 
 \date{}
 
@@ -118,19 +122,20 @@ Doche's value is
 \begin{equation}\label{eq:ratio}
   \log h(q)=\frac{\Phi(q)}{D(q)},\qquad
   \Phi(q)=\int_0^1\max(A,B)\,ds,\qquad
-  D(q)=\max(\arg_A,\arg_B),
+  D(q)=\max(\dA,\dB),
 \end{equation}
 where $A,B$ are real combinations of $\log|R(\chi(s))|$ over the active polynomials,
-$\chi(s)=z(1-z)$ with $z=e^{2\pi is}$, and $\arg_A,\arg_B$ are affine in the
-exponents (Section~\ref{sec:functional}). The numerator integrates a pointwise
-maximum and the denominator is a maximum of two affine functions; neither is smooth,
-and the first obstacle is simply to show the derivative exists.
+$\chi(s)=z(1-z)$ with $z=e^{2\pi is}$, and $\dA,\dB$ are the two arguments of the
+denominator's maximum, affine in the exponents (Section~\ref{sec:functional}). The
+numerator integrates a pointwise maximum and the denominator is a maximum of two
+affine functions; neither is smooth, and the first obstacle is simply to show the
+derivative exists.
 
 \begin{theorem}[First variation; Sections~\ref{sec:firstvar}--\ref{sec:unified}]
 \label{thm:main}
 Let $Q\in\Z[X]$ have no root on the contour $\chi([0,1])$, adjoined to one branch of
 an admissible family with exponent $q_Q\ge0$, under the standing hypotheses
-\emph{(H1)--(H3)} of Section~\ref{sec:firstvar} (in particular $A_0-B\not\equiv0$).
+\emph{(H1)--(H2$'$)} of Section~\ref{sec:firstvar} (in particular $A_0-B\not\equiv0$).
 Then $\log h$ is right-differentiable at $q_Q=0$, and
 \begin{equation}\label{eq:main}
   \dplus\!\log h/\partial q_Q\big|_0
@@ -138,8 +143,8 @@ Then $\log h$ is right-differentiable at $q_Q=0$, and
 \end{equation}
 where $\ACT$ is the arc on which $Q$'s branch attains the inner maximum, and
 $s_Q=\deg Q$ if that branch attains $D$ at $q_Q=0$ and $s_Q=0$ otherwise. The
-identity holds in all three regimes $\arg_A\gtrless\arg_B$ and at the tie
-$\arg_A=\arg_B$; at the tie $\log h$ is not two-sided differentiable, the left and
+identity holds in all three regimes $\dA\gtrless\dB$ and at the tie
+$\dA=\dB$; at the tie $\log h$ is not two-sided differentiable, the left and
 right derivatives differing by $\log h\cdot\deg Q/D$.
 \end{theorem}
 
@@ -232,13 +237,13 @@ For exponents $q$ over the base and $\{q_k\}$ over perturbing blocks $Q_k\in\Z[X
   B(s)=\log|Q_1Q_2(\chi(s))|+\sum_k q_k\log|Q_k(\chi(s))|,
 \end{equation}
 \begin{equation}\label{eq:Dformula}
-  \arg_A=\textstyle\sum_i q_i\deg P_i,\qquad
-  \arg_B=56+\sum_k q_k\deg Q_k .
+  \dA=\textstyle\sum_i q_i\deg P_i,\qquad
+  \dB=56+\sum_k q_k\deg Q_k .
 \end{equation}
 The form $\max(A,B)$ is the inner Jensen integral of Doche's double integral, and
 \eqref{eq:Dformula} is the \citet[\S4]{Doc01a} $D$-formula. A block may be adjoined to
-the \emph{base} branch (entering $A,\arg_A$) or the \emph{perturbing} branch
-(entering $B,\arg_B$).
+the \emph{base} branch (entering $A,\dA$) or the \emph{perturbing} branch
+(entering $B,\dB$).
 
 \begin{lemma}[{\citealp[Lemmas 2--5]{Doc01a}}]\label{lem:doche}
 For any admissible family, $\log h(q,\{q_k\})$ is a limit point of the spectrum
@@ -274,7 +279,7 @@ $\Phi(q_Q)=\int_0^1\max\bigl(A_0(s)+q_Q\log|Q(\chi(s))|,\,B(s)\bigr)\,ds$. We as
 \item[(H2$'$)] $A_0-B\not\equiv0$ on each analytic sub-arc (the branches are not
   identically equal; verified for the families here, where $\{A_0>B\}$ has positive
   measure $<1$);
-\item[(H3)] the perturbing branch attains $D$: $\arg_A(0)<\arg_B$, so $D\equiv\arg_B$
+\item[(H3)] the perturbing branch attains $D$: $\dA(0)<\dB$, so $D\equiv\dB$
   is locally constant in $q_Q$.
 \end{itemize}
 
@@ -330,10 +335,10 @@ integrand.
 %==============================================================================
 
 Theorem~\ref{thm:firstvar} assumed (H3), that the perturbing branch attains $D$. We
-remove it. Since $\arg_A,\arg_B$ are affine (the $D$-formula \eqref{eq:Dformula}),
-$D=\max(\arg_A,\arg_B)$ is convex and piecewise-linear, with one-sided derivatives
+remove it. Since $\dA,\dB$ are affine (the $D$-formula \eqref{eq:Dformula}),
+$D=\max(\dA,\dB)$ is convex and piecewise-linear, with one-sided derivatives
 everywhere. At $q_Q=0$ exactly one of three regimes holds:
-$\arg_A(0)>\arg_B$ (I), $\arg_A(0)<\arg_B$ (II), or $\arg_A(0)=\arg_B$ (III, a tie).
+$\dA(0)>\dB$ (I), $\dA(0)<\dB$ (II), or $\dA(0)=\dB$ (III, a tie).
 
 \begin{theorem}[Unified one-sided marginal]\label{thm:unified}
 Let $Q$ be adjoined to side $X\in\{A,B\}$ with exponent $q_Q\ge0$, under
@@ -350,7 +355,7 @@ $q_Q=0$ (at a tie, the perturbed side attains it for $q_Q>0$) and $s_Q=0$ otherw
 \emph{The inner derivative is regime-independent.} The proof of
 Theorem~\ref{thm:firstvar} uses only the inner $\max(A,B)$: the $1$-Lipschitz
 dominator, the a.e.\ limit, and the finiteness of $K=\{A_0=B\}$. It never references
-$\arg_A,\arg_B$ or which attains $D$. Hence
+$\dA,\dB$ or which attains $D$. Hence
 $\Phi^{+\prime}(0)=\int_{\ACT(X)}\log|Q(\chi)|\,ds$ in every regime (with $\ACT(B)$
 for a $B$-side block, the inner branches swapped).
 
@@ -510,7 +515,7 @@ re-optimized to
   q=(14.011500,13.443930,2.643590,2.299880,0.252420),\quad
   q_E=0.575080,\ q_F=0.568800,\ q_G=0.891590,\ q_H=0.066860,
 \]
-giving $D=\max(\arg_A,\arg_B)=\max(61.65784,72.00176)=72.00176$, the perturbing branch
+giving $D=\max(\dA,\dB)=\max(61.65784,72.00176)=72.00176$, the perturbing branch
 attaining $D$. Admissibility holds by Lemma~\ref{lem:doche}: $j_9$ is irreducible
 hence squarefree, distinct from $j_3$, coprime to $j_3$, and the active dictionary
 $\{P_1,P_2,P_4,P_6,P_8,j_3,j_9\}\cup\{Q_1,Q_2,Q_5,Q_6\}$ is pairwise coprime; base
@@ -567,7 +572,7 @@ The scientific Python stack (\texttt{numpy}, \texttt{scipy}, \texttt{mpmath},
 statement & program & verdict\\
 \midrule
 Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on all blocks\\
-\quad hypotheses (H1)--(H2) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
+\quad hypotheses (H1)--(H2$'$) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
