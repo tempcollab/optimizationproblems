@@ -8,7 +8,7 @@ Branch A={P*}, branch B={Q1,Q2}. Report:
  - of THOSE, where A_mid (resp B_mid) is actually the binding min (< flat and < straddle)
 """
 import numpy as np, math
-import verify_upper as vu
+import bound_01_doche_base as vu
 na=np.nextafter; PINF=np.inf
 def branch_rholo(a,b):
     m=0.5*(a+b); r=0.5*(b-a)

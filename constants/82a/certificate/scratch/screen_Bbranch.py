@@ -3,7 +3,7 @@ R8 Angle A step 3-4 -- DESIGN SCREEN for an improving B-PERTURBER block.
 
 Minimize the verified B-branch marginal
    m_B(Q) = (1/D)[ int_{B>A} log|Q(chi)| ds - (log h) deg(Q) ]
-(verified vs FD in verify_Bbranch_marginal.py) over admissible integer perturbers Q,
+(verified vs FD in firstvar_04_perturbing_marginal.py) over admissible integer perturbers Q,
 on the held R4 anchor (q_Q=0).  FIRING <=> m_B < 0.
 
 Admissibility (B-perturber; STRICTER than A-base -- run_state Rule):
@@ -33,8 +33,8 @@ import math
 import numpy as np
 import sympy as sp
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 import flammang_table1 as ft
 
 R4 = dict(q=[14.011500, 13.443930, 2.643590, 2.299880, 0.252420],

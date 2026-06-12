@@ -7,7 +7,7 @@ on  s in [0,1],  chi(s) = z(1-z),  z = e^{2 pi i s}, with
     A(s) = sum_i q_i log|P_i(chi)| + (A-base terms)
     B(s) = log|Q1 Q2| + (perturber terms),
     D    = max( sum q_i deg P_i + (A-base degs) , 56 + (perturber degs) ),
-exactly as in verify_upper_q8A.float_value_q8A and _Dval.
+exactly as in bound_07_block_j9.float_value_q8A and _Dval.
 
 Introduce a NEW A-base block Q (integer poly) with exponent q_Q >= 0:
     A(s) |-> A(s) + q_Q * log|Q(chi(s))| .
@@ -63,15 +63,15 @@ contains j9).  There the first variation is at the WRONG (already-active) point 
 gives r~>0 / FD>0 -- the documented trap.  This row is a NEGATIVE control, NOT a test
 of the lemma.
 
-Reproduce:  python3 verify_firstvar_lemma.py            (N=4_000_000, ~30-60s)
-            python3 verify_firstvar_lemma.py 1000000     (faster, coarser)
+Reproduce:  python3 firstvar_01_lemma.py            (N=4_000_000, ~30-60s)
+            python3 firstvar_01_lemma.py 1000000     (faster, coarser)
 """
 import sys
 import math
 import numpy as np
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 
 # ---- Block definitions (DESCENDING coeffs), from the harness / Flammang table ----
 # NUMBERING: campaign jk == ft._TABLE_DESCENDING[k-1] (the screen_swap_R5._TAB map).

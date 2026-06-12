@@ -30,10 +30,10 @@ Family (CERTIFIED angle has qB=qC=0):
            56 + qB*deg Q3 + qC*deg Q4 + qE*deg Q5 + qF*deg Q6 ).
 
 ANCHOR identity:
-  - At qH=0 this collapses EXACTLY to verify_upper_q7A at (q,qB,qC,qE,qF,qG):
+  - At qH=0 this collapses EXACTLY to bound_06_block_j3 at (q,qB,qC,qE,qF,qG):
     A loses the j9 term, D's first argument loses +qH*8 -> BIT-IDENTICAL.
 
-Per-cell enclosure machinery reused VERBATIM from verify_upper.py.  j9 is added to the
+Per-cell enclosure machinery reused VERBATIM from bound_01_doche_base.py.  j9 is added to the
 A-branch with weight qH, mechanically identical to any other P/j3 factor (same
 rho_full, weighted, outward-rounded).  Because the integrand changed, the mpmath
 soundness selftest (selftest_q8A) is re-run on THIS integrand (A now has qH*log|j9|).
@@ -51,11 +51,11 @@ THE COMPARISON TARGET is the CURRENT held UPPER value 0.2538925359 (R2 this camp
 NOT the superseded R11 value.  certify/tamper compare against HELD_CERT below.
 
 Usage:
-  python3 verify_upper_q8A.py anchor                  # qH=0 -> q7A BIT-IDENTICAL
-  python3 verify_upper_q8A.py admiss
-  python3 verify_upper_q8A.py selftest q1..q5 qB qC qE qF qG qH
-  python3 verify_upper_q8A.py certify q1..q5 qB qC qE qF qG qH [M0] [max_refine] [rem_cap]
-  python3 verify_upper_q8A.py tamper q1..q5 qB qC qE qF qG qH bogus_target
+  python3 bound_07_block_j9.py anchor                  # qH=0 -> q7A BIT-IDENTICAL
+  python3 bound_07_block_j9.py admiss
+  python3 bound_07_block_j9.py selftest q1..q5 qB qC qE qF qG qH
+  python3 bound_07_block_j9.py certify q1..q5 qB qC qE qF qG qH [M0] [max_refine] [rem_cap]
+  python3 bound_07_block_j9.py tamper q1..q5 qB qC qE qF qG qH bogus_target
 """
 
 import os
@@ -64,10 +64,10 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv
-import verify_upper as vu
-import verify_upper_q6 as vq6
-import verify_upper_q7A as vq7A  # for qH=0 anchor cross-check (q8A == q7A at qH=0)
+import bound_00_flammang_baseline as vv
+import bound_01_doche_base as vu
+import bound_05_block_j15 as vq6
+import bound_06_block_j3 as vq7A  # for qH=0 anchor cross-check (q8A == q7A at qH=0)
 
 NINF = -np.inf
 PINF = np.inf
@@ -416,7 +416,7 @@ if __name__ == "__main__":
 
     if mode == "anchor":
         print(f"[anchor] q8A (j9 second A-base) qH=0 must reproduce "
-              f"verify_upper_q7A BIT-IDENTICALLY at held R2 (q,qB=qC=0,qE,qF,qG).")
+              f"bound_06_block_j3 BIT-IDENTICALLY at held R2 (q,qB=qC=0,qE,qF,qG).")
         v8 = float_value_q8A(R2_Q, 0.0, 0.0, R2_QE, R2_QF, R2_QG, 0.0, N=8_000_000)
         v7 = vq7A.float_value_q7A(R2_Q, 0.0, 0.0, R2_QE, R2_QF, R2_QG, N=8_000_000)
         print(f"  float_value_q8A(R2 q, qE, qF, qG, qH=0) = {v8:.12f}")

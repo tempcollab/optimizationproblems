@@ -34,12 +34,12 @@ TRANSFINITE-DIAMETER problem t_{Z,phi} on the lemniscate w = z(1-z): both pick
 integer polynomials of small weighted log-norm on a sub-locus of that curve, drawn
 from the same Table-1 pool.
 
-Reproduce:  python3 verify_shared_pool.py
+Reproduce:  python3 firstvar_06_dictionary.py
 """
 import sys
 import sympy as sp
 
-import verify_upper as vu
+import bound_01_doche_base as vu
 import flammang_table1 as ft
 
 X = sp.symbols('X')
@@ -53,7 +53,7 @@ def sym_desc(desc):
 
 def sym_asc(asc):
     """Build a sympy poly in X from an ASCENDING-coefficient integer list
-    (verify_upper stores P1,P2,... DESCENDING; this is for the ASC dicts)."""
+    (bound_01_doche_base stores P1,P2,... DESCENDING; this is for the ASC dicts)."""
     return sum(int(v) * X ** i for i, v in enumerate(asc))
 
 
@@ -67,8 +67,8 @@ def main():
     print("R6 Angle 3 -- SHARED-POOL identity check (exact, integer-polynomial)")
     print("=" * 70)
 
-    # Doche base polys (DESCENDING) from verify_upper, and the campaign blocks.
-    #   verify_upper.P4/P6/P8 are DESCENDING coeff lists in the variable chi=z(1-z).
+    # Doche base polys (DESCENDING) from bound_01_doche_base, and the campaign blocks.
+    #   bound_01_doche_base.P4/P6/P8 are DESCENDING coeff lists in the variable chi=z(1-z).
     doche = {
         "P4": (vu.P4, 5),   # claim P4 == Flammang j5
         "P6": (vu.P6, 8),   # claim P6 == Flammang j8
@@ -97,8 +97,8 @@ def main():
         print(f"  campaign {nm} (deg {len(desc)-1})  ==  Flammang j{jk}: {eq}")
 
     # ---- 3. Perturber blocks Q5,Q6 = Flammang Table-1 entries ----------------
-    # verify_upper_q6 stores Q5,Q6 DESCENDING.  Import from q8A which re-exports.
-    import verify_upper_q8A as q8
+    # bound_05_block_j15 stores Q5,Q6 DESCENDING.  Import from q8A which re-exports.
+    import bound_07_block_j9 as q8
     print("\n[3] Perturber blocks are Flammang Table-1 entries (exact eq):")
     for nm, desc, jk in [("Q5", list(q8.Q5), 13), ("Q6", list(q8.Q6), 15)]:
         eq = sp.expand(sym_desc(desc) - sym_desc(_TAB[jk])) == 0
@@ -107,7 +107,7 @@ def main():
 
     # ---- 4. Full active dictionary: squarefree + pairwise coprime -----------
     print("\n[4] Active dictionary admissibility (Doc01a condition (4)):")
-    # verify_upper stores P1,P2,P4,P6,P8,Q1,Q2 DESCENDING.
+    # bound_01_doche_base stores P1,P2,P4,P6,P8,Q1,Q2 DESCENDING.
     active = {
         "P1": sym_desc(vu.P1), "P2": sym_desc(vu.P2),
         "P4": sym_desc(vu.P4), "P6": sym_desc(vu.P6), "P8": sym_desc(vu.P8),

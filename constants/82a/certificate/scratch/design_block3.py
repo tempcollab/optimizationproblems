@@ -28,7 +28,7 @@ import sys
 import itertools
 import numpy as np
 
-import verify_firstvar_lemma as fv
+import firstvar_01_lemma as fv
 import construct_block_R7 as cb
 
 

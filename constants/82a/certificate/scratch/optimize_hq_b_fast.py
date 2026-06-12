@@ -5,7 +5,7 @@ Q = Q1*Q2, D = max(sum q_i deg P_i, 56)).  IDENTICAL objective to
 optimize_hq_b.py (imports doche_hq_b.log_h); only the search budget differs:
 the float midpoint Riemann sum uses a modest N during the search and a large N
 to score the single best candidate.  This proposes a q* only -- the rigorous
-upper bound for the chosen q* is verify_upper.py::certify_maxAB.
+upper bound for the chosen q* is bound_01_doche_base.py::certify_maxAB.
 
 Record q* to beat (R5, reviewer-verified rigorous): log h(q*) = 0.2543326887
 at q* = (11.74, 8.77, 2.45, 1.55, 0.53).  Its float value (N=16e6) = 0.2543325796.

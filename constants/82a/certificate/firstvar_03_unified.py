@@ -21,7 +21,7 @@ Phi(q)/D(q). The TIE row additionally checks the LEFT FD differs (genuine one-si
 
 Runtime: ~1 s (pure scalar arithmetic, no integrals, no certify).
 
-Reproduce:  python3 verify_unified_firstvar.py
+Reproduce:  python3 firstvar_03_unified.py
 """
 import sys
 

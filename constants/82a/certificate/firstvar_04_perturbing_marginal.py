@@ -47,15 +47,15 @@ perturber).  CRITICAL (outline-review R1): the +-eps perturbed evaluation MUST m
   D(+-eps) = max( arg_A , arg_B0 +- eps*deg(Q) ).
 A copy of the A-base FD path that holds D fixed would MISMATCH and falsely reject m_B.
 
-Reproduce:  python3 verify_Bbranch_marginal.py            (N=4_000_000, ~40s)
-            python3 verify_Bbranch_marginal.py 1000000     (faster, coarser)
+Reproduce:  python3 firstvar_04_perturbing_marginal.py            (N=4_000_000, ~40s)
+            python3 firstvar_04_perturbing_marginal.py 1000000     (faster, coarser)
 """
 import sys
 import math
 import numpy as np
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 
 # held R4 family (j3 AND j9 A-base ON; perturbers Q5,Q6 ON). The q_Q=0 anchor for a
 # NEW perturber sits alongside the existing perturbers.

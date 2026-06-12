@@ -11,7 +11,7 @@ deg-8 A-base block j9, qH=0.066860) and substitute a different ADMISSIBLE Flamma
 Table-1 block as the A-base block in its slot, then JOINTLY re-optimize all 9
 free exponents (5 q's + qE,qF,qG + the swapped slot exponent qX) by Nelder-Mead.
 
-It reuses verify_upper_q8A.float_value_q8A but substitutes Q8 (the j9 slot) by the
+It reuses bound_07_block_j9.float_value_q8A but substitutes Q8 (the j9 slot) by the
 swap-in block's coefficient list.  Because float_value_q8A reads the module globals
 Q7 (j3) and Q8 (the swap slot), we monkeypatch q8.Q8 / q8.DEG_Q8 etc. for each
 candidate.  (The certified harness will be cloned separately for any winner.)
@@ -40,8 +40,8 @@ import time
 import numpy as np
 import sympy as sp
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 import flammang_table1 as ft
 
 # ---- the current held CERT value to beat (R4), and the N-stable gate ----

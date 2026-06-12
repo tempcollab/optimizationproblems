@@ -27,8 +27,8 @@ import itertools
 import numpy as np
 import sympy as sp
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 import screen_Bbranch as sb
 
 X = sp.symbols('X')

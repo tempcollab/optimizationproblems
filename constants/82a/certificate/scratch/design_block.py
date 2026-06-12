@@ -32,9 +32,9 @@ import itertools
 import numpy as np
 import sympy as sp
 
-import verify_upper as vu
-import verify_upper_q8A as q8
-import verify_firstvar_lemma as fv
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
+import firstvar_01_lemma as fv
 import flammang_table1 as ft
 import construct_block_R7 as cb   # reuse originality/admissibility/contour gates
 

@@ -3,7 +3,7 @@ Driver: rigorously certify an UPPER bound on C_82 = log h(q) for a SINGLE chosen
 admissible q in Doche's Doc01b limit-point family (base P1,P2,P4,P6,P8 + Q=Q1*Q2,
 D = max(sum q_i deg P_i, 56)).
 
-It reuses the EXISTING, reviewer-verified certificate harness in verify_upper.py
+It reuses the EXISTING, reviewer-verified certificate harness in bound_01_doche_base.py
 verbatim:
   - certify_maxAB(q, ...) : the outward-rounded max(A,B) quadrature enclosure
     (the same code that certified the R5 record q*).
@@ -11,7 +11,7 @@ verbatim:
     dominate the true int_cell max(A,B) dt (sampled at high precision via mpmath)
     on random cells, for THIS q (not just QSTAR).
 Admissibility (Doche Lemma 5) is q-independent (it constrains only the polynomial
-dictionary), so verify_upper.admissibility_check() certifies it once for all q.
+dictionary), so bound_01_doche_base.admissibility_check() certifies it once for all q.
 
 Usage:
   python3 certify_q.py q1 q2 q3 q4 q5 [M0] [max_refine] [rem_cap]
@@ -22,7 +22,7 @@ The R5 record to beat is the CERTIFIED value 0.2543326887.
 import sys
 import math
 import numpy as np
-import verify_upper as vu
+import bound_01_doche_base as vu
 
 RECORD_CERT = 0.2543326887   # R5 reviewer-verified CERTIFIED log h(q*)
 

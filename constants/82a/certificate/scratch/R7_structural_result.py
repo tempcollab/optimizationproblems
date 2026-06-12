@@ -11,8 +11,10 @@ NON-PERTURBATIVE and the dictionary is a MAXIMAL FIRING SET on the saturated R4 
 ALL r~ measured on the R4 anchor (j3 AND j9 ON, candidate exp 0) = GUARDRAIL 1.
 Run:  python3 R7_structural_result.py        (~2-3 min)
 """
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import numpy as np
-import verify_firstvar_lemma as fv
+import firstvar_01_lemma as fv
 import construct_block_R7 as cb
 import flammang_table1 as ft
 

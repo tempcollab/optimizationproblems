@@ -5,8 +5,8 @@ w(t)=z(1-z) on |z|=1, the A/B branches, the active set {B>A}, and the active-arc
 measure mu_act.  All pure float numerics for grounding the structural theorem.
 """
 import numpy as np
-import verify_upper as vu
-import verify_upper_q6 as vq6
+import bound_01_doche_base as vu
+import bound_05_block_j15 as vq6
 
 # Held R11 optimum
 Q = np.array([13.937341, 12.515102, 2.541409, 2.068537, 0.753965])

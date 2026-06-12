@@ -1,7 +1,7 @@
 """
 R8 FLOAT PRE-GATE for a NEW B-PERTURBER block (q9B family).
 
-Clones verify_upper_q8A.float_value with a THIRD perturber block Q9B carried at
+Clones bound_07_block_j9.float_value with a THIRD perturber block Q9B carried at
 exponent qJ >= 0 on the B-branch (alongside Q5,Q6).  Q9B adds qJ*log|Q9B| to B AND
 qJ*deg(Q9B) to arg_B (which ATTAINS D).  Joint Nelder-Mead re-opt of all exponents at
 high N, seeded from the held R4 point.
@@ -22,8 +22,8 @@ import sys
 import numpy as np
 from scipy.optimize import minimize
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 
 HELD = 0.2538893183   # TRUE held verified upper (R4). NEVER a stale/superseded target.
 

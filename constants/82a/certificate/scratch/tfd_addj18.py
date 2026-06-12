@@ -8,7 +8,7 @@ the exponents by a small Nelder-Mead.  FLOAT/CONJECTURE only — not a certifica
 import numpy as np
 from scipy.optimize import minimize
 import scratch.tfd_setup as S
-import verify_upper as vu
+import bound_01_doche_base as vu
 import flammang_table1 as ft
 
 T = ft.get_table()

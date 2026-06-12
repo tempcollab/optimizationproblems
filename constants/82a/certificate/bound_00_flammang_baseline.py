@@ -25,8 +25,8 @@ Cross-checked against the scalar mpmath certifier (verify_flammang.py) and
 against high-precision point samples (see SELFTEST below): the vectorized lower
 bound never exceeds the true minimum on a cell (0 violations / random tests).
 
-Run:  python3 verify_vec.py            (full certification)
-      python3 verify_vec.py selftest   (soundness checks vs mpmath)
+Run:  python3 bound_00_flammang_baseline.py            (full certification)
+      python3 bound_00_flammang_baseline.py selftest   (soundness checks vs mpmath)
 """
 
 import sys

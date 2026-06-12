@@ -1,6 +1,6 @@
 """
 82a LOWER bound, PATH B stage-2 — RIGOROUS interval branch-and-bound certificate
-WITH the OSS log-energy potential column.  Extends verify_vec.py by ONE added
+WITH the OSS log-energy potential column.  Extends bound_00_flammang_baseline.py by ONE added
 potential-term loop (the lambda0 * U_mu0 term), mirroring its 24-column log|Q_j|
 loop.  Goal: certify a LOWER bound m_energy > 0.2487458 (Flammang F18 record).
 
@@ -108,7 +108,7 @@ from scipy.special import spence
 from flammang_table1 import get_table
 
 # import the verified geometric / poly machinery from the R1 cert unchanged
-from verify_vec import (radd, rsub, rmul, cadd, cmul, cadd_int, cscale2, cabs2,
+from bound_00_flammang_baseline import (radd, rsub, rmul, cadd, cmul, cadd_int, cscale2, cabs2,
                         cos_iv, sin_iv, w_cell, w_point, poly_derivs, rho_terms,
                         log_up, log_down, NINF, PINF, _pad)
 
@@ -212,7 +212,7 @@ def lower_bound_batch(a, b):
     Wc, DWc, DDWc = w_cell(a, b)
     Wm, DWm, _ = w_point(m)
 
-    # sigma = log max(1,|w|): lower bound (identical to verify_vec)
+    # sigma = log max(1,|w|): lower bound (identical to bound_00_flammang_baseline)
     w2 = cabs2(Wc)
     w2lo = w2[0]
     sigma_lo = np.where(w2lo > 1.0,

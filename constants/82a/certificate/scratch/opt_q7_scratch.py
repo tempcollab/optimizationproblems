@@ -16,7 +16,7 @@ Flammang Table-1 blocks. Report which block + exponent vector drops log h most b
 """
 import numpy as np
 from scipy.optimize import minimize
-import verify_upper as vu
+import bound_01_doche_base as vu
 import flammang_table1 as ft
 
 DEGP = np.array([1, 1, 4, 8, 8], float)

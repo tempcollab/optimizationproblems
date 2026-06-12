@@ -1,7 +1,7 @@
 """
 R6 Angle 2 (COROLLARY / methods): the CONDITIONAL-CAPACITY block-selection screen.
 
-This operationalizes the first-variation lemma (verify_firstvar_lemma.py) into a
+This operationalizes the first-variation lemma (firstvar_01_lemma.py) into a
 PRINCIPLED RANKING of candidate A-base blocks, replacing brute multistart.
 
 Per the outline review: the un-normalized first-variation functional
@@ -39,10 +39,10 @@ Reproduce:  python3 screen_conditional_capacity.py            (N=2_000_000, ~10-
 import sys
 import numpy as np
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 import flammang_table1 as ft
-from verify_firstvar_lemma import (J3, J9, J6, J7, R11, R2, pv, AB_arrays)
+from firstvar_01_lemma import (J3, J9, J6, J7, R11, R2, pv, AB_arrays)
 
 _TAB = {j + 1: desc for j, (c, desc) in enumerate(ft._TABLE_DESCENDING)}
 

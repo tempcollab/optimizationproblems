@@ -3,9 +3,9 @@ R2 (this campaign) RIGOROUS upper-bound certificate for C_82, free-exponent fami
 with a NEW low-degree perturbing block Q7 added on top of the held R11 family
 h = Q1*Q2*Q5^qE*Q6^qF (Q5=Flammang j13 deg12, Q6=Flammang j15 deg16).
 
-This EXTENDS the R11-approved verify_upper_q6.py by adding a FIFTH free-exponent
+This EXTENDS the R11-approved bound_05_block_j15.py by adding a FIFTH free-exponent
 perturbing block Q7 (a LOW-DEGREE Flammang Table-1 block, default j3 deg 3, in
-X=z(1-z)), exponent qG>=0.  Authored so that qG=0 recovers EXACTLY verify_upper_q6 at
+X=z(1-z)), exponent qG>=0.  Authored so that qG=0 recovers EXACTLY bound_05_block_j15 at
 the SAME (q,qB,qC,qE,qF): B loses the Q7 term and D's perturbing branch loses the
 +qG*deg Q7 summand.  This is the calibration/anchor gate (Angle 1, R2 spec).
 
@@ -25,11 +25,11 @@ Family (Doche general-l, multi-free-block perturber):
            56 + qB*deg Q3 + qC*deg Q4 + qE*deg Q5 + qF*deg Q6 + qG*deg Q7 ).
 
 ANCHOR identity:
-  - At qG=0 this collapses EXACTLY to verify_upper_q6 at (q,qB,qC,qE,qF):
+  - At qG=0 this collapses EXACTLY to bound_05_block_j15 at (q,qB,qC,qE,qF):
     B loses the Q7 term, D's perturbing branch loses +qG*deg Q7 -> BIT-IDENTICAL.
 
-The per-cell enclosure machinery is reused VERBATIM from verify_upper.py via
-`import verify_upper as vu`.  The ONLY change vs q6 is that Q7 is added to the
+The per-cell enclosure machinery is reused VERBATIM from bound_01_doche_base.py via
+`import bound_01_doche_base as vu`.  The ONLY change vs q6 is that Q7 is added to the
 B-branch with weight qG (mechanically identical to any other Q factor).  Because the
 integrand changed, the mpmath soundness selftest (selftest_q7) is re-run on THIS
 integrand (B now has qG*log|Q7|).
@@ -46,11 +46,11 @@ The Q7 block is selectable via env var Q7_CAND in {j3,j5,j6,j7,j9} (default j3),
 so each low-degree candidate can be screened with the same harness.
 
 Usage:
-  Q7_CAND=j3 python3 verify_upper_q7.py anchor                  # qG=0 -> q6 BIT-IDENTICAL
-  Q7_CAND=j3 python3 verify_upper_q7.py admiss
-  Q7_CAND=j3 python3 verify_upper_q7.py selftest q1..q5 qB qC qE qF qG
-  Q7_CAND=j3 python3 verify_upper_q7.py certify q1..q5 qB qC qE qF qG [M0] [max_refine] [rem_cap]
-  Q7_CAND=j3 python3 verify_upper_q7.py tamper q1..q5 qB qC qE qF qG bogus_target
+  Q7_CAND=j3 python3 bound_06a_block_j3_pre.py anchor                  # qG=0 -> q6 BIT-IDENTICAL
+  Q7_CAND=j3 python3 bound_06a_block_j3_pre.py admiss
+  Q7_CAND=j3 python3 bound_06a_block_j3_pre.py selftest q1..q5 qB qC qE qF qG
+  Q7_CAND=j3 python3 bound_06a_block_j3_pre.py certify q1..q5 qB qC qE qF qG [M0] [max_refine] [rem_cap]
+  Q7_CAND=j3 python3 bound_06a_block_j3_pre.py tamper q1..q5 qB qC qE qF qG bogus_target
 """
 
 import os
@@ -59,11 +59,11 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv
-import verify_upper as vu
-import verify_upper_q4 as vq4
-import verify_upper_q5 as vq5
-import verify_upper_q6 as vq6   # for qG=0 anchor cross-check (q7 == q6 at qG=0)
+import bound_00_flammang_baseline as vv
+import bound_01_doche_base as vu
+import bound_03_block_Qb as vq4
+import bound_04_block_j13 as vq5
+import bound_05_block_j15 as vq6   # for qG=0 anchor cross-check (q7 == q6 at qG=0)
 
 NINF = -np.inf
 PINF = np.inf
@@ -165,7 +165,7 @@ def cell_AB_q7(a, b, q, qB, qC, qE, qF, qG):
 
 def cell_int_maxAB_q7(a, b, q, qB, qC, qE, qF, qG, rem_cap):
     """UPPER bound on int_cell max(A,B) dt + a `refine` mask.  Identical logic to
-    verify_upper.cell_int_maxAB; only cell_AB_q7 differs (extra qG*Q7 in B)."""
+    bound_01_doche_base.cell_int_maxAB; only cell_AB_q7 differs (extra qG*Q7 in B)."""
     d = cell_AB_q7(a, b, q, qB, qC, qE, qF, qG)
     r = na(0.5 * (b - a), PINF)
     width = na(b - a, PINF)
@@ -414,7 +414,7 @@ if __name__ == "__main__":
     R11_QF = 0.246614
 
     if mode == "anchor":
-        print(f"[anchor] Q7={Q7_CAND}  qG=0 must reproduce verify_upper_q6 "
+        print(f"[anchor] Q7={Q7_CAND}  qG=0 must reproduce bound_05_block_j15 "
               f"BIT-IDENTICALLY at held R11 (q,qB=qC=0,qE,qF).")
         v7 = float_value_q7(R11_Q, 0.0, 0.0, R11_QE, R11_QF, 0.0, N=8_000_000)
         v6 = vq6.float_value_q6(R11_Q, 0.0, 0.0, R11_QE, R11_QF, N=8_000_000)

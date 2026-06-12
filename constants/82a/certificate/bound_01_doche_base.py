@@ -6,9 +6,9 @@ Result (CERTIFIED, round 4 -- max(A,B) enclosure, function certify_maxAB):
    STAGE A (re-cert): C_82 <= log h(Doche q) <= 0.2544362773 < 0.25444.
    STAGE B (BREAK):   C_82 <= log h(q*)      <= 0.2543326887 < 0.25443677
                       = log(1.289735) [Doc01b], a STRICT record break (margin 1.04e-4).
-Reproduce:  python3 verify_upper.py selftest   (soundness of the cell bound)
-            python3 verify_upper.py stageA      (~2.5 min, M0=2e5)
-            python3 verify_upper.py stageB       (~2.5 min, M0=2e5)
+Reproduce:  python3 bound_01_doche_base.py selftest   (soundness of the cell bound)
+            python3 bound_01_doche_base.py stageA      (~2.5 min, M0=2e5)
+            python3 bound_01_doche_base.py stageB       (~2.5 min, M0=2e5)
 
 NOTE: the OLD split-quadrature routine certify() (mode certify_old) is broken/loose
 (returned a vacuous ~2.2) and is kept only for diagnosis; the LIVE certificate is
@@ -75,7 +75,7 @@ integrand WITHOUT the +/-log|Q| split that broke the old certify():
     log h(q) = (1/(2 pi D)) int_0^{2pi} G(t) dt,  D = max(sum q_i deg P_i, 56).
 
 On each cell [a,b] we enclose |P(w(t))|^2 by the SECOND-ORDER TAYLOR (mean-value)
-model of verify_vec.py (reused; rho_full): rho_m, rho'_m EXACT at the midpoint and
+model of bound_00_flammang_baseline.py (reused; rho_full): rho_m, rho'_m EXACT at the midpoint and
 rho'' enclosed over the wide cell, all OUTWARD-rounded (np.nextafter).  From those
 we get, per factor and outward-rounded: the cell sup/inf of (1/2)log rho (-> A_hi,
 A_lo, B_hi, B_lo), the midpoint value (-> A_mid_up, B_mid_up), an upper bound on
@@ -101,12 +101,12 @@ LEAF cells contribute to the final sum (no parent double-count).
 ADMISSIBILITY (Doche Lemma 5) is independent of q, so the same admissible family
 gives  C_82 <= log h(q)  for BOTH Doche's q and q*.
 
-Run:  python3 verify_upper.py selftest   (soundness: cell bound >= true int)
-      python3 verify_upper.py stageA      (re-cert: log h(Doche q) <= 0.25444)
-      python3 verify_upper.py stageB      (BREAK:   log h(q*) < 0.25443677)
-      python3 verify_upper.py calib       (reproduce Doche's h at his own q)
-      python3 verify_upper.py float       (float Riemann-sum conjecture)
-      python3 verify_upper.py certify_old (OLD broken split routine; diagnosis only)
+Run:  python3 bound_01_doche_base.py selftest   (soundness: cell bound >= true int)
+      python3 bound_01_doche_base.py stageA      (re-cert: log h(Doche q) <= 0.25444)
+      python3 bound_01_doche_base.py stageB      (BREAK:   log h(q*) < 0.25443677)
+      python3 bound_01_doche_base.py calib       (reproduce Doche's h at his own q)
+      python3 bound_01_doche_base.py float       (float Riemann-sum conjecture)
+      python3 bound_01_doche_base.py certify_old (OLD broken split routine; diagnosis only)
 """
 
 import sys
@@ -114,7 +114,7 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv          # reuse the verified Taylor-model interval machinery
+import bound_00_flammang_baseline as vv          # reuse the verified Taylor-model interval machinery
 
 NINF = -np.inf
 PINF = np.inf
@@ -140,7 +140,7 @@ QSTAR = np.array([11.74, 8.77, 2.45, 1.55, 0.53])
 RECORD = 0.25443677                      # log(1.289735), Doche Doc01b
 
 
-# coefficients ascending (low->high) for verify_vec.poly_derivs (which iterates
+# coefficients ascending (low->high) for bound_00_flammang_baseline.poly_derivs (which iterates
 # `for a in reversed(asc)`, i.e. high->low Horner, expecting ASCENDING input):
 def asc(coef_hl):
     return [int(c) for c in coef_hl[::-1]]
@@ -153,7 +153,7 @@ ASC = {nm: asc(c) for nm, c in
 
 def U2_enclosure(coef_asc, m, r, Wm, DWm, Wc, DWc, DDWc):
     """Verified [lo,hi] enclosure of |P(w(t))|^2 over the cell via the 2nd-order
-    Taylor / mean-value model (verify_vec.rho_terms)."""
+    Taylor / mean-value model (bound_00_flammang_baseline.rho_terms)."""
     rho_m, drho_m, rpp = vv.rho_terms(coef_asc, Wm, DWm, Wc, DWc, DDWc)
     r_lo = -r
     r2_hi = na(r * r, PINF)

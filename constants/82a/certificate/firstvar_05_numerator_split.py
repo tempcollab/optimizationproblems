@@ -3,7 +3,7 @@ R10 (this campaign) -- UPPER-INTERNAL DUAL-LOCI DECOMPOSITION of the HELD
 certificate NUMERATOR for C_82 (Zhang-Zagier essential minimum, 82a UPPER).
 
 STRUCTURAL round.  This script does NOT move the held UPPER number
-(0.2538893183, verify_upper_q8A.py, R4).  It establishes a NEW verifiable
+(0.2538893183, bound_07_block_j9.py, R4).  It establishes a NEW verifiable
 IDENTITY: the held certificate's numerator Phi(0) = int_0^1 max(A0,B) ds splits
 EXACTLY over the two upper-internal active loci
 
@@ -14,10 +14,10 @@ as Phi(0) = int_{ACT(A)} A0 ds + int_{ACT(B)} B ds, reproducing the held value
 0.2538893183 as the PASS criterion (not beating it).
 
 WHY THIS IS NEW (and not a re-run of R6/R8/R9):
-  - verify_shared_pool.py (R6) checks INTEGER-POLYNOMIAL identities only
+  - firstvar_06_dictionary.py (R6) checks INTEGER-POLYNOMIAL identities only
     (P4=j5 etc., squarefree + coprime).  It never touches A0/B, the partition,
     the numerator, or any integral.
-  - verify_firstvar_lemma.py / verify_Bbranch_marginal.py / verify_unified_firstvar.py
+  - firstvar_01_lemma.py / firstvar_04_perturbing_marginal.py / firstvar_03_unified.py
     (R6/R8/R9) compute MARGINALS -- derivatives at q=0, int_{ACT(X)} log|Q| for
     ONE block on ONE arc.  NONE computes the certificate NUMERATOR itself
     Phi(0) = int_{ACT(A)} A0 + int_{ACT(B)} B, and NONE checks the partition
@@ -49,23 +49,23 @@ CORROBORATION (BINDING CONDITION B -- supporting rows, NOT the headline):
        over each locus; LABELLED corroboration.
 
 Reproduce (cd constants/82a/certificate):
-  python3 verify_dual_loci_decomposition.py            # full, pushes to N=4M
-  python3 verify_dual_loci_decomposition.py 2000000    # faster top N
+  python3 firstvar_05_numerator_split.py            # full, pushes to N=4M
+  python3 firstvar_05_numerator_split.py 2000000    # faster top N
 """
 import sys
 import time
 import numpy as np
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 
 # ---------------------------------------------------------------------------
 # HELD R4 family -- the anchor for the HEADLINE (P)+(N)+(V) checks.  Exactly the
-# certified integrand's exponents (verify_upper_q8A.py, R4).  qB=qC=0.
+# certified integrand's exponents (bound_07_block_j9.py, R4).  qB=qC=0.
 HELD = dict(q=[14.011500, 13.443930, 2.643590, 2.299880, 0.252420],
             qB=0.0, qC=0.0, qE=0.575080, qF=0.568800, qG=0.891590, qH=0.066860)
 
-# Held certificate targets (verify_upper_q8A.py R4 RESULT):
+# Held certificate targets (bound_07_block_j9.py R4 RESULT):
 HELD_INT = 18.2804777610      # int_0^1 G(chi) ds  (certified outward enclosure)
 HELD_VALUE = 0.2538893183     # int_0^1 G ds / D   (the held UPPER value)
 
@@ -85,7 +85,7 @@ def pv(coef_desc, x):
 
 def AB_arrays(fam, N):
     """A0(s), B(s), chi(s) reconstructed with EXACTLY the held harness's
-    float_value_q8A convention (verify_upper_q8A lines 257-277).  A0 = the A-base
+    float_value_q8A convention (bound_07_block_j9 lines 257-277).  A0 = the A-base
     / prod-P^q arg WITHOUT any candidate block (it carries the held j3,j9 already
     in the family); B = the perturber arg.  This is bit-for-bit the certified
     integrand's two pieces."""
@@ -267,18 +267,18 @@ def marginal_crosscheck(N):
           f"(FIRES iff < 0: {rt < 0})")
     print(f"   support of the integral       = ACT(A) = {{A0>B}}  "
           f"(measure {np.mean(mA):.5f})")
-    # cross-check vs verify_firstvar_lemma's number for j9 on R2 (closed_form_rtilde
+    # cross-check vs firstvar_01_lemma's number for j9 on R2 (closed_form_rtilde
     # returns the UN-normalized int; r~/(1)=rt_int there).  Match to <1e-4.
     A_match = True
     try:
-        import verify_firstvar_lemma as vfl
+        import firstvar_01_lemma as vfl
         s2, A2, B2, chi2 = vfl.AB_arrays(vfl.R2, N)
         rt_int_ref, _ = vfl.closed_form_rtilde(vfl.R2, vfl.J9, A2, B2, chi2)
-        print(f"   verify_firstvar_lemma r~(j9) int (un-norm) = {rt_int_ref:.8f}   "
+        print(f"   firstvar_01_lemma r~(j9) int (un-norm) = {rt_int_ref:.8f}   "
               f"|diff| = {abs(rt_int - rt_int_ref):.2e}  (<1e-4)")
         A_match = abs(rt_int - rt_int_ref) < 1e-4
     except Exception as e:
-        print(f"   (cross-check vs verify_firstvar_lemma skipped: {e})")
+        print(f"   (cross-check vs firstvar_01_lemma skipped: {e})")
 
     # --- B-branch marginal m_B on the held R4 family (a B-side test block) ---
     # X^2 - X + 1 (the least-dry admissible B-perturber, R8).  m_B carries the

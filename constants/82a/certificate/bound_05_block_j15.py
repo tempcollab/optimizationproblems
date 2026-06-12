@@ -3,11 +3,11 @@ R11 RIGOROUS upper-bound certificate for C_82, free-exponent family with TWO fre
 perturbing blocks Q5 (Flammang Table 1 entry j=13, deg 12) and a NEW second free
 block Q6 (Flammang Table 1 entry j=15, deg 16).
 
-This EXTENDS the R10-approved verify_upper_q5.py (free blocks Q3=Qa, Q4=Qb deg 24,
+This EXTENDS the R10-approved bound_04_block_j13.py (free blocks Q3=Qa, Q4=Qb deg 24,
 Q5=j13 deg 12) by adding a FOURTH free-exponent perturbing block Q6 = Flammang
 Table 1 entry j=15 (deg 16 in X = z(1-z)), exponent qF>=0.  Authored in the ell=4
-shape so that qF=0 recovers EXACTLY verify_upper_q5 (held R10 family h=Q1*Q2*Q5^qE),
-qE=qF=0 recovers verify_upper_q4 (held R9 ell=2 family), and qB=qC=qE=qF=0 recovers
+shape so that qF=0 recovers EXACTLY bound_04_block_j13 (held R10 family h=Q1*Q2*Q5^qE),
+qE=qF=0 recovers bound_03_block_Qb (held R9 ell=2 family), and qB=qC=qE=qF=0 recovers
 the Doche base h=Q1*Q2, D=56.
 
 Family (Doche general-l, multi-free-block perturber):
@@ -28,14 +28,14 @@ This is the Doc01a §4 D-formula with a perturbing side of (here) up to four fre
 blocks (Q3,Q4,Q5,Q6) on top of the fixed distinguished block Q1*Q2.
 
 ANCHOR identities:
-  - At qF=0 this collapses EXACTLY to verify_upper_q5 at the same (q,qB,qC,qE):
+  - At qF=0 this collapses EXACTLY to bound_04_block_j13 at the same (q,qB,qC,qE):
     B loses the Q6 term and D's perturbing branch loses the +qF*16 summand.
-  - At qE=qF=0 it collapses to verify_upper_q4 (held R9 ell=2 family).
-  - At qB=qC=qE=qF=0 it collapses to verify_upper (h=Q1*Q2, D=56), the Doche base.
+  - At qE=qF=0 it collapses to bound_03_block_Qb (held R9 ell=2 family).
+  - At qB=qC=qE=qF=0 it collapses to bound_01_doche_base (h=Q1*Q2, D=56), the Doche base.
 
 The per-cell enclosure machinery (rho_full -> midpoint value / slope / curvature /
 cell sup-inf of (1/2)log|.|^2, all OUTWARD-rounded) is reused VERBATIM from
-verify_upper.py via `import verify_upper as vu`.  The ONLY change vs q5 is that Q6 is
+bound_01_doche_base.py via `import bound_01_doche_base as vu`.  The ONLY change vs q5 is that Q6 is
 added to the B-branch with weight qF, exactly as Q3,Q4,Q5 are added -- the rigor
 treatment of a Q6 factor in B is mechanically identical to a P factor in A (same
 rho_full output, weighted, outward-rounded). Because the integrand changed, the mpmath
@@ -50,11 +50,11 @@ squarefree, gcd(Q6, each kept factor)=1 incl. the LOAD-BEARING inter-block
 gcd(Q6,Q5)=1).
 
 Usage:
-  python3 verify_upper_q6.py anchor                  # qF=0 -> q5; qE=qF=0 -> q4; base
-  python3 verify_upper_q6.py admiss
-  python3 verify_upper_q6.py selftest q1..q5 qB qC qE qF
-  python3 verify_upper_q6.py certify q1 q2 q3 q4 q5 qB qC qE qF [M0] [max_refine] [rem_cap]
-  python3 verify_upper_q6.py tamper q1..q5 qB qC qE qF bogus_target
+  python3 bound_05_block_j15.py anchor                  # qF=0 -> q5; qE=qF=0 -> q4; base
+  python3 bound_05_block_j15.py admiss
+  python3 bound_05_block_j15.py selftest q1..q5 qB qC qE qF
+  python3 bound_05_block_j15.py certify q1 q2 q3 q4 q5 qB qC qE qF [M0] [max_refine] [rem_cap]
+  python3 bound_05_block_j15.py tamper q1..q5 qB qC qE qF bogus_target
 """
 
 import sys
@@ -62,10 +62,10 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv
-import verify_upper as vu
-import verify_upper_q4 as vq4   # for qE=qF=0 anchor chain
-import verify_upper_q5 as vq5   # for qF=0 anchor cross-check (q6 == q5 at qF=0)
+import bound_00_flammang_baseline as vv
+import bound_01_doche_base as vu
+import bound_03_block_Qb as vq4   # for qE=qF=0 anchor chain
+import bound_04_block_j13 as vq5   # for qF=0 anchor cross-check (q6 == q5 at qF=0)
 
 NINF = -np.inf
 PINF = np.inf
@@ -104,7 +104,7 @@ def _Dval(q, qB, qC, qE, qF):
 
 
 # ---------------------------------------------------------------------------
-# Per-cell A,B data.  A branch == verify_upper.cell_AB's A branch (P1..P8).
+# Per-cell A,B data.  A branch == bound_01_doche_base.cell_AB's A branch (P1..P8).
 # B branch == Q1 + Q2 (fixed) + qB*Q3 + qC*Q4 + qE*Q5 + qF*Q6 (free), each factor's
 # (1/2)log|.|^2 enclosed by vu.rho_full exactly as in vu.cell_AB.
 # ---------------------------------------------------------------------------
@@ -168,7 +168,7 @@ def cell_AB_q6(a, b, q, qB, qC, qE, qF):
 
 def cell_int_maxAB_q6(a, b, q, qB, qC, qE, qF, rem_cap):
     """UPPER bound on int_cell max(A,B) dt + a `refine` mask.  Identical logic to
-    verify_upper.cell_int_maxAB; only cell_AB_q6 differs (Q3,Q4,Q5,Q6 in B)."""
+    bound_01_doche_base.cell_int_maxAB; only cell_AB_q6 differs (Q3,Q4,Q5,Q6 in B)."""
     d = cell_AB_q6(a, b, q, qB, qC, qE, qF)
     r = na(0.5 * (b - a), PINF)
     width = na(b - a, PINF)

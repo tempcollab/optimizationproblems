@@ -2,7 +2,7 @@
 R10 RIGOROUS upper-bound certificate for C_82, free-exponent family with a NEW
 deg-12 perturbing block Q5 (Flammang Table 1 entry j=13).
 
-This EXTENDS the R9-approved verify_upper_q4.py (two free blocks Q3=Qa, Q4=Qb, both
+This EXTENDS the R9-approved bound_03_block_Qb.py (two free blocks Q3=Qa, Q4=Qb, both
 deg 24) to a THIRD free-exponent perturbing block Q5 = Flammang j13 (deg 12 in
 X = z(1-z)), exponent qE>=0.  Authored in the ell=3 shape so that qB=qC=0 recovers
 EXACTLY the Angle 1 family h = Q1*Q2*Q5^qE (drop Qa,Qb), AND qB=qC=qE=0 recovers the
@@ -24,14 +24,14 @@ This is the Doc01a §4 D-formula with a perturbing side of (here) up to three fr
 blocks (Q3,Q4,Q5) on top of the fixed distinguished block Q1*Q2.
 
 ANCHOR identities:
-  - At qE=0 this collapses EXACTLY to verify_upper_q4 at the same (q,qB,qC):
+  - At qE=0 this collapses EXACTLY to bound_03_block_Qb at the same (q,qB,qC):
     B loses the Q5 term and D's perturbing branch loses the +qE*12 summand.
   - At qB=qC=0 it collapses to the Angle 1 family h=Q1*Q2*Q5^qE (the certified family).
-  - At qB=qC=qE=0 it collapses to verify_upper (h=Q1*Q2, D=56), the Doche base.
+  - At qB=qC=qE=0 it collapses to bound_01_doche_base (h=Q1*Q2, D=56), the Doche base.
 
 The per-cell enclosure machinery (rho_full -> midpoint value / slope / curvature /
 cell sup-inf of (1/2)log|.|^2, all OUTWARD-rounded) is reused VERBATIM from
-verify_upper.py via `import verify_upper as vu`.  The ONLY change vs q4 is that Q5 is
+bound_01_doche_base.py via `import bound_01_doche_base as vu`.  The ONLY change vs q4 is that Q5 is
 added to the B-branch with weight qE, exactly as Q3,Q4 are added -- the rigor
 treatment of a Q5 factor in B is mechanically identical to a P factor in A (same
 rho_full output, weighted, outward-rounded). Because the integrand changed, the mpmath
@@ -45,11 +45,11 @@ is W = Q1*Q2*Q5 (deg 68>0, W(0)=W(1)=1, Q5 squarefree, gcd(Q5,each of P1,P2,P4,P
 Q1,Q2)=1).  The full pairwise grid incl. gcd(Q5,Qa)=gcd(Q5,Qb)=1 is also printed.
 
 Usage:
-  python3 verify_upper_q5.py anchor                            # qE=0 -> q4; base check
-  python3 verify_upper_q5.py admiss
-  python3 verify_upper_q5.py selftest q1..q5 qB qC qE
-  python3 verify_upper_q5.py certify q1 q2 q3 q4 q5 qB qC qE [M0] [max_refine] [rem_cap]
-  python3 verify_upper_q5.py tamper q1..q5 qB qC qE bogus_target
+  python3 bound_04_block_j13.py anchor                            # qE=0 -> q4; base check
+  python3 bound_04_block_j13.py admiss
+  python3 bound_04_block_j13.py selftest q1..q5 qB qC qE
+  python3 bound_04_block_j13.py certify q1 q2 q3 q4 q5 qB qC qE [M0] [max_refine] [rem_cap]
+  python3 bound_04_block_j13.py tamper q1..q5 qB qC qE bogus_target
 """
 
 import sys
@@ -57,9 +57,9 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv
-import verify_upper as vu
-import verify_upper_q4 as vq4   # for anchor cross-check (q5 == q4 at qE=0)
+import bound_00_flammang_baseline as vv
+import bound_01_doche_base as vu
+import bound_03_block_Qb as vq4   # for anchor cross-check (q5 == q4 at qE=0)
 
 NINF = -np.inf
 PINF = np.inf
@@ -92,7 +92,7 @@ def _Dval(q, qB, qC, qE):
 
 
 # ---------------------------------------------------------------------------
-# Per-cell A,B data.  A branch == verify_upper.cell_AB's A branch (P1..P8).
+# Per-cell A,B data.  A branch == bound_01_doche_base.cell_AB's A branch (P1..P8).
 # B branch == Q1 + Q2 (fixed) + qB*Q3 + qC*Q4 + qE*Q5 (free), each factor's
 # (1/2)log|.|^2 enclosed by vu.rho_full exactly as in vu.cell_AB.
 # ---------------------------------------------------------------------------
@@ -154,7 +154,7 @@ def cell_AB_q5(a, b, q, qB, qC, qE):
 
 def cell_int_maxAB_q5(a, b, q, qB, qC, qE, rem_cap):
     """UPPER bound on int_cell max(A,B) dt + a `refine` mask.  Identical logic to
-    verify_upper.cell_int_maxAB; only cell_AB_q5 differs (Q3,Q4,Q5 in B)."""
+    bound_01_doche_base.cell_int_maxAB; only cell_AB_q5 differs (Q3,Q4,Q5 in B)."""
     d = cell_AB_q5(a, b, q, qB, qC, qE)
     r = na(0.5 * (b - a), PINF)
     width = na(b - a, PINF)

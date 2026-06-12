@@ -20,12 +20,12 @@ limit point of the ZZ spectrum, hence an upper bound on C_82.  Admissibility of
 W = Q1*Q2*Q3 verified separately (deg 80>0, W(0)=W(1)=1, Q3 squarefree, all gcds 1).
 
 This module is a FLOAT objective only (midpoint Riemann sum) for the search; the
-rigorous certificate is verify_upper_q3.py::certify_maxAB_q3.
+rigorous certificate is bound_02_block_Qa.py::certify_maxAB_q3.
 """
 
 import numpy as np
 
-# Doc01b base polynomials in X (high->low), identical to doche_hq_b / verify_upper.
+# Doc01b base polynomials in X (high->low), identical to doche_hq_b / bound_01_doche_base.
 DB_P1 = [1, 0]
 DB_P2 = [-1, 1]
 DB_P4 = [1, -2, 4, -3, 1]

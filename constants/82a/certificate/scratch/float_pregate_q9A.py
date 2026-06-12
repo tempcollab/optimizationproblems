@@ -1,7 +1,7 @@
 """
 R7 FLOAT PRE-GATE for a THIRD A-base block (q9A family).
 
-Clones verify_upper_q8A.float_value_q8A with a THIRD A-base block Q9 carried at
+Clones bound_07_block_j9.float_value_q8A with a THIRD A-base block Q9 carried at
 exponent qI >= 0 alongside j3 (qG) and j9 (qH).  Joint Nelder-Mead re-optimization of
 all 10 exponents (q1..q5, qE, qF, qG, qH, qI) at high N, seeded from the held R4 point.
 
@@ -20,8 +20,8 @@ import sys
 import numpy as np
 from scipy.optimize import minimize
 
-import verify_upper as vu
-import verify_upper_q8A as q8
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
 import flammang_table1 as ft
 
 HELD = 0.2538893183   # GUARDRAIL 2: the TRUE held verified upper (R4). Overwrites stale.

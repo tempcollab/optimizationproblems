@@ -5,7 +5,7 @@ avoid the watchdog. N=80k for the optimizer; re-eval best at N=4M.
 import sys, time
 import numpy as np
 from scipy.optimize import minimize
-import verify_upper_q8A as q8
+import bound_07_block_j9 as q8
 
 R2 = [14.283862, 13.947194, 2.593425, 2.283539, 0.249084, 0.577911, 0.565724, 0.893516]
 SEED_QH = 0.0662

@@ -20,26 +20,28 @@ recomputing {A>B} there.  (R2 anchor is ONLY for seeding the U^nu well-map; R4 i
 q_Q=0 base point of the family Q* is being added to.)
 
 FACTORIZATION (the lever the optimizer acts on; identity verified to 5.2e-17 in
-verify_firstvar_lemma.root_potential_check):
+firstvar_01_lemma.root_potential_check):
     r~_Q = sum_{rho: Q(rho)=0} U^nu(rho) + deg(Q)*log|lead(Q)|,
     U^nu(zeta) = < log|zeta - chi| 1_{A0>B} >_s   (the active-arc log-potential).
 So r~ is driven DOWN by placing integer roots at the deepest U^nu wells while staying
 contour-root-free.
 
 Note: blocks are polynomials in w = chi = z(1-z); coprimality/originality is checked
-in w (the shared variable, per R6 verify_shared_pool).
+in w (the shared variable, per R6 firstvar_06_dictionary).
 
 Reproduce:  python3 construct_block_R7.py            (well map + enumeration, ~1-2 min)
 """
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import sys
 import math
 import itertools
 import numpy as np
 import sympy as sp
 
-import verify_upper as vu
-import verify_upper_q8A as q8
-import verify_firstvar_lemma as fv
+import bound_01_doche_base as vu
+import bound_07_block_j9 as q8
+import firstvar_01_lemma as fv
 import flammang_table1 as ft
 
 W = sp.symbols('w')

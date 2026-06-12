@@ -19,11 +19,13 @@ energy-CVP missed.
 Anchor = R4 (GUARDRAIL 1).  deg <= 10 (GUARDRAIL 3).
 Reproduce:  python3 design_block2.py            (~2-4 min)
 """
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import sys
 import itertools
 import numpy as np
 
-import verify_firstvar_lemma as fv
+import firstvar_01_lemma as fv
 import construct_block_R7 as cb
 
 

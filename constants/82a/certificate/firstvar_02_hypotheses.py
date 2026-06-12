@@ -17,10 +17,10 @@ Two audits the written proof needs as backing (the proof body itself is by hand)
     block like P1=X vanishes at chi(0)=0; those put a neighbourhood into {A_0<B}, off the
     active integrand, so they do not enter the bounded candidate term.)
 
-Reproduce:  python3 audit_firstvar_rigor.py
+Reproduce:  python3 firstvar_02_hypotheses.py
 """
 import numpy as np
-import verify_firstvar_lemma as fv
+import firstvar_01_lemma as fv
 
 J3 = fv.J3; J9 = fv.J9
 R4 = fv.R4

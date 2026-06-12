@@ -16,7 +16,7 @@ coprime/non-degenerate), and
 A new base block Q7 (here a LOW-DEGREE Flammang Table-1 polynomial, default j3 deg 3,
 in X=z(1-z)) with exponent qG>=0 therefore adds +qG*log|Q7| to the A-branch and
 +qG*deg Q7 to the FIRST argument of the D-max (the sum-q-deg-P branch).  This is
-distinct from verify_upper_q7.py (Angle 1) which adds Q7 to the B-branch and the
+distinct from bound_06a_block_j3_pre.py (Angle 1) which adds Q7 to the B-branch and the
 SECOND D-argument.
 
 Family:
@@ -30,10 +30,10 @@ Family:
            56 + qB*deg Q3 + qC*deg Q4 + qE*deg Q5 + qF*deg Q6 ).
 
 ANCHOR identity:
-  - At qG=0 this collapses EXACTLY to verify_upper_q6 at (q,qB,qC,qE,qF):
+  - At qG=0 this collapses EXACTLY to bound_05_block_j15 at (q,qB,qC,qE,qF):
     A loses the Q7 term, D's first argument loses +qG*deg Q7 -> BIT-IDENTICAL.
 
-Per-cell enclosure machinery reused VERBATIM from verify_upper.py.  Q7 is added to the
+Per-cell enclosure machinery reused VERBATIM from bound_01_doche_base.py.  Q7 is added to the
 A-branch with weight qG, mechanically identical to any other P factor (same rho_full,
 weighted, outward-rounded).  Because the integrand changed, the mpmath soundness
 selftest (selftest_q7A) is re-run on THIS integrand (A now has qG*log|Q7|).
@@ -54,11 +54,11 @@ Q7(0)=Q7(1)=1, which we report but do not require for a base block.)
 Q7 block selectable via env var Q7_CAND in {j3,j6,j7,j9} (default j3).
 
 Usage:
-  Q7_CAND=j3 python3 verify_upper_q7A.py anchor                  # qG=0 -> q6 BIT-IDENTICAL
-  Q7_CAND=j3 python3 verify_upper_q7A.py admiss
-  Q7_CAND=j3 python3 verify_upper_q7A.py selftest q1..q5 qB qC qE qF qG
-  Q7_CAND=j3 python3 verify_upper_q7A.py certify q1..q5 qB qC qE qF qG [M0] [max_refine] [rem_cap]
-  Q7_CAND=j3 python3 verify_upper_q7A.py tamper q1..q5 qB qC qE qF qG bogus_target
+  Q7_CAND=j3 python3 bound_06_block_j3.py anchor                  # qG=0 -> q6 BIT-IDENTICAL
+  Q7_CAND=j3 python3 bound_06_block_j3.py admiss
+  Q7_CAND=j3 python3 bound_06_block_j3.py selftest q1..q5 qB qC qE qF qG
+  Q7_CAND=j3 python3 bound_06_block_j3.py certify q1..q5 qB qC qE qF qG [M0] [max_refine] [rem_cap]
+  Q7_CAND=j3 python3 bound_06_block_j3.py tamper q1..q5 qB qC qE qF qG bogus_target
 """
 
 import os
@@ -67,11 +67,11 @@ import time
 import math
 import numpy as np
 
-import verify_vec as vv
-import verify_upper as vu
-import verify_upper_q4 as vq4
-import verify_upper_q5 as vq5
-import verify_upper_q6 as vq6   # for qG=0 anchor cross-check (q7A == q6 at qG=0)
+import bound_00_flammang_baseline as vv
+import bound_01_doche_base as vu
+import bound_03_block_Qb as vq4
+import bound_04_block_j13 as vq5
+import bound_05_block_j15 as vq6   # for qG=0 anchor cross-check (q7A == q6 at qG=0)
 
 NINF = -np.inf
 PINF = np.inf
@@ -409,7 +409,7 @@ if __name__ == "__main__":
 
     if mode == "anchor":
         print(f"[anchor] Q7={Q7_CAND} (A-branch)  qG=0 must reproduce "
-              f"verify_upper_q6 BIT-IDENTICALLY at held R11 (q,qB=qC=0,qE,qF).")
+              f"bound_05_block_j15 BIT-IDENTICALLY at held R11 (q,qB=qC=0,qE,qF).")
         v7 = float_value_q7A(R11_Q, 0.0, 0.0, R11_QE, R11_QF, 0.0, N=8_000_000)
         v6 = vq6.float_value_q6(R11_Q, 0.0, 0.0, R11_QE, R11_QF, N=8_000_000)
         print(f"  float_value_q7A(R11 q, qB=qC=0, qE, qF, qG=0) = {v7:.12f}")
