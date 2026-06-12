@@ -100,6 +100,36 @@ def _Dval(q, qB, qC, qE, qF, qG, qH):
                      + qE * DEG_Q5 + qF * DEG_Q6))
 
 
+def _sum_lo(terms):
+    """Rigorous DOWNWARD-rounded sum of nonnegative floats."""
+    acc = 0.0
+    for t in terms:
+        acc = na(acc + t, NINF)
+    return acc
+
+
+def _prod_lo(x, k):
+    """Downward-rounded x*k for nonnegative x and exact integer k."""
+    return na(float(x) * float(k), NINF)
+
+
+def _Dval_lo(q, qB, qC, qE, qF, qG, qH):
+    """A rigorous LOWER bound on D = max(arg_A, arg_B).
+
+    D is the DENOMINATOR of log h = (int G)/D, so an UPPER bound on log h needs a
+    LOWER bound on D.  Each argument is a sum of nonnegative products
+    (exponent >= 0) x (exact integer degree); we round every product and partial
+    sum toward -inf, then take the max of the two lower-bounded arguments (a lower
+    bound on the max).  Exponents/degrees are nonnegative here, so this is sound.
+    """
+    argA = _sum_lo([_prod_lo(q[i], int(DEGP[i])) for i in range(len(DEGP))]
+                   + [_prod_lo(qG, DEG_Q7), _prod_lo(qH, DEG_Q8)])
+    argB = _sum_lo([float(DEGQ12),
+                    _prod_lo(qB, DEG_Q3), _prod_lo(qC, DEG_Q4),
+                    _prod_lo(qE, DEG_Q5), _prod_lo(qF, DEG_Q6)])
+    return max(argA, argB)
+
+
 # ---------------------------------------------------------------------------
 def cell_AB_q8A(a, b, q, qB, qC, qE, qF, qG, qH):
     m = 0.5 * (a + b)
@@ -206,7 +236,10 @@ def cell_int_maxAB_q8A(a, b, q, qB, qC, qE, qF, qG, qH, rem_cap):
 
 def certify_maxAB_q8A(q, qB, qC, qE, qF, qG, qH, label, target, M0=200000,
                       max_refine=14, rem_cap=1e-10, verbose=True):
-    TWO_PI = na(2.0 * math.pi, PINF)
+    # TWO_PI and D are both DIVISORS of an upper-bounded numerator, so to keep the
+    # quotient an over-estimate they must be rounded DOWN (toward -inf): a smaller
+    # divisor yields a larger quotient, the safe direction for an upper bound.
+    TWO_PI = na(2.0 * math.pi, NINF)
     edges = np.linspace(0.0, 2.0 * math.pi, M0 + 1)
     a = edges[:-1].copy()
     b = edges[1:].copy()
@@ -215,7 +248,7 @@ def certify_maxAB_q8A(q, qB, qC, qE, qF, qG, qH, label, target, M0=200000,
     rounds = 0
     nbad = 0
     n_leaf = 0
-    D = _Dval(q, qB, qC, qE, qF, qG, qH)
+    D = _Dval_lo(q, qB, qC, qE, qF, qG, qH)   # LOWER bound on D (denominator)
     while True:
         cell_hi, refine = cell_int_maxAB_q8A(a, b, q, qB, qC, qE, qF, qG, qH, rem_cap)
         keep = ~refine

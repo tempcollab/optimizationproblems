@@ -66,17 +66,20 @@ closed form, uniformly across the three regimes of which branch attains the
 denominator---including the tie, where the derivative has a genuine one-sided kink.
 The load-bearing analytic point, the vanishing of the moving-boundary term, is
 settled by dominated convergence on the difference quotient. From this single
-derivative two consequences follow. First, a block lowers the bound to first order
-if and only if its \emph{normalized active potential} lies below $\log h$, and the
-active blocks of any optimal family lie exactly on the line $\rQ=\log h$; this is the
-complementary-slackness condition of the associated measure linear program. Second,
-read as a design objective the criterion shows the construction is \emph{saturated}:
-the blocks that help are forced---the finitely many admissible dictionary entries
-already present---and no admissible \emph{new} block of degree at most $16$ improves
-the bound, an obstruction we trace to the additivity of the marginal. As an
-application the analysis selects two further blocks and yields the improved record
-$\essmin\le 0.2538893183$, beating $0.25443677$ \citep{Doc01b}, certified by an
-outward-rounded interval enclosure. Code at \repo.
+derivative two consequences follow. First, a firing criterion: a block lowers the
+bound to first order according to a sign condition on a single arc integral, with the
+condition taking one form for a base block (no value term) and another for a
+perturbing block (the complementary-slackness condition $\rQ=\log h$ of the
+associated measure linear program). Second, run as a design objective the criterion
+selects two further admissible blocks, and certifying the resulting family yields the
+improved record
+\[
+  \essmin\le 0.2538893183,
+\]
+beating $0.25443677$ \citep{Doc01b} by an outward-rounded interval enclosure. We also
+give computational evidence---an additivity property of the marginal together with an
+explicit finite search---that the cheap improving blocks have been exhausted, locating
+where Doche's construction reaches the floor of its reachable gains. Code at \repo.
 \end{abstract}
 
 \maketitle
@@ -126,8 +129,9 @@ and the first obstacle is simply to show the derivative exists.
 \begin{theorem}[First variation; Sections~\ref{sec:firstvar}--\ref{sec:unified}]
 \label{thm:main}
 Let $Q\in\Z[X]$ have no root on the contour $\chi([0,1])$, adjoined to one branch of
-an admissible family with exponent $q_Q\ge0$. Then $\log h$ is right-differentiable
-at $q_Q=0$, and
+an admissible family with exponent $q_Q\ge0$, under the standing hypotheses
+\emph{(H1)--(H3)} of Section~\ref{sec:firstvar} (in particular $A_0-B\not\equiv0$).
+Then $\log h$ is right-differentiable at $q_Q=0$, and
 \begin{equation}\label{eq:main}
   \dplus\!\log h/\partial q_Q\big|_0
   =\frac1D\Bigl[\int_{\ACT}\log|Q(\chi(s))|\,ds-\log h\cdot s_Q\Bigr],
@@ -151,46 +155,55 @@ max-rule, which supplies the term $s_Q$ and, at a tie, the kink
 Specializing \eqref{eq:main} to a perturbing block isolates a selection rule.
 
 \begin{corollary}[Selection criterion; Section~\ref{sec:criterion}]\label{cor:criterion}
-For an admissible family with active set $\Omega$ (the arc where the perturbing
-branch attains the maximum), define the \emph{normalized active potential} of a block
-$Q$ by $\rQ:=\frac1{\deg Q}\int_\Omega\log|Q(\chi(s))|\,ds$. A perturbing block lowers
-the bound to first order iff $\rQ<\log h$; at any family optimal over its active
-exponents every active block satisfies $\rQ=\log h$ and every other admissible block
-satisfies $\rQ\ge\log h$. These are the complementary-slackness conditions of the
-\citet{BMQS} measure program restricted to Doche's family.
+Take a family in which the perturbing branch attains $D$ (the regime of the
+constructions below), and adjoin a block $Q$ at exponent $0$. Then $Q$ lowers the
+bound to first order according to which branch it joins:
+\begin{itemize}
+\item a \emph{base} block ($Q$ on the $A$-branch, the losing argument) fires iff its
+  \emph{base marginal} is negative,
+  $\;\widetilde r_Q:=\int_{\{A_0>B\}}\log|Q(\chi(s))|\,ds<0$;
+\item a \emph{perturbing} block ($Q$ on the $B$-branch, which attains $D$) fires iff
+  its \emph{normalized active potential} is below the value,
+  $\;\rQ:=\frac1{\deg Q}\int_{\{B>A_0\}}\log|Q(\chi(s))|\,ds<\log h$.
+\end{itemize}
+The two tests are the two cases $s_Q\in\{0,\deg Q\}$ of \eqref{eq:main}. At a family
+satisfying the first-order conditions, the perturbing form gives the
+complementary-slackness reading of the \citet{BMQS} measure program restricted to
+Doche's family: each active perturbing block sits on $\rQ=\log h$, and an inactive one
+has nonnegative reduced cost $\rQ-\log h$.
 \end{corollary}
 
-Run not as a test but as a design objective $\inf_Q\rQ$ over integer blocks, the same
-criterion bounds the construction.
+The base test has \emph{no} $\log h$ term, because a base block enters the argument
+that does not attain $D$; it is the test that selects the blocks of the improved bound
+(Section~\ref{sec:bound}). Run as a design objective over integer blocks, either test
+bounds the construction.
 
-\begin{theorem}[Saturation; Section~\ref{sec:saturation}]\label{thm:saturation}
-The signed marginal $m(Q):=\deg Q\,(\rQ-\log h)$ is additive over factorizations in
-$\Z[X]$. At the optimal family the only admissible blocks coprime to the dictionary
-with $m(Q)<0$ are finitely many entries of Flammang's \citep{F18} table, already
-present in the construction; the cheapest coprime \emph{new} factor has positive
-marginal exceeding the best of those. Consequently no admissible new block fires:
-within all admissible integer blocks of degree at most $16$, none improves the bound.
-\end{theorem}
-
-The blocks that help are thus \emph{forced}, which answers the second empirical
-question and supplies the first. Carrying the criterion out selects two further
-admissible blocks and gives the bound.
+Carried out, the criterion selects two further admissible blocks and gives the bound.
 
 \begin{theorem}[Improved bound; Section~\ref{sec:bound}]\label{thm:upper}
 $\essmin\le 0.2538893183$, strictly below the record $0.25443677$ of \citet{Doc01b},
 certified by an outward-rounded interval-arithmetic enclosure.
 \end{theorem}
 
+Finally, run as a design objective the criterion locates where the construction's
+reachable gains run out. The base marginal $\widetilde r_Q$ is additive over
+factorizations in $\Z[X]$, and an explicit finite search finds that the cheap firing
+blocks have already been absorbed into the dictionary (Section~\ref{sec:saturation}).
+This is computational evidence, not a non-existence theorem: high-degree admissible
+blocks outside the search can still fire (we exhibit table entries that would), so we
+claim only that the \emph{reachable} improvements are exhausted, and explain the
+mechanism.
+
 \subsection*{Scope}
 Theorem~\ref{thm:main} is a \emph{local} first-variation theory: it computes the
 derivative at $q_Q=0$ for Doche's functional, not a statement about $\essmin$ itself.
-Theorem~\ref{thm:saturation} is proven over the explicit, finite family of admissible
-integer blocks of degree at most $16$; it is not an unconditional non-existence
-statement, and Section~\ref{sec:saturation} is precise about what is proven and what
-is exhausted by enumeration. The improvement of Theorem~\ref{thm:upper} is genuine
-but small; its role is to confirm that the analysis produces the blocks it predicts.
-We do not claim block selection is a transfinite-diameter problem---it is not, and we
-record the obstruction (Remark~\ref{rem:noteq}). Every assertion below is backed by a
+The improvement of Theorem~\ref{thm:upper} is genuine but small; its role is to
+confirm that the analysis selects the blocks it predicts. The saturation discussion of
+Section~\ref{sec:saturation} is computational evidence over an explicit finite search,
+\emph{not} an unconditional non-existence statement; we are precise there about what is
+proven (additivity, the finite enumeration) and what is not (no claim over all integer
+blocks). We do not claim block selection is a transfinite-diameter problem---it is not,
+and we record the obstruction (Remark~\ref{rem:noteq}). Every assertion is backed by a
 re-runnable computation; Section~\ref{sec:verify} collects these, keyed by statement
 number, so that no claim rests on a number that cannot be reproduced.
 
@@ -230,12 +243,14 @@ the \emph{base} branch (entering $A,\arg_A$) or the \emph{perturbing} branch
 \begin{lemma}[{\citealp[Lemmas 2--5]{Doc01a}}]\label{lem:doche}
 For any admissible family, $\log h(q,\{q_k\})$ is a limit point of the spectrum
 $\{\hZ(\alpha)\}$; in particular $\essmin\le\log h(q,\{q_k\})$ for every admissible
-choice. A block is \emph{admissible} iff the distinguished block has positive degree,
-each $Q_k$ is squarefree, the active product $W$ (of all factors with positive
-exponent) satisfies $W(0)=W(1)=1$, and the factors of $W$ are pairwise coprime and
-coprime to the base; then $\prod P^n\ne\prod Q^n$ holds by unique factorization. A
-base block need not satisfy $P(0)=P(1)=1$ (e.g.\ $P_1=X$), whereas a perturbing block,
-entering the distinguished product, does.
+choice. We call a family \emph{admissible} when the hypotheses of \citet[Lemmas
+2--5]{Doc01a} hold; the following conditions are \emph{sufficient} for admissibility
+and are the ones we verify: the distinguished block has positive degree, each $Q_k$ is
+squarefree, the active product $W$ (of all factors with positive exponent) satisfies
+$W(0)=W(1)=1$, and the factors of $W$ are pairwise coprime and coprime to the base,
+which gives Doche's nontriviality condition $\prod P^n\ne\prod Q^n$ by unique
+factorization. A base block need not satisfy $P(0)=P(1)=1$ (e.g.\ $P_1=X$), whereas a
+perturbing block, entering the distinguished product, does.
 \end{lemma}
 
 No optimality of the exponents is needed for the bound; the analysis below exploits
@@ -256,6 +271,9 @@ $\Phi(q_Q)=\int_0^1\max\bigl(A_0(s)+q_Q\log|Q(\chi(s))|,\,B(s)\bigr)\,ds$. We as
 \item[(H2)] $A_0,B$ are real-analytic off the finite set of contour roots of their
   constituent polynomials, with integrable $-\infty$ logarithmic singularities there;
   near each such point $A_0\to-\infty$, placing a neighbourhood in $\{A_0<B\}$;
+\item[(H2$'$)] $A_0-B\not\equiv0$ on each analytic sub-arc (the branches are not
+  identically equal; verified for the families here, where $\{A_0>B\}$ has positive
+  measure $<1$);
 \item[(H3)] the perturbing branch attains $D$: $\arg_A(0)<\arg_B$, so $D\equiv\arg_B$
   is locally constant in $q_Q$.
 \end{itemize}
@@ -283,10 +301,11 @@ dominates for small $|q_Q|$ and $\psi_q(s)\to\log|Q(\chi(s))|$; if $A_0(s)<B(s)$
 $\psi_q(s)\to0$. Thus $\psi_q\to\log|Q(\chi)|\cdot\mathbf 1_{\{A_0>B\}}$ a.e.\ off
 $K$.
 
-\emph{The switching set is null.} $A_0-B$ is real-analytic off the finite
-contour-root set (H2) and not identically zero; a real-analytic function
-$\not\equiv0$ has isolated zeros, so $K$ is finite, hence null. The contour-root
-singularities lie in $\{A_0<B\}$ (H2), not in $K$.
+\emph{The switching set is null.} On each of the finitely many closed sub-arcs into
+which the contour-root set (H2) divides $[0,1]$, $A_0-B$ is real-analytic and, by
+(H2$'$), not identically zero; a real-analytic function $\not\equiv0$ has isolated
+zeros, and isolated zeros in a compact arc are finite in number, so $K$ is finite,
+hence null. The contour-root singularities lie in $\{A_0<B\}$ (H2), not in $K$.
 
 \emph{Conclusion.} Dominated convergence gives
 $\Phi^{+\prime}(0)=\lim_{q_Q\to0^+}\int_0^1\psi_q\,ds
@@ -318,7 +337,7 @@ $\arg_A(0)>\arg_B$ (I), $\arg_A(0)<\arg_B$ (II), or $\arg_A(0)=\arg_B$ (III, a t
 
 \begin{theorem}[Unified one-sided marginal]\label{thm:unified}
 Let $Q$ be adjoined to side $X\in\{A,B\}$ with exponent $q_Q\ge0$, under
-\emph{(H1)--(H2)}. Then $\log h$ is right-differentiable at $q_Q=0$ and
+\emph{(H1)--(H2$'$)}. Then $\log h$ is right-differentiable at $q_Q=0$ and
 \begin{equation}\label{eq:unified}
   \dplus\!\log h/\partial q_Q\big|_0
   =\frac1D\Bigl[\int_{\ACT(X)}\log|Q(\chi)|\,ds-\log h\cdot s_Q\Bigr],
@@ -368,85 +387,102 @@ $\frac1D\bigl[\int_{\{B>A_0\}}\log|Q|-\log h\cdot\deg Q\bigr]$.
 \section{The selection criterion}\label{sec:criterion}
 %==============================================================================
 
-Specializing \eqref{eq:unified} to a perturbing block (regime II, $X=B$) gives the
-criterion of Corollary~\ref{cor:criterion}.
+Throughout this section the perturbing branch attains $D$ (the regime of every family
+we construct). The two firing tests of Corollary~\ref{cor:criterion} are the two
+cases of \eqref{eq:unified} read off by the side $Q$ joins.
 
 \begin{definition}\label{def:rq}
-For a nonzero $Q\in\Z[X]$ and an admissible family with active set
-$\Omega=\{s:B(s)>A(s)\}$, the \emph{normalized active potential} is
-$\rQ:=\frac1{\deg Q}\int_\Omega\log|Q(\chi(s))|\,ds$.
+Let an admissible family have base active set $\{A_0>B\}$ and perturbing active set
+$\Omega=\{B>A_0\}$. For a nonzero $Q\in\Z[X]$:
+\[
+  \widetilde r_Q:=\int_{\{A_0>B\}}\log|Q(\chi(s))|\,ds
+  \qquad(\text{base marginal}),\qquad
+  \rQ:=\frac1{\deg Q}\int_\Omega\log|Q(\chi(s))|\,ds
+  \qquad(\text{normalized active potential}).
+\]
 \end{definition}
 
 \begin{proof}[Proof of Corollary~\ref{cor:criterion}]
-Take \eqref{eq:unified} with $X=B$ and $s_Q=\deg Q$:
-$\Phi^{+\prime}(0)=\int_\Omega\log|Q|=(\deg Q)\rQ$, so
-\begin{equation}\label{eq:marginal}
-  \dplus\!\log h/\partial q_Q\big|_0=\frac{\deg Q}{D}\bigl(\rQ-\log h\bigr).
+\emph{Base block} ($X=A$): since the perturbing branch attains $D$, a base block
+enters the losing argument, so $s_Q=0$ in \eqref{eq:unified} and
+\begin{equation}\label{eq:base-marg}
+  \dplus\!\log h/\partial q_Q\big|_0=\frac1D\int_{\{A_0>B\}}\log|Q|
+  =\frac{\widetilde r_Q}{D},
 \end{equation}
-The sign gives the firing test. The optimality statements are the Karush--Kuhn--Tucker
-conditions for the minimum over $q_Q\ge0$: an interior active block has vanishing
-derivative, hence $\rQ=\log h$; a block held at $q_Q=0$ has nonnegative derivative,
-hence $\rQ\ge\log h$. Writing the dual of the \citet[\S6]{BMQS} measure program
-restricted to Doche's family, $\rQ-\log h$ is precisely the reduced cost of the block,
-so these are its complementary-slackness conditions: active blocks are the tight
-constraints, inactive admissible blocks have nonnegative reduced cost, and Doche's
-tuned exponents solve the restricted program.
+with no $\log h$ term; firing is $\widetilde r_Q<0$.
+
+\emph{Perturbing block} ($X=B$): here $Q$ enters the $D$-attaining argument, so
+$s_Q=\deg Q$ and $\Phi^{+\prime}(0)=\int_\Omega\log|Q|=(\deg Q)\rQ$, giving
+\begin{equation}\label{eq:marginal}
+  \dplus\!\log h/\partial q_Q\big|_0=\frac{\deg Q}{D}\bigl(\rQ-\log h\bigr),
+\end{equation}
+firing iff $\rQ<\log h$. The optimality statements are the Karush--Kuhn--Tucker
+conditions for the minimum over $q_Q\ge0$: an interior active perturbing block has
+vanishing derivative, hence $\rQ=\log h$; one held at $q_Q=0$ has nonnegative
+derivative, hence $\rQ\ge\log h$. In the dual of the \citet[\S6]{BMQS} measure program
+restricted to Doche's family, $\rQ-\log h$ is the reduced cost of the block, so these
+are its complementary-slackness conditions.
 \end{proof}
 
 \begin{remark}[The criterion is a first variation, so the anchor matters]\label{rem:anchor}
-$\rQ$ in \eqref{eq:marginal} is evaluated at the family \emph{before} $Q$ is adjoined;
-the firing test is for an admissible perturbation $q_Q\ge0$ from that anchor. A family
-that already contains $Q$ has a different active set and reverses the reading, and an
-unconstrained reoptimization driving $q_Q<0$ leaves the admissible cone and certifies
-nothing. The sign test is the right derivative on the candidate-free anchor.
+Both $\widetilde r_Q$ and $\rQ$ are evaluated at the family \emph{before} $Q$ is
+adjoined; the firing test is for an admissible perturbation $q_Q\ge0$ from that anchor.
+A family that already contains $Q$ has a different active set and reverses the reading,
+and an unconstrained reoptimization driving $q_Q<0$ leaves the admissible cone and
+certifies nothing. The sign test is the right derivative on the candidate-free anchor.
 \end{remark}
 
 %==============================================================================
-\section{Saturation}\label{sec:saturation}
+\section{Where the reachable gains run out}\label{sec:saturation}
 %==============================================================================
 
-Read as a design objective $\inf_Q\rQ$ over admissible integer blocks, the criterion
-bounds the construction. Write the signed marginal
-$m(Q):=\deg Q\,(\rQ-\log h)=\int_\Omega\log|Q(\chi)|\,ds-\log h\cdot\deg Q$, so a block
-fires iff $m(Q)<0$. Since both the integral and the degree are additive over
-factorizations, so is the marginal:
+We use the base criterion of Corollary~\ref{cor:criterion} as a design objective and
+ask which integer blocks improve the bound. The blocks of
+Section~\ref{sec:bound} enter the base branch, so the relevant quantity is the base
+marginal $\widetilde r_Q=\int_{\{A_0>B\}}\log|Q(\chi)|\,ds$, with $Q$ firing iff
+$\widetilde r_Q<0$. The results of this section are \emph{computational evidence} over
+an explicit finite search, not a non-existence theorem; we are explicit about the
+search's boundaries.
+
+The one structural fact is additivity. Since
+$\widetilde r_Q=\int_{\{A_0>B\}}\log|Q|\,ds$ is an integral of $\log|Q|=\sum\log|Q_i|$
+over a fixed arc,
 \begin{equation}\label{eq:additive}
-  m(Q_1Q_2)=m(Q_1)+m(Q_2).
+  \widetilde r_{Q_1Q_2}=\widetilde r_{Q_1}+\widetilde r_{Q_2}.
 \end{equation}
-This additivity is the entire mechanism.
+A reducible block fires only if it has a firing factor.
 
-\begin{proposition}[Maximal firing set]\label{prop:maxfire}
-At the optimal family, evaluated on the candidate-free anchor:
-\begin{enumerate}
-\item the admissible Flammang \citep{F18} blocks coprime to the dictionary with
-  $m<0$ are exactly three, of marginals $-0.0052$, $-0.0037$, $-0.0083$; every other
-  block of negative marginal shares a factor with the active dictionary and is
-  inadmissible as a fresh block;
-\item the cheapest coprime \emph{new} monic factor, $X^2-X+1$, has positive marginal
-  $m=+0.0131$, and no coprime new factor of degree $\le2$ is cheaper.
-\end{enumerate}
-\end{proposition}
+\begin{remark}[The cheap firing blocks are already in the dictionary]\label{rem:evidence}
+Evaluated at the certified family of Section~\ref{sec:bound} on the candidate-free
+anchor, an enumeration of Flammang's \citep{F18} Table~1 finds the firing entries
+($\widetilde r_Q<0$) and sorts them by whether they are coprime to the active
+dictionary $W=\{P_1,P_2,P_4,P_6,P_8,j_3,j_9,Q_1,Q_2,Q_5,Q_6\}$. The low-degree firing
+entries that are \emph{not} coprime---degrees $1,3,12,12,16$---each share a factor with
+$W$ and so are already absorbed; the four cheapest firing factors are exactly the base
+blocks $j_3,j_9$ and the perturbing blocks $Q_5,Q_6$ used in the bound. Three
+higher-degree firing table entries (degrees $16,16,20$, base marginals $\approx-0.005$
+to $-0.008$) \emph{are} coprime to $W$: these would fire, but their realized gain after
+re-optimization falls below the certificate's resolution (Section~\ref{sec:bound}), so
+adjoining them does not yield a further certified break. A direct closest-vector and
+root-target search over original integer blocks (degree $\le10$, bounded coefficients;
+roughly $7.4\times10^4$ candidates, extended to degree $16$ near the firing locus)
+returns no original block whose base marginal is more negative than these, and by
+\eqref{eq:additive} a reducible block built from a coprime factor of cost
+$\widetilde r\ge+0.013$ (the cheapest such factor found, $X^2-X+1$) cannot beat the
+best firing margin $\approx-0.005$. The evidence is therefore that the cheap,
+\emph{certifiably} improving blocks of this construction have been exhausted---not that
+no admissible block of any degree fires.
+\end{remark}
 
-\begin{proof}[Proof of Theorem~\ref{thm:saturation}]
-An admissible new block coprime to the dictionary is not itself a firing Flammang
-entry, so in any factorization over $\Z[X]$ each factor either is a coprime new factor
-or shares a dictionary factor (inadmissible). By Proposition~\ref{prop:maxfire} the
-cheapest coprime new factor costs $+0.0131$, while the best firing margin available is
-$-0.0052$; by additivity \eqref{eq:additive} the block's marginal is at least
-$-0.0052+0.0131>0$, so it does not fire. A direct enumeration of all admissible
-integer blocks of degree $\le16$ confirms none fires, so the bound is not an artifact
-of the low-degree estimate. The firing blocks are therefore exactly the finitely many
-admissible Flammang entries, which the construction has already absorbed.
-\end{proof}
-
-\begin{remark}[Why the firing set is so thin]\label{rem:wells}
-The firing markers are isolated in the integer lattice: a single $\pm1$ coefficient
-change to a firing block swings its marginal from $-0.0052$ to above $+0.06$.
-Geometrically, firing requires a root in the deep wells of the active-arc potential,
-which lie strictly inside the lemniscate $\chi(\{|z|<1\})$; an admissible integer
-block cannot place a root there without a conjugate elsewhere that pays for it. This
-is the heuristic behind Proposition~\ref{prop:maxfire}; the proof rests only on the
-additivity \eqref{eq:additive} and the two reproduced marginals, not on the geometry.
+\begin{remark}[Why the cheap firing set is so thin]\label{rem:wells}
+The firing integer blocks are isolated in the coefficient lattice: a single $\pm1$
+change to a firing table entry swings its base marginal from $\approx-0.005$ to above
+$+0.06$. Geometrically, $\widetilde r_Q$ is negative only when a root of $Q$ sits in a
+deep well of the base active-arc potential, and those wells lie strictly inside the
+lemniscate $\chi(\{|z|<1\})$, where an admissible integer block cannot place a root
+without a conjugate elsewhere that pays for it. This is the mechanism behind the
+thinness; the statements above rest on the additivity \eqref{eq:additive} and the
+reproduced marginals, not on the geometry.
 \end{remark}
 
 \begin{remark}[Not a transfinite-diameter problem]\label{rem:noteq}
@@ -463,10 +499,11 @@ frame is the first-variation calculus above.
 \section{The improved bound}\label{sec:bound}
 %==============================================================================
 
-The criterion selects two further admissible firing blocks from Flammang's
+The base criterion selects two further admissible firing blocks from Flammang's
 \citep{F18} table, the low-degree entries of degrees $3$ and $8$ (call them $j_3,j_9$),
-adjoined to the base branch on top of the held family $Q_1Q_2\,Q_5^{q_E}Q_6^{q_F}$
-(whose blocks already sit on $\rQ=\log h$). The enriched family is
+each with negative base marginal $\widetilde r_Q<0$ at the held family
+$Q_1Q_2\,Q_5^{q_E}Q_6^{q_F}$ (whose perturbing blocks $Q_5,Q_6$ in turn sit on
+$\rQ=\log h$). The enriched family is
 $h=Q_1Q_2\,Q_5^{q_E}Q_6^{q_F}\,j_3^{q_G}j_9^{q_H}$ with the nine exponents jointly
 re-optimized to
 \[
@@ -491,8 +528,15 @@ branch to $-\infty$ but the finite branch caps the maximum), an $O(h^2)$
 \emph{straddle} bound from $\max(a+x,b+y)\le\max(a,b)+\max(x,y)$ applied to the
 midpoint Taylor deviation, and an $O(h^3)$ \emph{midpoint} bound where one branch
 dominates---and cells exceeding a deviation cap are bisected, only leaves contributing,
-with exact tiling. The enclosure resolves the frontier fully ($742266$ leaves, none
-unresolved) and gives $\int_0^1\max(A,B)\,ds\le18.2804777610$, whence
+with exact tiling. Every cell bound and the running sum are rounded toward $+\infty$,
+giving an upper bound $S\ge\int_0^{2\pi}\max(A,B)\,dt$. The normalizers are divisors of
+this numerator, so to keep the quotient an over-estimate they are rounded toward
+$-\infty$: a value $\underline{2\pi}\le2\pi$ and a value $\underline D\le D$ obtained by
+rounding each nonnegative product $q_k\deg Q_k$ and partial sum of the affine
+$D$-formula \eqref{eq:Dformula} downward (the exponents being nonnegative). Then
+$\log h=\Phi/D\le S/(\underline{2\pi}\,\underline D)$, with the final division rounded up.
+The frontier resolves fully ($742266$ leaves, none unresolved), $S/\underline{2\pi}\le
+18.2804777610$ and $\underline D=72.00176$, whence
 \[
   \essmin\;\le\;\log h\;\le\;\frac{18.2804777610}{72.00176}=0.2538893183\;<\;0.25443677. \qedhere
 \]
@@ -527,8 +571,8 @@ Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on a
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
-Thm.~\ref{thm:saturation} & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
-\quad maximal firing set & (saturation search) & cheapest new factor $m=+0.013$\\
+\S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
+\quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
 Thm.~\ref{thm:upper} & \texttt{bound\_07\_block\_j9} & \texttt{CERTIFIED} $\le0.2538893183$\\
 \quad anchor chain & \texttt{bound\_00}--\texttt{bound\_06} & each $q_k{=}0$ recovers the previous\\
 \bottomrule
@@ -544,7 +588,45 @@ the potential-theoretic computations are in the \texttt{scratch/} subdirectory.}
 
 The certified bound is produced by \texttt{bound\_07\_block\_j9} in \texttt{certify}
 mode on the exponent vector of Section~\ref{sec:bound}; the full command and the
-chain of anchor checks are documented in the directory's \texttt{README}.
+chain of anchor checks are documented in the directory's \texttt{README}. The
+results of this paper correspond to the repository state at commit
+\texttt{<commit-hash>} (an immutable archive is deposited with the submission); the
+polynomial data on which Theorem~\ref{thm:upper} depends is reproduced in full in
+Appendix~\ref{app:data} so that the certificate does not rely on a mutable link.
+
+%==============================================================================
+\appendix
+\section{Polynomial data}\label{app:data}
+%==============================================================================
+
+All polynomials are written in the symmetric coordinate $X=z(1-z)$, by descending
+coefficients. The base family and distinguished block are Doche's \citep{Doc01b}; the
+low-degree base polynomials are
+\[
+  P_1=X,\qquad P_2=1-X,\qquad P_4=X^4-2X^3+4X^2-3X+1,
+\]
+and the higher base polynomials, together with the two degree-$28$ factors $Q_1,Q_2$
+of the distinguished block, are listed by coefficient vector:
+{\small
+\begin{align*}
+P_6:&\ [1,-3,8,-16,26,-27,17,-6,1],\\
+P_8:&\ [1,-3,7,-14,30,-58,96,-123,114,-73,31,-8,1],\\
+Q_1:&\ [1,-7,30,-97,269,-679,1612,-3618,7646,-15180,28457,-50741,86189,\\
+   &\ \ -138288,206152,-279897,339335,-360911,331775,-260367,172556,\\
+   &\ \ -95554,43677,-16221,4786,-1084,178,-19,1],\\
+Q_2:&\ [1,-7,30,-96,255,-586,1212,-2360,4573,-9148,18749,-37783,71770,\\
+   &\ \ -124910,195848,-273368,335981,-359545,331349,-260271,172542,\\
+   &\ \ -95553,43677,-16221,4786,-1084,178,-19,1].
+\end{align*}}
+The perturbing blocks $Q_5,Q_6$ and the two base blocks $j_3,j_9$ adjoined in
+Section~\ref{sec:bound} are Flammang \citep{F18} Table~1 entries:
+{\small
+\begin{align*}
+Q_5=j_{13}:&\ [1,-3,8,-18,36,-62,97,-123,114,-73,31,-8,1]\quad(\deg 12),\\
+Q_6=j_{15}:&\ [1,-4,10,-17,26,-47,119,-298,592,-878,963,-780,464,-199,59,-11,1]\quad(\deg 16),\\
+j_3:&\ [1,1,-2,1]\quad(\deg 3),\qquad
+j_9:\ [1,-1,0,-3,15,-22,16,-6,1]\quad(\deg 8).
+\end{align*}}
 
 %==============================================================================
 \bibliographystyle{plainnat}
