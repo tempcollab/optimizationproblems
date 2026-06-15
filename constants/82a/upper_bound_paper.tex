@@ -725,23 +725,32 @@ boundary.
 \begin{table}[h]
 \centering\small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}rrrrcc@{}}
+\begin{tabular}{@{}rrrrccr@{}}
 \toprule
-$a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$\\
+$a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$ & $\rb{R_a}(\Omega_F)$\\
 \midrule
-$1$ & $18$ & $28$ & $1$ & yes & yes\\
-$2$ & $20$ & $28$ & $1$ & yes & yes\\
-$3$ & $22$ & $28$ & $1$ & yes & yes\\
-$4$ & $24$ & $28$ & $1$ & yes & yes\\
-$5$ & $26$ & $28$ & $1$ & yes & yes\quad($R_0=R_5$)\\
-$6$ & $28$ & $27$ & $1$ & yes & no\\
+$1$ & $18$ & $28$ & $1$ & yes & yes & $-0.01796$\\
+$2$ & $20$ & $28$ & $1$ & yes & yes & $-0.02481$\\
+$3$ & $22$ & $28$ & $1$ & yes & yes & $-0.03010$\\
+$4$ & $24$ & $28$ & $1$ & yes & yes & $-0.03378$\\
+$5$ & $26$ & $28$ & $1$ & yes & yes\quad($R_0=R_5$) & $-0.03560$\\
+$6$ & $28$ & $27$ & $1$ & yes & no & $(-0.03591)$\\
 \bottomrule
 \end{tabular}
 \medskip
-\caption{The bridge-exponent family $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$ and its degree
-boundary (Proposition~\ref{prop:degfloor}). The degree is preserved exactly for
-$a\le5$; $a=5$ is Grinsztajn's $R_0$. Verified by \texttt{firstvar\_08} with exact
-integer arithmetic.}
+\caption{The bridge-exponent family $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$, its degree
+boundary (Proposition~\ref{prop:degfloor}), and the first-variation firing margin
+$\rb{R_a}(\Omega_F)$. The degree is preserved exactly for $a\le5$; $a=5$ is
+Grinsztajn's $R_0$. Over the degree-preserving range $a\le5$ the margin
+$\rb{R_a}$ is strictly decreasing (firing strength $|\rb{R_a}|$ strictly increasing),
+maximised at $a=5$ (Proposition~\ref{prop:restricted-opt}); the strict ordering is
+\emph{certified} by the four signed difference enclosures $D_a<0$ of
+\texttt{firstvar\_09}. The $a=6$ entry is parenthesised: its margin is the
+\emph{unconstrained} optimum but $\deg R_6=27$ breaks degree preservation and the
+shared-normalizer identity \eqref{eq:transfer-id}, so it lies outside the comparison
+(the margin values for $a\le5$ are reproducible float midpoints; only their strict
+ordering is the certified claim). Degree data verified by \texttt{firstvar\_08} with
+exact integer arithmetic.}
 \label{tab:degfloor}
 \end{table}
 
@@ -873,6 +882,103 @@ $Q_1,Q_2$, firing by magnitude-subordination of the bridge''), with every consta
 directed-rounded interval enclosure rather than a grid reading.
 \end{remark}
 
+\subsection*{The bridge exponent is selected, not merely admitted}
+Proposition~\ref{prop:degfloor} shows $a=5$ is the \emph{maximal} degree-preserving
+bridge exponent, but admissibility does not by itself single $a=5$ out among the five
+candidates $a\in\{1,\dots,5\}$. The next proposition shows the criterion does single it
+out: among the degree-preserving siblings the firing strength is strictly increasing in
+$a$, so $a=5$ is the firing-\emph{optimal} degree-preserving displacement.
+
+\begin{proposition}[Restricted firing-optimality of the bridge exponent]
+\label{prop:restricted-opt}
+Let $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$ for $a\in\{1,\dots,5\}$ be the degree-preserving
+admissible siblings of Table~\ref{tab:degfloor} (each $\deg R_a=28$, content $1$,
+squarefree, coprime to $Q_1$, contour-root-free). Then the first-variation firing
+margin on the shared anchor $\Omega_F$ is strictly decreasing in $a$,
+\[
+  \rb{R_1}(\Omega_F)>\rb{R_2}(\Omega_F)>\rb{R_3}(\Omega_F)
+  >\rb{R_4}(\Omega_F)>\rb{R_5}(\Omega_F),
+\]
+so the firing strength $|\rb{R_a}(\Omega_F)|$ is maximised at the degree boundary
+$a=5$. Thus $a=5=$ Grinsztajn's $R_0$ is the firing-optimal exponent among the
+degree-preserving admissible siblings.
+\end{proposition}
+
+\begin{proof}
+Since $\deg R_a=\deg R_{a+1}=28$ and both blocks are scored on the same fixed
+$\Omega_F$, the normalizer $1/28$ is shared and the marginal-transfer identity
+\eqref{eq:transfer-id}, applied with $Q^*:=R_a$ and $R:=R_{a+1}$ (note
+$\deg(R_{a+1}-R_a)<28$, so Lemma~\ref{lem:transfer} applies verbatim), gives the exact
+\emph{consecutive-difference identity}
+\begin{equation}\label{eq:diff-id}
+  D_a:=\rb{R_{a+1}}(\Omega_F)-\rb{R_a}(\Omega_F)
+     =\frac1{28}\int_{\Omega_F}\log\frac{|R_{a+1}(\chi(s))|}{|R_a(\chi(s))|}\,ds,
+  \qquad a=1,2,3,4 .
+\end{equation}
+It therefore suffices to certify $D_a<0$ for $a=1,2,3,4$; the four strict inequalities
+chain to the displayed ordering. We certify a rigorous outward-rounded \emph{upper}
+bound $D_a^{\mathrm{hi}}$ on each $D_a$ and check $D_a^{\mathrm{hi}}<0$.
+
+The integrand of \eqref{eq:diff-id} is the \emph{signed} difference
+$\log|R_{a+1}|-\log|R_a|$; it is not one-signed on $\Omega_F$ (for $a=4$ about $79\%$ of
+the mass is negative but the integrand reaches $+2.78$ on the positive part), and
+membership of a contour cell in $\Omega_F=\{B_F>A_F\}$ is uncertain on straddle cells.
+A sound upper bound on the (true negative) integral is accumulated cell-wise as
+follows. On a cell, the outward-rounded enclosures $|R_a|^2\in[\rho^a_-,\rho^a_+]$,
+$|R_{a+1}|^2\in[\rho^{a+1}_-,\rho^{a+1}_+]$ (the same $\rho$-machinery as
+Section~\ref{sec:bound}) give half-log enclosures $\log|R_a|\in[\ell_a,L_a]$,
+$\log|R_{a+1}|\in[\ell_{a+1},L_{a+1}]$, and the signed integrand is enclosed by the
+directed-rounded difference $\bigl[\ell_{a+1}-L_a,\;L_{a+1}-\ell_a\bigr]$ (the
+subtraction rounds each endpoint outward). Writing $h$ for the upper endpoint
+$L_{a+1}-\ell_a$ and $w$ for the cell width, the cell's contribution to
+$D_a^{\mathrm{hi}}$ is
+\[
+  \begin{cases}
+    w\,h, & \text{if the cell is certainly in } \Omega_F\ (B_F\text{-lower}>A_F\text{-upper}),\\[2pt]
+    w\,\max(0,h), & \text{if the cell straddles } \partial\Omega_F,\\[2pt]
+    0, & \text{if the cell is certainly out } (B_F\text{-upper}<A_F\text{-lower}).
+  \end{cases}
+\]
+The asymmetry is essential: on a certainly-in cell a negative $h$ correctly
+\emph{reduces} the bound, but a straddle cell may lie outside $\Omega_F$, so its
+negative integrand is discarded and only a positive part is banked. (Bounding the
+integrand by $|\,\cdot\,|$ instead, as in the symmetric Lemma~\ref{lem:transfer}
+accumulation, would round toward $0$ and is unsound for a negative integral.) The
+per-cell upper endpoint $w\,h$ is loose only where $R_a,R_{a+1}$ share a deep
+near-contour zero, but there $w\,h$ grows merely like $w\log(1/w)\to0$ under bisection;
+adaptively bisecting every could-be-in cell whose contribution exceeds a fixed
+tolerance (and every cell on which $|R_a|^2$ or $|R_{a+1}|^2$ is not yet certified
+positive, securing $\inf_{\Omega_F}|R_a|>0$ for each $a$) drives $D_a^{\mathrm{hi}}$ to
+the true difference. The $R_{a+1}/R_a$ ratio has milder wells than $R/Q_1$ (the two
+siblings share most of their roots), so the harness of Lemma~\ref{lem:transfer} clears
+it. Certificate \texttt{firstvar\_09} returns, at base grid $N=40000$,
+\[
+  D_1^{\mathrm{hi}}=-2.06\times10^{-3},\;
+  D_2^{\mathrm{hi}}=-1.52\times10^{-3},\;
+  D_3^{\mathrm{hi}}=-8.54\times10^{-4},\;
+  D_4^{\mathrm{hi}}=-3.12\times10^{-4},
+\]
+all strictly negative, with $\inf_{\Omega_F}|R_a|>0$ certified for $a=1,\dots,5$ and no
+unresolved cells. (The true differences are $-6.85,-5.28,-3.68,-1.82$ in units of
+$10^{-3}$; the certified $D_a^{\mathrm{hi}}$ over-estimate them, the safe direction for
+proving $D_a<0$.) The four signs chain to the ordering.
+\end{proof}
+
+\begin{remark}[The unconstrained optimum sacrifices degree preservation]
+\label{rem:a6}
+The restriction to $a\le5$ is not cosmetic. The exponent $a=6$ gives a sibling that
+fires \emph{harder} than $R_0$ ($\rb{R_6}\approx-0.0359<\rb{R_5}\approx-0.0356$ on
+$\Omega_F$), so ``$a=5$ is firing-optimal'' is false without the restriction. But
+$\deg R_6=27$ (Proposition~\ref{prop:degfloor}): $a=6$ breaks degree preservation, the
+shared leading coefficients of $Q_1$, and---decisively for the argument
+above---the equal-degree hypothesis $\deg R_{a+1}=\deg R_a$ that makes the
+shared-normalizer difference identity \eqref{eq:diff-id} hold, so no $D_5$ for the
+$a=5\leftrightarrow a=6$ pair even exists. Proposition~\ref{prop:restricted-opt} is
+therefore the sharpest defensible optimality statement, and it explains why Grinsztajn
+stopped at $a=5$: $a=5$ is the firing-best choice consistent with degree preservation
+and the transfer identity that certifies firing.
+\end{remark}
+
 %==============================================================================
 \section{Where the reachable gains run out}\label{sec:saturation}
 %==============================================================================
@@ -963,6 +1069,7 @@ Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & margina
 Prop.~\ref{thm:record-fires} & \texttt{firstvar\_07\_record\_blocks} & fires on all 6, dry on controls\\
 Thm.~\ref{thm:generator}, Lem.~\ref{lem:transfer} & \texttt{firstvar\_08\_sibling\_generator} & firing-transfer bound clears gap\\
 \quad degree floor (Prop.~\ref{prop:degfloor}) & \texttt{firstvar\_08\_sibling\_generator} & $\deg R_a{=}28\!\iff\!a{\le}5$, admissible\\
+Prop.~\ref{prop:restricted-opt} & \texttt{firstvar\_09\_restricted\_optimality} & $D_a^{\mathrm{hi}}{<}0$, $a{=}1..4$: $\rb{R_a}$ $\downarrow$, opt.\ $a{=}5$\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
 \S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
 \quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
