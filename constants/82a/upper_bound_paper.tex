@@ -33,6 +33,8 @@
 \newcommand{\dA}{D_A}
 \newcommand{\dB}{D_B}
 \DeclareMathOperator{\ACT}{ACT}
+\DeclareMathOperator{\pp}{pp}
+\newcommand{\rb}[1]{r_{#1}}   % normalized active potential of a named block
 \newcommand{\repo}{\href{https://github.com/tempcollab/optimizationproblems/tree/main/constants/82a}{\texttt{github.com/tempcollab/optimizationproblems}}}
 
 \begin{document}
@@ -202,6 +204,20 @@ own optimum the active blocks cluster at a common reduced-cost level. The record
 consistent with, and sharply diagnosed by, the criterion (Proposition~\ref{thm:record-fires}).
 \end{proposition}
 
+The diagnosis is strengthened to a \emph{construction}. From a distinguished block
+$Q^*$ and an admissible bridge polynomial $g$, the criterion generates a firing sibling.
+
+\begin{theorem}[Sibling generator; Section~\ref{sec:generator}]\label{thm:gen-intro}
+Let $Q^*\in\{Q_1,Q_2\}$ be a firing degree-$28$ block of Doche's distinguished block on
+an anchor family $F$, and $g=P_1^5P_2^5P_4\,P_{\mathrm{tail}}$ ($P_{\mathrm{tail}}\in\{P_7,P_8\}$).
+Then the primitive part $R=\pp(Q^*\mp g)$ is a degree-$28$ admissible block, coprime to
+$Q^*$, and a certified magnitude-subordination bound (Lemma~\ref{lem:transfer})
+transfers the firing from $Q^*$ to $R$: $\rb{R}<\log h$. The Grinsztajn near-cancellation
+factors $R_0,R_2$ are the instances of this construction, and the exponent $a=5$ in $g$
+is the maximal value preserving the degree (Proposition~\ref{prop:degfloor}). The seed
+$Q^*$ and the bridge ansatz are inputs; their optimality is not claimed.
+\end{theorem}
+
 As an independent illustration, used as a design objective on the dictionary of this
 paper the base criterion selects two further admissible blocks; certifying the
 resulting family gives $\essmin\le0.2538893183$, improving Doche's longstanding
@@ -226,12 +242,16 @@ are absorbed, and explain the mechanism.
 Theorem~\ref{thm:main} is a \emph{local} first-variation theory: it computes the
 derivative at $q_Q=0$ for Doche's functional, not a statement about $\essmin$ itself.
 Proposition~\ref{thm:record} is a \emph{diagnostic}: on a fine grid the criterion fires
-on, and accounts for, the blocks of the \citet{Gri26} construction---it does not
-\emph{generate} the near-cancellation factors $R_0,R_2$, which are that author's
-construction, but diagnoses after the fact that they fire, that natural controls do not,
-and that the record sits near a common reduced-cost level (a diagnostic analogue of KKT
-stationarity, the multiplicities being fixed). The marginals there are grid evaluations,
-not interval certificates; we state them as numerical diagnostics. The improvement of
+on, and accounts for, the blocks of the \citet{Gri26} construction; its marginals are
+grid evaluations, not interval certificates, and we state them as numerical diagnostics.
+Theorem~\ref{thm:gen-intro} (Section~\ref{sec:generator}) strengthens this from
+diagnosis to \emph{construction}, but only \emph{from a seed}: given the distinguished
+block $Q^*$ and the bridge ansatz it generates the firing sibling family containing
+$R_0,R_2$, with the firing transferred by a directed-rounded interval certificate
+(Lemma~\ref{lem:transfer}) and the maximal exponent $a=5$ forced by an exact degree
+count (Proposition~\ref{prop:degfloor}). We do \emph{not} claim the criterion alone, with
+no seed, predicts $R_0,R_2$, nor that the seed or bridge is optimal among generators
+(Remark~\ref{rem:gen-scope}); the choice of seed and bridge stays heuristic. The improvement of
 Theorem~\ref{thm:upper} is genuine but small, and is no longer the record; its role is
 to confirm that the analysis selects blocks predictively, from the criterion rather
 than from search. The saturation discussion of
@@ -644,13 +664,214 @@ $\log h=0.2536269$ from \eqref{eq:samefunctional} to $10^{-9}$ and returns the m
 above. The candidate-free reading is the one called for by Remark~\ref{rem:anchor}: each
 margin is the right derivative of $\log h$ as that block enters at $q_Q=0^+$.
 
-The reading is \emph{explanatory}, not generative: the criterion does not produce
-$R_0,R_2$---those are the near-cancellation construction \eqref{eq:R0R2} of
-\citet{Gri26}---but diagnoses, after the fact, that they fire, that natural controls do
-not, and that the record sits near a common reduced-cost level. The two constructions
-optimize the same Doche functional; the record is consistent with, and sharply
-diagnosed by, the first-variation criterion. We do not claim the search optimized the
-marginal rule, only that its output is exactly what the rule selects.
+The reading of this section is a \emph{diagnostic}: the criterion fires on $R_0,R_2$
+after the fact. The next section strengthens it to a \emph{construction}---given the
+distinguished blocks $Q_1,Q_2$ and the bridge ansatz, $R_0,R_2$ are produced, with the
+firing transferred to them by a certified inequality, rather than read off a grid.
+
+%==============================================================================
+\section{The sibling generator: from diagnosis to construction}\label{sec:generator}
+%==============================================================================
+
+The diagnostic of Section~\ref{sec:record} fires on $R_0,R_2$ but does not build them.
+This section closes that gap from a seed: given a firing perturbing block $Q^*$ and an
+admissible \emph{bridge} polynomial $g$, the primitive part $R=\pp(Q^*\mp g)$ is an
+explicit degree-preserving coprime firing sibling of $Q^*$, and $R_0,R_2$ are its
+instances. The construction is generative in the precise sense that its input is
+$Q^*$ and the bridge ansatz---not $R_0,R_2$---and its output is the family they belong
+to. What stays heuristic is named in the scope remark: the \emph{choice} of seed and
+bridge, not the fact that the recipe yields firing siblings.
+
+Throughout, fix one \emph{anchor family} $F$: the record denominator with the seed
+block $Q^*$ removed, with perturbing active set $\Omega_F=\{B_F>A_F\}$. Both $Q^*$ and
+the sibling $R$ are scored on this single $\Omega_F$, so the marginal $\rQ$ of
+Definition~\ref{def:rq} is unambiguous and ``$Q^*$ fires'' reads $\rb{Q^*}(\Omega_F)<\log h$.
+
+\subsection*{Degree preservation and the maximal exponent}
+The bridge ansatz is $g_a=P_1^aP_2^aP_4\cdot P_{\mathrm{tail}}$ with
+$P_{\mathrm{tail}}\in\{P_7,P_8\}$ of degree $12$. The displacement degree is a clean
+count.
+
+\begin{proposition}[Maximal degree-preserving displacement]\label{prop:degfloor}
+For $g_a=P_1^aP_2^aP_4\,P_{\mathrm{tail}}$ with $\deg P_{\mathrm{tail}}=12$ one has
+$\deg g_a=2a+16$. Hence, since $\deg Q^*=28$,
+\[
+  \deg\bigl(Q^*\mp g_a\bigr)=\deg Q^*=28\quad\Longleftrightarrow\quad 2a+16<28
+  \quad\Longleftrightarrow\quad a\le5 ,
+\]
+and for $a\le5$ the subtraction preserves the top $28-(2a+16)$ coefficients of $Q^*$;
+the primitive part does not change the degree. Thus $a=5$ is the largest bridge exponent
+for which $Q^*\mp g_a$ retains the degree and the leading coefficient of $Q^*$, and
+$R_0=\pp(Q_1-g_5\,/\,P_{\mathrm{tail}}\cdot P_8)$ is the instance $a=5$, tail $P_8$.
+\end{proposition}
+
+\begin{proof}
+$\deg(P_1^aP_2^aP_4)=a+a+4=2a+4$, so $\deg g_a=(2a+4)+12=2a+16$. If $\deg g_a<\deg Q^*$
+the leading coefficient of $Q^*\mp g_a$ is that of $Q^*$ and the two are equal in their
+top $\deg Q^*-\deg g_a$ coefficients; if $\deg g_a=\deg Q^*$ the leading terms may
+cancel. The inequality $2a+16<28$ is $a\le5$. Taking the primitive part divides by a
+nonzero integer content and leaves the degree unchanged. \emph{(Here $a=6$ gives
+$\deg g_6=28=\deg Q^*$ with leading coefficient $+1$, equal to that of $Q_1$, so the
+$X^{28}$ terms cancel and the degree drops to $27$---an illustrative boundary, not the
+mechanism: the bound is forced by $2a+16<28$ alone.)}
+\end{proof}
+
+For $a=1,\dots,5$ the sibling $R_a=\pp(Q_1-g_a\,P_8)$ is squarefree, coprime to $Q_1$,
+satisfies $R_a(0)=R_a(1)=1$, and has content $1$; these are finite \texttt{sympy} checks
+(certificate \texttt{firstvar\_08}), so each $R_a$ is admissible
+(Lemma~\ref{lem:doche}). Table~\ref{tab:degfloor} records the family and its degree
+boundary.
+
+\begin{table}[h]
+\centering\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}rrrrcc@{}}
+\toprule
+$a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$\\
+\midrule
+$1$ & $18$ & $28$ & $1$ & yes & yes\\
+$2$ & $20$ & $28$ & $1$ & yes & yes\\
+$3$ & $22$ & $28$ & $1$ & yes & yes\\
+$4$ & $24$ & $28$ & $1$ & yes & yes\\
+$5$ & $26$ & $28$ & $1$ & yes & yes\quad($R_0=R_5$)\\
+$6$ & $28$ & $27$ & $1$ & yes & no\\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{The bridge-exponent family $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$ and its degree
+boundary (Proposition~\ref{prop:degfloor}). The degree is preserved exactly for
+$a\le5$; $a=5$ is Grinsztajn's $R_0$. Verified by \texttt{firstvar\_08} with exact
+integer arithmetic.}
+\label{tab:degfloor}
+\end{table}
+
+\subsection*{The marginal-transfer identity and the firing-transfer bound}
+Because $\deg R=\deg Q^*$, the normalizer $1/\deg$ in $\rQ$ is shared, and scoring both
+blocks on the single $\Omega_F$ gives the exact identity
+\begin{equation}\label{eq:transfer-id}
+  \rb{R}-\rb{Q^*}
+  =\frac1{\deg Q^*}\int_{\Omega_F}\log\frac{|R(\chi(s))|}{|Q^*(\chi(s))|}\,ds .
+\end{equation}
+Writing $R=c^{-1}(Q^*\mp g)$ with $c=\operatorname{cont}(Q^*\mp g)\in\Z_{>0}$,
+\[
+  \log\frac{|R|}{|Q^*|}=-\log c+\log\Bigl|\,1\mp\frac{g}{Q^*}\Bigr| .
+\]
+Fix $\theta=\tfrac12$ and split $\Omega_F$ into a \emph{bulk}
+$\Omega_0=\Omega_F\cap\{|g/Q^*|\le\theta\}$ and a \emph{well}
+$W=\Omega_F\cap\{|g/Q^*|>\theta\}$, $\delta:=|W|$.
+
+\begin{lemma}[Magnitude-subordination / firing-transfer bound]\label{lem:transfer}
+Let $Q^*$ be a perturbing block with $\inf_{\Omega_F}|Q^*|>0$, $g\in\Z[X]$ with
+$\deg g<\deg Q^*$, and $R=\pp(Q^*\mp g)$ contour-root-free
+($m_R:=\inf_{\Omega_F}|R|>0$). Then
+\begin{equation}\label{eq:transfer-bound}
+  \bigl|\rb{R}-\rb{Q^*}\bigr|
+  \;\le\;\frac1{\deg Q^*}\Bigl[\,\log c
+  +\frac{\theta}{1-\theta}\,|\Omega_0|
+  +\int_{W}\bigl|\log|R/Q^*|\bigr|\,ds\Bigr]\;=:\;\mathrm{RHS},
+\end{equation}
+and the well integral $\int_{W}|\log|R/Q^*||\,ds$ is finite because $m_R>0$ and
+$\sup_{\Omega_F}\log|Q^*|<\infty$. Consequently, if
+$\rb{Q^*}(\Omega_F)+\mathrm{RHS}<\log h$ then $\rb{R}(\Omega_F)<\log h$: the sibling
+$R$ fires.
+\end{lemma}
+
+\begin{proof}
+Start from \eqref{eq:transfer-id} and bound the integrand in absolute value on each
+piece. The content term contributes $\log c$ uniformly (degree $\deg Q^*$ times the
+constant $-\frac1{\deg Q^*}\log c$ in $\rQ$). On $\Omega_0$, with $u=g/Q^*$ and
+$|u|\le\theta<1$,
+\[
+  \bigl|\log|1\mp u|\bigr|\le-\log(1-|u|)\le\frac{|u|}{1-|u|}\le\frac{\theta}{1-\theta},
+\]
+the first inequality because $1-|u|\le|1\mp u|\le 1+|u|$ and
+$\log(1+|u|)\le-\log(1-|u|)$, the second the standard bound
+$-\log(1-x)\le x/(1-x)$ for $x\in[0,1)$, the third monotonicity; integrating gives
+$\frac{\theta}{1-\theta}|\Omega_0|$.
+
+On $W$ the ratio $|u|=|g/Q^*|$ may exceed $1$, so we do \emph{not} cap $|\log|R/Q^*||$
+by a global constant; instead we retain the integral $\int_W|\log|R/Q^*||\,ds$ and
+bound it cell-by-cell when we certify the constants. The integrand is
+$\bigl|\log|R|-\log|Q^*|\bigr|$, and on a contour cell on which the directed-rounded
+enclosures give $\log|R|\in[\ell_R,L_R]$ and $\log|Q^*|\in[\ell_{Q^*},L_{Q^*}]$ its
+supremum over the cell is at most
+$\max\{L_R-\ell_{Q^*},\,L_{Q^*}-\ell_R\}$, a valid per-cell upper bound \emph{whether
+or not} $\log|R|>\log|Q^*|$ there. This is integrable: as a cell shrinks around a
+shared well of $R$ and $Q^*$ the per-cell bound grows only like $\log(1/\text{width})$,
+so its width-weighted contribution tends to $0$; refining the cells that carry the
+shared wells drives the certified well integral to the true marginal shift
+($\approx10^{-3}$, cf.\ \eqref{eq:transfer-id}). Finiteness of $\int_W|\log|R/Q^*||\,ds$
+follows from $m_R>0$ and $\sup_{\Omega_F}\log|Q^*|<\infty$ (the integrand is
+$\le\log(1/m_R)+\sup_{\Omega_F}\log|Q^*|$ pointwise, an $L^\infty$ bound that secures
+integrability but is too crude to certify firing---hence the cell-wise treatment).
+Summing the three pieces and dividing by $\deg Q^*$ is \eqref{eq:transfer-bound}. The
+firing conclusion is \eqref{eq:transfer-id} together with
+Corollary~\ref{cor:criterion} applied to $R$ on $\Omega_F$.
+\end{proof}
+
+\begin{theorem}[Sibling generator]\label{thm:generator}
+Let $Q^*\in\{Q_1,Q_2\}$ be a degree-$28$ factor of Doche's distinguished block, firing
+on the anchor $\Omega_F$, and let $g=P_1^5P_2^5P_4\cdot P_{\mathrm{tail}}$ with
+$P_{\mathrm{tail}}=P_8$ (resp.\ $P_7$). Then $R:=\pp(Q^*\mp g)$, with the sign chosen as
+in \eqref{eq:R0R2}, is a degree-$28$ admissible block, coprime to $Q^*$, squarefree,
+with $R(0)=R(1)=1$, content $1$, and contour-root-free; and the firing-transfer bound
+\eqref{eq:transfer-bound} clears the firing gap,
+\[
+  \rb{R}(\Omega_F)\;\le\;\rb{Q^*}(\Omega_F)+\mathrm{RHS}\;<\;\log h ,
+\]
+so $R$ fires and is adjoinable as a denominator factor independent of $Q^*$. The
+Grinsztajn near-cancellation factors $R_0,R_2$ are exactly the instances
+$Q^*\in\{Q_1,Q_2\}$ of this construction.
+\end{theorem}
+
+\begin{proof}
+Admissibility and degree preservation are Proposition~\ref{prop:degfloor} and the
+finite \texttt{sympy} checks (content $1$, coprimality, squarefreeness, $R(0)=R(1)=1$),
+certificate \texttt{firstvar\_08}. The contour-root-freeness $m_R>0$, the bulk constants
+$|\Omega_0|,\rb{Q^*}(\Omega_F)$, and the cell-wise well integral
+$\int_W|\log|R/Q^*||\,ds$ entering \eqref{eq:transfer-bound} are each a directed-rounded
+interval enclosure over $\Omega_F$, computed by the same outward-rounded cell machinery
+as the bound of Section~\ref{sec:bound}. The well cells are adaptively bisected on two
+criteria---until $|R|^2$ is certified strictly positive (so $m_R>0$ is established, not
+measured) \emph{and} until each cell's contribution to $\int_W|\log|R/Q^*||\,ds$ falls
+below a fixed tolerance---so the certified well integral is the rigorous per-cell bound
+of Lemma~\ref{lem:transfer}, with no global cap on $|\log|R/Q^*||$ invoked. With these
+certified constants,
+\[
+  \rb{Q_1}(\Omega_F)\le-0.0335,\quad \mathrm{RHS}\le0.0049,\quad
+  \rb{Q_1}+\mathrm{RHS}\le-0.0287<\log h=0.25363
+\]
+for $R_0$, and $\rb{Q_2}(\Omega_F)\le-0.0330$, $\mathrm{RHS}\le0.0063$,
+$\rb{Q_2}+\mathrm{RHS}\le-0.0267<\log h$ for $R_2$; both clear with margin
+$\approx0.28$. Lemma~\ref{lem:transfer} then gives $\rb{R}<\log h$, and
+Corollary~\ref{cor:criterion} that $R$ fires. Coprimality $\gcd(R,Q^*)=1$ makes $R$ an
+independent admissible factor.
+\end{proof}
+
+The bound \eqref{eq:transfer-bound} still has slack---its certified value $\approx0.005$
+is an order above the true marginal shift $\rb{R}-\rb{Q^*}\approx10^{-3}$ from
+\eqref{eq:transfer-id}---yet it leaves margin $\approx0.28$ to $\log h$, so the firing of
+the sibling is \emph{proved}, not merely diagnosed. The mechanism is the
+magnitude-engineering of the bridge: $g$ is small relative to $Q^*$ on the bulk
+$\Omega_0$ ($|g/Q^*|\le\theta$ on measure $\approx0.44$ of $\Omega_F$, and far smaller
+than $\theta$ over most of it), so $R\approx Q^*$ there and inherits $Q^*$'s reduced
+cost, while in the deep wells $W$ (measure $\delta\approx0.08$) the bridge is comparable
+to $Q^*$ and displaces the roots, making $R$ coprime to $Q^*$. The sibling is the same
+size as $Q^*$, not an approximation to zero; it fires by inheritance, not by smallness.
+
+\begin{remark}[What is generated and what is not]\label{rem:gen-scope}
+Theorem~\ref{thm:generator} is a generator \emph{from a seed}: its inputs are the
+distinguished block $Q^*$ and the bridge ansatz, and it produces the firing sibling
+family of which $R_0,R_2$ are members, with the firing certified by
+Lemma~\ref{lem:transfer}. It does \emph{not} claim the criterion alone, with no seed,
+predicts $R_0,R_2$; it does not claim the bridge $P_1^5P_2^5P_4$ or the tails $P_7,P_8$
+are optimal among generators (the choice of seed and bridge stays heuristic, the open
+residual); and it does not claim the recipe produces the \emph{best} siblings. It
+converts the diagnosis of Section~\ref{sec:record} (``$R_0,R_2$ fire'') into a stated
+construction (``$R_0,R_2$ are the maximal degree-preserving coprime siblings of
+$Q_1,Q_2$, firing by magnitude-subordination of the bridge''), with every constant a
+directed-rounded interval enclosure rather than a grid reading.
+\end{remark}
 
 %==============================================================================
 \section{Where the reachable gains run out}\label{sec:saturation}
@@ -740,6 +961,8 @@ Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on a
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
 Prop.~\ref{thm:record-fires} & \texttt{firstvar\_07\_record\_blocks} & fires on all 6, dry on controls\\
+Thm.~\ref{thm:generator}, Lem.~\ref{lem:transfer} & \texttt{firstvar\_08\_sibling\_generator} & firing-transfer bound clears gap\\
+\quad degree floor (Prop.~\ref{prop:degfloor}) & \texttt{firstvar\_08\_sibling\_generator} & $\deg R_a{=}28\!\iff\!a{\le}5$, admissible\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
 \S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
 \quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
