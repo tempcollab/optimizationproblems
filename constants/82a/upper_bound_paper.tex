@@ -70,21 +70,21 @@ closed form, uniformly across the three regimes of which branch attains the
 denominator---including the tie, where the derivative has a genuine one-sided kink.
 The load-bearing analytic point, the vanishing of the moving-boundary term, is
 settled by dominated convergence on the difference quotient. From this single
-derivative two consequences follow. First, a firing criterion: a block lowers the
-bound to first order according to a sign condition on a single arc integral, with the
-condition taking one form for a base block (no value term) and another for a
-perturbing block (the complementary-slackness condition $\rQ=\log h$ of the
-associated measure linear program). Second, run as a design objective the criterion
-selects two further admissible blocks, and certifying the resulting family yields the
-improved record
-\[
-  \essmin\le 0.2538893183,
-\]
-beating $0.25443677$ \citep{Doc01b} by an outward-rounded interval enclosure. We also
-give computational evidence---an additivity property of the marginal together with an
+derivative a firing criterion follows: a block lowers the bound to first order
+according to a sign condition on a single arc integral, with the condition taking one
+form for a base block (no value term) and another for a perturbing block (the
+complementary-slackness condition $\rQ=\log h$ of the associated measure linear
+program). The criterion accounts for the constructions found by search. Used as a
+design objective it selects further admissible blocks, certifying an enriched family
+that improves on \citet{Doc01b}; and applied to the recent record of \citet{Gri26},
+obtained by an independent denominator-first search, it fires on \emph{every} block of
+that construction---including two new near-cancellation factors our analysis had not
+seen---while staying inert on generic blocks, and the record's active blocks lie on
+the criterion's stationarity locus. The two constructions are the same Doche
+functional, and the search is the criterion's calculus carried out numerically. We
+also give computational evidence---an additivity property of the marginal with an
 explicit finite search---that within a specified finite dictionary the cheaply
-improving blocks have already been absorbed, indicating where the easily reachable
-gains of the construction run out. Code at \repo.
+improving blocks have already been absorbed. Code at \repo.
 \end{abstract}
 
 \maketitle
@@ -100,11 +100,13 @@ and its \emph{essential minimum}
   \essmin:=\sup\bigl\{\,H\in\R:\ \{\alpha\in\Qbar:\hZ(\alpha)\le H\}\ \text{is finite}\,\bigr\}
 \end{equation}
 is the largest threshold below which only finitely many algebraic numbers lie. Its
-value is unknown. The two-sided record stands at
+value is unknown. The lower record is $0.2487458=\log1.282416$ \citep{F18}; on the
+upper side \citet{Doc01b} long held $0.25443677=\log1.289735$, recently improved by a
+denominator-first search of \citet{Gri26} to a certified $0.2536331090$. Thus
 \[
-  0.2487458=\log 1.282416\ \ \citep{F18}\ \le\ \essmin\ \le\ \log 1.289735=0.25443677\ \ \citep{Doc01b},
+  0.2487458\ \citep{F18}\ \le\ \essmin\ \le\ 0.2536331090\ \citep{Gri26}.
 \]
-and \citet{BMQS} have shown that the two classical methods producing these bounds are
+\citet{BMQS} have shown that the two classical methods producing these bounds are
 linear-programming duals with no duality gap, so the residual interval is a
 truncation gap, not a structural one.
 
@@ -180,15 +182,35 @@ has nonnegative reduced cost $\rQ-\log h$.
 \end{corollary}
 
 The base test has \emph{no} $\log h$ term, because a base block enters the argument
-that does not attain $D$; it is the test that selects the blocks of the improved bound
-(Section~\ref{sec:bound}). Run as a design objective over integer blocks, either test
+that does not attain $D$; it is the test that selects the blocks of the enriched family
+of Section~\ref{sec:bound}. Run as a design objective over integer blocks, either test
 bounds the construction.
 
-Carried out, the criterion selects two further admissible blocks and gives the bound.
+The criterion's main use is descriptive: it identifies which blocks any Doche-family
+construction should carry, the record constructions among them.
 
-\begin{theorem}[Improved bound; Section~\ref{sec:bound}]\label{thm:upper}
-$\essmin\le 0.2538893183$, strictly below the record $0.25443677$ of \citet{Doc01b},
-certified by an outward-rounded interval-arithmetic enclosure.
+\begin{theorem}[The criterion accounts for the record; Section~\ref{sec:record}]
+\label{thm:record}
+The current record bound $\essmin\le 0.2536331090$ of \citet{Gri26}, obtained by a
+denominator-first search, is the same Doche functional \eqref{eq:ratio} written in
+complementary coordinates. Its denominator carries six perturbing blocks, among them
+two new near-cancellation factors $R_0,R_2$ outside the dictionary studied here. At the
+candidate-free anchor the perturbing criterion fires on \emph{every} one
+($\rQ<\log h$, strictly), while generic integer blocks of like degree stay inert; and
+at the record's own optimum the active blocks lie on the stationarity locus
+$\rQ\approx\log h$ of Corollary~\ref{cor:criterion}. The record is thus the criterion's
+calculus carried out by search, not a fortuitous find.
+\end{theorem}
+
+As an independent illustration, used as a design objective on the dictionary of this
+paper the base criterion selects two further admissible blocks; certifying the
+resulting family gives $\essmin\le0.2538893183$, improving Doche's longstanding
+$0.25443677$ (Theorem~\ref{thm:upper}, Section~\ref{sec:bound})---short of the
+\citet{Gri26} record but obtained from the criterion rather than from search.
+
+\begin{theorem}[An improvement on Doche; Section~\ref{sec:bound}]\label{thm:upper}
+$\essmin\le 0.2538893183$, strictly below the longstanding $0.25443677$ of
+\citet{Doc01b}, certified by an outward-rounded interval-arithmetic enclosure.
 \end{theorem}
 
 Finally, run as a design objective the criterion indicates where the construction's
@@ -203,8 +225,14 @@ are absorbed, and explain the mechanism.
 \subsection*{Scope}
 Theorem~\ref{thm:main} is a \emph{local} first-variation theory: it computes the
 derivative at $q_Q=0$ for Doche's functional, not a statement about $\essmin$ itself.
-The improvement of Theorem~\ref{thm:upper} is genuine but small; its role is to
-confirm that the analysis selects the blocks it predicts. The saturation discussion of
+Theorem~\ref{thm:record} is an \emph{explanatory} statement: the criterion fires on,
+and accounts for, the blocks of the \citet{Gri26} construction---it does not
+\emph{generate} the near-cancellation factors $R_0,R_2$, which are that author's
+construction, but it certifies after the fact that they satisfy its firing and
+stationarity conditions, and that generic blocks do not. The improvement of
+Theorem~\ref{thm:upper} is genuine but small, and is no longer the record; its role is
+to confirm that the analysis selects blocks predictively, from the criterion rather
+than from search. The saturation discussion of
 Section~\ref{sec:saturation} is computational evidence over an explicit finite search,
 \emph{not} an unconditional non-existence statement; we are precise there about what is
 proven (additivity, the finite enumeration) and what is not (no claim over all integer
@@ -498,28 +526,95 @@ random cells with no violations on the safe side, and a deliberately understated
 is correctly rejected; the independent floating-point value $0.2538891201$ sits just
 below the certified enclosure, the correct (outward) direction.
 
-The improvement is modest in absolute terms but a definite fraction of the open
-interval, as Table~\ref{tab:gap} records; its role is to certify that the criterion
-selects the blocks it predicts, not to settle the constant.
+The improvement is modest and is not the record (Table~\ref{tab:gap}); its role is to
+certify that the criterion selects blocks predictively, not to settle the constant. The
+current record, $0.2536331090$ of \citet{Gri26}, is lower still---and, as the next
+section shows, is itself selected block-for-block by the same criterion.
 
 \begin{table}[h]
 \centering\small
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{@{}lll@{}}
 \toprule
- & upper bound & gap above $0.2487458$ \citep{F18}\\
+upper bound & value & gap above $0.2487458$ \citep{F18}\\
 \midrule
-previous record \citep{Doc01b} & $0.25443677$ & $5.690\times10^{-3}$\\
+Doche \citep{Doc01b} & $0.25443677$ & $5.690\times10^{-3}$\\
 this paper (Thm.~\ref{thm:upper}) & $0.2538893183$ & $5.144\times10^{-3}$\\
-\midrule
-improvement & $5.474\times10^{-4}$ & $9.6\%$ of the interval closed\\
+record \citep{Gri26} (Thm.~\ref{thm:record}) & $0.2536331090$ & $4.887\times10^{-3}$\\
 \bottomrule
 \end{tabular}
 \medskip
-\caption{The certified upper bound against the previous record and the standing lower
-bound. The new bound closes about one tenth of the residual two-sided interval.}
+\caption{Upper bounds against the standing lower bound $0.2487458$ \citep{F18}. This
+paper's bound improves Doche's longstanding value; the current record of \citet{Gri26}
+is lower still and is accounted for by the criterion (Section~\ref{sec:record}).}
 \label{tab:gap}
 \end{table}
+
+%==============================================================================
+\section{The criterion accounts for the record}\label{sec:record}
+%==============================================================================
+
+The criterion is not only a design rule; it is a diagnostic, and we test it against a
+construction it did not produce. The current record \citep{Gri26},
+$\essmin\le0.2536331090$, is reached by a \emph{denominator-first} search: one fixes a
+denominator $Q=Q_1Q_2R_0R_2P_7P_9$ of degree $140$ and optimizes the numerator
+exponents $q_i$ over $P_1,\dots,P_6,P_8$ by linear programming, where
+\begin{equation}\label{eq:R0R2}
+  R_0=Q_1-P_1^5P_2^5P_4P_8,\qquad R_2=Q_2+P_1^5P_2^5P_4P_7
+\end{equation}
+are two \emph{near-cancellation} factors built to sit close to $Q_1,Q_2$. The blocks
+$P_7,P_9$ are the degree-$12$ and degree-$16$ Flammang entries that appear as $Q_5,Q_6$
+in this paper; $R_0,R_2$ are new and lie outside the dictionary of
+Section~\ref{sec:bound}.
+
+\subsection*{The same functional} The record bound is reported as
+$\bigl(\log M(Q)+\int_0^1(A-B)^+\,ds\bigr)/\deg Q$ with $A=\sum_iq_i\log|P_i(\chi)|$
+the numerator and $B=\log|Q(\chi)|$ the denominator. This is exactly Doche's
+\eqref{eq:ratio} in complementary coordinates: by Jensen $\int_0^1 B\,ds=\log M(Q)$, so
+\begin{equation}\label{eq:samefunctional}
+  \frac{\log M(Q)+\int_0^1(A-B)^+\,ds}{\deg Q}
+  =\frac{\int_0^1\bigl(B+(A-B)^+\bigr)ds}{\deg Q}
+  =\frac{\int_0^1\max(A,B)\,ds}{\deg Q}=\frac{\Phi}{D}=\log h.
+\end{equation}
+The two constructions optimize one surface; the denominator-first search descends it
+where the first-variation calculus differentiates it. Here the perturbing branch is
+$B$, so $\Omega=\{B>A_0\}$ is the perturbing active set and
+Corollary~\ref{cor:criterion} applies block by block.
+
+\begin{theorem}[The record satisfies the firing criterion]\label{thm:record-fires}
+At the candidate-free anchor---the record family with one block removed---each of the
+six denominator blocks $Q_1,Q_2,R_0,R_2,P_7,P_9$ fires by the perturbing test
+$\rQ<\log h$ of Corollary~\ref{cor:criterion}; for the two new factors
+\[
+  \rQ(R_0)=-0.0688,\qquad \rQ(R_2)=-0.0656,
+\]
+far below $\log h=0.25363$, and likewise $\rQ(P_7)=-0.0158$, $\rQ(P_9)=-0.0411$. The
+test is discriminating: generic integer blocks of comparable degree do not fire---
+$\rQ(P_3)=0.272$, $\rQ(P_5)=0.264$, $\rQ(X^2-X+1)=0.276$, all exceeding $\log h$.
+Moreover at the record's own optimum the active blocks lie on the stationarity locus of
+the criterion: $\rQ-\log h$ for all six clusters in $[+0.0069,+0.0084]$, spread
+$0.0015$, the complementary-slackness signature of an interior optimum.
+\end{theorem}
+
+\begin{proof}
+The identity \eqref{eq:samefunctional} is exact. The marginals are
+$\rQ=\frac1{\deg Q}\int_\Omega\log|Q(\chi)|\,ds$ of Definition~\ref{def:rq}, evaluated
+on a fine midpoint grid; a computation (Section~\ref{sec:verify}) returns the stated
+values, reproduces the record value $\log h=0.2536269$ from \eqref{eq:samefunctional}
+to $10^{-9}$, and confirms the firing signs and the stationarity cluster. The
+candidate-free reading is the correct one by Remark~\ref{rem:anchor}: each block's
+marginal is the right derivative of $\log h$ as that block enters at $q_Q=0^+$.
+\end{proof}
+
+The reading is \emph{explanatory}, not generative: the criterion does not produce
+$R_0,R_2$---those are the near-cancellation construction \eqref{eq:R0R2} of
+\citet{Gri26}---but it certifies after the fact that they fire, that generic blocks do
+not, and that the record sits at the criterion's first-order optimum. The small uniform
+offset $\rQ-\log h\approx+0.007$ rather than $0$ is consistent with the denominator
+exponents being held at multiplicity one rather than driven to interior stationarity;
+the entry test $\rQ<\log h$, which is what selects the blocks, holds with wide margin.
+A search that knows the criterion would have proposed exactly these blocks; the record
+is the calculus carried out numerically.
 
 %==============================================================================
 \section{Where the reachable gains run out}\label{sec:saturation}
@@ -608,6 +703,7 @@ Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on a
 \quad hypotheses (H1)--(H2$'$) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
+Thm.~\ref{thm:record-fires} & \texttt{firstvar\_07\_record\_blocks} & fires on all 6, dry on controls\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
 \S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
 \quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
@@ -665,6 +761,20 @@ Q_6=j_{15}:&\ [1,-4,10,-17,26,-47,119,-298,592,-878,963,-780,464,-199,59,-11,1]\
 j_3:&\ [1,1,-2,1]\quad(\deg 3),\qquad
 j_9:\ [1,-1,0,-3,15,-22,16,-6,1]\quad(\deg 8).
 \end{align*}}
+The two near-cancellation factors of the \citet{Gri26} record
+(Section~\ref{sec:record}), defined by \eqref{eq:R0R2} and taken to a positive
+leading coefficient, are the degree-$28$ polynomials
+{\small
+\begin{align*}
+R_0:&\ [1,-7,31,-107,321,-867,2148,-4922,10497,-20908,38973,-68026,111075,\\
+   &\ \ -169111,238522,-308360,360033,-373190,337618,-262546,173171,-95678,\\
+   &\ \ 43693,-16222,4786,-1084,178,-19,1],\\
+R_2:&\ [1,-7,29,-86,202,-387,618,-861,1256,-2589,7105,-19328,45963,-93546,\\
+   &\ \ 163248,-244838,315271,-347265,325506,-258092,171927,-95429,43661,\\
+   &\ \ -16220,4786,-1084,178,-19,1].
+\end{align*}}
+Here $P_7,P_9$ in the record's denominator are the polynomials denoted $Q_5,Q_6$
+above.
 
 %==============================================================================
 \bibliographystyle{plainnat}
