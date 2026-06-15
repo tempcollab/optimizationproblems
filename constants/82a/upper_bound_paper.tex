@@ -82,8 +82,9 @@ improved record
 \]
 beating $0.25443677$ \citep{Doc01b} by an outward-rounded interval enclosure. We also
 give computational evidence---an additivity property of the marginal together with an
-explicit finite search---that the cheap improving blocks have been exhausted, locating
-where Doche's construction reaches the floor of its reachable gains. Code at \repo.
+explicit finite search---that within a specified finite dictionary the cheaply
+improving blocks have already been absorbed, indicating where the easily reachable
+gains of the construction run out. Code at \repo.
 \end{abstract}
 
 \maketitle
@@ -190,14 +191,14 @@ $\essmin\le 0.2538893183$, strictly below the record $0.25443677$ of \citet{Doc0
 certified by an outward-rounded interval-arithmetic enclosure.
 \end{theorem}
 
-Finally, run as a design objective the criterion locates where the construction's
-reachable gains run out. The base marginal $\widetilde r_Q$ is additive over
-factorizations in $\Z[X]$, and an explicit finite search finds that the cheap firing
+Finally, run as a design objective the criterion indicates where the construction's
+easily reachable gains run out. The base marginal $\widetilde r_Q$ is additive over
+factorizations in $\Z[X]$, and an explicit finite search finds that the cheaply firing
 blocks have already been absorbed into the dictionary (Section~\ref{sec:saturation}).
 This is computational evidence, not a non-existence theorem: high-degree admissible
 blocks outside the search can still fire (we exhibit table entries that would), so we
-claim only that the \emph{reachable} improvements are exhausted, and explain the
-mechanism.
+claim only that the cheaply \emph{reachable} improvements within the searched dictionary
+are absorbed, and explain the mechanism.
 
 \subsection*{Scope}
 Theorem~\ref{thm:main} is a \emph{local} first-variation theory: it computes the
@@ -230,6 +231,14 @@ Doche realizes such measures as limiting Galois-conjugate distributions of a
 perturbed-polynomial family \citep{Doc01a,Doc01b}. Fix base polynomials
 $\{P_1,P_2,P_4,P_6,P_8\}\subset\Z[X]$ and a distinguished block $Q_1Q_2\in\Z[X]$ of
 degree $56$ (the \citet{Doc01b} record family; $Q_1,Q_2$ its degree-$28$ factors).
+The exponents are real because they are \emph{limit proportions}: \citet[\S3]{Doc01a}
+realizes a nonnegative real exponent vector $q$ as the limit, along a sequence of
+integer polynomials $\prod_i P_i^{n_i}\prod_k Q_k^{m_k}$ with $n_i,m_k\in\Z_{\ge0}$, of
+the normalized multiplicities $n_i/N,\,m_k/N$ as $N\to\infty$ through rational
+approximations $n_i/N\to q_i$; the spectrum value \eqref{eq:ratio} is continuous in
+these proportions, so every $q\in\R_{\ge0}^{\,\cdot}$ is attained as a limit point and
+the bound $\essmin\le\log h(q)$ holds for real $q$. Adjoining a base or a perturbing
+block enlarges this index set by one coordinate and preserves the construction.
 For exponents $q$ over the base and $\{q_k\}$ over perturbing blocks $Q_k\in\Z[X]$
 (all $\ge0$), the limit value is \eqref{eq:ratio} with
 \begin{equation}\label{eq:AB}
@@ -438,69 +447,6 @@ certifies nothing. The sign test is the right derivative on the candidate-free a
 \end{remark}
 
 %==============================================================================
-\section{Where the reachable gains run out}\label{sec:saturation}
-%==============================================================================
-
-We use the base criterion of Corollary~\ref{cor:criterion} as a design objective and
-ask which integer blocks improve the bound. The blocks of
-Section~\ref{sec:bound} enter the base branch, so the relevant quantity is the base
-marginal $\widetilde r_Q=\int_{\{A_0>B\}}\log|Q(\chi)|\,ds$, with $Q$ firing iff
-$\widetilde r_Q<0$. The results of this section are \emph{computational evidence} over
-an explicit finite search, not a non-existence theorem; we are explicit about the
-search's boundaries.
-
-The one structural fact is additivity. Since
-$\widetilde r_Q=\int_{\{A_0>B\}}\log|Q|\,ds$ is an integral of $\log|Q|=\sum\log|Q_i|$
-over a fixed arc,
-\begin{equation}\label{eq:additive}
-  \widetilde r_{Q_1Q_2}=\widetilde r_{Q_1}+\widetilde r_{Q_2}.
-\end{equation}
-A reducible block fires only if it has a firing factor.
-
-\begin{remark}[The cheap firing blocks are already in the dictionary]\label{rem:evidence}
-Evaluated at the certified family of Section~\ref{sec:bound} on the candidate-free
-anchor, an enumeration of Flammang's \citep{F18} Table~1 finds the firing entries
-($\widetilde r_Q<0$) and sorts them by whether they are coprime to the active
-dictionary $W=\{P_1,P_2,P_4,P_6,P_8,j_3,j_9,Q_1,Q_2,Q_5,Q_6\}$. The low-degree firing
-entries that are \emph{not} coprime---degrees $1,3,12,12,16$---each share a factor with
-$W$ and so are already absorbed; the four cheapest firing factors are exactly the base
-blocks $j_3,j_9$ and the perturbing blocks $Q_5,Q_6$ used in the bound. Three
-higher-degree firing table entries (degrees $16,16,20$, base marginals $\approx-0.005$
-to $-0.008$) \emph{are} coprime to $W$: these would fire, but their realized gain after
-re-optimization falls below the certificate's resolution (Section~\ref{sec:bound}), so
-adjoining them does not yield a further certified break. A direct closest-vector and
-root-target search over original integer blocks (degree $\le10$, bounded coefficients;
-roughly $7.4\times10^4$ candidates, extended to degree $16$ near the firing locus)
-returns no original block whose base marginal is more negative than these, and by
-\eqref{eq:additive} a reducible block built from a coprime factor of cost
-$\widetilde r\ge+0.013$ (the cheapest such factor found, $X^2-X+1$) cannot beat the
-best firing margin $\approx-0.005$. The evidence is therefore that the cheap,
-\emph{certifiably} improving blocks of this construction have been exhausted---not that
-no admissible block of any degree fires.
-\end{remark}
-
-\begin{remark}[Why the cheap firing set is so thin]\label{rem:wells}
-The firing integer blocks are isolated in the coefficient lattice: a single $\pm1$
-change to a firing table entry swings its base marginal from $\approx-0.005$ to above
-$+0.06$. Geometrically, $\widetilde r_Q$ is negative only when a root of $Q$ sits in a
-deep well of the base active-arc potential, and those wells lie strictly inside the
-lemniscate $\chi(\{|z|<1\})$, where an admissible integer block cannot place a root
-without a conjugate elsewhere that pays for it. This is the mechanism behind the
-thinness; the statements above rest on the additivity \eqref{eq:additive} and the
-reproduced marginals, not on the geometry.
-\end{remark}
-
-\begin{remark}[Not a transfinite-diameter problem]\label{rem:noteq}
-Factoring $\log|Q|$ over the roots writes $\rQ$ as an averaged logarithmic potential
-of $\Omega$, which invites reading block selection as an equilibrium
-(transfinite-diameter) problem. It is not: the equilibrium measure of $\Omega$ has
-constant potential $\approx0.524$ on its support, well above $\log h=0.254$, so
-$\Omega$'s measure is not the equilibrium measure and $\log h$ is not its Robin
-constant. The integer constraint, not capacity, controls the value, and the correct
-frame is the first-variation calculus above.
-\end{remark}
-
-%==============================================================================
 \section{The improved bound}\label{sec:bound}
 %==============================================================================
 
@@ -551,6 +497,93 @@ A soundness check compares the per-cell bound against a high-precision reference
 random cells with no violations on the safe side, and a deliberately understated target
 is correctly rejected; the independent floating-point value $0.2538891201$ sits just
 below the certified enclosure, the correct (outward) direction.
+
+The improvement is modest in absolute terms but a definite fraction of the open
+interval, as Table~\ref{tab:gap} records; its role is to certify that the criterion
+selects the blocks it predicts, not to settle the constant.
+
+\begin{table}[h]
+\centering\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & upper bound & gap above $0.2487458$ \citep{F18}\\
+\midrule
+previous record \citep{Doc01b} & $0.25443677$ & $5.690\times10^{-3}$\\
+this paper (Thm.~\ref{thm:upper}) & $0.2538893183$ & $5.144\times10^{-3}$\\
+\midrule
+improvement & $5.474\times10^{-4}$ & $9.6\%$ of the interval closed\\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{The certified upper bound against the previous record and the standing lower
+bound. The new bound closes about one tenth of the residual two-sided interval.}
+\label{tab:gap}
+\end{table}
+
+%==============================================================================
+\section{Where the reachable gains run out}\label{sec:saturation}
+%==============================================================================
+
+With the bound in hand we read the base criterion of
+Corollary~\ref{cor:criterion} the other way---as a design objective---and ask which
+integer blocks improve it. The blocks of Section~\ref{sec:bound} enter the base branch,
+so the relevant quantity is the base marginal
+$\widetilde r_Q=\int_{\{A_0>B\}}\log|Q(\chi)|\,ds$, with $Q$ firing iff
+$\widetilde r_Q<0$. The results of this section are \emph{computational evidence} over
+an explicit finite search, not a non-existence theorem; we are explicit about the
+search's boundaries.
+
+The one structural fact is additivity. Since
+$\widetilde r_Q=\int_{\{A_0>B\}}\log|Q|\,ds$ is an integral of $\log|Q|=\sum\log|Q_i|$
+over a fixed arc,
+\begin{equation}\label{eq:additive}
+  \widetilde r_{Q_1Q_2}=\widetilde r_{Q_1}+\widetilde r_{Q_2}.
+\end{equation}
+A reducible block fires only if it has a firing factor.
+
+\begin{remark}[The cheap firing blocks are already in the dictionary]\label{rem:evidence}
+Evaluated at the certified family of Section~\ref{sec:bound} on the candidate-free
+anchor, an enumeration of Flammang's \citep{F18} Table~1 finds the firing entries
+($\widetilde r_Q<0$) and sorts them by whether they are coprime to the active
+dictionary $W=\{P_1,P_2,P_4,P_6,P_8,j_3,j_9,Q_1,Q_2,Q_5,Q_6\}$. The low-degree firing
+entries that are \emph{not} coprime---degrees $1,3,12,12,16$---each share a factor with
+$W$ and so are already absorbed; the four cheapest firing factors are exactly the base
+blocks $j_3,j_9$ and the perturbing blocks $Q_5,Q_6$ used in the bound. Three
+higher-degree firing table entries (degrees $16,16,20$, base marginals $\approx-0.005$
+to $-0.008$) \emph{are} coprime to $W$: these would fire, but their realized gain after
+re-optimization falls below the certificate's resolution (Section~\ref{sec:bound}), so
+adjoining them does not yield a further certified break. A direct closest-vector and
+root-target search over original integer blocks (degree $\le10$, bounded coefficients;
+roughly $7.4\times10^4$ candidates, extended to degree $16$ near the firing locus)
+returns no original block whose base marginal is more negative than these, and by
+\eqref{eq:additive} a reducible block built from a coprime factor of cost
+$\widetilde r\ge+0.013$ (the cheapest such factor found, $X^2-X+1$) cannot beat the
+best firing margin $\approx-0.005$. The evidence is therefore that the cheap,
+\emph{certifiably} improving blocks of this construction have been absorbed---not that
+no admissible block of any degree fires.
+\end{remark}
+
+\begin{remark}[Why the cheap firing set is so thin]\label{rem:wells}
+The firing integer blocks are isolated in the coefficient lattice: a single $\pm1$
+change to a firing table entry swings its base marginal from $\approx-0.005$ to above
+$+0.06$. Geometrically, $\widetilde r_Q$ is negative only when a root of $Q$ sits in a
+deep well of the base active-arc potential, and those wells lie strictly inside the
+lemniscate $\chi(\{|z|<1\})$, where an admissible integer block cannot place a root
+without a conjugate elsewhere that pays for it. This is the mechanism behind the
+thinness; the statements above rest on the additivity \eqref{eq:additive} and the
+reproduced marginals, not on the geometry.
+\end{remark}
+
+\begin{remark}[Not a transfinite-diameter problem]\label{rem:noteq}
+Factoring $\log|Q|$ over the roots writes $\rQ$ as an averaged logarithmic potential
+of $\Omega$, which invites reading block selection as an equilibrium
+(transfinite-diameter) problem. It is not: the equilibrium measure of $\Omega$ has
+constant potential $\approx0.524$ on its support, well above $\log h=0.254$, so
+$\Omega$'s measure is not the equilibrium measure and $\log h$ is not its Robin
+constant. The integer constraint, not capacity, controls the value, and the correct
+frame is the first-variation calculus above.
+\end{remark}
 
 %==============================================================================
 \section{Verification}\label{sec:verify}
