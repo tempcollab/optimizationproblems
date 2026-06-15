@@ -136,10 +136,10 @@ derivative exists.
 
 \begin{theorem}[First variation; Sections~\ref{sec:firstvar}--\ref{sec:unified}]
 \label{thm:main}
-Let $Q\in\Z[X]$ have no root on the contour $\chi([0,1])$, adjoined to one branch of
-an admissible family with exponent $q_Q\ge0$, under the standing hypotheses
-\emph{(H1)--(H2$'$)} of Section~\ref{sec:firstvar} (in particular $A_0-B\not\equiv0$).
-Then $\log h$ is right-differentiable at $q_Q=0$, and
+Let $Q\in\Z[X]$ be adjoined to one branch of an admissible family with exponent
+$q_Q\ge0$, with $\log|Q(\chi(\cdot))|$ integrable (automatic if $Q$ is contour-root-free)
+and the branches not identically equal---the conditions \emph{(L)}, \emph{(N)} of
+Section~\ref{sec:firstvar}. Then $\log h$ is right-differentiable at $q_Q=0$, and
 \begin{equation}\label{eq:main}
   \dplus\!\log h/\partial q_Q\big|_0
   =\frac1D\Bigl[\int_{\ACT}\log|Q(\chi(s))|\,ds-\log h\cdot s_Q\Bigr],
@@ -305,23 +305,38 @@ this by enriching the dictionary.
 Fix an admissible family with branches $A_0,B$ as in \eqref{eq:AB}, and adjoin a
 block $Q\in\Z[X]$ to the \emph{base} branch with exponent $q_Q\ge0$, so
 $A(s,q_Q)=A_0(s)+q_Q\log|Q(\chi(s))|$ while $B$ is unchanged. Write
-$\Phi(q_Q)=\int_0^1\max\bigl(A_0(s)+q_Q\log|Q(\chi(s))|,\,B(s)\bigr)\,ds$. We assume:
+$\Phi(q_Q)=\int_0^1\max\bigl(A_0(s)+q_Q\log|Q(\chi(s))|,\,B(s)\bigr)\,ds$.
 
+Two facts about $A_0,B$ are structural, not hypotheses: being finite real
+combinations $\sum q_i\log|P_i(\chi(s))|$ of logarithms of polynomials, $A_0$ and $B$
+are real-analytic on $[0,1]$ off the finite set of $s$ with $P_i(\chi(s))=0$, where
+they have integrable $-\infty$ logarithmic singularities; and at such a point the
+vanishing branch tends to $-\infty$, so a neighbourhood of it lies in the
+complementary half $\{A_0<B\}$ or $\{B<A_0\}$. These hold for \emph{every} Doche family
+by construction and are used freely below.
+
+The lemma then needs only the following, on the single block $Q$ being adjoined and on
+the non-degeneracy of the two branches.
 \begin{itemize}
-\item[(H1)] $Q$ has no root on $\chi([0,1])$, so $\log|Q(\chi(\cdot))|$ is bounded,
-  hence in $L^1[0,1]$;
-\item[(H2)] $A_0,B$ are real-analytic off the finite set of contour roots of their
-  constituent polynomials, with integrable $-\infty$ logarithmic singularities there;
-  near each such point $A_0\to-\infty$, placing a neighbourhood in $\{A_0<B\}$;
-\item[(H2$'$)] $A_0-B\not\equiv0$ on each analytic sub-arc (the branches are not
-  identically equal; verified for the families here, where $\{A_0>B\}$ has positive
-  measure $<1$);
-\item[(H3)] the perturbing branch attains $D$: $\dA(0)<\dB$, so $D\equiv\dB$
-  is locally constant in $q_Q$.
+\item[(L)] \emph{(Local integrability.)} $\log|Q(\chi(\cdot))|\in L^1[0,1]$. This holds
+  whenever $Q$ has no root on the contour $\chi([0,1])$, in which case
+  $\log|Q(\chi(\cdot))|$ is bounded; it holds more generally, a contour root
+  contributing only an integrable logarithmic singularity. Every block adjoined in this
+  paper is contour-root-free.
+\item[(N)] \emph{(Non-degeneracy.)} $A_0-B\not\equiv0$ on each analytic sub-arc cut out
+  by the structural singularities above; equivalently, the two branches do not coincide
+  on a set of positive measure. This is immediate from admissibility---$\prod
+  P^{q_i}\not\equiv\prod Q^{q_k}$, so $A_0-B$, a nonzero real-analytic function on each
+  sub-arc, cannot vanish identically there.
 \end{itemize}
+We assume throughout this section that the perturbing branch attains the denominator,
+$\dA(0)<\dB$, so that $D\equiv\dB$ is locally constant in $q_Q$; this regime
+assumption is removed in Section~\ref{sec:unified}, where the formula is proved with no
+condition on which branch attains $D$.
 
 \begin{theorem}[First-variation lemma]\label{thm:firstvar}
-Under \emph{(H1)--(H3)}, $\Phi$ is right-differentiable at $q_Q=0$ with
+Under \emph{(L)} and \emph{(N)}, with the perturbing branch attaining $D$, $\Phi$ is
+right-differentiable at $q_Q=0$ with
 \begin{equation}\label{eq:Phiprime}
   \Phi^{+\prime}(0)=\int_{\{A_0>B\}}\log|Q(\chi(s))|\,ds,
 \end{equation}
@@ -333,7 +348,7 @@ For $q_Q\ne0$ set $\psi_q(s)=\bigl[\max(A_0+q_Q\log|Q|,B)-\max(A_0,B)\bigr]/q_Q$
 evaluated at $\chi(s)$.
 
 \emph{Domination.} The map $t\mapsto\max(a+t,b)$ is $1$-Lipschitz, so
-$|\psi_q(s)|\le|\log|Q(\chi(s))||$; by (H1) this dominator lies in $L^1[0,1]$
+$|\psi_q(s)|\le|\log|Q(\chi(s))||$; by (L) this dominator lies in $L^1[0,1]$
 uniformly in $q_Q$, including at the contour-root singularities of $A_0$, where
 $\max(A_0,B)=B$ for both $q_Q$ and $0$ so $\psi_q=0$.
 
@@ -344,10 +359,10 @@ $\psi_q(s)\to0$. Thus $\psi_q\to\log|Q(\chi)|\cdot\mathbf 1_{\{A_0>B\}}$ a.e.\ o
 $K$.
 
 \emph{The switching set is null.} On each of the finitely many closed sub-arcs into
-which the contour-root set (H2) divides $[0,1]$, $A_0-B$ is real-analytic and, by
-(H2$'$), not identically zero; a real-analytic function $\not\equiv0$ has isolated
+which the structural singularities divide $[0,1]$, $A_0-B$ is real-analytic and, by
+(N), not identically zero; a real-analytic function $\not\equiv0$ has isolated
 zeros, and isolated zeros in a compact arc are finite in number, so $K$ is finite,
-hence null. The contour-root singularities lie in $\{A_0<B\}$ (H2), not in $K$.
+hence null. The contour-root singularities lie in $\{A_0<B\}$, not in $K$.
 
 \emph{Conclusion.} Dominated convergence gives
 $\Phi^{+\prime}(0)=\lim_{q_Q\to0^+}\int_0^1\psi_q\,ds
@@ -356,7 +371,7 @@ separate treatment: the a.e.\ limit is already the fixed-set integrand
 $\mathbf 1_{\{A_0>B\}}$, and dominated convergence equates the limit of the quotient
 with its integral. The first-order boundary term vanishes \emph{because $A_0=B$ on
 $K$}---the envelope cancellation---not because the boundary is fixed. Finally
-$\log h=\Phi/D$ with $D$ constant near $0$ by (H3).
+$\log h=\Phi/D$ with $D$ constant near $0$ since the perturbing branch attains $D$.
 \end{proof}
 
 The vanishing of the moving-boundary term is the substance of the lemma: a direct
@@ -371,15 +386,16 @@ integrand.
 \section{Removing the regime hypothesis}\label{sec:unified}
 %==============================================================================
 
-Theorem~\ref{thm:firstvar} assumed (H3), that the perturbing branch attains $D$. We
-remove it. Since $\dA,\dB$ are affine (the $D$-formula \eqref{eq:Dformula}),
+Theorem~\ref{thm:firstvar} assumed the perturbing branch attains $D$. We
+remove that regime assumption. Since $\dA,\dB$ are affine (the $D$-formula \eqref{eq:Dformula}),
 $D=\max(\dA,\dB)$ is convex and piecewise-linear, with one-sided derivatives
 everywhere. At $q_Q=0$ exactly one of three regimes holds:
 $\dA(0)>\dB$ (I), $\dA(0)<\dB$ (II), or $\dA(0)=\dB$ (III, a tie).
 
 \begin{theorem}[Unified one-sided marginal]\label{thm:unified}
 Let $Q$ be adjoined to side $X\in\{A,B\}$ with exponent $q_Q\ge0$, under
-\emph{(H1)--(H2$'$)}. Then $\log h$ is right-differentiable at $q_Q=0$ and
+\emph{(L)} and \emph{(N)} and with no condition on which branch attains $D$. Then
+$\log h$ is right-differentiable at $q_Q=0$ and
 \begin{equation}\label{eq:unified}
   \dplus\!\log h/\partial q_Q\big|_0
   =\frac1D\Bigl[\int_{\ACT(X)}\log|Q(\chi)|\,ds-\log h\cdot s_Q\Bigr],
@@ -700,7 +716,7 @@ The scientific Python stack (\texttt{numpy}, \texttt{scipy}, \texttt{mpmath},
 statement & program & verdict\\
 \midrule
 Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on all blocks\\
-\quad hypotheses (H1)--(H2$'$) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
+\quad hypotheses (L), (N) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
 Thm.~\ref{thm:record-fires} & \texttt{firstvar\_07\_record\_blocks} & fires on all 6, dry on controls\\
