@@ -1,4 +1,10 @@
-"""Criterion accounts for the current record (Beukers--maaxgrin denominator-first bound).
+"""First-variation diagnostic for the current record (Grinsztajn denominator-first bound).
+
+NOTE ON RIGOR: the marginals here are fine-GRID evaluations, not interval certificates.
+The paper states the corresponding Proposition as a numerical diagnostic, not a theorem.
+A rigorous interval certificate of the Gri26 deg-140 bound in our own harness is a
+separate, still-open milestone (it would upgrade the diagnostic to a certified statement).
+
 
 The current record upper bound for mu^ess(h_Z), log h <= 0.2536331090 (certified by
 the maaxgrin/zhang-zagier-c82-bound repository), is built denominator-first: a fixed
@@ -196,7 +202,7 @@ def main():
     print(f"    cluster spread = {spread:.6f}  (tight spread => common stationarity locus)")
     ok &= all(abs(o) < STATIONARY_TOL for o in offsets) and spread < 0.01
 
-    print("\n" + ("PASS: the criterion accounts for the current record." if ok else "FAIL"))
+    print("\n" + ("PASS: the criterion diagnoses the current record (grid evaluation)." if ok else "FAIL"))
     return 0 if ok else 1
 
 
