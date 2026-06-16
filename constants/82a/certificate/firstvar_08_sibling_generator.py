@@ -224,8 +224,13 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
     A_R = asc([int(c) for c in lib[R_name].all_coeffs()])
     A_g = asc([int(c) for c in g_poly.all_coeffs()])
 
-    # anchor family F = record denom minus seed, plus the numerator A_F.
-    denom_blocks = [b for b in RECORD_DENOM if b != seed_name]   # scoring Q* / R on F
+    # anchor family F = record denom with BOTH the seed Q* AND the sibling R
+    # removed (the DOUBLY-CLEAN candidate-free anchor).  The firing test is the
+    # right derivative as R ENTERS at q_R=0+, so R must be ABSENT from the anchor
+    # it is scored on; removing only the seed (as a prior revision did) left R in
+    # the denominator and scored R on a family that already contained it, which is
+    # not the candidate-free derivative the criterion requires (cf. rem:anchor).
+    denom_blocks = [b for b in RECORD_DENOM if b not in (seed_name, R_name)]
     A_denom = {b: asc([int(c) for c in lib[b].all_coeffs()]) for b in denom_blocks}
     A_num = {}
     for nm in NUMERATOR_Q:
@@ -258,7 +263,9 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
             B_lo = na(B_lo + lp_lo, NINF)
             B_hi = na(B_hi + lp_hi, PINF)
         certainly_out = B_hi < A_lo
+        certainly_in = B_lo > A_hi                 # whole cell inside Omega_F
         in_or_straddle = ~certainly_out            # could be in Omega_F
+        straddle = in_or_straddle & ~certainly_in  # membership uncertain
         ratio2_lo = na(g2_lo / np.maximum(q2_hi, LOG_FLOOR), NINF)
         ratio2_hi = na(g2_hi / np.maximum(q2_lo, LOG_FLOOR), PINF)
         could_be_well = ratio2_hi > theta2         # |g/Q*|>theta possible
@@ -272,7 +279,7 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
         # whether |R|^2 is certified strictly positive on this cell
         R_pos = r2_lo > LOG_FLOOR
         return dict(w=w, geo=geo, logQ_hi=logQ_hi,
-                    in_or_straddle=in_or_straddle,
+                    in_or_straddle=in_or_straddle, straddle=straddle,
                     could_be_well=could_be_well, could_be_bulk=could_be_bulk,
                     ratio2_hi=ratio2_hi, logRQ_abs_hi=logRQ_abs_hi,
                     r2_lo=r2_lo, R_pos=R_pos)
@@ -334,7 +341,17 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
             omega0_w += float(np.sum(w[lm & k['could_be_bulk']]))
             if np.any(lm):
                 M_Qstar = max(M_Qstar, float(np.max(k['logQ_hi'][lm])))
-                rQ_upper_int += float(np.sum((w * k['logQ_hi'])[lm]))
+                # r_{Q*} = int_{Omega_F} log|Q*| ds.  For an UPPER bound:
+                #   - certainly-in cell: contributes w*logQ_hi (its true mass, even
+                #     if negative -- it is genuinely inside Omega_F);
+                #   - straddle cell: may lie OUTSIDE Omega_F, where its true
+                #     contribution is 0; banking a negative w*logQ_hi would UNDERSHOOT
+                #     the integral, so we clamp to w*max(0,logQ_hi).  (A straddle with
+                #     logQ_hi>=0 already contributes its non-negative upper part.)
+                logQ_sound = np.where(k['straddle'],
+                                      np.maximum(k['logQ_hi'], 0.0),
+                                      k['logQ_hi'])
+                rQ_upper_int += float(np.sum((w * logQ_sound)[lm]))
             # well integral on LEAF well cells
             lw = lm & k['could_be_well']
             if np.any(lw):
