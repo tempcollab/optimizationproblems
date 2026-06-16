@@ -17,6 +17,18 @@ notes (R2-this-round, THEORY result, held bounds UNTOUCHED, REVIEWER-VERIFIED R2
        degree preservation / the shared-normalizer identity), out of scope. Paper:
        prop:restricted-opt + rem:a6, r_{R_a} column on tab:degfloor, firstvar_09 row on tab:verify.
        Reproduce: cd constants/82a/certificate; python3 firstvar_09_restricted_optimality.py 40000 (~258s PASS).
+notes (R6-this-round, NO milestone, held bounds UNTOUCHED, Status none):
+       Attempted the bridge-SUPPORT firing-optimality analogue of R2's exponent result (firstvar_10,
+       lower-bound-difference frame D(d)^lo>0 vs Q*=R(P4)=R0). VERIFIED DEAD END (proof-reviewer R6,
+       /tmp/round-6/proof-reviewer.md): the frame cannot certify the tight near-miss -- D(d)^lo stays
+       NEGATIVE even at N=60000 (structural: deep-well straddle cells bank ~-4.1e-4 of irreducible
+       negative mass, ~4x the certainly-IN surplus; full run ~17h infeasible). The unbacked
+       Proposition prop:support-opt was REMOVED from upper_bound_paper.tex; firstvar_10 kept as a
+       documented dead-end artifact. KEPT (NOT a milestone, reviewer-verified prose hygiene): the
+       a=4 integrand sign-count fix "~79% negative" -> ~64% negative/36% positive (pos mass 0.357,
+       neg 0.643, max +2.775) in prop:restricted-opt proof AND firstvar_09 docstring. See
+       constants/82a/approaches/R3-bridge-support-selection.md for the structural reason and why
+       Angle 2 (two-sided margins) is also blocked.
 held: lower 0.2524001332 (REVIEWER-VERIFIED, R17). RECORD BREAK on the LOWER side via
       re-freeze of the OSS reference measure mu0 at a WIDER arc-width (B=55 -> 15 arcs,
       L=0.057120, lambda0=0.04012668, Ihat=-0.2111616260, m_cut=0.2526110) on the UNCHANGED

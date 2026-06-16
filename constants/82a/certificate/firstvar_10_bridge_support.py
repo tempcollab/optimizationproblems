@@ -1,5 +1,35 @@
 """firstvar_10 -- RESTRICTED FIRING-OPTIMALITY of the bridge SUPPORT (the deg-4 multiplier).
 
+############################################################################
+# DEAD-END ARTIFACT -- DO NOT REVIVE THIS FRAME (R6 proof-reviewer verdict).
+#
+# This certificate FRAME FAILS structurally and is kept only so future rounds
+# do not repeat it.  The lower-bound-difference frame vs Q* = R(P4) = R0 CANNOT
+# certify the tight near-miss: the per-competitor D(d)^lo stays NEGATIVE even at
+# N=60000 (near-miss #2 d=[1,-1,4,-3,1]: D_lo = -5.2e-4 @ N=4000, -4.5e-4 @ 20000,
+# -4.1e-4 @ 60000; trend sublinear, never reaches the +1e-5 tight threshold).  The
+# obstruction is structural, NOT a parameter/N issue: deep-well STRADDLE cells where
+# R(d) and R(P4) both dive to a shared near-contour zero AND the Omega_F active-set
+# membership is uncertain bank ~-4e-4 of genuinely-negative mass (rsub of two wide
+# log-wells, banked because the cell cannot be proved certainly-IN).  That negative
+# (~4x the entire certainly-IN surplus +9.6e-5) is irreducible: bisecting a deep well
+# keeps each sub-cell a straddle and the well-log tail decays only as w*log(1/w).  At
+# least one ORDINARY "far" competitor (d=[1,1,1,-2,1]) also fails the coarse gate.
+# A full default run is ALSO infeasible to review (~17h: every one of 728 competitors
+# shares R0's deep wells, forcing deep bisection ~87s each).
+#
+# This is the SIGN-FLIPPED twin of firstvar_09, and the flip is fatal: firstvar_09
+# certifies an UPPER bound on a genuinely-NEGATIVE integral (banking the negative bulk
+# is safe), whereas firstvar_10 needs a POSITIVE lower bound on a small-positive
+# integral while being forced to bank the deep-well straddle NEGATIVES.
+#
+# A salvage needs a DIFFERENT frame (e.g. certifying the Omega_F boundary sharply
+# enough at the shared wells so those cells become certainly-IN, or a discrete/algebraic
+# separation of the 728 competitors that does not pass through int_{Omega_F}), not a
+# parameter tweak.  See /tmp/round-6/proof-reviewer.md.  Prop:support-opt was REMOVED
+# from upper_bound_paper.tex; no milestone was earned.
+############################################################################
+
 A rigorous, outward-rounded interval certificate that, among the STATED FINITE admissible
 family of degree-4 monic bridge multipliers d, the first-variation firing margin
 r_{R(d)}(Omega_F) is MAXIMISED (most negative) at d = P4 = (1,-2,4,-3,1) = Grinsztajn's

@@ -40,8 +40,8 @@ degree preservation.
 =========================  RIGOR OF THE SIGNED UPPER BOUND  ==================
 
 The integrand of (D) is the SIGNED difference log|R_{a+1}| - log|R_a|.  It is NOT
-one-signed on Omega_F (for a=4 about 79% of the mass is negative, but the integrand
-reaches +2.78 on a 21% positive part), and the membership of a contour cell in
+one-signed on Omega_F (for a=4 about 64% of the mass is negative and 36% positive,
+the integrand reaching +2.78 on the positive part), and the membership of a contour cell in
 Omega_F = {B_F > A_F} is uncertain on STRADDLE cells.  A rigorous UPPER bound on the
 true negative integral therefore needs an ASYMMETRIC accumulation (must-fix M1):
 

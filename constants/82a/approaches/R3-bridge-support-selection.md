@@ -1,5 +1,68 @@
 # R3 — Bridge-support selection: the criterion SELECTS the deg-4 factor P4
 
+## RESULT (R6, proof-builder + proof-reviewer): ANGLE 1 IS A VERIFIED DEAD END
+
+Status: **Angle 1 DEAD** (structural), **Angle 2 BLOCKED** (strictly more fragile).
+Held bounds FROZEN (upper 0.2538893183, lower 0.2524001332), Status `none`. NO milestone
+earned. The unbacked Proposition prop:support-opt was REMOVED from the paper (R6 cleanup).
+
+### Angle 1 — DEAD (lower-bound-difference vs Q*=R(P4)=R0). Reviewer-verified structural reason.
+The signed-difference LOWER-bound frame D(d)^lo > 0 CANNOT certify the tight near-miss, and
+the failure is STRUCTURAL, not a parameter/N issue (per /tmp/round-6/proof-reviewer.md, which
+independently reproduced the probe and re-derived the decomposition):
+- Near-miss #2 d=[1,-1,4,-3,1]: D_lo = -5.21e-4 @ N=4000, -4.55e-4 @ 20000, -4.13e-4 @ 60000.
+  Always NEGATIVE, sublinear trend, never reaches the +1e-5 tight threshold. (True float
+  D(#2) = +6.95e-4 > 0, so the THEOREM may be true, but THIS FRAME cannot certify it.)
+- ROOT CAUSE: deep-well STRADDLE cells (R(d) and R(P4) both dive to a shared near-contour
+  zero AND Omega_F active-set membership is uncertain) bank ~-4.1e-4 of GENUINELY-NEGATIVE
+  mass (rsub of two wide log-wells, banked because the cell cannot be proved certainly-IN).
+  That negative is ~4x the entire certainly-IN positive surplus (+9.6e-5). The discarded
+  positive on straddle cells is only +9.5e-6 -- far too small to flip the sign; so this is
+  NOT a "discarded-positive-signal" problem (the orchestrator's hypothesis), it is an
+  irreducible banked-negative problem. Bisecting a deep well keeps each sub-cell a straddle
+  (membership uncertainty does not vanish at the boundary); the well-log tail decays only as
+  w*log(1/w) -- exactly the sublinear N trend. No feasible N closes it.
+- WHY firstvar_09 (exponent twin) WORKED but firstvar_10 does NOT: firstvar_09 certifies an
+  UPPER bound on a genuinely-NEGATIVE integral (banking the negative bulk on straddles is
+  SAFE and the true integral is comfortably negative). firstvar_10 is the SIGN-FLIP: it needs
+  a POSITIVE lower bound on a small-positive integral, but is forced to bank the deep-well
+  straddle NEGATIVES that swamp the positive certainly-IN mass. The flip is fatal.
+- SECOND independent blocker: the full default run is ~17h (every one of 728 competitors
+  shares R0's deep wells, forcing deep bisection ~87s each) -- not reviewable even if the
+  sign issue were fixed. At least one ORDINARY "far" competitor (d=[1,1,1,-2,1]) also fails
+  the coarse gate.
+DO NOT retry this frame. A salvage needs a DIFFERENT design: either certify the Omega_F
+active-set boundary sharply enough at the shared deep wells so those cells become
+certainly-IN (admitting their positive int_lo), OR a discrete/algebraic separation of the
+728 competitors that does not go through int_{Omega_F}. Neither is in hand -- an outliner
+question, not a builder fix.
+
+### Angle 2 — BLOCKED (strictly more fragile, outline-reviewer + inherits the same defect).
+Two-sided per-margin non-overlap was already ranked strictly more fragile than Angle 1 by
+the outline-reviewer (the straddle/boundary uncertainty does NOT cancel -- it must be paid
+TWICE, once per absolute margin, whereas the difference frame at least cancels the boundary
+band to ~3e-7). It also inherits the SAME deep-well straddle problem on BOTH sides. So it is
+blocked a fortiori; do not pursue it as a salvage.
+
+### Angle 3 — KEPT (verified prose fix, NOT a milestone).
+"~79% negative" for the a=4 integrand corrected to "~64% negative / 36% positive, integrand
+reaching +2.78" in BOTH the prop:restricted-opt proof (paper) AND firstvar_09 docstring.
+INDEPENDENTLY re-derived by the reviewer (own poly build + Horner, N=200k): on Omega_F
+positive mass 0.3569 (~36%), negative 0.6430 (~64%), max +2.775. This stands on its own and
+was kept in both files during the R6 cleanup. (Descriptive polish on an already-verified
+result; the reviewer logged NO milestone for it.)
+
+### Artifacts after cleanup.
+- firstvar_10_bridge_support.py: KEPT as a documented DEAD-END artifact (banner added to its
+  docstring recording the structural failure) so future rounds do not repeat the frame.
+- upper_bound_paper.tex: prop:support-opt, its proof, eq:diff-id-support, tab:support-margins,
+  rem:support-scope, the firstvar_10 tab:verify row, and the \TODO macro were all REMOVED;
+  the intro thm:gen-intro scope paragraph and rem:gen-scope were reverted to the git-HEAD
+  wording (bridge stays heuristic -- only the EXPONENT prop:restricted-opt is established,
+  not the support). LaTeX brace/env balance re-checked, all \ref resolve.
+
+---
+
 Status: OUTLINE (round 3). Awaiting outline-reviewer, then proof-builder.
 Spec review: REQUIRED (new finite-comparison frame, new certificate, new paper Prop +
 table; non-trivial admissible-family definition that must be defensible to a referee).
