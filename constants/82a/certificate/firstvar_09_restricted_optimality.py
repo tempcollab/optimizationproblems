@@ -205,7 +205,12 @@ def certify_diff(a, lib, N):
     A_R_a = asc([int(c) for c in build_R_a(lib, a)[1].all_coeffs()])
     A_R_b = asc([int(c) for c in build_R_a(lib, a + 1)[1].all_coeffs()])
 
-    denom_blocks = [b for b in RECORD_DENOM if b != "Q1"]   # anchor F = record \ {Q1}
+    # Anchor F = record denom with the seed Q1 AND the sibling R0 (= R_5, the only
+    # member of the compared R_a family present in the record denominator) removed:
+    # the candidate-free anchor for the R_a comparison.  R2 belongs to the Q2 family,
+    # is not one of the R_a, and stays.  (A prior revision removed only Q1, leaving
+    # R0 in the anchor against which R_5 was being scored -- cf. rem:anchor.)
+    denom_blocks = [b for b in RECORD_DENOM if b not in ("Q1", "R0")]
     A_denom = {b: asc([int(c) for c in lib[b].all_coeffs()]) for b in denom_blocks}
     A_num = {}
     for nm in NUMERATOR_Q:

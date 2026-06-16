@@ -98,7 +98,9 @@ and its \emph{essential minimum}
 is the largest threshold below which only finitely many algebraic numbers lie. Its
 value is unknown. The lower record is $0.2487458=\log1.282416$ \citep{F18}; on the
 upper side \citet{Doc01b} long held $0.25443677=\log1.289735$, recently improved by a
-denominator-first search of \citet{Gri26} to a certified $0.2536331090$. Thus
+denominator-first search to a certified $0.2536331090$, distributed by \citet{Gri26} as
+an independent reproducible code certificate (we cite the archived repository, not a
+manuscript). Thus
 \[
   0.2487458\ \citep{F18}\ \le\ \essmin\ \le\ 0.2536331090\ \citep{Gri26}.
 \]
@@ -329,9 +331,16 @@ the non-degeneracy of the two branches.
   paper is contour-root-free.
 \item[(N)] \emph{(Non-degeneracy.)} $A_0-B\not\equiv0$ on each analytic sub-arc cut out
   by the structural singularities above; equivalently, the two branches do not coincide
-  on a set of positive measure. This is immediate from admissibility---$\prod
-  P^{q_i}\not\equiv\prod Q^{q_k}$, so $A_0-B$, a nonzero real-analytic function on each
-  sub-arc, cannot vanish identically there.
+  on a set of positive measure. Since $A_0-B=\sum_i q_i\log|P_i(\chi)|-\sum_k
+  q_k\log|Q_k(\chi)|$ is real-analytic on each sub-arc, it either vanishes identically
+  there or has only isolated zeros; (N) is the assumption that the former does not
+  occur. For \emph{real} exponents this is not a formal consequence of unique
+  factorization---it is the statement that the functions $\log|P_i(\chi(\cdot))|$,
+  $\log|Q_k(\chi(\cdot))|$ admit no real linear relation on a sub-arc with the given
+  coefficients---so we take (N) as a hypothesis, verified for each family used here by
+  auditing that the kink set $K=\{A_0=B\}$ is a finite point set: its sign-change count
+  is stable across grid refinements, the numerical fingerprint of $A_0-B\not\equiv0$
+  (certificate \texttt{firstvar\_02}).
 \end{itemize}
 We assume throughout this section that the perturbing branch attains the denominator,
 $\dA(0)<\dB$, so that $D\equiv\dB$ is locally constant in $q_Q$; this regime
@@ -670,10 +679,14 @@ $Q^*$ and the bridge ansatz---not $R_0,R_2$---and its output is the family they 
 to. What stays heuristic is named in the scope remark: the \emph{choice} of seed and
 bridge, not the fact that the recipe yields firing siblings.
 
-Throughout, fix one \emph{anchor family} $F$: the record denominator with the seed
-block $Q^*$ removed, with perturbing active set $\Omega_F=\{B_F>A_F\}$. Both $Q^*$ and
-the sibling $R$ are scored on this single $\Omega_F$, so the marginal $\rQ$ of
-Definition~\ref{def:rq} is unambiguous and ``$Q^*$ fires'' reads $\rb{Q^*}(\Omega_F)<\log h$.
+Throughout, fix one \emph{anchor family} $F$: the record denominator with \emph{both}
+the seed block $Q^*$ and the sibling $R$ removed, with perturbing active set
+$\Omega_F=\{B_F>A_F\}$. Removing both is what makes $\Omega_F$ a candidate-free anchor
+for each of $Q^*$ and $R$: by Remark~\ref{rem:anchor} the firing test for a block is the
+right derivative as that block \emph{enters} at exponent $0$, so the block must be absent
+from the family it is scored against. Both $Q^*$ and $R$ are then scored on this single
+$\Omega_F$, the marginal $\rQ$ of Definition~\ref{def:rq} is unambiguous, and
+``$Q^*$ fires'' reads $\rb{Q^*}(\Omega_F)<\log h$ as a genuine entry test.
 
 \subsection*{Degree preservation and the maximal exponent}
 The bridge ansatz is $g_a=P_1^aP_2^aP_4\cdot P_{\mathrm{tail}}$ with
@@ -684,27 +697,32 @@ count.
 For $g_a=P_1^aP_2^aP_4\,P_{\mathrm{tail}}$ with $\deg P_{\mathrm{tail}}=12$ one has
 $\deg g_a=2a+16$. Hence, since $\deg Q^*=28$,
 \[
-  \deg\bigl(Q^*\mp g_a\bigr)=\deg Q^*=28\quad\Longleftrightarrow\quad 2a+16<28
-  \quad\Longleftrightarrow\quad a\le5 ,
+  2a+16<28\ \Longleftrightarrow\ a\le5\ \Longrightarrow\ \deg\bigl(Q^*\mp g_a\bigr)=28 ,
 \]
-and for $a\le5$ the subtraction preserves the top $28-(2a+16)$ coefficients of $Q^*$;
-the primitive part does not change the degree. Thus $a=5$ is the largest bridge exponent
-for which $Q^*\mp g_a$ retains the degree and the leading coefficient of $Q^*$, and
-$R_0=\pp(Q_1-g_5\,/\,P_{\mathrm{tail}}\cdot P_8)$ is the instance $a=5$, tail $P_8$.
+with the top $28-(2a+16)$ coefficients of $Q^*$ preserved; taking the primitive part does
+not change the degree. So $a=5$ is the largest exponent at which the displacement is
+guaranteed to fix the degree and leading coefficient \emph{for either sign}. The
+behaviour at the boundary $a=6$ is sign-dependent, and this is where the two record
+factors differ: for the subtraction $\pp(Q_1-g_6)$ with tail $P_8$ the degree-$28$
+leading terms cancel ($1-1=0$) and the degree drops to $27$, so $a=5$ is sharply maximal;
+for the addition $\pp(Q_2+g_6)$ with tail $P_7$ they add ($1+1=2$) and $a=6$ still has
+degree $28$ but leading coefficient $2$, so there $a=5$ is the maximal
+\emph{monic}-preserving exponent. Either way $a=5$ is the maximal exponent preserving both the degree and the
+leading coefficient of $Q^*$, and $R_0,R_2$ are the instances $a=5$.
 \end{proposition}
 
 \begin{proof}
-$\deg(P_1^aP_2^aP_4)=a+a+4=2a+4$, so $\deg g_a=(2a+4)+12=2a+16$. If $\deg g_a<\deg Q^*$
-the leading coefficient of $Q^*\mp g_a$ is that of $Q^*$ and the two are equal in their
-top $\deg Q^*-\deg g_a$ coefficients; if $\deg g_a=\deg Q^*$ the leading terms may
-cancel. The inequality $2a+16<28$ is $a\le5$. Taking the primitive part divides by a
-nonzero integer content and leaves the degree unchanged. \emph{(Here $a=6$ gives
-$\deg g_6=28=\deg Q^*$ with leading coefficient $+1$, equal to that of $Q_1$, so the
-$X^{28}$ terms cancel and the degree drops to $27$---an illustrative boundary, not the
-mechanism: the bound is forced by $2a+16<28$ alone.)}
+$\deg(P_1^aP_2^aP_4)=2a+4$, so $\deg g_a=2a+16$. For $a\le5$, $\deg g_a<28=\deg Q^*$, so
+$Q^*\mp g_a$ has the leading coefficient of $Q^*$ and agrees with it in the top
+$28-\deg g_a$ coefficients; the primitive part rescales by a nonzero integer content and
+fixes the degree. At $a=6$, $\deg g_6=28$ and the $X^{28}$ coefficient of $Q^*\mp g_6$ is
+$\operatorname{lc}(Q^*)\mp\operatorname{lc}(g_6)=1\mp1$: for the subtraction it is $0$ and
+the degree drops to $27$, while for the addition it is $2$ and the degree stays $28$ with
+a non-monic leading coefficient. In both cases $a=5$ is the last exponent preserving the
+monic leading coefficient of $Q^*$.
 \end{proof}
 
-For $a=1,\dots,5$ the sibling $R_a=\pp(Q_1-g_a\,P_8)$ is squarefree, coprime to $Q_1$,
+For $a=1,\dots,5$ the sibling $R_a=\pp(Q_1-g_a)$ is squarefree, coprime to $Q_1$,
 satisfies $R_a(0)=R_a(1)=1$, and has content $1$; these are finite \texttt{sympy} checks
 (certificate \texttt{firstvar\_08}), so each $R_a$ is admissible
 (Lemma~\ref{lem:doche}). Table~\ref{tab:degfloor} records the family and its degree
@@ -717,12 +735,12 @@ boundary.
 \toprule
 $a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$ & $\rb{R_a}(\Omega_F)$\\
 \midrule
-$1$ & $18$ & $28$ & $1$ & yes & yes & $-0.01796$\\
-$2$ & $20$ & $28$ & $1$ & yes & yes & $-0.02481$\\
-$3$ & $22$ & $28$ & $1$ & yes & yes & $-0.03010$\\
-$4$ & $24$ & $28$ & $1$ & yes & yes & $-0.03378$\\
-$5$ & $26$ & $28$ & $1$ & yes & yes\quad($R_0=R_5$) & $-0.03560$\\
-$6$ & $28$ & $27$ & $1$ & yes & no & $(-0.03591)$\\
+$1$ & $18$ & $28$ & $1$ & yes & yes & $-0.03231$\\
+$2$ & $20$ & $28$ & $1$ & yes & yes & $-0.03917$\\
+$3$ & $22$ & $28$ & $1$ & yes & yes & $-0.04442$\\
+$4$ & $24$ & $28$ & $1$ & yes & yes & $-0.04798$\\
+$5$ & $26$ & $28$ & $1$ & yes & yes\quad($R_0=R_5$) & $-0.04982$\\
+$6$ & $28$ & $27$ & $1$ & yes & no & $(-0.05233)$\\
 \bottomrule
 \end{tabular}
 \medskip
@@ -829,14 +847,23 @@ as the bound of Section~\ref{sec:bound}. The well cells are adaptively bisected 
 criteria---until $|R|^2$ is certified strictly positive (so $m_R>0$ is established, not
 measured) \emph{and} until each cell's contribution to $\int_W|\log|R/Q^*||\,ds$ falls
 below a fixed tolerance---so the certified well integral is the rigorous per-cell bound
-of Lemma~\ref{lem:transfer}, with no global cap on $|\log|R/Q^*||$ invoked. With these
+of Lemma~\ref{lem:transfer}, with no global cap on $|\log|R/Q^*||$ invoked. Two points
+secure the certificate. First, $\Omega_F$ is the candidate-free anchor of
+Section~\ref{sec:generator}: \emph{both} $Q^*$ and $R$ are removed from the record
+denominator, so $\rb{Q^*}(\Omega_F)$ and $\rb{R}(\Omega_F)$ are genuine entry tests
+(Remark~\ref{rem:anchor}), not scores against a family already containing $R$. Second,
+the upper bound on $\rb{Q^*}=\int_{\Omega_F}\log|Q^*|\,ds$ is interval-sound on cells
+whose membership in $\Omega_F$ is uncertain: a cell certainly in $\Omega_F$ contributes
+its signed $\int\log|Q^*|$, but a straddle cell---which may lie outside $\Omega_F$, where
+its true contribution is $0$---is clamped to its non-negative part, since banking a
+negative value would understate (not over-state) the integral. With these
 certified constants,
 \[
-  \rb{Q_1}(\Omega_F)\le-0.0335,\quad \mathrm{RHS}\le0.0049,\quad
-  \rb{Q_1}+\mathrm{RHS}\le-0.0287<\log h=0.25363
+  \rb{Q_1}(\Omega_F)\le-0.04216,\quad \mathrm{RHS}\le0.00379,\quad
+  \rb{Q_1}+\mathrm{RHS}\le-0.03837<\log h=0.25363
 \]
-for $R_0$, and $\rb{Q_2}(\Omega_F)\le-0.0330$, $\mathrm{RHS}\le0.0063$,
-$\rb{Q_2}+\mathrm{RHS}\le-0.0267<\log h$ for $R_2$. The firing margins
+for $R_0$, and $\rb{Q_2}(\Omega_F)\le-0.03536$, $\mathrm{RHS}\le0.00444$,
+$\rb{Q_2}+\mathrm{RHS}\le-0.03092<\log h$ for $R_2$. The firing margins
 $\log h-\rb{R}\ge0.28$ are large---the firing is not delicate.
 Lemma~\ref{lem:transfer} then gives $\rb{R}<\log h$, and Corollary~\ref{cor:criterion}
 that $R$ fires. Coprimality $\gcd(R,Q^*)=1$ makes $R$ an independent admissible factor.
@@ -847,9 +874,9 @@ sits an order of magnitude above the true marginal shift $\approx10^{-3}$ from
 \eqref{eq:transfer-id}---but with $0.28$ of margin to spare it certifies firing
 comfortably. The mechanism is the magnitude-engineering of the bridge: $g$ is small
 relative to $Q^*$ on the bulk
-$\Omega_0$ ($|g/Q^*|\le\theta$ on measure $\approx0.44$ of $\Omega_F$, and far smaller
+$\Omega_0$ ($|g/Q^*|\le\theta$ on measure $\approx0.40$ of $\Omega_F$, and far smaller
 than $\theta$ over most of it), so $R\approx Q^*$ there and inherits $Q^*$'s reduced
-cost, while in the deep wells $W$ (measure $\delta\approx0.08$) the bridge is comparable
+cost, while in the deep wells $W$ (measure $\delta\approx0.07$) the bridge is comparable
 to $Q^*$ and displaces the roots, making $R$ coprime to $Q^*$. The sibling is the same
 size as $Q^*$, not an approximation to zero; it fires by inheritance, not by smallness.
 
@@ -935,22 +962,23 @@ the true difference. The $R_{a+1}/R_a$ ratio has milder wells than $R/Q_1$ (the 
 siblings share most of their roots), so the harness of Lemma~\ref{lem:transfer} clears
 it. Certificate \texttt{firstvar\_09} returns, at base grid $N=40000$,
 \[
-  D_1^{\mathrm{hi}}=-2.06\times10^{-3},\;
-  D_2^{\mathrm{hi}}=-1.52\times10^{-3},\;
-  D_3^{\mathrm{hi}}=-8.54\times10^{-4},\;
-  D_4^{\mathrm{hi}}=-3.12\times10^{-4},
+  D_1^{\mathrm{hi}}=-2.25\times10^{-3},\;
+  D_2^{\mathrm{hi}}=-1.97\times10^{-3},\;
+  D_3^{\mathrm{hi}}=-1.71\times10^{-3},\;
+  D_4^{\mathrm{hi}}=-4.33\times10^{-4},
 \]
 all strictly negative, with $\inf_{\Omega_F}|R_a|>0$ certified for $a=1,\dots,5$ and no
-unresolved cells. (The true differences are $-6.85,-5.28,-3.68,-1.82$ in units of
+unresolved cells. (The true differences are $-6.86,-5.25,-3.56,-1.84$ in units of
 $10^{-3}$; the certified $D_a^{\mathrm{hi}}$ over-estimate them, the safe direction for
 proving $D_a<0$.) The four signs chain to the ordering.
 \end{proof}
 
 \begin{remark}[The unconstrained optimum sacrifices degree preservation]
 \label{rem:a6}
-The restriction to $a\le5$ is not cosmetic. The exponent $a=6$ gives a sibling that
-fires \emph{harder} than $R_0$ ($\rb{R_6}\approx-0.0359<\rb{R_5}\approx-0.0356$ on
-$\Omega_F$), so ``$a=5$ is firing-optimal'' is false without the restriction. But
+The restriction to $a\le5$ is not cosmetic. For the subtraction family
+$R_a=\pp(Q_1-g_a)$ the exponent $a=6$ gives a sibling that fires \emph{harder} than
+$R_0$ ($\rb{R_6}\approx-0.0523<\rb{R_5}\approx-0.0498$ on $\Omega_F$), so ``$a=5$ is
+firing-optimal'' is false without the restriction. But here
 $\deg R_6=27$ (Proposition~\ref{prop:degfloor}): $a=6$ breaks degree preservation, the
 shared leading coefficients of $Q_1$, and---decisively for the argument
 above---the equal-degree hypothesis $\deg R_{a+1}=\deg R_a$ that makes the
@@ -1071,8 +1099,8 @@ the potential-theoretic computations are in the \texttt{scratch/} subdirectory.}
 The certified bound is produced by \texttt{bound\_07\_block\_j9} in \texttt{certify}
 mode on the exponent vector of Section~\ref{sec:bound}; the full command and the
 chain of anchor checks are documented in the directory's \texttt{README}. The
-results of this paper correspond to the repository state at commit
-\texttt{<commit-hash>} (an immutable archive is deposited with the submission); the
+results of this paper correspond to the repository state at the tagged release commit
+recorded with the submission's archived artifact (DOI assigned at acceptance); the
 polynomial data on which Theorem~\ref{thm:upper} depends is reproduced in full in
 Appendix~\ref{app:data} so that the certificate does not rely on a mutable link.
 
