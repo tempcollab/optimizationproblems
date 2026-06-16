@@ -74,8 +74,8 @@ it generative: from a firing seed block $Q^*$ and an admissible bridge $g$, the
 primitive part $R=\pp(Q^*\mp g)$ is a degree-preserving admissible firing sibling of
 $Q^*$, the firing transferred by a certified magnitude-subordination bound. Grinsztajn's
 $R_0,R_2$ are exactly the instances of the bridge $g=P_1^5P_2^5P_4\,P_{\mathrm{tail}}$,
-with the exponent $5$ forced by an exact degree count---which also explains why the
-search stopped there. The one heuristic input is the seed itself; producing it
+with the exponent $5$ the maximal value preserving the monic leading coefficient of
+$Q^*$---which also explains why the search stopped there. The one heuristic input is the seed itself; producing it
 unconditionally is the open problem. As a check that the criterion selects
 predictively, it builds a family improving Doche's longstanding $0.25443677$ to
 $0.2538893183$. All certificates use outward-rounded interval arithmetic and are
@@ -195,10 +195,13 @@ shows the two coordinate systems describe one surface).
 
 \begin{proposition}[The criterion diagnoses the record; Section~\ref{sec:record}]
 \label{thm:record}
-On a fine grid the perturbing criterion $\rQ<\log h$ fires, strictly, on every one of
-the record's six denominator blocks at the candidate-free anchor, while natural controls
-stay inert; at the record's own optimum the active blocks cluster at a common
-reduced-cost level. The marginals are grid evaluations, stated as numerical diagnostics.
+On a fine grid the firing criterion---read in the regime-correct form of
+Theorem~\ref{thm:unified} at each candidate-free anchor, where for five of the six blocks
+the perturbing branch does not attain $D$ and the test is the active-arc integral
+$m_Q=\int_{\{B>A_0\}}\log|Q|<0$---fires, strictly, on every one of the record's six
+denominator blocks, while natural controls stay inert; at the record's own optimum the
+active blocks cluster at a common reduced-cost level. The marginals are grid evaluations,
+stated as numerical diagnostics.
 \end{proposition}
 
 That the criterion accounts block-for-block for a construction built without it is the
@@ -213,10 +216,11 @@ Let $Q^*\in\{Q_1,Q_2\}$ be a firing degree-$28$ factor of Doche's distinguished 
 an anchor family $F$, and $g=P_1^5P_2^5P_4\,P_{\mathrm{tail}}$ ($P_{\mathrm{tail}}\in\{P_7,P_8\}$).
 Then the primitive part $R=\pp(Q^*\mp g)$ is a degree-$28$ admissible block, coprime to
 $Q^*$, and a certified magnitude-subordination bound (Lemma~\ref{lem:transfer})
-transfers the firing from $Q^*$ to $R$: $\rb{R}<\log h$. The Grinsztajn near-cancellation
-factors $R_0,R_2$ are exactly the instances $Q^*\in\{Q_1,Q_2\}$, and $a=5$ in $g$ is the
-maximal exponent preserving the degree (Proposition~\ref{prop:degfloor})---which is why
-the search stopped there (Remark~\ref{rem:a6}).
+transfers the firing from $Q^*$ to $R$: $R$ fires on the anchor (in the base regime of
+$F$, $m_R<0$). The Grinsztajn near-cancellation factors $R_0,R_2$ are exactly the
+instances $Q^*\in\{Q_1,Q_2\}$, and $a=5$ in $g$ is the maximal exponent preserving the
+monic leading coefficient of $Q^*$ (Proposition~\ref{prop:degfloor})---which is why the
+search stopped there (Remark~\ref{rem:a6}).
 \end{theorem}
 
 The sibling is \emph{proved} to fire by a directed-rounded interval certificate, not
@@ -618,14 +622,21 @@ Corollary~\ref{cor:criterion} applies block by block.
 
 \begin{proposition}[First-variation diagnostic for the record]\label{thm:record-fires}
 Evaluated on a fine grid (Section~\ref{sec:verify}), the record construction is
-diagnosed by the criterion as follows. At the candidate-free anchor---the record family
-with one block removed---each of the six denominator blocks fires by the perturbing test
-$\rQ<\log h$ of Corollary~\ref{cor:criterion}, with the margins of
-Table~\ref{tab:recordfire}; the two new near-cancellation factors $R_0,R_2$ fire as
+diagnosed by the criterion as follows. All six denominator blocks are \emph{perturbing}
+(B-side) blocks, so by Theorem~\ref{thm:unified} each marginal is read on the arc
+$\{B>A_0\}$. At the candidate-free anchor---the record family with one block removed---the
+regime is set by the numerator degree $\dA=125.24$ against the reduced denominator degree
+$\dB$: removing a degree-$28$ block or $P_9$ leaves $\dB\le124<\dA$, the \emph{base}
+regime, where $s_Q=0$ and the entry test of Theorem~\ref{thm:unified} is
+$m_Q:=\int_{\{B>A_0\}}\log|Q(\chi)|\,ds<0$ (no $\log h$ term); only removing $P_7$ leaves
+$\dB=128>\dA$, the perturbing regime with test $m_Q-\log h\deg Q<0$. Every one of the six
+fires: the active-arc integral $m_Q$ is strictly negative throughout
+(Table~\ref{tab:recordfire}), and the two new near-cancellation factors $R_0,R_2$ fire as
 strongly as the established blocks. The test discriminates: natural controls drawn from
-the base family and from the bounded-coefficient search family do not fire, with
-$\rQ(P_3)=0.272$, $\rQ(P_5)=0.264$, $\rQ(X^2-X+1)=0.276$, all above $\log h=0.25363$.
-At the record's own optimum the six active blocks instead cluster at a common
+the base family and from the bounded-coefficient search family have \emph{positive}
+active-arc integral and so do not fire---$m_{P_3}=+0.79$, $m_{P_5}=+2.05$,
+$m_{X^2-X+1}=+0.54$ (full anchor). At the record's own \emph{full} optimum, where
+$\dB=140>\dA$ and the perturbing regime holds, the six active blocks cluster at a common
 reduced-cost level $\rQ-\log h\in[+0.0069,+0.0084]$ (spread $0.0015$): not exact KKT
 stationarity, but a diagnostic analogue, the multiplicities being fixed at one rather
 than freely optimized.
@@ -634,32 +645,44 @@ than freely optimized.
 \begin{table}[h]
 \centering\small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}lrrrc@{}}
+\begin{tabular}{@{}lrrcrrc@{}}
 \toprule
-block & degree & candidate-free $\rQ$ & $\rQ-\log h$ at optimum & fires?\\
+block & degree & $\dB$ & regime & $m_Q$ (cand.-free) & $\rQ-\log h$ at opt. & fires?\\
 \midrule
-$Q_1$ & $28$ & $-0.0702$ & $+0.0069$ & yes\\
-$Q_2$ & $28$ & $-0.0671$ & $+0.0075$ & yes\\
-$R_0$ & $28$ & $-0.0688$ & $+0.0073$ & yes\\
-$R_2$ & $28$ & $-0.0656$ & $+0.0073$ & yes\\
-$P_7=Q_5$ & $12$ & $-0.0158$ & $+0.0084$ & yes\\
-$P_9=Q_6$ & $16$ & $-0.0411$ & $+0.0077$ & yes\\
+$Q_1$ & $28$ & $112$ & base & $-1.015$ & $+0.0069$ & yes\\
+$Q_2$ & $28$ & $112$ & base & $-0.980$ & $+0.0075$ & yes\\
+$R_0$ & $28$ & $112$ & base & $-0.996$ & $+0.0073$ & yes\\
+$R_2$ & $28$ & $112$ & base & $-0.958$ & $+0.0073$ & yes\\
+$P_7=Q_5$ & $12$ & $128$ & pert. & $-0.110$ & $+0.0084$ & yes\\
+$P_9=Q_6$ & $16$ & $124$ & base & $-0.373$ & $+0.0077$ & yes\\
 \bottomrule
 \end{tabular}
 \medskip
-\caption{The six denominator blocks of the \citet{Gri26} record, diagnosed by the
-perturbing criterion ($\log h=0.25363$). \emph{Candidate-free $\rQ$}: the marginal with
-that block removed (the entry test of Corollary~\ref{cor:criterion}); all six are
-negative, so each block lowers the bound when adjoined. \emph{At optimum}: the reduced
-cost with all blocks present, clustering near a common level.}
+\caption{The six denominator blocks of the \citet{Gri26} record ($\dA=125.24$,
+$\log h=0.25363$). Each is a perturbing (B-side) block, so its marginal is read on the
+arc $\{B>A_0\}$ (Theorem~\ref{thm:unified}). \emph{Regime / $m_Q$}: at the candidate-free
+anchor, removing the block leaves the reduced denominator degree $\dB$; for $\dB<\dA$
+(base regime, $s_Q=0$) the entry test is the active-arc integral
+$m_Q=\int_{\{B>A_0\}}\log|Q(\chi)|\,ds<0$, and all six are strictly negative, so each
+lowers the bound when adjoined. \emph{At optimum}: at the full optimum $\dB=140>\dA$, the
+perturbing regime holds and the reduced cost $\rQ-\log h$ clusters near a common level.}
 \label{tab:recordfire}
 \end{table}
 
-The diagnostic rests on the exact identity \eqref{eq:samefunctional} and on the
-marginals of Definition~\ref{def:rq}; the grid computation reproduces the record value
-$\log h=0.2536269$ from \eqref{eq:samefunctional} to $10^{-9}$ and returns the margins
-above. The candidate-free reading is the one called for by Remark~\ref{rem:anchor}: each
-margin is the right derivative of $\log h$ as that block enters at $q_Q=0^+$.
+The diagnostic rests on the exact identity \eqref{eq:samefunctional} and on the unified
+marginal of Theorem~\ref{thm:unified}, with the entry test taken in its regime-correct
+form: at the candidate-free anchor the perturbing branch no longer attains $D$ for five
+of the six blocks ($\dB<\dA$), so the firing condition is $m_Q<0$, the $s_Q=0$ case---not
+the normalized $\rQ<\log h$, which is valid only when the perturbing branch attains $D$
+(as at the full optimum and the $P_7$-removed anchor). The two readings agree in verdict
+here because $m_Q$ is itself strictly negative, but only the $s_Q=0$ form is licensed in
+the base regime. The candidate-free anchor is the one called for by
+Remark~\ref{rem:anchor}: $m_Q$ is the numerator of the right derivative of $\log h$ as
+that block enters at $q_Q=0^+$. The grid computation reproduces the search's
+\emph{candidate} value $\log h=0.2536269$ from \eqref{eq:samefunctional} to $10^{-9}$;
+this is the uncertified LP value, of which $0.2536331090$ is the slightly weaker
+outward-rounded interval enclosure (the certified record of \citet{Gri26}), so the
+diagnostic operates on the true optimum and the small gap is the certification margin.
 
 The reading of this section is a \emph{diagnostic}: the criterion fires on $R_0,R_2$
 after the fact. The next section strengthens it to a \emph{construction}---given the
@@ -680,13 +703,21 @@ to. What stays heuristic is named in the scope remark: the \emph{choice} of seed
 bridge, not the fact that the recipe yields firing siblings.
 
 Throughout, fix one \emph{anchor family} $F$: the record denominator with \emph{both}
-the seed block $Q^*$ and the sibling $R$ removed, with perturbing active set
+the seed block $Q^*$ and the sibling $R$ removed, with active arc
 $\Omega_F=\{B_F>A_F\}$. Removing both is what makes $\Omega_F$ a candidate-free anchor
 for each of $Q^*$ and $R$: by Remark~\ref{rem:anchor} the firing test for a block is the
 right derivative as that block \emph{enters} at exponent $0$, so the block must be absent
-from the family it is scored against. Both $Q^*$ and $R$ are then scored on this single
-$\Omega_F$, the marginal $\rQ$ of Definition~\ref{def:rq} is unambiguous, and
-``$Q^*$ fires'' reads $\rb{Q^*}(\Omega_F)<\log h$ as a genuine entry test.
+from the family it is scored against. Removing two degree-$28$ blocks leaves the reduced
+denominator degree $\dB=84$, well below the numerator degree $\dA=125.24$, so $F$ is in
+the \emph{base} regime: by Theorem~\ref{thm:unified} the entry test for a perturbing
+($B$-side) block $Q$ is the active-arc integral
+\begin{equation}\label{eq:mdef}
+  m_Q:=\int_{\Omega_F}\log|Q(\chi(s))|\,ds<0\qquad(s_Q=0),
+\end{equation}
+the $s_Q=0$ form, not the normalized $\rQ<\log h$ (which would apply only if the
+perturbing branch attained $D$). Both $Q^*$ and $R$ are scored on this single
+$\Omega_F$, the integrals $m_{Q^*},m_R$ are unambiguous, and ``$Q^*$ fires'' reads
+$m_{Q^*}<0$ as a genuine entry test.
 
 \subsection*{Degree preservation and the maximal exponent}
 The bridge ansatz is $g_a=P_1^aP_2^aP_4\cdot P_{\mathrm{tail}}$ with
@@ -733,7 +764,7 @@ boundary.
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{@{}rrrrccr@{}}
 \toprule
-$a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$ & $\rb{R_a}(\Omega_F)$\\
+$a$ & $\deg g_a=2a+16$ & $\deg R_a$ & content & admissible & $\deg R_a=28$ & $\rb{R_a}(\Omega_F)$ (per deg.)\\
 \midrule
 $1$ & $18$ & $28$ & $1$ & yes & yes & $-0.03231$\\
 $2$ & $20$ & $28$ & $1$ & yes & yes & $-0.03917$\\
@@ -745,10 +776,11 @@ $6$ & $28$ & $27$ & $1$ & yes & no & $(-0.05233)$\\
 \end{tabular}
 \medskip
 \caption{The bridge-exponent family $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$, its degree
-boundary (Proposition~\ref{prop:degfloor}), and the first-variation firing margin
-$\rb{R_a}(\Omega_F)$. The degree is preserved exactly for $a\le5$; $a=5$ is
-Grinsztajn's $R_0$. Over the degree-preserving range $a\le5$ the margin
-$\rb{R_a}$ is strictly decreasing (firing strength $|\rb{R_a}|$ strictly increasing),
+boundary (Proposition~\ref{prop:degfloor}), and the per-degree active potential
+$\rb{R_a}(\Omega_F)$ (whose ordering, at fixed degree $28$ in the base regime, is that of
+the firing quantity $m_{R_a}$). The degree is preserved exactly for $a\le5$; $a=5$ is
+Grinsztajn's $R_0$. Over the degree-preserving range $a\le5$ the potential
+$\rb{R_a}$ is strictly decreasing (firing strength strictly increasing),
 maximised at $a=5$ (Proposition~\ref{prop:restricted-opt}); the strict ordering is
 \emph{certified} by the four signed difference enclosures $D_a<0$ of
 \texttt{firstvar\_09}. The $a=6$ entry is parenthesised: its margin is the
@@ -761,11 +793,11 @@ exact integer arithmetic.}
 \end{table}
 
 \subsection*{The marginal-transfer identity and the firing-transfer bound}
-Because $\deg R=\deg Q^*$, the normalizer $1/\deg$ in $\rQ$ is shared, and scoring both
-blocks on the single $\Omega_F$ gives the exact identity
+In the base regime of $\Omega_F$ the firing quantity is the un-normalized active-arc
+integral $m_Q=\int_{\Omega_F}\log|Q(\chi)|\,ds$ of \eqref{eq:mdef}; scoring $Q^*$ and $R$
+on the single $\Omega_F$ gives the exact identity
 \begin{equation}\label{eq:transfer-id}
-  \rb{R}-\rb{Q^*}
-  =\frac1{\deg Q^*}\int_{\Omega_F}\log\frac{|R(\chi(s))|}{|Q^*(\chi(s))|}\,ds .
+  m_R-m_{Q^*}=\int_{\Omega_F}\log\frac{|R(\chi(s))|}{|Q^*(\chi(s))|}\,ds .
 \end{equation}
 Writing $R=c^{-1}(Q^*\mp g)$ with $c=\operatorname{cont}(Q^*\mp g)\in\Z_{>0}$,
 \[
@@ -776,26 +808,24 @@ $\Omega_0=\Omega_F\cap\{|g/Q^*|\le\theta\}$ and a \emph{well}
 $W=\Omega_F\cap\{|g/Q^*|>\theta\}$, $\delta:=|W|$.
 
 \begin{lemma}[Magnitude-subordination / firing-transfer bound]\label{lem:transfer}
-Let $Q^*$ be a perturbing block with $\inf_{\Omega_F}|Q^*|>0$, $g\in\Z[X]$ with
+Let $Q^*$ be a perturbing block with $\mu^*:=\inf_{\Omega_F}|Q^*|>0$, $g\in\Z[X]$ with
 $\deg g<\deg Q^*$, and $R=\pp(Q^*\mp g)$ contour-root-free
-($m_R:=\inf_{\Omega_F}|R|>0$). Then
+($\mu_R:=\inf_{\Omega_F}|R|>0$). Then
 \begin{equation}\label{eq:transfer-bound}
-  \bigl|\rb{R}-\rb{Q^*}\bigr|
-  \;\le\;\frac1{\deg Q^*}\Bigl[\,\log c
+  \bigl|m_R-m_{Q^*}\bigr|
+  \;\le\;\log c\,|\Omega_F|
   +\frac{\theta}{1-\theta}\,|\Omega_0|
-  +\int_{W}\bigl|\log|R/Q^*|\bigr|\,ds\Bigr]\;=:\;\mathrm{RHS},
+  +\int_{W}\bigl|\log|R/Q^*|\bigr|\,ds\;=:\;\mathrm{RHS},
 \end{equation}
-and the well integral $\int_{W}|\log|R/Q^*||\,ds$ is finite because $m_R>0$ and
-$\sup_{\Omega_F}\log|Q^*|<\infty$. Consequently, if
-$\rb{Q^*}(\Omega_F)+\mathrm{RHS}<\log h$ then $\rb{R}(\Omega_F)<\log h$: the sibling
-$R$ fires.
+and the well integral $\int_{W}|\log|R/Q^*||\,ds$ is finite because $\mu_R>0$, $\mu^*>0$,
+and $\sup_{\Omega_F}\log|Q^*|<\infty$. Consequently, in the base regime, if
+$m_{Q^*}(\Omega_F)+\mathrm{RHS}<0$ then $m_R(\Omega_F)<0$: the sibling $R$ fires.
 \end{lemma}
 
 \begin{proof}
 Start from \eqref{eq:transfer-id} and bound the integrand in absolute value on each
-piece. The content term contributes $\log c$ uniformly (degree $\deg Q^*$ times the
-constant $-\frac1{\deg Q^*}\log c$ in $\rQ$). On $\Omega_0$, with $u=g/Q^*$ and
-$|u|\le\theta<1$,
+piece. The content term contributes $-\log c$ uniformly, hence $\log c\,|\Omega_F|$ in
+absolute value. On $\Omega_0$, with $u=g/Q^*$ and $|u|\le\theta<1$,
 \[
   \bigl|\log|1\mp u|\bigr|\le-\log(1-|u|)\le\frac{|u|}{1-|u|}\le\frac{\theta}{1-\theta},
 \]
@@ -807,7 +837,9 @@ $\frac{\theta}{1-\theta}|\Omega_0|$.
 On $W$ the ratio $|u|=|g/Q^*|$ may exceed $1$, so $|\log|R/Q^*||$ has no useful global
 cap and we retain the integral $\int_W|\log|R/Q^*||\,ds$. \emph{Integrability} is
 immediate: the integrand $\bigl|\log|R|-\log|Q^*|\bigr|$ is bounded pointwise by
-$\log(1/m_R)+\sup_{\Omega_F}\log|Q^*|<\infty$, finite since $m_R>0$. This $L^\infty$
+$\log(1/\mu_R)+\log(1/\mu^*)+\sup_{\Omega_F}\log|Q^*|<\infty$---the lower bound
+$\mu^*>0$ on $|Q^*|$ controls $-\log|Q^*|$ on the well, where $|Q^*|$ itself dips, just
+as $\mu_R>0$ controls $-\log|R|$. This $L^\infty$
 bound secures finiteness but is far too crude to certify firing, which is why we bound
 the integral cell-by-cell instead. On a contour cell where the directed-rounded
 enclosures give $\log|R|\in[\ell_R,L_R]$ and $\log|Q^*|\in[\ell_{Q^*},L_{Q^*}]$, the
@@ -815,10 +847,10 @@ integrand's supremum is at most $\max\{L_R-\ell_{Q^*},\,L_{Q^*}-\ell_R\}$, a val
 per-cell bound whether or not $\log|R|>\log|Q^*|$ there. As a cell shrinks around a
 shared well of $R,Q^*$ this bound grows only like $\log(1/\text{width})$, so its
 width-weighted contribution vanishes, and refining the well cells drives the certified
-integral to the true marginal shift ($\approx10^{-3}$, cf.\ \eqref{eq:transfer-id}).
-Summing the three pieces and dividing by $\deg Q^*$ gives \eqref{eq:transfer-bound}; the
-firing conclusion combines it with Corollary~\ref{cor:criterion} applied to $R$ on
-$\Omega_F$.
+integral to the true marginal shift ($\approx10^{-2}$, cf.\ \eqref{eq:transfer-id}).
+Summing the three pieces gives \eqref{eq:transfer-bound}; the firing conclusion combines
+it with the base-regime entry test \eqref{eq:mdef} (Theorem~\ref{thm:unified}, $s_Q=0$)
+applied to $R$ on $\Omega_F$.
 \end{proof}
 
 \begin{theorem}[Sibling generator]\label{thm:generator}
@@ -827,9 +859,9 @@ on the anchor $\Omega_F$, and let $g=P_1^5P_2^5P_4\cdot P_{\mathrm{tail}}$ with
 $P_{\mathrm{tail}}=P_8$ (resp.\ $P_7$). Then $R:=\pp(Q^*\mp g)$, with the sign chosen as
 in \eqref{eq:R0R2}, is a degree-$28$ admissible block, coprime to $Q^*$, squarefree,
 with $R(0)=R(1)=1$, content $1$, and contour-root-free; and the firing-transfer bound
-\eqref{eq:transfer-bound} clears the firing gap,
+\eqref{eq:transfer-bound} clears the firing gap in the base regime,
 \[
-  \rb{R}(\Omega_F)\;\le\;\rb{Q^*}(\Omega_F)+\mathrm{RHS}\;<\;\log h ,
+  m_R(\Omega_F)\;\le\;m_{Q^*}(\Omega_F)+\mathrm{RHS}\;<\;0 ,
 \]
 so $R$ fires and is adjoinable as a denominator factor independent of $Q^*$. The
 Grinsztajn near-cancellation factors $R_0,R_2$ are exactly the instances
@@ -839,39 +871,40 @@ $Q^*\in\{Q_1,Q_2\}$ of this construction.
 \begin{proof}
 Admissibility and degree preservation are Proposition~\ref{prop:degfloor} and the
 finite \texttt{sympy} checks (content $1$, coprimality, squarefreeness, $R(0)=R(1)=1$),
-certificate \texttt{firstvar\_08}. The contour-root-freeness $m_R>0$, the bulk constants
-$|\Omega_0|,\rb{Q^*}(\Omega_F)$, and the cell-wise well integral
+certificate \texttt{firstvar\_08}. The contour-root-freeness $\mu_R>0$, the bulk
+constants $|\Omega_0|,m_{Q^*}(\Omega_F)$, and the cell-wise well integral
 $\int_W|\log|R/Q^*||\,ds$ entering \eqref{eq:transfer-bound} are each a directed-rounded
 interval enclosure over $\Omega_F$, computed by the same outward-rounded cell machinery
 as the bound of Section~\ref{sec:bound}. The well cells are adaptively bisected on two
-criteria---until $|R|^2$ is certified strictly positive (so $m_R>0$ is established, not
+criteria---until $|R|^2$ is certified strictly positive (so $\mu_R>0$ is established, not
 measured) \emph{and} until each cell's contribution to $\int_W|\log|R/Q^*||\,ds$ falls
 below a fixed tolerance---so the certified well integral is the rigorous per-cell bound
 of Lemma~\ref{lem:transfer}, with no global cap on $|\log|R/Q^*||$ invoked. Two points
 secure the certificate. First, $\Omega_F$ is the candidate-free anchor of
 Section~\ref{sec:generator}: \emph{both} $Q^*$ and $R$ are removed from the record
-denominator, so $\rb{Q^*}(\Omega_F)$ and $\rb{R}(\Omega_F)$ are genuine entry tests
+denominator, leaving $\dB=84<\dA$, so the base-regime test $m<0$ of \eqref{eq:mdef}
+applies and $m_{Q^*}(\Omega_F),m_R(\Omega_F)$ are genuine entry tests
 (Remark~\ref{rem:anchor}), not scores against a family already containing $R$. Second,
-the upper bound on $\rb{Q^*}=\int_{\Omega_F}\log|Q^*|\,ds$ is interval-sound on cells
+the upper bound on $m_{Q^*}=\int_{\Omega_F}\log|Q^*|\,ds$ is interval-sound on cells
 whose membership in $\Omega_F$ is uncertain: a cell certainly in $\Omega_F$ contributes
 its signed $\int\log|Q^*|$, but a straddle cell---which may lie outside $\Omega_F$, where
 its true contribution is $0$---is clamped to its non-negative part, since banking a
 negative value would understate (not over-state) the integral. With these
 certified constants,
 \[
-  \rb{Q_1}(\Omega_F)\le-0.04216,\quad \mathrm{RHS}\le0.00379,\quad
-  \rb{Q_1}+\mathrm{RHS}\le-0.03837<\log h=0.25363
+  m_{Q_1}(\Omega_F)\le-1.39,\quad \mathrm{RHS}\le0.10,\quad
+  m_{Q_1}+\mathrm{RHS}\le-1.29<0
 \]
-for $R_0$, and $\rb{Q_2}(\Omega_F)\le-0.03536$, $\mathrm{RHS}\le0.00444$,
-$\rb{Q_2}+\mathrm{RHS}\le-0.03092<\log h$ for $R_2$. The firing margins
-$\log h-\rb{R}\ge0.28$ are large---the firing is not delicate.
-Lemma~\ref{lem:transfer} then gives $\rb{R}<\log h$, and Corollary~\ref{cor:criterion}
-that $R$ fires. Coprimality $\gcd(R,Q^*)=1$ makes $R$ an independent admissible factor.
+for $R_0$, and $m_{Q_2}(\Omega_F)\le-1.39$, $\mathrm{RHS}\le0.10$,
+$m_{Q_2}+\mathrm{RHS}\le-1.29<0$ for $R_2$. The firing margins $|m_R|\ge1.3$ are
+large---the firing is not delicate. Lemma~\ref{lem:transfer} then gives $m_R<0$, and the
+base-regime entry test \eqref{eq:mdef} that $R$ fires. Coprimality $\gcd(R,Q^*)=1$ makes
+$R$ an independent admissible factor.
 \end{proof}
 
-The bound \eqref{eq:transfer-bound} is not tight---its certified value $\approx0.005$
-sits an order of magnitude above the true marginal shift $\approx10^{-3}$ from
-\eqref{eq:transfer-id}---but with $0.28$ of margin to spare it certifies firing
+The bound \eqref{eq:transfer-bound} is not tight---its certified value $\approx0.1$
+sits well above the true marginal shift $\approx0.02$ from
+\eqref{eq:transfer-id}---but with $1.3$ of margin to spare it certifies firing
 comfortably. The mechanism is the magnitude-engineering of the bridge: $g$ is small
 relative to $Q^*$ on the bulk
 $\Omega_0$ ($|g/Q^*|\le\theta$ on measure $\approx0.40$ of $\Omega_F$, and far smaller
@@ -901,26 +934,27 @@ $a$, so $a=5$ is the firing-\emph{optimal} degree-preserving displacement.
 \label{prop:restricted-opt}
 Let $R_a=\pp(Q_1-P_1^aP_2^aP_4\,P_8)$ for $a\in\{1,\dots,5\}$ be the degree-preserving
 admissible siblings of Table~\ref{tab:degfloor} (each $\deg R_a=28$, content $1$,
-squarefree, coprime to $Q_1$, contour-root-free). Then the first-variation firing
-margin on the shared anchor $\Omega_F$ is strictly decreasing in $a$,
+squarefree, coprime to $Q_1$, contour-root-free). Then the base-regime firing quantity
+$m_{R_a}=\int_{\Omega_F}\log|R_a(\chi)|\,ds$ on the shared anchor $\Omega_F$ is strictly
+decreasing in $a$,
 \[
-  \rb{R_1}(\Omega_F)>\rb{R_2}(\Omega_F)>\rb{R_3}(\Omega_F)
-  >\rb{R_4}(\Omega_F)>\rb{R_5}(\Omega_F),
+  m_{R_1}(\Omega_F)>m_{R_2}(\Omega_F)>m_{R_3}(\Omega_F)
+  >m_{R_4}(\Omega_F)>m_{R_5}(\Omega_F),
 \]
-so the firing strength $|\rb{R_a}(\Omega_F)|$ is maximised at the degree boundary
+so the firing strength $|m_{R_a}(\Omega_F)|$ is maximised at the degree boundary
 $a=5$. Thus $a=5=$ Grinsztajn's $R_0$ is the firing-optimal exponent among the
 degree-preserving admissible siblings.
 \end{proposition}
 
 \begin{proof}
 Since $\deg R_a=\deg R_{a+1}=28$ and both blocks are scored on the same fixed
-$\Omega_F$, the normalizer $1/28$ is shared and the marginal-transfer identity
+$\Omega_F$ in the same base regime, the marginal-transfer identity
 \eqref{eq:transfer-id}, applied with $Q^*:=R_a$ and $R:=R_{a+1}$ (note
 $\deg(R_{a+1}-R_a)<28$, so Lemma~\ref{lem:transfer} applies verbatim), gives the exact
 \emph{consecutive-difference identity}
 \begin{equation}\label{eq:diff-id}
-  D_a:=\rb{R_{a+1}}(\Omega_F)-\rb{R_a}(\Omega_F)
-     =\frac1{28}\int_{\Omega_F}\log\frac{|R_{a+1}(\chi(s))|}{|R_a(\chi(s))|}\,ds,
+  D_a:=m_{R_{a+1}}(\Omega_F)-m_{R_a}(\Omega_F)
+     =\int_{\Omega_F}\log\frac{|R_{a+1}(\chi(s))|}{|R_a(\chi(s))|}\,ds,
   \qquad a=1,2,3,4 .
 \end{equation}
 It therefore suffices to certify $D_a<0$ for $a=1,2,3,4$; the four strict inequalities
@@ -960,24 +994,25 @@ tolerance (and every cell on which $|R_a|^2$ or $|R_{a+1}|^2$ is not yet certifi
 positive, securing $\inf_{\Omega_F}|R_a|>0$ for each $a$) drives $D_a^{\mathrm{hi}}$ to
 the true difference. The $R_{a+1}/R_a$ ratio has milder wells than $R/Q_1$ (the two
 siblings share most of their roots), so the harness of Lemma~\ref{lem:transfer} clears
-it. Certificate \texttt{firstvar\_09} returns, at base grid $N=40000$,
+it. Certificate \texttt{firstvar\_09} returns, at base grid $N=40000$ (reported in the
+per-degree normalization $D_a/28$, whose sign is that of $D_a$),
 \[
-  D_1^{\mathrm{hi}}=-2.25\times10^{-3},\;
-  D_2^{\mathrm{hi}}=-1.97\times10^{-3},\;
-  D_3^{\mathrm{hi}}=-1.71\times10^{-3},\;
-  D_4^{\mathrm{hi}}=-4.33\times10^{-4},
+  D_1^{\mathrm{hi}}/28=-2.25\times10^{-3},\;
+  D_2^{\mathrm{hi}}/28=-1.97\times10^{-3},\;
+  D_3^{\mathrm{hi}}/28=-1.71\times10^{-3},\;
+  D_4^{\mathrm{hi}}/28=-4.33\times10^{-4},
 \]
 all strictly negative, with $\inf_{\Omega_F}|R_a|>0$ certified for $a=1,\dots,5$ and no
-unresolved cells. (The true differences are $-6.86,-5.25,-3.56,-1.84$ in units of
-$10^{-3}$; the certified $D_a^{\mathrm{hi}}$ over-estimate them, the safe direction for
+unresolved cells. (The true per-degree differences are $-6.86,-5.25,-3.56,-1.84$ in
+units of $10^{-3}$; the certified bounds over-estimate them, the safe direction for
 proving $D_a<0$.) The four signs chain to the ordering.
 \end{proof}
 
 \begin{remark}[The unconstrained optimum sacrifices degree preservation]
 \label{rem:a6}
 The restriction to $a\le5$ is not cosmetic. For the subtraction family
-$R_a=\pp(Q_1-g_a)$ the exponent $a=6$ gives a sibling that fires \emph{harder} than
-$R_0$ ($\rb{R_6}\approx-0.0523<\rb{R_5}\approx-0.0498$ on $\Omega_F$), so ``$a=5$ is
+$R_a=\pp(Q_1-g_a)$ the exponent $a=6$ gives a sibling whose per-degree active potential
+$\rb{R_6}\approx-0.0523$ on $\Omega_F$ sits below $\rb{R_5}\approx-0.0498$, so ``$a=5$ is
 firing-optimal'' is false without the restriction. But here
 $\deg R_6=27$ (Proposition~\ref{prop:degfloor}): $a=6$ breaks degree preservation, the
 shared leading coefficients of $Q_1$, and---decisively for the argument

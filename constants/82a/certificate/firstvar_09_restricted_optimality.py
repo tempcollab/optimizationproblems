@@ -331,7 +331,9 @@ def float_margins(lib):
             v = v * chi + x
         return v
 
-    denom_blocks = [b for b in RECORD_DENOM if b != "Q1"]
+    # Same candidate-free anchor as the certified path: remove BOTH Q1 and R0 (=R_5),
+    # so the R_a comparison is scored against a family containing neither (cf. rem:anchor).
+    denom_blocks = [b for b in RECORD_DENOM if b not in ("Q1", "R0")]
     A_num = {}
     for nm in NUMERATOR_Q:
         coeffs = POLY_COEFFS[nm] if nm in POLY_COEFFS else NUM_EXTRA[nm]

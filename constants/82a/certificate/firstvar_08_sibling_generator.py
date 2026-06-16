@@ -11,12 +11,19 @@ and R0,R2 are its instances a=5.
 
 ================================  WHAT IS PROVED  =============================
 
-Fix ONE anchor family F (the Gri26 record denominator with the seed block Q*
-REMOVED) and its perturbing active set  Omega_F = { B_F > A_F }.  Both Q* and R
-are scored on the SAME Omega_F (must-fix item 3).  Since deg R = deg Q* (Angle-2
-degree floor), the normalizer 1/deg is shared and the MARGINAL-TRANSFER IDENTITY
+Fix ONE anchor family F (the Gri26 record denominator with BOTH the seed block Q*
+AND the sibling R removed) and its active arc  Omega_F = { B_F > A_F }.  Both Q*
+and R are scored on the SAME Omega_F, each absent from the family it is scored on.
+Removing two deg-28 blocks leaves D_B = 84 < D_A = 125.24, so F is in the BASE
+regime: by the unified marginal (thm:unified) the entry test for a perturbing
+(B-side) block is the un-normalized active-arc integral
 
-    r_R - r_{Q*}  =  (1/deg)  int_{Omega_F}  log |R/Q*|  ds                  (I)
+    m_Q := int_{Omega_F} log|Q| ds  <  0       (s_Q = 0, base regime),
+
+NOT the normalized r_Q < log h (which holds only when the perturbing branch
+attains D).  Since deg R = deg Q*, the MARGINAL-TRANSFER IDENTITY is
+
+    m_R - m_{Q*}  =  int_{Omega_F}  log |R/Q*|  ds                          (I)
 
 is EXACT.  Writing R = (1/c)(Q* -+ g) with c = content(Q* -+ g) (here c = 1),
 
