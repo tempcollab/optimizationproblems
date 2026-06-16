@@ -84,12 +84,44 @@ positive sum.
 =========================  RIGOR OF THE LOWER BOUND  ========================
 
 SAFE DIRECTION (why this is NOT the firstvar_10 dead end).  This is a LOWER bound on U
-on a region where U is comfortably positive (the certified c1 ~ 9e-4, c2 ~ 1e-2), with
-the log SINGULARITY HELD OFF the contour: for alpha in box B, inf_s|chi(s)-alpha| is
-certified >= ~0.47 > 0, so log|chi - alpha|^2 is a BOUNDED smooth function and the
-quadrature is a fixed smooth 1-D-in-s sum.  There is NO deep well, NO near-cancellation
-straddle banking, NO adaptive s-bisection, NO 729-box blow-up.  Adaptivity is in ALPHA
-ONLY (bisect an alpha-cell whose certified U-lower-bound is not yet > 0).
+on a region where U is comfortably positive (true min U over box B = +9.5e-4 at the
+well-boundary corner Re=-0.02; far-field c2 ~ 7e-3), with the log SINGULARITY HELD OFF
+the contour: for alpha in box B, inf_{s}|chi(s)-alpha| > 0 with a CERTIFIED positive
+margin (the printed `min certified separation`).  NOTE (corrected per the R23
+outline-review, MF-A): the worst separation over box B is NOT ~0.47 -- it is ~0.0075,
+attained near alpha ~ -1.626 + 1.108 i where the lemniscate's Re(chi) ~ -1.73 lobe
+GRAZES box B (min Re(chi) on the contour is -1.73, so chi DOES enter the Re<0 strip).
+The bound stays valid there because that grazing alpha is FAR from the well (U ~ +0.05),
+i.e. the small-separation region and the small-U region are DECOUPLED.  Still, the
+separation is the genuine geometric fact, certified per cell by the |chi-alpha|^2
+enclosure ITSELF, NOT by any half-plane property of chi.  There is NO deep well; the
+straddle banking IS present (Omega_F membership is only partially resolved at finite N,
+so straddle cells bank negative half-logs) but it is bounded, NOT the firstvar_10
+deep-well blow-up.  Adaptivity is in ALPHA ONLY (bisect an alpha-cell whose certified
+U-lower-bound is not yet > 0).
+
+==================  STATUS / FEASIBILITY (R23, MF-B -- HONEST) ==================
+The load-bearing box-B cover (step 2i) is NOT YET DEMONSTRATED to complete-and-PASS.
+Steps 1 (additivity) and 2ii (far-field, c2 = +6.99e-3 > 0 CERTIFIED at Ns=40000) run
+in ~12s on an idle machine.  But the box-B alpha-cover at Ns=40000 did NOT complete in
+~40 min of dedicated single-threaded CPU (R23: two orchestrator runs, the second on a
+cleaned machine after killing six leftover firstvar_{10,11} processes from rounds 19-22
+that had been oversubscribing the CPU -- the clean run still ran ~40 min in box B with
+no completion before being stopped).  Root cause is NOT just contention: box B is a
+single-threaded Python loop `for k in range(...)` calling alpha_cell_U_lo one alpha-cell
+at a time, each costing O(Ns) numpy work, and the band of cells near the well boundary
+(Re ~ -delta, where the true U is only ~+9.5e-4) needs deep alpha-refinement while the
+straddle banking over the ~12000 unresolved-membership cells at Ns=40000 biases the
+certified per-cell U_lo downward.  Lower Ns => MORE straddle (worse for box B); higher Ns
+=> higher per-cell cost (slower).  Until box B is shown to terminate with c1 > 0 and 0
+unresolved cells at a tractable, reviewer-reproducible cost, this certificate is
+INCOMPLETE and the obstruction is NOT a reviewer-verified milestone -- it is a
+verified-in-part construction (additivity + far-field) plus an outline-reviewer-checked
+angle (novelty clears the bar; coverage gap-free; true U values confirmed).  The open
+next step is a feasible box-B redesign: VECTORISE the alpha-cell loop (evaluate all
+alpha-cells of a refinement level in one batched numpy pass instead of a Python loop),
+and/or certify U on box B via a coarse membership-INDEPENDENT lower bound that avoids
+straddle banking entirely.
 
 COMPLEX TAYLOR ENCLOSURE of chi(s) over an s-cell [a,b] (avoids interval-Horner
 dependency blow-up over a wide cell):

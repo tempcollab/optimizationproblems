@@ -29,6 +29,22 @@ notes (R6-this-round, NO milestone, held bounds UNTOUCHED, Status none):
        neg 0.643, max +2.775) in prop:restricted-opt proof AND firstvar_09 docstring. See
        constants/82a/approaches/R3-bridge-support-selection.md for the structural reason and why
        Angle 2 (two-sided margins) is also blocked.
+notes (R23, NO milestone, held bounds UNTOUCHED, Status none):
+       Firing-OBSTRUCTION / root-localisation angle (approaches/R10-firing-obstruction.md, cert
+       firstvar_11_firing_obstruction.py): would upgrade the heuristic Remark rem:wells into a PROVED
+       necessary condition "every admissible monic firing block has at least one X-root in an explicit
+       compact set K" via X-root additivity r~_Q=sum_j U(alpha_j) + a certified U>=c>0 outside K.
+       outline-reviewer APPROVED the angle (clears the milestone bar; orthogonal to thm:generator &
+       prop:restricted-opt; novelty real; coverage gap-free; true min U over box B=+9.5e-4>0;
+       sup|chi|=2; imaginary-axis lemma genuinely false so delta=0.02 forced) -- see
+       approaches/R10-firing-obstruction-review.md. Cert step 1 (additivity, ~1e-17) PASS and step 2ii
+       (far-field tail, c2=+6.99e-3 CERTIFIED at Ns=40000) verified in ~30s. BUT the load-bearing step
+       2i (box-B alpha-cover, U>=c1>0) did NOT complete in >40 min of compute (R23, killed): per-cell
+       O(Ns) cost x deep well-boundary refinement, plus straddle banking over ~12k unresolved-membership
+       cells. So NOT reviewer-verified -> no milestone (count stays 21). Paper UNCHANGED (rem:wells stays
+       a remark). Open next step: make box B feasible (vectorise per-cell loop, or a membership-independent
+       U lower bound that avoids straddle banking). MF-A corrected in the cert docstring (the false
+       "inf_s|chi-alpha|>=0.47"; true ~0.0075 near the Re(chi)~-1.73 grazing lobe).
 held: lower 0.2524001332 (REVIEWER-VERIFIED, R17). RECORD BREAK on the LOWER side via
       re-freeze of the OSS reference measure mu0 at a WIDER arc-width (B=55 -> 15 arcs,
       L=0.057120, lambda0=0.04012668, Ihat=-0.2111616260, m_cut=0.2526110) on the UNCHANGED
