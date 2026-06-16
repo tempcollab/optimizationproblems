@@ -1,0 +1,6 @@
+near#2 d=[1, -1, 4, -3, 1] N=4000 depthcap=8 tol=0.001: D_lo=-8.463e-02 mRd=4.7e-08 mRP4=1.0e-07 depth=8 unres=24990 84.4s
+near#2 d=[1, -1, 4, -3, 1] N=4000 depthcap=14 tol=0.0005: D_lo=-3.696e-03 mRd=9.9e-08 mRP4=1.0e-07 depth=9 unres=0 105.1s
+generic d=[1, 0, 0, 0, 1] N=4000 depthcap=8 tol=0.001: D_lo=-4.331e-02 mRd=1.7e-07 mRP4=1.0e-07 depth=8 unres=24702 83.3s
+generic d=[1, 0, 0, 0, 1] N=4000 depthcap=14 tol=0.0005: D_lo=+9.106e-04 mRd=2.4e-06 mRP4=1.0e-07 depth=9 unres=0 107.8s
+near d=[1, 2, -1, -1, 1] N=4000 depthcap=8 tol=0.001: D_lo=-2.370e-01 mRd=5.0e-08 mRP4=1.0e-07 depth=8 unres=24702 88.7s
+near d=[1, 2, -1, -1, 1] N=4000 depthcap=14 tol=0.0005: D_lo=-1.822e-03 mRd=1.3e-06 mRP4=1.0e-07 depth=9 unres=0 98.3s

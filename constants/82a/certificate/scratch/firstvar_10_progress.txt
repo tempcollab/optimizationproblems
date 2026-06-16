@@ -1,0 +1,12 @@
+==============================================================================
+firstvar_10  RESTRICTED FIRING-OPTIMALITY of the bridge SUPPORT (deg-4 d)
+             coarse_N=2000  tight_N=4000  well_tol=5e-05  dev=True
+==============================================================================
+
+(A) admissible box A (monic, c0=+1, |ci|<=4): |A| = 729 of 729 raw  (3.5s)
+    P4=(1,-2,4,-3,1) in A? True   (c2=4 on the |c2|<=4 boundary; c3,c1 interior)
+
+(F) float cross-check: r_R(P4) = -0.03560  (anchor sanity, expect -0.03560)
+    [50/711] d=[1, -2, 2, -3, 1] D^lo=+3.089e-03 cleared (8421s)
+    [100/711] d=[1, 4, -1, -2, 1] D^lo=+4.203e-03 cleared (16965s)
+    [150/711] d=[1, 2, 3, -1, 1] D^lo=+4.999e-03 cleared (39205s)
