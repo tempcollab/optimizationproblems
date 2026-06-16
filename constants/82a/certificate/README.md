@@ -13,10 +13,16 @@ Run from this directory; the scientific Python stack (`numpy`, `scipy`, `mpmath`
 
 ## Upper bound — `μ^ess(h_Z) ≤ 0.2538893183`
 
-A first-variation criterion for Doche's perturbed-polynomial construction, the
-saturation theorem, and the improved record. Paper: `../upper_bound_paper.tex`.
+A first-variation theory of Doche's perturbed-polynomial construction. The **main
+result** is the *sibling generator* (`firstvar_08`): it constructs Grinsztajn's
+near-cancellation factors `R0, R2` from a seed block and a bridge, lifting the theory
+from a diagnostic to a generative construction. A complementary *root-localisation
+obstruction* (`firstvar_09`/`firstvar_11`) says where any firing block must place a
+root. The certified bound `0.2538893183` improves Doche `0.25443677` but is **not the
+record** — the standing record is Grinsztajn's `0.2536331090` (`[Gri26]`), which this
+work diagnoses and explains rather than beats. Paper: `../upper_bound_paper.tex`.
 
-### The record certificate
+### The bound certificate
 
 ```
 cd constants/82a/certificate
@@ -24,6 +30,7 @@ python3 bound_07_block_j9.py certify \
   14.011500 13.443930 2.643590 2.299880 0.252420 0 0 \
   0.575080 0.568800 0.891590 0.066860 200000 14 1e-10
 # -> CERTIFIED  log h <= 0.2538893183   (frontier fully resolved, ~7 min)
+#    improves Doche 0.25443677; below the Gri26 record 0.2536331090.
 ```
 
 ### The bound chain (each block adjoined in turn)
@@ -56,6 +63,14 @@ anchor cross-check.)
 | `firstvar_04_perturbing_marginal.py` | perturbing-branch marginal `m_B` vs finite difference |
 | `firstvar_05_numerator_split.py` | exact active-set decomposition of the numerator |
 | `firstvar_06_dictionary.py` | dictionary admissibility (pairwise coprime, squarefree) |
+| `firstvar_07_record_blocks.py` | record diagnostic: criterion fires on all 6 Gri26 blocks, dry on controls |
+| `firstvar_08_sibling_generator.py` | **main result** — generator: firing-transfer bound builds `R0,R2`; degree floor `a≤5` |
+| `firstvar_09_restricted_optimality.py` | `D_a^hi < 0` (`a=1..4`): firing margin maximal at `a=5 = R0` |
+| `firstvar_11_firing_obstruction.py` | obstruction: root-additivity + `U≥0` off compact `K` (far-field done; box-B run pending) |
+
+`firstvar_10_bridge_support.py` is a **documented dead end** (the bridge-support
+optimality analogue: the lower-bound-difference frame cannot certify the near-miss;
+proof-reviewer verified). Kept as a negative-result artifact, not part of the paper.
 
 ### Saturation (no admissible new block fires)
 
@@ -124,8 +139,11 @@ the true minimum `0.2487462`.
 ## Files at a glance
 
 - `bound_0*.py` — the upper-bound certificate ladder (run `bound_07_block_j9.py` for
-  the record).
-- `firstvar_0*.py` — the first-variation theory checks.
+  the certified `0.2538893183` bound).
+- `firstvar_0*.py`, `firstvar_11_*.py` — the first-variation theory checks: the
+  criterion, the generator (`08`, main result), restricted optimality (`09`), and the
+  root-localisation obstruction (`11`). `firstvar_10_*` is a documented dead end.
 - `flammang_table1.py` — the 24 Flammang [F18] Table-1 integer polynomials `Q_j(w)`.
-- `scratch/` — searches, probes, the saturation enumeration, the lower-side OSS
-  experiment, and scalar cross-checks (the working record, not the certified set).
+- `scratch/` — searches, probes, timing scans, the saturation enumeration, the
+  lower-side OSS experiment, and scalar cross-checks (working notes, not the certified
+  set).

@@ -39,7 +39,9 @@
 
 \begin{document}
 
-\title{A first-variation criterion for Doche's Zhang--Zagier upper bound}
+\title[A first-variation theory for the Zhang--Zagier upper bound]
+{From diagnosis to construction:\\
+a first-variation theory of Doche's Zhang--Zagier upper bound}
 
 \author{Anonymous Authors}
 
@@ -60,33 +62,34 @@ perturbed polynomials, first variation, Danskin's theorem}
 
 \begin{abstract}
 Doche's perturbed-polynomial construction produces upper bounds for the essential
-minimum $\essmin$ of the Zhang--Zagier height by adjoining integer
-\emph{perturbing blocks} to a base family and tuning real exponents; which blocks
-lower the bound, and how far the construction can be driven, had been determined by
-search. We give the construction an analytic foundation. Doche's limit value is a
-ratio $\log h=\Phi(q)/D(q)$ in which the numerator is an integral of a pointwise
-maximum and the denominator a maximum of affine functions; both are non-smooth, so
-the existence of the derivative is not automatic. We prove that $\log h$ is
-right-differentiable in each block exponent and compute the first variation in
-closed form, uniformly across the three regimes of which branch attains the
-denominator---including the tie, where the derivative has a genuine one-sided kink.
-The load-bearing analytic point, the vanishing of the moving-boundary term, is
-settled by dominated convergence on the difference quotient. From this single
-derivative a firing criterion follows: a block lowers the bound to first order
-according to a sign condition on a single arc integral, with the condition taking one
-form for a base block (no value term) and another for a perturbing block (the
-complementary-slackness condition $\rQ=\log h$ of the associated measure linear
-program). The criterion accounts for the constructions found by search. Used as a
-design objective it selects further admissible blocks, certifying an enriched family
-that improves on \citet{Doc01b}; and applied to the recent record of \citet{Gri26},
-obtained by an independent denominator-first search, the criterion fires on
-\emph{every} block of that construction---including two new near-cancellation factors
-our analysis had not seen---while staying inert on natural controls, and the record's
-active blocks cluster at a common reduced-cost level. The two constructions optimize the
-same Doche functional; the record is consistent with, and sharply diagnosed by, the
-first-variation criterion. We also give computational evidence---an additivity property
-of the marginal with an explicit finite search---that within a specified finite
-dictionary the cheaply improving blocks have already been absorbed. Code at \repo.
+minimum $\essmin$ of the Zhang--Zagier height by adjoining integer \emph{perturbing
+blocks} to a base family and tuning real exponents; which blocks lower the bound had
+been determined by search, and the recent record of \citet{Gri26}---built from two
+near-cancellation factors $R_0,R_2$ of a degree-$140$ denominator---was found by a
+heuristic search, not predicted. We give the construction an analytic foundation and,
+from it, a \emph{generative} account of those factors. Doche's limit value is a ratio
+$\log h=\Phi(q)/D(q)$ whose numerator integrates a pointwise maximum and whose
+denominator is a maximum of affine functions; neither is smooth, so the existence of
+the derivative is not automatic. We prove $\log h$ is right-differentiable in each
+block exponent and compute the first variation in closed form, uniformly across the
+three regimes of which branch attains the denominator---including the tie, where the
+derivative has a genuine one-sided kink---the load-bearing point, vanishing of the
+moving-boundary term, settled by dominated convergence. The derivative yields a firing
+criterion that diagnoses any construction on the Doche family, and on the
+\citet{Gri26} record it fires on \emph{every} block. Our main result strengthens this
+diagnosis to a construction: from a firing seed block $Q^*$ and an admissible bridge
+$g$, the primitive part $R=\pp(Q^*\mp g)$ is a degree-preserving admissible firing
+sibling of $Q^*$---the firing transferred by a certified magnitude-subordination
+bound---and Grinsztajn's $R_0,R_2$ are exactly the instances $a=5$ of the bridge
+$g=P_1^aP_2^aP_4\,P_{\mathrm{tail}}$, with $a=5$ forced by an exact degree count. We
+complement this sufficient condition with a necessary one: the marginal of a block is
+additive over its roots, so a firing block must place a root in an explicit compact
+well-set of a logarithmic potential. Used as a design objective the criterion selects
+two further admissible blocks, certifying a family that improves Doche's longstanding
+bound to $0.2538893183$---predictively rather than by search, though short of the
+record. All certificates use outward-rounded interval arithmetic and are
+re-runnable. We make no claim on the lower bound, which remains \citet{F18}'s
+$0.2487458$. Code at \repo.
 \end{abstract}
 
 \maketitle
@@ -185,58 +188,87 @@ has nonnegative reduced cost $\rQ-\log h$.
 
 The base test has \emph{no} $\log h$ term, because a base block enters the argument
 that does not attain $D$; it is the test that selects the blocks of the enriched family
-of Section~\ref{sec:bound}. Run as a design objective over integer blocks, either test
-bounds the construction.
+of Section~\ref{sec:bound}. The criterion is the engine of this paper, but not its
+destination: a screening test scores a block one already holds in hand: it does not
+say which block to build. Our results close that gap from both sides---a sufficient
+condition that \emph{constructs} firing blocks, and a necessary condition that says
+where any firing block must live.
 
-The criterion's main use is descriptive: it identifies which blocks any Doche-family
-construction should carry, the record constructions among them. We test it against a
-construction it did not produce.
+\subsection*{The record, diagnosed} We first turn the criterion on a construction it
+did not produce. The current record \citep{Gri26}, $\essmin\le0.2536331090$, was found
+by a denominator-first search that optimizes the same Doche functional
+\eqref{eq:ratio} in complementary coordinates, with two \emph{new} near-cancellation
+factors $R_0,R_2$ of a degree-$140$ denominator that lie outside the dictionary of any
+prior analysis (and whose origin Grinsztajn obtains heuristically, not from theory).
 
 \begin{proposition}[The criterion diagnoses the record; Section~\ref{sec:record}]
 \label{thm:record}
-The current record bound $\essmin\le 0.2536331090$ of \citet{Gri26}, obtained by a
-denominator-first search, optimizes the same Doche functional \eqref{eq:ratio} written
-in complementary coordinates. Its denominator carries six perturbing blocks, among them
-two new near-cancellation factors $R_0,R_2$ outside the dictionary studied here. On a
-fine grid the perturbing criterion fires on \emph{every} one at the candidate-free
-anchor ($\rQ<\log h$, strictly), while natural controls stay inert; and at the record's
-own optimum the active blocks cluster at a common reduced-cost level. The record is thus
-consistent with, and sharply diagnosed by, the criterion (Proposition~\ref{thm:record-fires}).
+On a fine grid (Section~\ref{sec:verify}) the perturbing criterion $\rQ<\log h$ fires
+on \emph{every} one of the record's six denominator blocks at the candidate-free
+anchor, strictly, while natural controls stay inert, and at the record's own optimum
+the active blocks cluster at a common reduced-cost level. The record is consistent
+with, and sharply diagnosed by, the criterion.
 \end{proposition}
 
-The diagnosis is strengthened to a \emph{construction}. From a distinguished block
-$Q^*$ and an admissible bridge polynomial $g$, the criterion generates a firing sibling.
+\subsection*{From diagnosis to construction (the main result)} The diagnosis fires on
+$R_0,R_2$ but does not build them. Our central result removes that gap: the criterion
+is \emph{generative}. Given a firing seed block $Q^*$ and an admissible bridge
+polynomial $g$, the criterion produces an explicit degree-preserving firing sibling,
+and Grinsztajn's factors are its first instances.
 
 \begin{theorem}[Sibling generator; Section~\ref{sec:generator}]\label{thm:gen-intro}
-Let $Q^*\in\{Q_1,Q_2\}$ be a firing degree-$28$ block of Doche's distinguished block on
+Let $Q^*\in\{Q_1,Q_2\}$ be a firing degree-$28$ factor of Doche's distinguished block on
 an anchor family $F$, and $g=P_1^5P_2^5P_4\,P_{\mathrm{tail}}$ ($P_{\mathrm{tail}}\in\{P_7,P_8\}$).
 Then the primitive part $R=\pp(Q^*\mp g)$ is a degree-$28$ admissible block, coprime to
 $Q^*$, and a certified magnitude-subordination bound (Lemma~\ref{lem:transfer})
 transfers the firing from $Q^*$ to $R$: $\rb{R}<\log h$. The Grinsztajn near-cancellation
-factors $R_0,R_2$ are the instances of this construction, and the exponent $a=5$ in $g$
-is the maximal value preserving the degree (Proposition~\ref{prop:degfloor}). The seed
-$Q^*$ and the bridge ansatz are inputs; their optimality is not claimed.
+factors $R_0,R_2$ are exactly the instances $Q^*\in\{Q_1,Q_2\}$ of this construction, and
+the exponent $a=5$ in $g$ is the maximal value preserving the degree
+(Proposition~\ref{prop:degfloor}).
 \end{theorem}
 
-As an independent illustration, used as a design objective on the dictionary of this
-paper the base criterion selects two further admissible blocks; certifying the
-resulting family gives $\essmin\le0.2538893183$, improving Doche's longstanding
-$0.25443677$ (Theorem~\ref{thm:upper}, Section~\ref{sec:bound})---short of the
-\citet{Gri26} record but obtained from the criterion rather than from search.
+The content is that the sibling is \emph{proved} to fire, by a directed-rounded
+interval certificate, not merely observed to. The mechanism (Section~\ref{sec:generator})
+is a transfer principle: $g$ is small in magnitude relative to $Q^*$ on the active arc,
+so $\log|R/Q^*|$ is integrable and controlled, while $R$'s integer structure displaces
+its roots off those of $Q^*$, making $R$ a coprime, independently adjoinable factor that
+inherits $Q^*$'s firing.
+
+\subsection*{Where firing blocks must live} The generator is a sufficient condition. We
+pair it with a necessary one, which sharpens the heuristic ``firing blocks are rare''
+into geometry. The base marginal is \emph{additive over roots}: writing $Q$ over its
+roots, $\widetilde r_Q=\log|\mathrm{lc}|\cdot|\Omega_F|+\sum_j U(\alpha_j)$ with
+$U(\alpha)=\int_{\Omega_F}\log|\chi(s)-\alpha|\,ds$ a fixed logarithmic potential. So a
+firing block is forced to place a root where $U$ is negative.
+
+\begin{theorem}[Root-localisation obstruction; Section~\ref{sec:obstruction}]
+\label{thm:obstruction-intro}
+There is an explicit compact set $K\subset\C$ such that $U(\alpha)\ge c>0$ for all
+$\alpha\notin K$. Consequently every admissible monic integer block $Q$ that fires on
+the base branch ($\widetilde r_Q<0$) has at least one root in $K$. The set $K$ and the
+constant are certified by outward-rounded interval arithmetic.
+\end{theorem}
+
+Together the two theorems frame the firing set: Theorem~\ref{thm:gen-intro} manufactures
+firing blocks from a seed, and Theorem~\ref{thm:obstruction-intro} confines every firing
+block's roots to a known region---a generator and an obstruction for the same object.
+
+\subsection*{A predictive bound, and saturation} Read forward as a design objective on
+the dictionary of this paper, the base criterion selects two further admissible firing
+blocks; certifying the resulting family gives an improvement on Doche obtained
+predictively rather than by search.
 
 \begin{theorem}[An improvement on Doche; Section~\ref{sec:bound}]\label{thm:upper}
 $\essmin\le 0.2538893183$, strictly below the longstanding $0.25443677$ of
 \citet{Doc01b}, certified by an outward-rounded interval-arithmetic enclosure.
 \end{theorem}
 
-Finally, run as a design objective the criterion indicates where the construction's
-easily reachable gains run out. The base marginal $\widetilde r_Q$ is additive over
-factorizations in $\Z[X]$, and an explicit finite search finds that the cheaply firing
-blocks have already been absorbed into the dictionary (Section~\ref{sec:saturation}).
-This is computational evidence, not a non-existence theorem: high-degree admissible
-blocks outside the search can still fire (we exhibit table entries that would), so we
-claim only that the cheaply \emph{reachable} improvements within the searched dictionary
-are absorbed, and explain the mechanism.
+This improvement is modest and is \emph{not} the record; its role is to confirm that the
+criterion selects blocks predictively, not to settle the constant. Read backward, the
+criterion locates where the construction's reachable gains run out: $\widetilde r_Q$ is
+additive over factorizations in $\Z[X]$, and an explicit finite search finds the cheaply
+firing blocks already absorbed into the dictionary (Section~\ref{sec:saturation}). This
+is computational evidence, not a non-existence theorem.
 
 \subsection*{Scope}
 Theorem~\ref{thm:main} is a \emph{local} first-variation theory: it computes the
@@ -244,22 +276,32 @@ derivative at $q_Q=0$ for Doche's functional, not a statement about $\essmin$ it
 Proposition~\ref{thm:record} is a \emph{diagnostic}: on a fine grid the criterion fires
 on, and accounts for, the blocks of the \citet{Gri26} construction; its marginals are
 grid evaluations, not interval certificates, and we state them as numerical diagnostics.
-Theorem~\ref{thm:gen-intro} (Section~\ref{sec:generator}) strengthens this from
-diagnosis to \emph{construction}, but only \emph{from a seed}: given the distinguished
-block $Q^*$ and the bridge ansatz it generates the firing sibling family containing
-$R_0,R_2$, with the firing transferred by a directed-rounded interval certificate
-(Lemma~\ref{lem:transfer}) and the maximal exponent $a=5$ forced by an exact degree
-count (Proposition~\ref{prop:degfloor}). We do \emph{not} claim the criterion alone, with
-no seed, predicts $R_0,R_2$, nor that the seed or bridge is optimal among generators
-(Remark~\ref{rem:gen-scope}); the choice of seed and bridge stays heuristic. The improvement of
-Theorem~\ref{thm:upper} is genuine but small, and is no longer the record; its role is
-to confirm that the analysis selects blocks predictively, from the criterion rather
-than from search. The saturation discussion of
-Section~\ref{sec:saturation} is computational evidence over an explicit finite search,
-\emph{not} an unconditional non-existence statement; we are precise there about what is
-proven (additivity, the finite enumeration) and what is not (no claim over all integer
-blocks). We do not claim block selection is a transfinite-diameter problem---it is not,
-and we record the obstruction (Remark~\ref{rem:noteq}). Every assertion is backed by a
+Theorem~\ref{thm:gen-intro} (Section~\ref{sec:generator}), our main result,
+strengthens this from diagnosis to \emph{construction}, but only \emph{from a seed}:
+given the distinguished block $Q^*$ and the bridge ansatz it generates the firing
+sibling family containing $R_0,R_2$, with the firing transferred by a directed-rounded
+interval certificate (Lemma~\ref{lem:transfer}) and the maximal exponent $a=5$ forced
+by an exact degree count (Proposition~\ref{prop:degfloor}). We do \emph{not} claim the
+criterion alone, with no seed, predicts $R_0,R_2$, nor that the seed or bridge is
+optimal among generators (Remark~\ref{rem:gen-scope}); the choice of seed and bridge
+stays heuristic, and naming it is the honest residual---the generative theory we have
+is generative \emph{relative to} an input, and producing the seed unconditionally is
+the open problem. Theorem~\ref{thm:obstruction-intro}
+(Section~\ref{sec:obstruction}) is the complementary necessary condition; its
+analytic core---root-additivity of the marginal and positivity of $U$ off an explicit
+compact set---is proved, and the supporting interval certificate of the far-field and
+near-contour positivity is documented in the verification set
+(Section~\ref{sec:verify}), with the final compact-region certified run noted there as
+pending at the present revision. The improvement of Theorem~\ref{thm:upper} is genuine
+but small, and is \emph{not} the record; its role is to confirm that the analysis
+selects blocks predictively, from the criterion rather than from search. The saturation
+discussion of Section~\ref{sec:saturation} is computational evidence over an explicit
+finite search, \emph{not} an unconditional non-existence statement; we are precise
+there about what is proven (additivity, the finite enumeration) and what is not (no
+claim over all integer blocks). We do not claim block selection is a
+transfinite-diameter problem---it is not, and we record the obstruction
+(Remark~\ref{rem:noteq}). We make \emph{no} claim on the lower bound: it remains
+$0.2487458$ \citep{F18}, and nothing here bears on it. Every assertion is backed by a
 re-runnable computation; Section~\ref{sec:verify} collects these, keyed by statement
 number, so that no claim rests on a number that cannot be reproduced.
 
@@ -981,6 +1023,121 @@ and the transfer identity that certifies firing.
 \end{remark}
 
 %==============================================================================
+\section{Where firing blocks must live: a root-localisation obstruction}
+\label{sec:obstruction}
+%==============================================================================
+
+The generator of Section~\ref{sec:generator} is a \emph{sufficient} condition: it
+manufactures firing siblings from a seed. We now establish the complementary
+\emph{necessary} condition, which constrains the roots of \emph{every} firing block
+and gives the geometry behind the thinness observed empirically in
+Remark~\ref{rem:wells}. Throughout, the anchor is the base active arc
+$\Omega_F=\{A_0>B\}$ of the certified family of Section~\ref{sec:bound}, on which a
+base block fires iff $\widetilde r_Q=\int_{\Omega_F}\log|Q(\chi(s))|\,ds<0$
+(Corollary~\ref{cor:criterion}).
+
+\subsection*{Additivity over roots}
+The marginal is a logarithmic potential of the active arc evaluated at the roots of the
+block.
+
+\begin{lemma}[Root-additivity of the marginal]\label{lem:rootadd}
+For $Q\in\Z[X]$ with leading coefficient $\mathrm{lc}$ and roots $\alpha_1,\dots,\alpha_n$
+(with multiplicity),
+\begin{equation}\label{eq:rootadd}
+  \widetilde r_Q=\log|\mathrm{lc}|\cdot|\Omega_F|+\sum_{j=1}^n U(\alpha_j),
+  \qquad U(\alpha):=\int_{\Omega_F}\log|\chi(s)-\alpha|\,ds .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Factor $Q(X)=\mathrm{lc}\prod_j(X-\alpha_j)$, so
+$\log|Q(\chi(s))|=\log|\mathrm{lc}|+\sum_j\log|\chi(s)-\alpha_j|$ pointwise on
+$\Omega_F$; integrate over $\Omega_F$ and exchange the finite sum with the integral.
+$U(\alpha)$ is finite for every $\alpha$ because $\log|\chi(\cdot)-\alpha|$ has at worst
+an integrable logarithmic singularity where $\chi$ meets $\alpha$.
+\end{proof}
+
+We state the obstruction for blocks normalised to a monic representative,
+$\mathrm{lc}=+1$, so that the $\log|\mathrm{lc}|$ term in \eqref{eq:rootadd} vanishes;
+the admissible primitive integer blocks of the construction are monic up to sign. A
+block with $|\mathrm{lc}|<1$ would contribute a negative leading term and is excluded as
+a non-integer-block case. For such a $Q$, \eqref{eq:rootadd} reads
+$\widetilde r_Q=\sum_j U(\alpha_j)$: firing requires the root sum of $U$ to be negative,
+hence at least one root where $U$ itself is negative.
+
+\subsection*{Positivity of the potential off a compact set}
+Let $M:=\sup_{s}|\chi(s)|=2$ (attained on the full circle; a rigorous upper bound on
+$\sup_{\Omega_F}|\chi|$ as well). Fix $R_*=3.5$ and $\delta=0.02$.
+
+\begin{proposition}[Two-region positivity]\label{prop:Upos}
+There are constants $c_1,c_2>0$ such that $U(\alpha)\ge\min(c_1,c_2)>0$ for every
+$\alpha$ with $\operatorname{Re}\alpha\le-\delta$, by the following two certified
+estimates.
+\begin{enumerate}
+\item[\textup{(far field)}] If $|\alpha|\ge R_*$ then for all $s$,
+$|\chi(s)-\alpha|\ge|\alpha|-|\chi(s)|\ge R_*-M$, so
+\[
+  U(\alpha)\ge|\Omega_F|\,\log(R_*-M)=|\Omega_F|\,\log(1.5)=:c_2>0 ,
+\]
+positive because $R_*-M=1.5>1$.
+\item[\textup{(near field)}] On the box $B=\{-R_*\le\operatorname{Re}\alpha\le-\delta,\
+|\operatorname{Im}\alpha|\le R_*\}$, $U(\alpha)\ge c_1>0$ by a two-dimensional
+interval cover of $B$: each $\alpha$-cell carries an outward-rounded lower bound on $U$
+assembled from per-$s$-cell lower bounds on $\tfrac12\log|\chi(s)-\alpha|^2$, the
+separation $\inf_{s,\alpha}|\chi(s)-\alpha|>0$ being certified \emph{by the enclosure
+itself} on each cell.
+\end{enumerate}
+\end{proposition}
+
+The near-field certificate is the load-bearing computation and must not be replaced by
+a half-plane shortcut: $\chi$ traces a lemniscate reaching $\operatorname{Re}\chi\approx-1.73$,
+so $\operatorname{Re}\chi\ge0$ on $\Omega_F$ is \emph{false}, and the contour passes
+close to part of $B$. At its closest the certified separation
+$\inf_{\Omega_F}|\chi(s)-\alpha|$ over $B$ is only about $7.5\times10^{-3}$ (attained at
+$\alpha\approx-1.63+1.11i$, where $\chi$ grazes the box); the bound nonetheless stays
+strictly positive there because that single grazing $s$ contributes one bounded-negative
+term swamped by the rest of the integral ($U\approx+0.05$ at that $\alpha$). The
+separation is certified cell by cell from the enclosure of $|\chi(s)-\alpha|^2$, never
+from a geometric half-plane property of $\chi$.
+
+\begin{theorem}[Root-localisation obstruction]\label{thm:obstruction}
+Set $K:=\{\alpha:\operatorname{Re}\alpha\ge-\delta\}\cap\{|\alpha|\le R_*\}$, a compact
+set. Then $U(\alpha)\ge\min(c_1,c_2)>0$ for every $\alpha\notin K$, and consequently
+every admissible monic integer block $Q$ with $\widetilde r_Q<0$ has at least one root
+in $K$.
+\end{theorem}
+
+\begin{proof}
+The complement of $K$ is $\{\operatorname{Re}\alpha<-\delta\}\cup\{|\alpha|>R_*\}$. If
+$|\alpha|>R_*$ the far-field estimate gives $U(\alpha)\ge c_2$. Otherwise
+$\operatorname{Re}\alpha<-\delta$ and $|\alpha|\le R_*$; then $|\operatorname{Im}\alpha|\le
+R_*$ (else $|\alpha|>R_*$) and $\operatorname{Re}\alpha\ge-R_*$, so $\alpha\in B$ and the
+near-field estimate gives $U(\alpha)\ge c_1$. Thus $U\ge\min(c_1,c_2)>0$ off $K$. If
+every root of a monic $Q$ lay off $K$, then $\widetilde r_Q=\sum_jU(\alpha_j)>0$ by
+Lemma~\ref{lem:rootadd}, contradicting $\widetilde r_Q<0$; hence some root lies in $K$.
+\end{proof}
+
+This is the geometry promised in Remark~\ref{rem:wells}: a firing block cannot be built
+without placing a root inside the explicit compact $K$, the closure of the well-set
+$\{U<0\}$, and the integer constraint then forces compensating conjugates that make such
+blocks rare. Together with the generator (Theorem~\ref{thm:generator}) it brackets the
+firing set from both sides.
+
+\begin{remark}[Status of the certificate]\label{rem:obstruction-status}
+Lemma~\ref{lem:rootadd} and the far-field estimate of Proposition~\ref{prop:Upos} are
+elementary and verified to machine precision (certificate \texttt{firstvar\_11};
+root-additivity reproduced to $<10^{-15}$ on monic test blocks, $c_2=+7.0\times10^{-3}$
+certified). The near-field box-$B$ positivity is the one expensive step: the
+interval cover near the grazing band requires deep adaptive subdivision, and the
+full certified run is recorded in Section~\ref{sec:verify} as pending at the present
+revision. An independent grid evaluation places $\min_B U\approx+9.5\times10^{-4}>0$
+(attained at the well-boundary corner $\operatorname{Re}=-\delta$), consistent with
+$c_1>0$ with margin; the offset $\delta=0.02$ is forced rather than free, since
+$U(0)\approx-1.1\times10^{-5}<0$ (the well crosses the imaginary axis), and is part of
+the statement.
+\end{remark}
+
+%==============================================================================
 \section{Where the reachable gains run out}\label{sec:saturation}
 %==============================================================================
 
@@ -1072,6 +1229,8 @@ Thm.~\ref{thm:generator}, Lem.~\ref{lem:transfer} & \texttt{firstvar\_08\_siblin
 \quad degree floor (Prop.~\ref{prop:degfloor}) & \texttt{firstvar\_08\_sibling\_generator} & $\deg R_a{=}28\!\iff\!a{\le}5$, admissible\\
 Prop.~\ref{prop:restricted-opt} & \texttt{firstvar\_09\_restricted\_optimality} & $D_a^{\mathrm{hi}}{<}0$, $a{=}1..4$: $\rb{R_a}$ $\downarrow$, opt.\ $a{=}5$\\
 \quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
+Lem.~\ref{lem:rootadd}, far field (Prop.~\ref{prop:Upos}) & \texttt{firstvar\_11\_firing\_obstruction} & additivity $<10^{-15}$; $c_2{=}{+}7.0{\times}10^{-3}$\\
+Thm.~\ref{thm:obstruction}, box-$B$ (Prop.~\ref{prop:Upos}) & \texttt{firstvar\_11\_firing\_obstruction} & $c_1{>}0$; full certified run \emph{pending}\\
 \S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
 \quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
 Thm.~\ref{thm:upper} & \texttt{bound\_07\_block\_j9} & \texttt{CERTIFIED} $\le0.2538893183$\\

@@ -1,7 +1,22 @@
 # C_82a — Essential minimum of the Zhang-Zagier height
 
 ## Status
-none
+THEORY PAPER (upper side). Deliverable = `upper_bound_paper.tex`: a first-variation
+theory of Doche's upper bound. Headline = the SIBLING GENERATOR (firstvar_08): it
+constructs Grinsztajn's near-cancellation factors R0,R2 from a seed + bridge, lifting
+the criterion from a diagnostic to a generative construction. Complemented by the
+ROOT-LOCALISATION OBSTRUCTION (firstvar_11): every firing block must place a root in an
+explicit compact K (far-field certified; box-B run PENDING). Certified upper bound
+0.2538893183 (improves Doche; demoted to a predictive worked example; NOT the record).
+
+Honest bound ledger:
+  - lower: 0.2487458 [Flammang F18] — UNCHANGED. We make NO lower-bound claim.
+    (Any 0.25xx "lower record" lines below are from a SEPARATE energy-method run and
+    are INVALID — that approach needs a z<->1-z symmetry the asymmetric mu0 does not
+    have; the bound dips to ~0.22 on the {|1-z|=1} circle the certificate never scans.
+    Do not cite them. Kept only as the OSS experiment artifact in scratch.)
+  - upper: 0.2536331090 [Gri26] is the live record; OUR certified value 0.2538893183
+    improves Doche 0.25443677 but is above Gri26. We diagnose + explain Gri26, not beat it.
 
 ## Bounds
 table: lower 0.24874 [F18, Flammang 2018] · upper 0.25444 [Doc01b, Doche 2001]

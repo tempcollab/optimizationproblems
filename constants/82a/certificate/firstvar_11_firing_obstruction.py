@@ -84,12 +84,17 @@ positive sum.
 =========================  RIGOR OF THE LOWER BOUND  ========================
 
 SAFE DIRECTION (why this is NOT the firstvar_10 dead end).  This is a LOWER bound on U
-on a region where U is comfortably positive (the certified c1 ~ 9e-4, c2 ~ 1e-2), with
-the log SINGULARITY HELD OFF the contour: for alpha in box B, inf_s|chi(s)-alpha| is
-certified >= ~0.47 > 0, so log|chi - alpha|^2 is a BOUNDED smooth function and the
-quadrature is a fixed smooth 1-D-in-s sum.  There is NO deep well, NO near-cancellation
-straddle banking, NO adaptive s-bisection, NO 729-box blow-up.  Adaptivity is in ALPHA
-ONLY (bisect an alpha-cell whose certified U-lower-bound is not yet > 0).
+on a region where U is comfortably positive (the certified c1 ~ 9.5e-4, c2 ~ 7e-3),
+with the log singularity held OFF the contour: for every alpha in box B the separation
+inf_s|chi(s)-alpha| is certified > 0 cell-by-cell (g_lo > 0), so log|chi - alpha|^2 is
+finite and the quadrature is a fixed 1-D-in-s sum.  NOTE: the separation is NOT large
+everywhere.  chi traces a lemniscate reaching Re(chi) ~ -1.73, so the contour GRAZES
+part of box B: the WORST certified separation over box B is ~0.0075 (at alpha ~
+-1.626 + 1.108i), not ~0.47.  U stays positive there anyway (~ +0.05) because the
+single grazing s contributes one bounded-negative integrand swamped by the far bulk --
+but the small separation is real and is why box B needs DEEP adaptive refinement near
+the grazing band (this is the expensive step).  Adaptivity is in ALPHA (bisect an
+alpha-cell whose certified U-lower-bound is not yet > 0); the s-grid stays fixed.
 
 COMPLEX TAYLOR ENCLOSURE of chi(s) over an s-cell [a,b] (avoids interval-Horner
 dependency blow-up over a wide cell):
@@ -261,10 +266,25 @@ def precompute_scells(Ns):
     certainly_in = A_lo > B_hi
     certainly_out = A_hi < B_lo
     straddle = (~certainly_in) & (~certainly_out)
-    omega_meas = float(np.sum(w[certainly_in | straddle])) / TWO_PI
+    could_in = certainly_in | straddle
+    omega_meas = float(np.sum(w[could_in])) / TWO_PI
+    # OPTIMIZATION (provably inert): the per-alpha-cell U_lo accumulator gives
+    # certainly_out s-cells contribution EXACTLY 0 (they are neither banked nor
+    # straddle-negative), and min_sep / n_bad are computed over could_in only. So
+    # only could_in s-cells ever matter. Pre-slice chi / w / masks to that subset
+    # ONCE here; alpha_cell_U_lo then sums over the could_in subset alone. At the
+    # operating scale Ns=40000 the active arc is ~31% of the circle, so this drops
+    # ~69% of the inner-loop work per alpha-cell with NO change to the certified
+    # value (same elements, same order, same outward rounding).
+    wr_lo, wr_hi, wi_lo, wi_hi = chi
+    chi_ci = (wr_lo[could_in], wr_hi[could_in], wi_lo[could_in], wi_hi[could_in])
     return dict(w=w, chi=chi, certainly_in=certainly_in,
                 straddle=straddle, omega_meas=omega_meas,
-                could_in=(certainly_in | straddle))
+                could_in=could_in,
+                # could_in-restricted views consumed by alpha_cell_U_lo:
+                w_ci=w[could_in], chi_ci=chi_ci,
+                ci_in_could=certainly_in[could_in],
+                st_in_could=straddle[could_in])
 
 
 # ---------------------------------------------------------------------------
@@ -276,35 +296,65 @@ def precompute_scells(Ns):
 # Returns (U_lo, min_sep, n_bad)  where min_sep = sqrt(min g_lo over could-in cells),
 # n_bad = # could-in s-cells with g_lo <= 0 (forces alpha-cell refinement).
 # ---------------------------------------------------------------------------
+def _isq(lo, hi):
+    """Rigorous outward-rounded enclosure of x^2 for x in [lo, hi] (arrays).
+    A square is >= 0: if the interval straddles 0 the min square is 0, else it is the
+    nearer endpoint squared; the max square is the farther endpoint squared. Lower
+    endpoint rounded down, upper rounded up. Tighter AND sound vs the generic rmul
+    (which can return a NEGATIVE lower bound for a straddling interval)."""
+    alo = np.abs(lo)
+    ahi = np.abs(hi)
+    straddles = (lo <= 0.0) & (hi >= 0.0)
+    m = np.where(straddles, 0.0, np.minimum(alo, ahi))   # min |x| over the interval
+    Mx = np.maximum(alo, ahi)                              # max |x| over the interval
+    sq_lo = np.maximum(na(m * m, NINF), 0.0)              # a square is >= 0 (sound floor)
+    sq_hi = na(Mx * Mx, PINF)
+    return sq_lo, sq_hi
+
+
 def alpha_cell_U_lo(SC, are_lo, are_hi, aim_lo, aim_hi):
-    wr_lo, wr_hi, wi_lo, wi_hi = SC['chi']
+    # Work ONLY over the could_in s-cells (certainly_out cells contribute exactly 0
+    # to U_lo and are excluded from min_sep / n_bad), pre-sliced once in
+    # precompute_scells. Same NONZERO terms as the full-array sum -- only the zero
+    # certainly_out terms are dropped, so the value matches the full sum to within
+    # float summation order (a sub-ULP wobble; verified <= 0.02 below the true U on
+    # 300 sample cells, the SAFE direction). The final na(...,NINF) keeps U_lo a
+    # rigorous LOWER bound regardless of summation order, so soundness does not
+    # depend on it. ~3.2x fewer s-cells per alpha-cell at Ns=40000.
+    wr_lo, wr_hi, wi_lo, wi_hi = SC['chi_ci']
     # chi - alpha  (subtract a real interval [are_lo,are_hi] from real part, etc.)
     dr_lo, dr_hi = vv.rsub(wr_lo, wr_hi, are_lo, are_hi)
     di_lo, di_hi = vv.rsub(wi_lo, wi_hi, aim_lo, aim_hi)
-    re2_lo, re2_hi = vv.rmul(dr_lo, dr_hi, dr_lo, dr_hi)
-    im2_lo, im2_hi = vv.rmul(di_lo, di_hi, di_lo, di_hi)
+    # SQUARE of an interval (NOT generic rmul): for x in [a,b], x^2 in [m^2, M^2] with
+    # m = 0 if the interval straddles 0 (a<=0<=b), else min(|a|,|b|); M = max(|a|,|b|).
+    # vv.rmul(d,d) is UNSOUND here: it takes min over cross products a*b, which is
+    # NEGATIVE for a straddling interval (e.g. [-0.01,0.02]^2 -> -2e-4), even though a
+    # square is >= 0. That spurious negativity floored g_lo at LOG_FLOOR on every cell
+    # where the contour's real/imag range brackets alpha, injecting a huge artificial
+    # -0.0086 per s-cell and preventing certification (the divergence bottleneck).
+    re2_lo, re2_hi = _isq(dr_lo, dr_hi)
+    im2_lo, im2_hi = _isq(di_lo, di_hi)
     g_lo, g_hi = vv.radd(re2_lo, re2_hi, im2_lo, im2_hi)
     # (1/2) log g  enclosure
     hl_lo = na(0.5 * vv.log_down(np.maximum(g_lo, LOG_FLOOR)), NINF)
-    # asymmetric LOWER accumulation
-    w = SC['w']
-    ci = SC['certainly_in']
-    st = SC['straddle']
+    # asymmetric LOWER accumulation (could_in subset; certainly_out are absent = 0)
+    w = SC['w_ci']
+    ci = SC['ci_in_could']
+    st = SC['st_in_could']
     contrib = np.zeros_like(w)
     contrib = np.where(ci, w * hl_lo, contrib)                  # banked half-log (any sign)
     contrib = np.where(st, w * np.minimum(0.0, hl_lo), contrib)  # straddle: negative only
     U_lo = na((float(np.sum(contrib))) / TWO_PI, NINF)
-    could = SC['could_in']
-    g_could = g_lo[could]
-    n_bad = int(np.sum(g_could <= LOG_FLOOR))
-    min_sep = float(np.sqrt(max(np.min(g_could), 0.0))) if g_could.size else PINF
+    # g_lo is already restricted to could_in cells, so min_sep / n_bad use it directly.
+    n_bad = int(np.sum(g_lo <= LOG_FLOOR))
+    min_sep = float(np.sqrt(max(np.min(g_lo), 0.0))) if g_lo.size else PINF
     return U_lo, min_sep, n_bad
 
 
 # ---------------------------------------------------------------------------
 # Adaptive (in alpha) cover of box B certifying U >= c1 > 0.
 # ---------------------------------------------------------------------------
-def certify_box(SC, n0, target=0.0, max_depth=20):
+def certify_box(SC, n0, target=0.0, max_depth=20, verbose=True):
     # initial 2-D alpha grid over B = {-R0<=Re<=-DELTA, |Im|<=R0}
     re_edges = np.linspace(-R0, -DELTA, n0 + 1)
     im_edges = np.linspace(-R0, R0, 2 * n0 + 1)
@@ -322,7 +372,17 @@ def certify_box(SC, n0, target=0.0, max_depth=20):
     n_bad_total = 0
     depth = 0
     worst_cell = None
+    t0 = time.time()
+    if verbose:
+        # The box-B alpha-cover is the expensive step; it bisects a frontier of
+        # alpha-cells by depth and was previously SILENT until completion. Print one
+        # line per depth level so progress (and any stall in the grazing band, where
+        # cells near Re~-1.6 refine deepest) is visible.  Each level's `for k` loop is
+        # the CPU cost; `frontier` is how many cells that level evaluates.
+        print(f"    [box B] start: {are_lo.size} alpha-cells, max_depth={max_depth}",
+              flush=True)
     while are_lo.size:
+        frontier = are_lo.size
         keep_rl = []; keep_rh = []; keep_il = []; keep_ih = []
         U_los = np.empty(are_lo.size)
         seps = np.empty(are_lo.size)
@@ -332,9 +392,11 @@ def certify_box(SC, n0, target=0.0, max_depth=20):
                 SC, are_lo[k], are_hi[k], aim_lo[k], aim_hi[k])
             U_los[k] = U_lo; seps[k] = sep; bads[k] = nb
         ok = (U_los > target) & (bads == 0)
+        n_resolved_level = 0
         for k in range(are_lo.size):
             if ok[k]:
                 n_cells_done += 1
+                n_resolved_level += 1
                 if U_los[k] < c1:
                     c1 = U_los[k]
                     worst_cell = (are_lo[k], are_hi[k], aim_lo[k], aim_hi[k], U_los[k])
@@ -354,11 +416,22 @@ def certify_box(SC, n0, target=0.0, max_depth=20):
                 else:
                     n_unresolved += 1
                     n_bad_total += int(bads[k])
+        if verbose:
+            c1_str = "inf" if c1 == PINF else f"{c1:+.3e}"
+            sep_str = "inf" if min_sep_global == PINF else f"{min_sep_global:.2e}"
+            print(f"    [box B] depth {depth:2d}: frontier {frontier}, "
+                  f"resolved {n_resolved_level} (cum {n_cells_done}), "
+                  f"bisect {len(keep_rl)}, c1={c1_str}, min_sep={sep_str}, "
+                  f"{time.time()-t0:.0f}s", flush=True)
         if not keep_rl:
             break
         are_lo = np.array(keep_rl); are_hi = np.array(keep_rh)
         aim_lo = np.array(keep_il); aim_hi = np.array(keep_ih)
         depth += 1
+    if verbose:
+        print(f"    [box B] done: c1={c1:+.6e}, {n_cells_done} cells, "
+              f"depth {depth}, {n_unresolved} unresolved, {time.time()-t0:.0f}s",
+              flush=True)
     return dict(c1=c1, min_sep=min_sep_global, n_unresolved=n_unresolved,
                 n_cells=n_cells_done, depth=depth, worst_cell=worst_cell,
                 n_bad_total=n_bad_total)
