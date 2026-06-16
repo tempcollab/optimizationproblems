@@ -167,7 +167,7 @@ def main():
     # (2) Entry (firing) condition at the candidate-free anchor.
     print("\n(2) ENTRY: r_Q < log h at the CANDIDATE-FREE anchor (block removed)")
     print(f"    {'block':6}{'deg':>4}{'r_Q (cand-free)':>18}{'fire?':>8}")
-    for blk in ["R0", "R2", "P7", "P9"]:
+    for blk in ["Q1", "Q2", "R0", "R2", "P7", "P9"]:
         dQ = _degree(lib[blk])
         B_free = np.zeros(GRID_N)
         for b in DENOMINATOR:
