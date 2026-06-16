@@ -8,3 +8,4 @@ firstvar_10  RESTRICTED FIRING-OPTIMALITY of the bridge SUPPORT (deg-4 d)
 
 (F) float cross-check: r_R(P4) = -0.03560  (anchor sanity, expect -0.03560)
     [50/711] d=[1, -2, 2, -3, 1] D^lo=+3.089e-03 cleared (8421s)
+    [100/711] d=[1, 4, -1, -2, 1] D^lo=+4.203e-03 cleared (16965s)
