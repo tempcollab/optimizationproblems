@@ -1,5 +1,24 @@
 # R10 — Base-marginal firing-OBSTRUCTION / root-localisation theorem (outline)
 
+> **STATUS (R23): outline-reviewed & APPROVED-in-principle; cert PARTIALLY verified; NOT a
+> milestone yet.** The outline-reviewer (constants/82a/approaches/R10-firing-obstruction-review.md)
+> confirmed the angle clears the milestone bar (novelty orthogonal to thm:generator and
+> prop:restricted-opt; upgrades the heuristic rem:wells to a proved root-localisation necessary
+> condition), independently verified the X-root additivity identity (~1e-17), sup|chi|=2 exactly
+> (so R0=3.5,M=2,R0-M=1.5>0; far-field c2 certified > 0), gap-free coverage of complement(K) by
+> {Re<=-delta}∪{|α|>=R0}, true min U over box B = +9.5e-4>0, and the false imaginary-axis lemma
+> (so delta=0.02 is forced). Cert firstvar_11_firing_obstruction.py: step 1 (additivity) PASS and
+> step 2ii (far-field, c2=+6.99e-3 CERTIFIED at Ns=40000) run in ~30s. **BUT the load-bearing
+> step 2i (box-B alpha-cover) did NOT complete in >40 min (R23, killed)** — each alpha-cell is
+> O(Ns) and the well-boundary band needs deep refinement while straddle banking over ~12k
+> unresolved-membership cells biases U_lo down. So the obstruction is NOT yet reviewer-verified.
+> **Open next step:** make box B feasible — vectorise the per-cell loop, or certify U on box B by a
+> coarse membership-INDEPENDENT lower bound that avoids straddle banking. Three reviewer must-fixes
+> recorded: MF-A (the docstring's "inf_s|chi-α|>=0.47" was FALSE; true ~0.0075 near the grazing
+> lobe — corrected in the cert docstring R23); MF-B (demonstrate a completed full run — OPEN);
+> MF-C (state cert's Omega_F={A>B} is the paper's candidate-free {A_0>B} anchor).
+
+
 ## 82a
 Spec review: **required** (new analytic result: a certified continuum lower bound on
 the single-root potential U(alpha), plus a far-field tail lemma — it must be checked
