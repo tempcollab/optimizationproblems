@@ -41,17 +41,16 @@ approach body and reuse the literature digests.
 
 Write the work into `constants/<id>/`:
 - the certificate/construction + its checking script under the folder;
-- update `constants/<id>/current.md` per the contract in `CLAUDE.md` — record the
-  value you now claim under `held` and refresh the `## Bounds` snapshot. Leave
-  `## Status: none` and **do not write to the `## Progress log`** — those are the
-  reviewer's to set, only after it verifies your work. (Create the file with the
-  contract's skeleton if this is the first attempt on the constant.)
-- update the relevant `constants/<id>/approaches/<slug>.md` — what you did, the result,
-  and concretely what would push it further. An unverified numerical-search value goes
-  here as a labelled conjecture, never into `held`.
+- update the relevant `constants/<id>/approaches/<slug>.md` — what you did, the value you
+  now **claim** (clearly as a claim, not a verified fact), and concretely what would push it
+  further.
 
-Do **not** edit the canonical `constants/<id>.md` record — the reviewer does that only
-after verifying.
+Your claim is unverified until the reviewer confirms it, so **do not touch `current.md`** —
+`held`, `## Bounds`, `## Status`, and `## Progress log` are all the reviewer's to write,
+only after verification (`CLAUDE.md` contract). Writing your claim into `held` would put an
+unverified value where the contract promises a verified one. (If `current.md` doesn't exist
+yet, leave it — the reviewer creates it with the skeleton.) And do **not** edit the canonical
+`constants/<id>.md` record; the reviewer does that only after verifying.
 
 After writing, return one line (name the approach slug you expanded — the reviewer
 needs it to record the outcome):

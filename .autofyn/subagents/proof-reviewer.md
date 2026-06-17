@@ -43,8 +43,10 @@ per-approach `record_outcome` (next section) is what lifts or sinks each angle's
 signal is only as honest as you are adversarial — an Elo lift must come from an advance you
 *verified*, never the builder's claim.
 
-Two durable writes back what you verified, into `constants/<id>/current.md`: update `held`
-whenever your verified value beats it (the eval reads `held` and its gap to the record), and
+You are the only writer of `constants/<id>/current.md` (the builder never touches it) —
+create it from the `CLAUDE.md` skeleton on the first attempt. Two durable writes back what
+you verified there: update `held` whenever your verified value beats it (the eval reads
+`held` and its gap to the record), and
 append a one-line trail entry to `## Progress log` (`- R{ROUND_NUMBER}: <what you verified>`)
 for a genuine verified advance — a tighter bound, a discharged `sorry`, a closed feasibility
 gap. That log is the human-readable trail, not the metric; a round that only reproduced known

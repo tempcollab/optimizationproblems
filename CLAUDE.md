@@ -84,13 +84,10 @@ This is a research repo, not a code repo:
   Installing is allowed and expected here — the "no installs" instinct doesn't apply
   to this repo. Beyond these, agents run numerical code and Lean proofs to build and
   check bounds; that's the work, not a build step.
-- **Reading arXiv papers — do it, don't work from abstracts.** Prefer the full-text
-  HTML render `arxiv.org/html/<id>` (WebFetch reads it directly, no download). Fall
-  back to `arxiv.org/abs/<id>` for the abstract/metadata. **Do NOT WebFetch
-  `arxiv.org/pdf/<id>`** — it returns raw bytes; download the PDF (into
-  `constants/<id>/literature/pdfs/`, never into `/tmp/memory/` or a round dir — those
-  are archived as text and a stray binary breaks the snapshot) and run
-  `pdf2txt.py` (pdfminer.six) instead.
+- **Snapshot safety (repo-wide).** `/tmp/memory/` and the round dirs are archived as
+  text each round; a stray binary there breaks the snapshot. Any binary an agent
+  downloads (e.g. a paper PDF) goes under `constants/<id>/literature/pdfs/`, never into
+  `/tmp/memory/` or a round dir. (How the explorer reads papers is in its prompt.)
 - **One constant per run.** A run attacks exactly ONE constant `<id>`, chosen in
   round 1 and fixed for the whole run. All rounds push that one constant. Everything
   below — the metric, the eval, `current.md` — is about that single `<id>`.
@@ -103,13 +100,16 @@ This is a research repo, not a code repo:
   orchestrator tracks to judge "are we progressing". The reviewer's per-approach
   `record_outcome` is what feeds it (see the workflow); the outline-reviewer folds those
   into the Elo each round.
-  - **Eval:** a command that reads the population state for the run's constant — from the
-    ranker sidecar `constants/<id>/approaches/.ranking.json` (top Elo, live vs dead-ended
-    counts) together with the verified `held` bound and its gap to the record in
-    `current.md` — and prints that as the round's progress line. Progress is the population
-    sharpening and the gap shrinking; regression is the leader stalling while nothing new
-    fires. No milestone-line counting: that was the pre-ranking metric and the ranking
-    subsumes it.
+  - **Eval:** `python .autofyn/eval.py <id>` — it reads the population state from the ranker
+    sidecar `constants/<id>/approaches/.ranking.json` (top Elo, live vs dead-ended counts)
+    and the verified `held` bound + its gap to the record from `current.md`, and prints the
+    round's progress line. Progress is the population sharpening and the gap shrinking;
+    regression is the leader stalling while nothing new fires. No milestone-line counting:
+    that was the pre-ranking metric and the ranking subsumes it. The constant `<id>` is
+    fixed during round-1 triage, so the orchestrator writes this exact command (with the
+    chosen `<id>`) into `run_state.md`'s Concrete Target at the end of round 1, once the
+    explorer has picked the constant — not before, when `<id>` is still unknown. Until then
+    the eval prints a cold-start line (no population yet), which is the correct baseline.
   - The signal is only as honest as the reviewer is adversarial — an Elo lift comes from a
     *verified* advance, never the builder's unverified claim, so a round that produced
     nothing reproducible moves nothing.
@@ -134,9 +134,19 @@ This is a research repo, not a code repo:
   no more, no fewer — in parallel (the "parallel same-type agents, distinct output
   filenames" pattern), each told which slug it owns. Don't collapse a multi-slug set to one
   builder, and don't pad a single-slug set to three.
-- **Route per approach.** The proof-reviewer returns one verdict per built slug. Route
-  each independently — APPROVE records it, CHANGES REQUESTED → its builder, RETHINK → the
-  outliner. A mixed result is normal; end the round once every slug is routed.
+- **Route per approach (overrides the engine's whole-round "all APPROVE" gate).** The
+  proof-reviewer returns one verdict per built slug; route each slug **independently**, not
+  the round as a unit:
+  - **APPROVE** — the slug is *terminal for the round*: it's recorded (reviewer wrote the
+    canonical row + `held`), and it is NOT rebuilt. A single approved slug does not hold the
+    round open, and one non-approved slug does not send approved siblings back to a builder.
+  - **CHANGES REQUESTED** — re-dispatch *only that slug's* builder to close the named gap.
+    You may do so this round, or carry it to the next round if compute is better spent
+    elsewhere — its approach stays live in the ranking either way.
+  - **RETHINK** — that slug's angle goes back to the outliner; it does not block the others.
+  A mixed result (some APPROVE, some not) is normal and is **not** "round failed." End the
+  round once every slug has been routed — approved ones recorded, the rest dispatched or
+  carried — regardless of how many approved.
 
 ## Workflow
 
@@ -144,6 +154,10 @@ Each run picks **one** constant and loops (each agent's job is in its own prompt
 in the orchestrator bullets above):
 
 **math-explorer → proof-outliner → outline-reviewer → proof-builder ×(1–3) → proof-reviewer**
+
+The **outline-reviewer always runs** — it is not the engine's skippable "plan review". It is
+the ranking hub and the gate (it ranks the field, registers approved angles, and emits the
+build set the builders need), so the loop has no build set without it. Don't skip it.
 
 Record every attempt in `constants/<id>/`. The next round starts fresh with no memory —
 the folder is how it knows what was tried and why a line stalled.
