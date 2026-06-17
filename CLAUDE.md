@@ -43,84 +43,78 @@ This is a research repo, not a code repo:
   `constants/<id>/literature/pdfs/`, never into `/tmp/memory/` or a round dir — those
   are archived as text and a stray binary breaks the snapshot) and run
   `pdf2txt.py` (pdfminer.six) instead.
-- **Goal & eval.** Beating a record on these constants can take many rounds — you
-  do not improve a bound every round, and a binary "did we beat the record" metric
-  would read 0 for most of a run and give the loop no signal. So the metric is
-  **verified progress**, not record-breaks: every round that genuinely advances the
-  frontier (reproduced the record method, built a feasible construction, closed a
-  certificate gap, tightened a verified bound, and ultimately beat the record) is a
-  milestone the reviewer logs. Beating the record is the headline milestone, not the
-  only one that counts.
+- **One constant per run.** A run attacks exactly ONE constant `<id>`, chosen in
+  round 1 and fixed for the whole run. All rounds push that one constant. Everything
+  below — the metric, the eval, `current.md` — is about that single `<id>`.
+- **Goal & eval.** Beating the record can take many rounds — you do not improve the
+  bound every round, and a binary "did we beat the record" metric would read 0 for
+  most of a run and give the loop no signal. So the metric is **verified progress**,
+  not record-breaks: every round that genuinely advances the frontier (reproduced the
+  record method, built a feasible construction, closed a certificate gap, tightened a
+  verified bound, and ultimately beat the record) is a milestone the reviewer logs.
+  Beating the record is the headline milestone, not the only one that counts.
   - **Metric:** number of reviewer-verified progress milestones — the `- R<round>:`
-    lines the reviewer appends to the `## Progress log` of each attacked constant's
-    `current.md`. **Baseline: 0.** (Set the eval to a command that counts those
-    lines across `constants/*/current.md`.)
+    lines the reviewer appends to the `## Progress log` of the run's constant's
+    `constants/<id>/current.md`. **Baseline: 0.** (Set the eval to a command that
+    counts those lines in that one file.)
   - A milestone is logged **only by the proof-reviewer, only for a round whose
     advance it verified** — so the builder can't pad it. A round that produced
     nothing new (re-digested the same paper, an unreproducible claim) logs no
     milestone and the count plateaus.
   - The rare actual record-break is additionally flagged: that constant's
     `current.md` gets `## Status: improved` (else `none`).
-- **Depth over breadth.** One constant per run — the **most promising** one, not the
-  widest gap. Promising means *tractable*: a real, attackable opening with the right
-  kind of machinery available. A huge gap can be huge because the bound is hopeless
-  (moving it would settle a Millennium problem — e.g. the de Bruijn–Newman lower
-  bound ⇔ the Riemann Hypothesis), and some constants are already closed (upper =
-  lower, e.g. 11b). The explorer triages this first; skip the closed and the
-  conjecture-hard, and spend the run where verified progress is actually reachable.
-  Steady verified progress on one such constant is the win; an actual record-break is
-  the breakthrough.
+- **Pick the most promising constant, not the widest gap.** Promising means
+  *tractable*: a real, attackable opening with the right kind of machinery available.
+  A huge gap can be huge because the bound is hopeless (moving it would settle a
+  Millennium problem — e.g. the de Bruijn–Newman lower bound ⇔ the Riemann
+  Hypothesis), and some constants are already closed (upper = lower, e.g. 11b). The
+  explorer triages this in round 1; skip the closed and the conjecture-hard, and spend
+  the run where verified progress is actually reachable. Steady verified progress on
+  the chosen constant is the win; an actual record-break is the breakthrough.
 - **One folder per problem.** Everything for a constant lives in `constants/<id>/`,
   beside Tao's record file `constants/<id>.md`. The record is the current bound to
   beat; edit it only once an improvement is verified. The folder is the scratchpad —
   work there freely.
+- **Build set → parallel builders.** The outline-reviewer ends its report with
+  `build set: <slug>[, <slug>...]` — the slugs it chose to build this round (it sizes the
+  set, often just 1, at most 3). Dispatch **exactly one proof-builder per slug listed** —
+  no more, no fewer — in parallel (the "parallel same-type agents, distinct output
+  filenames" pattern), each told which slug it owns. Don't collapse a multi-slug set to one
+  builder, and don't pad a single-slug set to three.
+- **Route per approach.** The proof-reviewer returns one verdict per built slug. Route
+  each independently — APPROVE records it, CHANGES REQUESTED → its builder, RETHINK → the
+  outliner. A mixed result is normal; end the round once every slug is routed.
 
 ## Workflow
 
-Each run, pick **one** constant and run the loop:
+Each run picks **one** constant and loops (each agent's job is in its own prompt; routing
+in the orchestrator bullets above):
 
-**math-explorer → proof-outliner → outline-reviewer *(optional)* → proof-builder → proof-reviewer**, then route on the reviewer's verdict:
-- **APPROVE** → record the improvement; push further or move on.
-- **CHANGES REQUESTED** → back to **proof-builder** to close the gap.
-- **RETHINK** → back to **proof-outliner** for a different angle.
+**math-explorer → proof-outliner → outline-reviewer → proof-builder ×(1–3) → proof-reviewer**
 
-
-1. **math-explorer** — Read `constants/<id>.md` and any existing `constants/<id>/`.
-   Fetch and digest the papers behind the record bounds so we know the number to beat
-   and don't repeat a dead end. Report where the slack is, which bound is softer, and
-   any angle the prior work didn't try. Does NOT attempt the improvement.
-   You may run **several explorers in parallel** for wider
-   coverage — each taking a distinct angle (the record papers, techniques from an
-   analogous constant, the computational/relaxation side) so they surface
-   uncorrelated openings instead of one framing.
-2. **proof-outliner** — Propose several attack angles, not one — strengthen the
-   record, borrow a technique from an analogous constant, an explicit construction, a
-   computational relaxation. Rank them; name the hard step in each.
-3. **outline-reviewer** *(optional)* — On a non-trivial angle, check it can actually
-   beat the record before the builder spends compute.
-4. **proof-builder** — Turn the chosen angle into a concrete improvement and the
-   artifact that backs it (an argument, a construction, or a certificate it runs to
-   check). The deep step — runs on the strongest model.
-5. **proof-reviewer** — Adversarially verify: reproduce the check, re-derive the
-   load-bearing step independently, confirm the bound strictly beats the table value.
-   Emit the verdict that routes the round.
-
-Record every attempt in `constants/<id>/`. The next round starts with a fresh context
-and no memory of this one — the folder is how it knows what was tried and why a line
-stalled, so it builds on the work instead of repeating it.
+Record every attempt in `constants/<id>/`. The next round starts fresh with no memory —
+the folder is how it knows what was tried and why a line stalled.
 
 ## The `constants/<id>/` folder
 
-Each attacked constant gets a workspace beside its record file — research needs
-room. It holds the literature digests (`literature/`), one living document per
-attack angle (`approaches/<slug>.md` — the idea, its status, and how to push it),
-the construction/certificate artifacts (`certificate/`), and the tracking file
-`current.md`. Shape the rest as the work needs; an approach is a document you
-revisit and strengthen, so nothing is lost between runs.
+The run's constant gets a workspace beside its record file — research needs room. It
+holds the literature digests (`literature/`), one living document per attack angle
+(`approaches/<slug>.md` — the idea, its status, and how to push it), the
+construction/certificate artifacts (`certificate/`), and the tracking file
+`current.md`. The proof work lives in `approaches/` + `certificate/`; `current.md`
+records only the verified bottom line. An approach is a document you revisit and
+strengthen, so nothing is lost between runs.
+
+Approach bodies (`approaches/<slug>.md`) are free-form. Their ranking metadata (Elo,
+counts, stale flag, last outcome) lives in the tool-owned sidecar
+`approaches/.ranking.json` — never hand-edited; only the ranking tools touch it
+(`sample_approaches`/`register_approach`/`record_outcome`/`update_ranking`, served by
+`.autofyn/approach_ranker.py`).
 
 ### `current.md` — the tracking file (contract)
 
-The per-constant scratchpad the eval reads. It MUST contain these sections:
+The tracking file for the run's constant — the eval counts its milestone lines. It
+MUST contain these sections:
 
 ```
 ## Status            improved | none   (only the reviewer sets `improved`)
