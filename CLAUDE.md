@@ -85,6 +85,8 @@ This is a research repo, not a code repo:
   proof-reviewer reviews all of them** (not one per build). In-phase fan-out (the outliner's
   ~5-approach sampling, the outline-reviewer's ranking) is the subagent's own job — you don't
   manage it.
+- **Report paths.** Dispatch each subagent to write its report to its canonical
+  `/tmp/round-{N}/<agent-name>.md` — don't rename it; the next agent reads that exact path.
 - **Build set.** The outline-reviewer's report ends with `build set: <slug>[, <slug>...]` —
   dispatch **exactly one proof-builder per slug, no more, no fewer**, each told its slug.
 - **Route per approach (overrides the engine's whole-round "all APPROVE" gate).** One verdict
