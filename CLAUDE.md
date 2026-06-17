@@ -18,6 +18,32 @@ if you see a better road.
 Moving a single bound is a real, paper-worthy result — these are the same constants
 AlphaEvolve, ThetaEvolve, and others compete on.
 
+## Prefer Lean-certifiable constants
+
+The strongest result is a **machine-checked** one: a bound whose proof Lean type-checks,
+so "valid" means `lake build` passes, not "a reviewer re-derived it and spotted no hole."
+That gate is categorically stronger — it eliminates the whole class of floating-point /
+overlooked-step bugs that a hand-checked numerical certificate can hide.
+
+So the target selection is Lean-aware. What decides fit is **the shape of the
+load-bearing step**, not the field label:
+
+- **Lean-fit** — the certifying step is finite, discrete, or algebraic: a finite case
+  enumeration, a divisibility/congruence argument, an explicit construction whose
+  validity is a polynomial identity or a degree/coprimality condition, a combinatorial
+  counting bound, an inequality chained through `Mathlib` lemmas. Lean checks these
+  natively. **These are the preferred targets**, and their certificate is a `.lean` file.
+- **Lean-hostile** — the bound bottoms out in a continuum estimate: interval quadrature
+  over many cells, an SDP feasibility certificate, a Mahler-measure integral (the 82a
+  kind). Formalizing these in Lean is its own research project; do **not** force Lean
+  here. They stay directed-rounded numerical certificates with adversarial review.
+
+Field is not the filter: some number theory is analysis-heavy (L-functions, exponential
+sums → continuum estimates → Lean-hostile), and some analytically-flavoured constants
+have a discrete core that is Lean-fit. Triage on the certifying step. When two constants
+are equally promising, prefer the Lean-fit one — its result is a theorem, not a
+certificate.
+
 ## For the orchestrator
 
 This is a research repo, not a code repo:
@@ -33,9 +59,20 @@ This is a research repo, not a code repo:
   - **A scientific Python stack** for building and checking bounds:
     `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` when an angle needs
     an SDP solver or symbolic algebra).
+  - **The Lean toolchain** — the preferred certification path (see below). Install
+    once with `elan` (no root needed — it lands in `~/.elan`): `curl` the elan
+    installer, then in a `lean/` project at the repo root run `lake exe cache get`
+    to pull the prebuilt Mathlib cache (a large one-time download; building it from
+    source would take hours). **Pin the versions in round 1** — commit a
+    `lean-toolchain` file and a fixed Mathlib rev in `lake-manifest.json` — because
+    the sandbox persists across rounds, so a version chosen now holds for the whole
+    run; letting `lake` float to latest risks a proof that compiled in round 3
+    breaking in round 40. The sandbox keeps `~/.elan` and the compiled Mathlib
+    between rounds, so this cost is paid once and every later round just type-checks
+    the new proof against the cached library.
   Installing is allowed and expected here — the "no installs" instinct doesn't apply
-  to this repo. Beyond these, agents run numerical code to build and check bounds;
-  that's the work, not a build step.
+  to this repo. Beyond these, agents run numerical code and Lean proofs to build and
+  check bounds; that's the work, not a build step.
 - **Reading arXiv papers — do it, don't work from abstracts.** Prefer the full-text
   HTML render `arxiv.org/html/<id>` (WebFetch reads it directly, no download). Fall
   back to `arxiv.org/abs/<id>` for the abstract/metadata. **Do NOT WebFetch
@@ -48,19 +85,26 @@ This is a research repo, not a code repo:
   below — the metric, the eval, `current.md` — is about that single `<id>`.
 - **Goal & eval.** Beating the record can take many rounds — you do not improve the
   bound every round, and a binary "did we beat the record" metric would read 0 for
-  most of a run and give the loop no signal. So the metric is **verified progress**,
-  not record-breaks: every round that genuinely advances the frontier (reproduced the
-  record method, built a feasible construction, closed a certificate gap, tightened a
-  verified bound, and ultimately beat the record) is a milestone the reviewer logs.
-  Beating the record is the headline milestone, not the only one that counts.
-  - **Metric:** number of reviewer-verified progress milestones — the `- R<round>:`
-    lines the reviewer appends to the `## Progress log` of the run's constant's
+  most of a run and give the loop no signal. So the metric is **verified frontier
+  motion**. A milestone is one of exactly two things, verified by the reviewer:
+  - the **held** bound strictly improved (a tighter verified bound than we held), or
+  - a **named, previously-recorded gap closed** — a blocker written down in a prior
+    round's approach doc (a `sorry` discharged, a feasibility hole filled, a missing
+    lemma proved) now resolved.
+
+  That is the bar. Reproducing the record, building scaffolding, "groundwork on a
+  bold line" — these are **progress notes in the approach doc, not milestones**.
+  Reproducing the record is a one-time **round-1 baseline** ("we hold a confirmed,
+  re-runnable reproduction of the record"), logged once and not counted again. This
+  keeps the reviewer a pure adversarial gate: it does not look for reasons to be
+  generous, only for genuine frontier motion it can verify.
+  - **Metric:** number of reviewer-verified milestones — the `- R<round>:` lines the
+    reviewer appends to the `## Progress log` of the run's constant's
     `constants/<id>/current.md`. **Baseline: 0.** (Set the eval to a command that
     counts those lines in that one file.)
-  - A milestone is logged **only by the proof-reviewer, only for a round whose
-    advance it verified** — so the builder can't pad it. A round that produced
-    nothing new (re-digested the same paper, an unreproducible claim) logs no
-    milestone and the count plateaus.
+  - A milestone is logged **only by the proof-reviewer, only for verified frontier
+    motion** — so the builder can't pad it, and re-digesting a paper or an
+    unreproducible claim logs nothing and the count plateaus honestly.
   - The rare actual record-break is additionally flagged: that constant's
     `current.md` gets `## Status: improved` (else `none`).
 - **Pick the most promising constant, not the widest gap.** Promising means
@@ -68,9 +112,10 @@ This is a research repo, not a code repo:
   A huge gap can be huge because the bound is hopeless (moving it would settle a
   Millennium problem — e.g. the de Bruijn–Newman lower bound ⇔ the Riemann
   Hypothesis), and some constants are already closed (upper = lower, e.g. 11b). The
-  explorer triages this in round 1; skip the closed and the conjecture-hard, and spend
-  the run where verified progress is actually reachable. Steady verified progress on
-  the chosen constant is the win; an actual record-break is the breakthrough.
+  explorer triages this in round 1; skip the closed and the conjecture-hard, prefer the
+  Lean-fit, and spend the run where verified frontier motion is actually reachable. Steady
+  verified motion on the chosen constant is the win; an actual record-break is the
+  breakthrough.
 - **One folder per problem.** Everything for a constant lives in `constants/<id>/`,
   beside Tao's record file `constants/<id>.md`. The record is the current bound to
   beat; edit it only once an improvement is verified. The folder is the scratchpad —
@@ -140,10 +185,17 @@ The reviewer enforces these:
   table and `constants/<id>.md` can disagree (a PR may have tightened one past the
   other). Check both, and treat the genuinely best verified bound as the value to
   beat.
-- **The check must be reproducible.** A bound from computation is only as good as the
-  check the reviewer can re-run; one that can't be reproduced isn't established.
-- **No hand-waving on the load-bearing step.** The reviewer re-derives it; if it
-  can't, the bound is wrong.
+- **The check must be reproducible.** A bound is only as good as the check the reviewer
+  can re-run; one that can't be reproduced isn't established. For a **Lean-fit** bound the
+  check is `lake build` on the proof — type-checking *is* the reproduction, and it is the
+  gold standard: a bound carried by a Lean proof that compiles needs no further hand
+  re-derivation of its formalized steps. For a **Lean-hostile** (numerical) bound the
+  check is the directed-rounded certificate, re-run and adversarially re-derived by hand.
+- **No hand-waving on the load-bearing step.** For a numerical certificate the reviewer
+  re-derives the load-bearing step independently; if it can't, the bound is wrong. For a
+  Lean proof the step must be *inside the formalization* — a `sorry`, an unproved
+  hypothesis, or an axiom smuggling in the hard step means the bound is not established,
+  however green `lake build` looks.
 - **A valid bound first.** A construction that violates the constant's own
   constraints gives no bound at all, however good its value.
 - **Prove, don't conjecture.** A numerical search result is a conjecture until

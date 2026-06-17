@@ -53,10 +53,17 @@ Each round flows **explore → plan → select+rank → build ×(1–3) → revi
 
 ## Why this works for math
 
-- **No fake solves.** The bound only counts when `proof-reviewer` independently
-  re-derives it and re-runs the certificate — the orchestrator can't self-approve.
-- **Dense reward.** Every round ends with a real eval: does the certified value beat the
-  number in `constants/<id>.md`? The delta is logged to eval history.
+- **Machine-checked where possible.** The loop prefers **Lean-fit** constants — those
+  whose load-bearing step is finite/discrete/algebraic — and certifies them with a Lean
+  proof that `lake build` type-checks. "Valid" then means the kernel accepts it, not that a
+  reviewer spotted no hole. Analysis-heavy (Lean-hostile) bounds stay directed-rounded
+  numerical certificates with adversarial review.
+- **No fake solves.** A bound counts only when `proof-reviewer` reproduces the check —
+  `lake build` clean (no `sorry`/axiom) for a Lean proof, or an independent re-derivation +
+  re-run for a numerical certificate. The orchestrator can't self-approve.
+- **Honest reward.** A milestone is verified **frontier motion** only — the held bound
+  strictly improved, or a named prior gap closed. Reproductions and scaffolding are
+  progress notes, not milestones, so the metric can't drift upward on activity.
 - **Learning from failures.** Reviewer findings and dead ends become persistent Rules and
   feed the approach ranking (a dead-end loses Elo, a verified line gains it), so later
   rounds don't re-expand a stalled angle. Ranking sits at the outline-reviewer, which sees

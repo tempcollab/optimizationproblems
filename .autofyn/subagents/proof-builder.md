@@ -14,10 +14,16 @@ approach body and reuse the literature digests.
 
 ## Build the improvement
 
-- **Produce the bound AND a certificate** the reviewer can independently re-establish —
-  the form follows the method (a re-checking script, an explicit object + constraint
-  check, a full written derivation). Put it in `constants/<id>/certificate/`. A bound the
-  reviewer can't re-establish is not established.
+- **Produce the bound AND a certificate** the reviewer can independently re-establish.
+  The form follows the angle's fit (from the explorer's triage / `CLAUDE.md`):
+  - **Lean-fit** (preferred) — write a **Lean proof** that `lake build`s clean against the
+    pinned Mathlib, in `constants/<id>/certificate/` (a `.lean` file in the repo's `lean/`
+    project). A compiling proof with **no `sorry`, no added axiom, no unproved hypothesis**
+    smuggling the hard step is the gold-standard certificate — type-checking is the check.
+  - **Lean-hostile** — write a directed-rounded numerical certificate (a re-checking
+    script with outward rounding) in `constants/<id>/certificate/`, as for 82a.
+  A bound the reviewer can't re-establish — `lake build` fail, or a script that doesn't
+  reproduce — is not established.
 - **Validity first** — confirm feasibility against the constant's constraints before
   reporting a value.
 - **Beat the record strictly** — state the table value and your new value; if it doesn't

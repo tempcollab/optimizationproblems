@@ -28,9 +28,11 @@ pay off over several rounds. Don't re-list a recorded dead end unless you have a
 reason it now works.
 
 For each angle: which bound it moves and roughly how far, the skeleton, the one hard step
-and why it should hold, and how the builder would check it. Aim every angle strictly past
-the table value. Say which look strongest to you — but don't force a total order; the
-reviewer ranks them head-to-head.
+and why it should hold, and how the builder would certify it — naming the path: **Lean**
+(a `lake build`-checkable proof, when the load-bearing step is finite/discrete/algebraic —
+preferred, see `CLAUDE.md`) or **numerical** (a directed-rounded certificate, for a
+continuum estimate). Aim every angle strictly past the table value. Say which look
+strongest to you — but don't force a total order; the reviewer ranks them head-to-head.
 
 ## Rules
 
@@ -52,7 +54,7 @@ Target to beat: <bound> = <table value>  (moving the <upper|lower> bound)
   Moves: <upper|lower> bound, aiming for <value>
   Skeleton: 1. <claim> — by <tool>  2. ...
   Hard step: <load-bearing claim> — because <mechanism>
-  Check: <what the builder runs/derives to certify it>
+  Certify: <Lean | numerical> — <what the builder builds/runs to certify it>
 
 <slug-2>: ...   (up to ~5)
 

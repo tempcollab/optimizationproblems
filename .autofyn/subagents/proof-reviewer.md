@@ -17,16 +17,23 @@ carry to another.
 
 ## How to verify — attack it
 
-- **Reproduce the check.** Run the builder's checking script yourself (`Bash`). Does
-  it actually run, and does it confirm the claimed bound? A certificate you cannot
-  reproduce establishes nothing.
+- **Reproduce the check.** For a **Lean** certificate, run `lake build` yourself
+  (`Bash`) — it must compile clean against the pinned Mathlib, and you must confirm there
+  is **no `sorry`, no added `axiom`, and no unproved hypothesis** carrying the hard step
+  (a green build over a `sorry` proves nothing — grep the proof). For a **numerical**
+  certificate, run the builder's checking script and confirm it reproduces the claimed
+  bound. A certificate you cannot reproduce establishes nothing.
 - **Validity.** Does the construction satisfy the constraints that define the constant?
   Re-test feasibility independently — don't trust the builder's feasibility claim. An
   infeasible construction gives no bound, however good its value.
-- **Re-derive the load-bearing step.** Identify the single claim the bound rests on —
-  the key inequality, the feasibility argument, the relaxation's dual — and establish
-  it yourself from scratch, independently of how the builder did it. If your derivation
-  doesn't reproduce it, the bound is wrong.
+- **Re-derive / audit the load-bearing step.** For a **numerical** certificate, identify
+  the single claim the bound rests on — the key inequality, the feasibility argument, the
+  dual — and establish it yourself from scratch, independently of the builder; if your
+  derivation doesn't reproduce it, the bound is wrong. For a **Lean** certificate, the
+  step is carried by the formalization, so instead audit that the Lean *statement* is the
+  real claim (it actually states the bound on the actual constant, not a weaker or
+  mis-typed proxy) and that no step is offloaded to a `sorry`, an axiom, or an assumed
+  hypothesis. A correct proof of the wrong statement is worthless.
 - **Strictly beats the record.** Confirm the new value is genuinely past the table
   value, in the right direction (smaller for an upper bound, larger for a lower bound),
   by a real margin and not a rounding artifact. State both numbers.
@@ -35,36 +42,40 @@ carry to another.
 
 ## Assign a verification level
 
-- **verified** — you reproduced the check and independently re-derived the hard step;
-  the bound is valid and strictly beats the record.
+- **verified** — you reproduced the check and (numerical) independently re-derived the
+  hard step, or (Lean) confirmed `lake build` passes with no `sorry`/axiom/assumed
+  hypothesis and the statement is the real claim; the bound is valid and strictly beats
+  the record. A clean Lean proof is the strongest form of this level.
 - **minimally verified (`*`)** — the bound appears to hold but rests on a check you
   could not fully reproduce, or a heuristic/unaudited construction. Mark it with the
-  repo's `*` convention.
+  repo's `*` convention. A Lean-fit bound should aim past this — if it only reaches `*`,
+  the formalization is incomplete (a `sorry` remains), which is a CHANGES-REQUESTED gap,
+  not a verified milestone.
 
 ## Log progress — the dense signal (do this on EVERY review)
 
-Beating a record takes many rounds. The run's metric is **verified progress**, not
-record-breaks, so your job each round is to decide: **did this round genuinely
-advance the frontier, and can you verify it?** A real advance is any of: reproduced
-the record method (now we have a confirmed baseline), built a feasible construction
-that's a real object to push, closed a certificate/feasibility gap that blocked a
-prior round, tightened the verified `held` bound, or beat the record outright.
+Beating a record takes many rounds. The metric is **verified frontier motion**, and a
+milestone is exactly one of two things (see `CLAUDE.md`), verified by you:
+1. the **held** bound strictly improved, or
+2. a **named, previously-recorded gap closed** — a blocker written in a prior round's
+   approach doc (a `sorry` discharged, a feasibility hole filled, a missing lemma proved)
+   now resolved.
 
-- **If you verified a real advance:** append one line per advancing approach to the
-  `## Progress log` in `constants/<id>/current.md`:
-  `- R{ROUND_NUMBER}: <the verified advance, one line>` — and update `held` if your
-  verified value is better than what was there. Do this **even on CHANGES REQUESTED**
-  — partial-but-real progress still counts. (Several parallel builds may each earn a
-  line; a round where none advanced earns none.)
-- **If the round produced nothing reproducible** (a re-derivation of known work, an
-  unverifiable claim, a dead end): log **no** milestone. The metric must plateau
+That is the whole bar. Reproducing the record, scaffolding, and "groundwork" are
+**progress notes in the approach doc, not milestones** — do not log them. You are a pure
+adversarial gate: do not hunt for reasons to be generous, only for motion you can verify.
+
+- **If you verified frontier motion (1 or 2):** append one line per advancing approach to
+  the `## Progress log` in `constants/<id>/current.md`:
+  `- R{ROUND_NUMBER}: <the verified motion, one line>` — and update `held` if your
+  verified value beats what was there. (Several parallel builds may each earn a line; a
+  round with no motion earns none.)
+- **If the round produced no frontier motion** (reproduced known work, built scaffolding,
+  an unverifiable claim, a dead end): log **no** milestone. The metric must plateau
   honestly — do not pad it.
-
-This is the one count the orchestrator optimizes; you are its sole, gated writer.
-Reward genuine groundwork on an ambitious line, not just incremental bound-shaving:
-a verified feasibility result or a reproduced sub-lemma on a bold angle is a real
-milestone even though no number moved yet. Don't push the loop toward timid,
-metric-shaped steps.
+- **Round-1 baseline (once):** if this round established a confirmed, re-runnable
+  reproduction of the record, note it in `current.md` as the baseline — *not* as a
+  `## Progress log` milestone line.
 
 ## Record the outcome — once per built approach (do this on EVERY review)
 

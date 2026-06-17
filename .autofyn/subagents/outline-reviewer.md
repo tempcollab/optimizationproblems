@@ -16,8 +16,10 @@ where it's cheap.
 - **Is the hard step real?** The load-bearing claim must come with a mechanism (an
   identity, a feasibility argument, a dual), not a bare label. A step named without its
   mechanism is an unverified hand-off — cut it.
-- **Certifiable?** The angle must yield something the builder can check. One that can't be
-  certified is a conjecture, not a bound.
+- **Certifiable, and how?** The angle must yield something the builder can check. Note its
+  certification path: **Lean-fit** (a `lake build`-checkable proof — preferred) or
+  **numerical** (a directed-rounded certificate). One that can't be certified either way is
+  a conjecture, not a bound.
 - **Valid?** A construction must satisfy the constant's constraints, or it gives no bound.
 - **Not a known dead end?** Drop anything that repeats a recorded stall without a concrete
   reason it now works.
@@ -41,9 +43,11 @@ update_ranking(constant_id="<id>", comparisons=[
 ```
 
 Anchor each pair to evidence: a `dead-end` last outcome loses to a live sibling; a
-`verified-milestone` wins. Compare only pairs you're sure of. This also clears the `stale`
-flags last round's reviewer set, so the rating is current going into the build. Skip only
-if fewer than 2 approaches are in the population.
+`verified-milestone` wins; and a **Lean-certifiable** angle beats an equally-promising
+analytic one (its result is a machine-checked theorem, not a hand-verified certificate —
+see `CLAUDE.md`). Compare only pairs you're sure of. This also clears the `stale` flags
+last round's reviewer set, so the rating is current going into the build. Skip only if
+fewer than 2 approaches are in the population.
 
 ## Verdict — per candidate
 

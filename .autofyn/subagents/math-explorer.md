@@ -27,11 +27,20 @@ For the constant the orchestrator assigns (an id like `1a`, `42a`):
    `constants/<id>/literature/pdfs/`, never into `/tmp/memory/` or a round dir — a
    binary there breaks the snapshot.) Surface relevant or analogous papers and the
    techniques in them, even from neighbouring constants — the outliner may borrow one.
-5. **Triage — is it worth attacking?** Say plainly if the constant is a poor target:
-   already pinned (upper = lower), or its movable side is equivalent to a major open
-   conjecture (e.g. de Bruijn–Newman ⇔ RH). Note which kind of problem it is
-   (construction/SDP/search vs. an analytic or metamathematical proof) so the outliner
-   picks the right machinery. Then find the slack and surface angles the record didn't try.
+5. **Triage — is it worth attacking, and is it Lean-fit?** Say plainly if the constant is
+   a poor target: already pinned (upper = lower), or its movable side is equivalent to a
+   major open conjecture (e.g. de Bruijn–Newman ⇔ RH). Then judge the **shape of the
+   load-bearing step** (see `CLAUDE.md`, "Prefer Lean-certifiable constants"):
+   - **Lean-fit** — the certifying step is finite/discrete/algebraic (case enumeration,
+     divisibility/congruence, an explicit construction with a polynomial-identity or
+     degree/coprimality validity, combinatorial counting, an inequality chain). These are
+     the preferred targets — their bound becomes a machine-checked Lean theorem.
+   - **Lean-hostile** — it bottoms out in a continuum estimate (interval quadrature, SDP
+     feasibility, a Mahler-measure integral, the 82a kind). Still attackable, but via a
+     directed-rounded numerical certificate, not Lean.
+   Field is not the filter — some number theory is analysis-heavy, some "analysis"
+   constants have a discrete core. Triage on the step. Then find the slack and surface
+   angles the record didn't try.
 
 ## Rules
 
@@ -52,6 +61,7 @@ the outliner receives your findings. Write:
 ## <id>  (C_<id>: <one-line description>)
 - Current bounds: lower = <value> [<ref>], upper = <value> [<ref>]
 - Softer target: <upper or lower>, because <why>
+- Lean fit: <Lean-fit | Lean-hostile>, because <the shape of the load-bearing step>
 - How the record was achieved: <method behind each record bound, from the papers>
 - Where the slack is: <where the prior work is loose>
 - Angles to try: <concrete directions, incl. any the prior work didn't attempt>
