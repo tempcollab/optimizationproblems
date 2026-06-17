@@ -1,0 +1,24 @@
+{
+  "eta-coefficient-barrier": {
+    "elo": 1484.0,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "eta-coefficient-barrier",
+    "stale": false,
+    "summary": "Parked frontier marker: c=3 leading coeff of eta(C_p^3)<=3p^2 (BSP 2017) pins C_53 at 4 via sup at n=p*q; only an unconditional sub-3p^2 eta for all large p moves it. No build."
+  },
+  "lean-conditional-scaffold": {
+    "elo": 1516.0,
+    "expanded": 1,
+    "last_note": "Lean scaffold verified: lake build Constants green (Lean v4.31.0 / Mathlib fabf563), recursion_step + comparison_ineq fully proved, #print axioms clean (no sorryAx/problem axiom), algebra re-derived independently. Conditional re-derivation of recursion step only \u2014 held UNCHANGED at 4, no bound improvement. Next: lift to full factorization induction over prime multiset.",
+    "last_outcome": "verified-milestone",
+    "last_round": 2,
+    "selected": 0,
+    "slug": "lean-conditional-scaffold",
+    "stale": true,
+    "summary": "Lean-formalize Grinsztajn's conditional induction; round-2 sub-goal = the N recursion lemma D(C_m^3)<=4m-Q-2 & p<=Q => D(C_pm^3)<=4pm-Q-2, axiomatizing the zero-sum inputs (re-derives C_53<=4 conditionally; lake-build certified)."
+  }
+}

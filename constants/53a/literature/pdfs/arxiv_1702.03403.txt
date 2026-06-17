@@ -1,0 +1,2852 @@
+7
+1
+0
+2
+
+b
+e
+F
+1
+1
+
+]
+T
+N
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+3
+0
+4
+3
+0
+.
+2
+0
+7
+1
+:
+v
+i
+X
+r
+a
+
+DAVENPORT’S CONSTANT FOR GROUPS WITH LARGE
+EXPONENT
+
+GAUTAMI BHOWMIK AND JAN-CHRISTOPH SCHLAGE-PUCHTA
+
+Abstract. Let G be a ﬁnite abelian group. We show that its Davenport
+constant D(G) satisﬁes D(G) ≤ exp(G) + |G|
+exp(G) − 1, provided that exp(G) ≥
+p|G|, and D(G) ≤ 2p|G| − 1, if exp(G) < p|G|. This proves a conjecture by
+Balasubramanian and the ﬁrst named author.
+
+1. Introduction and results
+
+For an abelian group G we denote by D(G) the least integer k, such that every
+sequence g1, . . . , gk of elements in G contains a subsequence gi1 , . . . , giℓ with gi1 +
+
+|
+
+P
+
+. . .
+
+· · ·
+
++ giℓ = 0.
+Write G = Zn1 ⊕ · · · ⊕
+r + 1.
+ni −
+
+nr, where we write Zn for Z/nZ. Put
+Znr with n1|
+M (G) =
+In several cases, including 2-generated groups and p-
+groups, the value of D(G) matches with the obvious lower bound M (G), however,
+in general this is not true. In fact there are inﬁnitely many groups of rank 4 or
+more where D(G) is greater than M (G) see, for example, [11]. As far as upper
+bounds are concerned we have only rather crude ones. One such example, which is
+appealing for its simple structure, is the estimate D(G)
+,
+exp(G)
+(cid:1)
+|G|
+due to van Emde Boas and Kruyswijk[4]. This bound, for the case when
+exp(G)
+is small, was improved by Bhowmik and Balasubramanian [1] who proved that
+D(G)
+exp(G) , 7), and conjectured that
+−
+one may replace the constant 7 by
+. Here we prove this conjecture. It turns out
+that the hypothesis that k be integral creates some technical diﬃculties, therefore
+we prove the following, slightly sharper result.
+
+1, where k is an integer
+
+exp(G)
+(cid:0)
+
+1 + log |G|
+
+|G|
+k + k
+
+min(
+
+|
+p
+
+G
+|
+
+≤
+
+≤
+
+≤
+
+|G|
+
+Theorem 1.1. For an abelian group G with exp(G)
+exp(G) + |G|
+
+1, while for exp(G) <
+
+|
+p
+we have D(G)
+
+≥
+
+we have D(G)
+2
+
+1.
+
+G
+
+≤
+
+exp(G) −
+
+|
+p
+We notice that the ﬁrst upper bound is actually reached for groups of rank 2
+1. An application of our bound to random groups
+
+|
+p
+
+| −
+
+G
+|
+≤
+
+G
+|
+
+where D(G) = exp(G) + |G|
+and (Z∗
+n,
+
+exp(G) −
+
+) will be the topic of a forthcoming paper.
+
+Let s≤n(G) be the least integer k, such that every sequence of length k contains
+n adding up to 0 and let s=n(G) be the least integer k
+a subsequence of length
+such that any sequence of length k in G contains a zero-sum of sequence of length
+exactly equal to n. In the special case where n = exp(G) we use the more standard
+notation of η(G) and s(G) respectively. We need the following bounds on η and s.
+Theorem 1.2.
+
+(1) We have s(Z3
+
+3) = 91, and s(Z6
+
+3) = 19, s(Z4
+
+3) = 41, s(Z5
+
+3) =
+
+≤
+
+·
+
+225.
+
+2000 Mathematics Subject Classiﬁcation. Primary 11B13, 11B70.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+2
+
+G. BHOWMIK AND J.-C. SCHLAGE-PUCHTA
+
+≥
+
+7 is prime and d
+
+157, s(Z5
+5) = 37, s(Z4
+5)
+5)
+≤
+3, then η(Zd
+p)
+
+(2) We have s(Z3
+(3) If p
+The above results for Z3 are due to Bose[5], Pelegrino[13], Edel, Ferret, Landjev
+and Storme[6], and Potechin[14], respectively. The value of s(Z3
+5) was determined
+by Gao, Hou, Schmid and Tangadurai[10], the bounds for higher rank will be proven
+in section 4 using the density increment method. The last statement will be proven
+by combinatorial means in section 5.
+
+690, and s(Z6
+5)
+≤
+pd−p
+7) + 4.
+p2−p (3p
+
+≤
+≤
+
+3091.
+
+−
+
+≥
+
+We further need some information on the existence of zero-sums not much larger
+
+then exp(G).
+
+Theorem 1.3. Let p be a prime, d
+(6p
+sequence of length (6p
+
+4)pd−3 + 1 in Zd
+
+4)pd−4 + 1 in Zd
+
+≥
+p contains a zero-sum of length
+
+3 an integer. Then a sequence of length
+3p−1
+4, then a
+2
+
+. If d
+
+≤
+≥
+p contains a zero-sum of length
+
+2p.
+
+−
+
+−
+
+≤
+
+The proof of Theorem 1.1 uses the inductive method. To deal with the inductive
+
+step we require the following.
+
+Theorem 1.4. Let p be a prime, d
+k, M , such that M
+zero-sums, and M
+
+η(Zd
+pd−1 + pk.
+
+≥
+≤
+
+2 an integer. Then there exist integers
+p), every sequence of length M contains at least k disjoint
+
+≥
+
+Note that the statement is trivial if η(Zd
+p)
+
+pd−1. However, this bound is false
+for p = 2 and all d, as well as for the pairs (3, 3), (3, 4), (3, 5) and (5, 3). We believe
+that this is the complete list of exceptions. From the Alon-Dubiner-theorem and
+Roth-type estimates one can already deduce that the above bound for η holds for
+all but ﬁnitely many pairs. However, dealing with the exceptional pairs by direct
+computation is way beyond current computational means.
+
+≤
+
+2. Systems of disjoint zero-sums
+
+Let Dk(G) be the least integer t such that every sequence of length t in G contains
+k disjoint zero-sum sequences. The most direct way to prove the existence of many
+disjoint zero-sums is by proving the existence of rather short zero-sums, therefore
+we are interested in zero sums of length not much beyond p.
+
+Lemma 2.1. Every sequence of length 6p
+, every sequence of length 6p
+
+≤
+−
+and every sequence of length (d + 1)p
+
+3p−1
+2
+
+−
+3 in Z4
+
+3 in Z3
+p contains a zero-sum of length
+
+p contains a zero-sum of length
+2p,
+p contains a zero sum of length
+
+≤
+
+d in Zd
+
+−
+
+−
+
+≤
+Proof. We claim that a sequence of length 6p
+p contains a zero sum of
+length p or 3p. To see this we adapt Reiher’s proof of Kemnitz’ conjecture [16]. For
+a sequence S denote by N ℓ(S) the number of zeo-sum subsequences of S of length
+3 without a zero sum of length p or 3p, T
+ℓ. Let S be a seauence of length 6p
+a subsequence of length 4p
+3. Then the
+−
+Chevalley-Warning theorem gives the following equations.
+
+3, and U a subsequence of length 5p
+
+3 in Z3
+
+−
+
+−
+
+−
+
+(d
+
+1)p.
+
+1 + N p(T ) + N 2p(T ) + N 3p(T )
+1 + N p(U ) + N 2p(U ) + N 3p(U ) + N 4p(U )
+1 + N p(S) + N 2p(S) + N 3p(S) + N 4p(S) + N 5p(S)
+
+0
+0
+0
+
+(mod p)
+(mod p)
+(mod p)
+
+≡
+≡
+≡
+
+By assumption S, and a forteriori U and T do not contain zero sums of length p
+or 3p, thus all occurrences of N p and N 3p vanish. If N 5p(S)
+= 0, and Z is a zero
+
+6
+ON DAVENPORT’S CONSTANT
+
+3
+
+sum in S, then choosing for T a subsequence of Z of length 4p
+3 we ﬁnd from
+Y is
+the ﬁrst equation that T contains a zero sum Y of length 2p. But then Z
+a zero sum of length 3p, a contradiction. We now add up the ﬁrst equation over
+all subsequences T of length 4p
+3, and the second over all subsequences of length
+3, and obtain a system of three euations in the two variables N 2p(S), N 4p(S),
+5p
+which is unsolvable.
+
+−
+
+−
+
+−
+
+\
+
+|
+
+|
+
+Z
+
+≤
+
+−
+
+3 in Z4
+
+Now let S be a sequence of length 6p
+
+= p, then we found a zeo sum of length
+
+3p. If
+zero sum Y , and then either Y or Z
+
+3, and let Z be a zero sum of length p or
+. Otherwise Z contains a
+3(p−1)
+.
+2
+The second claim follows similarly starting from the fact that every sequence of
+length 6p
+p contains a zero-sum subsequence of length p, 2p or 4p, while the
+last one follows from the fact proven by Gao and Geroldinger[8, Theorem 6.7], that
+d contains a zero sum of length divisible by p. (cid:3)
+a sequence of length (d + 1)p
+
+3(p−1)
+2
+Y is the desired zero-sum of length
+
+−
+The next result is used to lift results for special groups Zd
+
+p to groups of arbitrary
+rank. The argument is rather wasteful, still the resulting bounds are surprisingly
+useful.
+
+≤
+
+−
+
+\
+
+Lemma 2.2. If a
+
+d, then s≤k(Zd
+p)
+
+≤
+
+pd−1
+pa−1 (s≤k(Za
+p)
+≤
+pa−1 (s≤k(Za
+p)
+
+1) + 1
+
+−
+1) + 1 in Zd
+
+Proof. Let A be a sequence of length pd−1
+0, then we found a short zero sum. Otherwise let U be a subgroup of Zd
+U ∼= Za
+is sightly bigger than s≤k(Za
+p)
+least s≤k(Za
+we obtain the desired zero sum.
+
+p. If A contains
+p with
+p chosen at random. The expected number of elements of A, which are in U
+1, hence there exists a subgroup which contains at
+p) elements of the sequence. Restricting our attention to this subgroup
+(cid:3)
+
+−
+
+−
+
+Lemma 2.3. We have
+
+Dk(Z3
+p)
+
+≤
+
+max
+
+5p
+
+3(p
+
+1)
+
+−
+2
+
+2,
+
+−
+
++ 2p + 5
+
+,
+(cid:17)
+
+(cid:16)
+
+3(p
+
+and, for d
+
+Dk(Zd
+p)
+
+≤
+
+4,
+
+≥
+max
+
+4)pd−3 + 1,
+
+(6p
+(cid:0)
+
+−
+
+1)
+
+k + 1 + (6p
+
+4)pd−3
+
+−
+
+1
+4
+
++
+
+3
+2p −
+
+3
+4p2 −
+
+1
+dp
+
+−
+2
+
+(cid:1)(cid:17)
+Proof. We only give the proof for the second inequality, the ﬁrst one being signiﬁ-
+cantly easier.
+
+(cid:0)
+
+Let S be a sequence of length at least (6p
+
+4)pd−3 + 1. Then we can ﬁnd a zero
+. We continue doing so until there are less zero-sums left.
+sum of length
+4)pd−4 + 1
+Then we remove zero sums of length
+points left. Among the remaining points we still ﬁnd zero sums of length at most
+D(Zd
+1) + 1, hence, in total we obtain a system of at least
+
+2p, until there are less than (6p
+
+3(p−1)
+2
+
+−
+
+≤
+
+≤
+
+−
+
+p) = d(p
+S
+
+−
+(6p
+3(p
+disjoint zero sums. Hence,
+
+4)pd−3
+1)/2
+
+−
+−
+
+| −
+
+|
+
+−
+
+(6p
+
+1
+
++
+
+−
+
+4)pd−3
+
+4)pd−4
+
+(6p
+
+−
+
+−
+2p
+
++
+
+(6p
+d(p
+
+−
+−
+
+4)pd−4
+1) + 1
+
+4)pd−3 + 1+
+
+Dk(Zd
+p)
+
+(6p
+
+−
+
+≤
+
+max
+
+0,
+
+(cid:16)
+
+and our claim follows.
+
+3(p
+
+1)
+
+−
+2
+
+(6p
+
+−
+
+4)pd−3
+
+(6p
+
+−
+
+−
+2p
+
+4)pd−4
+
+k
+(cid:0)
+
+−
+
++
+
+(6p
+d(p
+
+−
+−
+
+4)pd−4
+1) + 1
+
+,
+(cid:1)(cid:17)
+
+(cid:3)
+
+4
+
+G. BHOWMIK AND J.-C. SCHLAGE-PUCHTA
+
+The reader should compare our result with a similar bound given by Freeze and
+Schmid[7, Proposition 3.5]. In our result the coeﬃcient of k is smaller, while the
+constant term is much bigger. The following result is an interpolation between
+these results.
+
+Lemma 2.4. Let N, d
+≥
+largest integer such that N > (a + 1)pd−a+1. If a
+
+3 be integers, p a prime number, and deﬁne a to be the
+
+2, then Dk(Zd
+p)
+
+N , where
+
+k =
+
+(a
+
+N
+
+−
+
+d−1
+
+ν + 1
+
+1)p −
+
+Xν=a
+
+ν(ν
+
+1)
+
+−
+
+pd−a
+
+1
+
+−
+
+≥
+
+(a
+
+N
+
+−
+
+1)p
+
+1
+(cid:0)
+
+−
+
+a(1
+
+p−1)
+
+(cid:1)
+
+−
+
+≥
+
+≤
+1
+
+Proof. Let S be a sequence of length N in Zd
+p. We have to show that S contains
+a systm of k disjoint zero sums. Since N > (a + 1)pd−a+1, S contains a zero sum
+of length
+1)p. We remove zero sums of this length, until the remaining
+sequence has length < (a + 1)pd−a+1. From this point onward we remove zero sums
+ap, until the remainder has length < (a + 2)pd−a+2, and so on. In this
+of length
+way we obtain a disjoint system consisting of
+
+(a
+
+≤
+
+−
+
+≤
+
+N
+
+−
+
+(a + 1)pd−a+1
+1)p
+(a
+
+(a + 1)pd−a+1
+
++
+
+−
+ap
+
+(a + 2)pd−a+2
+
++
+
++
+
+· · ·
+
+dp2
+
+−
+
+(d + 1)p
+ap
+
++ 1
+
+zero sums. This sum almost telescopes, yielding the ﬁrst expression for k. For the
+ν+1
+ν(ν−1) is decreasing, hence the summands in the
+inequality note that the sequence
+p−ν, and we conclude that
+series are decreasing faster than the geometrical series
+p−1)−1. Our
+the whole sum is bounded by the ﬁrst summand multiplied by (1
+(cid:3)
+claim now follows.
+
+P
+
+−
+
+−
+
+The following result is a special case of a result of Lindstr¨om[12] (see also [7,
+
+Theorem 7.2, Lemma 7.4]).
+Lemma 2.5. Every sequence of length 2d−1 + 1 in Zd
+
+2 contains a zero-sum of length
+3, and this bound is best possible. Every sequence of length 2(d+1)/2 + 1 in Zd
+2
+
+≤
+contains a zero-sum of length
+
+4.
+
+≤
+
+3. Proof of Theorem 1.1
+
+In this section we show that Theorem 1.4 implies Theorem 1.1.
+
+Lemma 3.1. Let G be an abelian group of rank r
+holds true for all proper subgroups of G. Then it holds true for G itself.
+
+3. Assume that Theorem 1.1
+
+≥
+
+|
+
+≥
+
+G
+|
+
+p of G, such that d
+
+3, exp(G) = p exp(G/U ), and
+
+Proof. Let p be a prime divisor of
+U ∼= Zd
+assumptions. Put H = G/U . Let A be a sequence consisting of exp(G) + |G|
+or not. Denote by
+or 2
+|⌋ −
+A the image of A in H. Then we obtain a zero-sum, by choosing a large system of
+disjoint zero-sums in Zd
+p, and then choosing a zero-sum among the elements in H
+deﬁned by these sums, provided that
+
+. Choose an elementary abelian subgroup
+is minimal under these
+1
+
+1 elements, depending on whether exp(G) >
+
+exp(G) −
+
+|
+p
+
+|
+p
+
+G
+|
+
+G
+
+U
+
+⌊
+
+|
+
+|
+
+D(H)
+
+M
+
+A
+
+| −
+p
+
+|
+
+≤
+
++ k,
+
+p) and k = k(p, d, M ) is deﬁned as in Theorem 1.4. The left hand
+where M
+side can be estimated using the inductive hypothesis. We have exp(H) = exp(G)
+,
+
+≥
+
+η(Zd
+
+p
+
+ON DAVENPORT’S CONSTANT
+
+5
+
+= |G|
+
+H
+|
+follows, provided that
+
+pd . Assume ﬁrst that exp(G)
+
+|
+
+G
+|
+
+≥
+
+|
+p
+
+and exp(H)
+
+H
+
+|
+
+≥
+
+|
+p
+
+. Then our claim
+
+exp(G)
+p
+
++
+
+G
+|
+exp(G)pd −
+
+|
+
+1
+
+|
+
+≤
+
+A
+
+| −
+p
+
+M
+
++ k,
+
+inserting the choice of A and rearranging terms this becomes
+
+exp(G) +
+
+G
+|
+exp(G)pd−1 −
+
+|
+
+p
+
+≤
+The quotient of G by its largest cyclic subgroup contains at least Zd−1
+
+−
+
+exp(G) + |
+
+1
+
+M + pk.
+
+G
+|
+exp(G) −
+
+, hence,
+exp(|G| with a lower bound we lose something,
+
+|G|
+
+p
+
+|G|
+
+pd−1. Clearly, by replacing
+
+exp(G) ≥
+hence, it suﬃces to establish the relation
+pd−1
+
+p
+
+1
+
+−
+
+≤
+
+M + pk.
+
+1
+
+−
+
+−
+
+However, this relation is implied by Theorem 1.4.
+
+Next suppose that exp(G)
+
+G
+|
+
+and exp(H) <
+
+≥
+H
+
+|
+|
+p
+p
+> exp(H) = exp(G)/p
+
+. Then
+
+H
+
+|
+
+/p2,
+
+G
+|
+
+≥ p|
+
+/pd =
+
+G
+|
+
+q|
+
+p|
+thus d < 2, but this case was excluded from the outset.
+and exp(H) <
+|
+p
+1, provided that
+
+If exp(G) <
+
+yields D(G)
+
+H
+
+|
+
+G
+|
+|
+2√G
+p
+−
+
+≤
+
+, the same argument as in the ﬁrst case
+|
+
+Since
+
+H
+
+|
+
+|
+
+= |G|
+
+pd and M
+
+p
+
+2
+
+G
+
+1
+
+M + pN.
+
+| −
+
+≤
+
+p|
+−
+pd−1 this becomes
+
+| −
+
+H
+
+2p
+
+p|
+pN
+−
+(2
+
+≤
+
+p|
+As exp(H) < √H we have that H is of rank at least 3, which by our assumption
+on the size of H implies that
+
+p2d. This implies
+
+| ≥
+
+G
+
+−
+
+−
+
+2p−(d−2)/2)
+
+G
+
+pd−1
+
+p + 1.
+
+|
+
+| ≥
+(2
+
+G
+
+| ≥
+
+2p−(d−2)/2)pd >
+
+−
+
+1
+2
+
+pd > pd−1
+
+p + 1,
+
+−
+
+(2
+
+2p−(d−2)/2)
+
+−
+and our claim is proven.
+
+p|
+
+If exp(G) <
+
+G
+|
+
+|
+p
+
+that is
+
+(cid:0)
+
+and exp(H)
+
+√H, the theorem follows provided that
+
+≥
+
+H
+
+exp(H) + |
+
+|
+exp(H) −
+
+2
+
+≤
+
+1
+
+p
+(cid:1)
+
+p|
+
+G
+
+| −
+
+1
+
+−
+
+M + kp,
+
+exp(G) +
+
+G
+|
+pd−2 exp(G) −
+
+|
+
+p
+
+≤
+
+2
+
+1
+
+pd−1.
+
+−
+
+G
+
+| −
+pd/2−1
+
+p|
+G
+|
+
+The bounds for exp(G) and exp(H) imply
+, and
+in this range the left hand side is increasing as a function of exp(G), hence, this
+inequality is certainly true if
+
+exp(G) <
+
+|
+p
+
+|
+p
+
+G
+|
+
+≤
+
+1 + pd−1 +
+
+G
+|
+If this is not the case, then
+
+p|
+
+p2−d
+
+p,
+
+−
+
+| ≥
+pd.
+
+G
+
+p|
+G
+| ≥
+
+which follows from
+|
+the choice of p we have that H has rank at most 2, that is, H = Zn1 ⊕
+p
+Zpn2 , say. Then D(H) = n1 + n2 −
+G = Zd−2
+Dn1+n2−1(Zd
+pdn1n2 −
+p)
+
+< pd, and by
+Zn2 and
+1, thus it suﬃces to prove
+
+Zpn1 ⊕
+
+p ⊕
+
+H
+
+1.
+
+≤
+
+2
+
+|
+
+|
+
+p
+
+6
+
+G. BHOWMIK AND J.-C. SCHLAGE-PUCHTA
+
+Denote the right hand side by N . Then Lemma 2.4 shows that our claim holds
+true, provided that
+
+n1 + n2 −
+
+1
+
+≤
+Using the trivial bound n1 + n2 −
+apd−a
+1
+1)p
+(a
+
+a(1
+
+1
+
+1
+
+−
+
+≤
+
+−
+
+(cid:0)
+
+N
+
+1
+
+(a
+
+1)p
+
+1
+(cid:0)
+
+.
+(cid:1)
+−
+n1n2 we ﬁnd that this inequality follows from
+
+p−1)
+
+a(1
+
+−
+
+−
+
+a + p−(d−a)
+4a
+
+≥
+
+(cid:1)
+
+ap−a + p−d
+(cid:0)
+
+,
+(cid:1)
+
+p−1)
+
+−
+
+2, with exception
+and by direct inspection we see that our claim follows for all a
+only the case (p, a) = (2, 2). In this case our claim follows from Lemma 2.5, provided
+that d > 3. Finally, if p = 2 and d = 3, then D(G) = M (G) was shown by van Emde
+Boas[3] under the assumption that Lemma 5.1 holds true for all prime divisors of
+, which we today know to hold for all primes. Hence the proof is complete. (cid:3)
+H
+|
+We know that D(Zn1 ⊕
+≤
+
+1, hence Theorem 1.1 holds true for all
+2. Hence Theorem 1.1 follows by induction over the group order.
+
+Zn2 ) = n1 + n2 −
+
+groups of rank
+
+≥
+
+|
+
+4. Proof of Theorem 1.4: The case p
+
+7
+
+≤
+
+4.1. The primes 2 and 3. To prove Theorem 1.4 for p = 2, we want to show that
+in a set of 2d points we can ﬁnd a system consisting of many disjoint zero-sums.
+3, until
+We ﬁrst remove one zero-sum of length
+≤
+this is not possible anymore, and then we switch to zero-sums of length 4. Finally
+we remove zero-sums of length
+2) = d + 1.
+In this way we obtain at least
+
+≤
+d + 1, which is possible in view of D(Zd
+
+2, then zero-sums of length
+
+≤
+
+2d
+
+2
+
++
+
+−
+3
+
+2d−1 + 2
+
+−
+
+2(d+1)/2
+4
+
+1
+
+−
+
++
+
+2(d+1)/2
+
+−
+d + 1
+
+d
+
+2
+
+−
+
++ 1 =
+
+2d
+4
+
++
+
+2d + 2
+
+24 −
+
+2(d−3)/2 +
+
+2(d+1)/2
+d + 1
+
+−
+
+1
+
+zero-sums. Disregarding the last fraction we see that this quantity is
+provided that d
+this bound.
+
+2d−2,
+6 we obtain our claim by explicitly computing
+
+7. For 3
+
+≤
+
+≤
+
+≥
+
+≥
+
+d
+
+Next we consider p = 3. For d
+
+6 we have
+
+≥
+s(Zd
+3)
+
+η(Zd
+3)
+
+≤
+
+3d−6s(Z6
+
+3) < 3d−1,
+
+≤
+
+hence, Theorem 1.4 holds true with N = 0, M = 3d−1. For d = 5 it follows
+from Lemma 2.1 that a sequence of length η(Z5
+3 contains a system of N =
+3)
+η(Z5
+
+disjoint zero-sums, hence, our claim follows provided that
+
+−
+
+3)−2d−6
+3d−3
+
+⌉
+
+⌈
+
+η(Z5
+3)
+
+η(Z5
+3)
+12
+
+−
+
+16
+
+⌉
+
+3
+
+⌈
+
+≤
+
++ 34,
+
+≤
+
+21 + 81. In the same way we see that for d = 4 a sequence of length
+3 contains a system of 4 disjoint zero-sums, thus our claim follows from
+12 + 27. Finally it is shown in [2, Proposition 1], that a sequence of length
+3) = 17 our
+
+3 contains a system of 3 disjoint zero-sums. Together with η(Z3
+
+that is, 89
+39 in Z4
+39
+≤
+15 in Z3
+claim follows in this case as well.
+
+ON DAVENPORT’S CONSTANT
+
+7
+
+4.2. The prime 5. We begin by proving the second statement of Theorem 1.2. We
+do so by using a density increment argument together with explicit calculations.
+ku of a sequence A over Fd
+A
+Deﬁne the Fourier bias
+max
+).
+ξ, α
+e(
+ku :=
+A
+i
+h
+p\{0} Xα∈A
+
+p as
+
+ξ∈Fd
+
+k
+
+k
+
+1
+A
+|
+
+|
+
+Then we have the following.
+
+Lemma 4.1. Let p
+≥
+contains a zero-sum of length p, provided that
+
+3 be a prime number, A be a sequence over Fd
+
+p. Then A
+
+p−1
+
+A
+p(p−1)d >
+|
+|
+
+A
+k
+
+p−3
+u (cid:18)k
+
+k
+
+ku +
+A
+
+p
+1
+−
+2pd−1 (cid:19)
+
++
+
+p
+2(cid:19)
+
+(cid:18)
+
+p−2
+
+A
+|
+|
+p(p−1)d
+
+Proof. Let N be the number of solutions of the equation a1 +
+ai ∈
+
+A. From [17, Lemma 4.13] we have
+
+N
+
+|
+
+≥
+
+p
+
+A
+|
+pd − k
+
+p−2
+u
+
+A
+k
+
+A
+|
+
+|
+
+p(p−2)d.
+
++ ap = 0 with
+
+· · ·
+
+· · ·
+
++ ap = 0 corresponds to a zero-sum of A, if a1, . . . , ap are distinct
+A solution a1 +
+elements in A. Using M¨obius inversion over the lattice of set partitions one could
+compute the over-count exactly, however, it turns out that the resulting terms are
+of negligible order, which is why we bound the error rather crudely. The number of
+p
+solutions M in which not all elements are diﬀerent is at most
+times the number
+2
++ ap−1 = 0. Since multiplication by 2 is
+of solutions of the equation 2a1 + a2 +
+(cid:0)
+a linear map in Fd
+, using [17, Lemma 4.13] again we
+2A
+obtain
+
+p we have that
+
+· · ·
+ku =
+
+A
+k
+
+k
+
+(cid:1)
+
+M
+
+|
+
+A
+pd +
+|
+
+A
+k
+
+≤
+
+k
+Hence the number of zero-sums is at least
+A
+|
+pd − k
+
+A
+k
+
+p−2
+u
+
+A
+|
+
+M
+
+N
+
+≥
+
+p(p−2)d
+
+p
+
+|
+
+|
+
+−
+and our claim follows.
+
+p−3
+u
+
+A
+|
+
+|
+
+p(p−3)d.
+
+p−1
+
+A
+|
+pd − k
+
+|
+
+−
+
+p−3
+u
+
+A
+k
+
+A
+|
+
+|
+
+p(p−3)d,
+
+(cid:3)
+
+k
+p−1
+
+s(Z3
+
+We now use this lemma recursively to obtain bounds for s(Zd
+5) = 37.
+Consider a 3-dimensional subgroup U , and let ξ
+
+U .
+Let n1, . . . , n5 be the number of elements of A in each of the 5 cosets of U , ζ be a
+ﬁfth root of unity. If max(ni)
+37, we have a zero-sum of length p in one of the
+hyperplanes. Hence
+
+5 be a vector such that v
+
+5), starting from
+
+Z4
+
+≥
+
+⊥
+
+∈
+
+A
+
+ku ≤
+
+k
+
+1
+A
+|
+
+|
+
+max
+|
+n1+···+n5=|A|
+0≤ni≤36
+
+n1 + n2ζ +
+
++ n5ζ4
+
+.
+
+|
+
+· · ·
+
+Since 1 + ζ +
+
+· · ·
+
+n1 + n2ζ +
+
++ ζ4 = 0, we have
++ n5ζ4 = (36
+
+· · ·
+
+n1) + (36
+
+n2)ζ +
+
++ (36
+
+−
+
+· · ·
+
+−
+
+−
+
+n5)ζ4,
+
+that is,
+
+max
+n1+···+n5=|A|
+0≤ni≤36
+
+|
+
+n1 + n2ζ +
+
++ n5ζ4
+
+· · ·
+
+=
+
+|
+
+max
+n1+···+n5=180−|A|
+0≤ni≤36
+
+|
+
+n1 + n2ζ +
+
++ n5ζ4
+
+.
+
+|
+
+· · ·
+
+8
+
+G. BHOWMIK AND J.-C. SCHLAGE-PUCHTA
+
+For
+A
+provided that
+
+| ≥
+
+|
+
+144 the right hand side equals 180
+
+A
+|
+
+− |
+
+, and we obtain a zero-sum,
+
+4
+
+A
+|
+|
+625 (cid:19)
+
+(cid:18)
+
+>
+
+(cid:18)
+
+180
+
+2
+
+180
+
+(cid:19)
+
+(cid:18)
+
+A
+|
+
+− |
+A
+|
+
+|
+One easily ﬁnds that this is the case for
+The same argument yields for d = 5 the inequality
+
+|
+
+− |
+A
+|
+A
+|
+
+|
+
+A
+|
+
++
+
+2
+125 (cid:19)
+
++
+
+2
+125 (cid:18)
+
+A
+|
+|
+625 (cid:19)
+
+3
+
+.
+
+= 157, and we deduce s(Z4
+5)
+
+157.
+
+≤
+
+4
+
+A
+|
+|
+3125 (cid:19)
+
+(cid:18)
+
+>
+
+(cid:18)
+
+780
+
+2
+
+780
+
+A
+|
+
+2
+− |
+− |
+625 (cid:19)
+A
+A
+|
+|
+|
+690, that is, we obtain s(Z5
+5)
+
+A
+|
+
++
+
+(cid:18)
+
+(cid:19)
+
+|
+
++
+
+3
+
+2
+A
+|
+|
+3125 (cid:19)
+625 (cid:18)
+690. Finally for Z6
+
+,
+
+5 we
+
+≤
+
+which is satisﬁed for
+obtain
+
+|
+
+A
+
+| ≥
+
+4
+
+A
+|
+15625 (cid:19)
+
+|
+
+(cid:18)
+
+>
+
+(cid:18)
+
+3445
+
+which is satisﬁed for
+
+A
+
+|
+
+| ≥
+
+2
+
+3445
+
+A
+|
+
+(cid:19)
+
+− |
+A
+|
+3091, thus the last inequality follows as well.
+
+− |
+A
+|
+
+3125 (cid:18)
+
+(cid:18)
+
+|
+
++
+
++
+
+|
+
+A
+|
+
+2
+3125 (cid:19)
+
+2
+
+3
+
+,
+
+A
+|
+|
+3125 (cid:19)
+
+Hence, Theorem 1.2(2) is proven.
+We have η(Z3
+5, one of length
+
+10, and one more among the remaining 18
+
+5) = 33, and among 33 elements we can ﬁnd one zero-sum of length
+5) = 13
+≤
+points. Hence we can take M = 33, N = 3, and Theorem 1.4 follows. Moreover we
+have η(Z4
+153, and among 153 elements we can ﬁnd one zero-sum
+5)
+of length
+10, and one more zero-sum, that is, we can
+take N = 15, and Theorem 1.4 follows for d = 4 as well.
+For d = 5 we have η(Z5
+5)
+
+≤
+≤
+5, 13 zero-sums of length
+
+s(Z4
+5)
+
+D(Z3
+
+≤
+
+≥
+
+−
+
+≤
+
+≤
+
+4
+
+s(Z5
+5)
+ﬁnd 24 disjoint zero-sums of length
+625 + 120. For d
+follows since M
+
+≤
+
+4
+
+≤
+
+686, and among 686 points in Z5 we
+−
+20, thus taking M = 686, N = 24, our claim
+6 we have
+
+≤
+
+s(Zd
+5)
+
+≤
+
+≤
+≥
+5d−6s(Z6
+5)
+
+3091
+
+·
+
+≤
+
+5d−6 < 5d−1,
+
+and our claim becomes trivial.
+
+5. Proof of Theorem 1.4: The case p
+
+7
+
+≥
+
+We begin by proving the last statement of Theorem 1.2.
+3 in Z2
+for suitable elements a, b, c
+
+Lemma 5.1. Let A be a sequence of length 3p
+length
+
+ap−1, bp−1, cp−1
+
+p. Then A =
+
+−
+
+≤
+
+{
+
+}
+
+Z2
+p.
+
+∈
+
+p without a zero-sum of
+
+Proof. A prime p is said to satisfy property B if in every maximal zero-sum free
+subset of Z2
+2. Gao and
+Geroldinger[9] have shown that the condition of the above lemma holds true if
+p has property B, and Reiher[15] has shown that every prime has property B. (cid:3)
+
+p some element occurs with multiplicity at least p
+
+−
+
+For p = 7 we need a little more speciﬁc information.
+Lemma 5.2. Let A be a sequence of length 15 over Z2
+a zero-sum of length
+elements of A.
+
+≤
+
+7, which does not contain
+7. Then there exist a cyclic subgroup which contains 3
+
+Proof. The proof can be done either by a mindless computer calculation or by a
+slightly more sophisticated human readable argument, however, as the latter also
+boils down to a sequence of case distinction we shall be a little brief. Let A be
+a counterexample, that is, a zero-sum free sequence of length 15, such that every
+
+ON DAVENPORT’S CONSTANT
+
+9
+
+cyclic subgroup contains at most 15 points. We shall deduce properties of A in a
+bootstrap manner.
+
+Without loss we may assume that A contains no two elements x, y with y =
+2x. Suppose that A contains two such elements. Then replacing y by x gives a
+new sequence A′, such that for an element in Z2
+p the shortest representation as a
+subsum of A′ is at least as long as the shortest representation as a subsum of A. In
+particular, A′ contains no short zero sum.
+
+There is at most one subgroup which contains two diﬀerent elements. Without
+loss we may assume that (1, 0), (3, 0), (0, 1), (0, 3) are in A. The subgroup generated
+by (1, 1) can contain either (5, 5) with multiplicity 2, or one of (1, 1), (2, 2), (5, 5)
+with multiplicity 1. If (5, 5) occurs twice, the remaining elements of the sequence
+must be among
+, which can eas-
+(2, 3), (2, 4), (3, 2), (3, 5), (4, 2), (4, 5), (5, 3), (5, 4)
+}
+ily be ruled out. If (5, 5) does not occur twice, then all subgroups diﬀerent from
+contain one element with multiplicity 2. The only possible
+,
+(1, 0)
+(1, 1)
+i
+h
+i
+h
+are (1, 6), (6, 1), and by symmetry we may assume that (6, 1)
+elements in
+1)
+i
+−
+occurs twice. Now
+must contain (6, 5), and we conclude that the remaining
+(1, 2)
+i
+h
+points are (2, 6), (3, 1), (5, 4), and we obtain the zero-sum (5, 4) + (6, 1) + (3, 1) +
+(0, 1).
+
+,
+(0, 1)
+i
+h
+(1,
+h
+
+{
+
+There exist 3 diﬀerent elements x, y, z, each of multiplicity 2 in A, such that
+7, such that no two generate the
+x + y
+same subgroup, and the sum of two diﬀerent of them is contained in two ﬁxed cyclic
+subgroups, which easily gives a contradiction.
+
+. Otherwise there are 6 elements of Z2
+i
+
+z
+∈ h
+
+(1, 0), (0, 1) and (2, 2) cannot all occur with multiplicity 2. Suppose otherwise.
+Then the only further elements which can occur with multiplicity 2 are (1, 6), (2, 4),
+(4, 2), (4, 6), (6, 1), and (6, 4). Moreover, two elements which are exchanged by the
+map (x, y)
+(y, x) cannot both occur in A, hence we may assume that (6, 1) occurs
+twice in A, while (1, 6) does not. Then (2, 4) and (4, 6) occur twice in A, and we
+get the zero-sum 2
+
+(6, 1) + (1, 6) + (1, 0).
+
+7→
+
+·
+
+−
+
+≤
+
+≤
+
+(1, 0), (0, 1) and (1, 1) cannot all occur with multiplicity 2. Using the previous
+result one ﬁnds that all further elements of multiplicity 2 have one coordinate equal
+to 1. By symmetry we may assume that there are two further elements of the form
+(1, t). If there is an element of the form (x, y), 2
+5, this immediately gives
+x
+a zero-sum of length 8
+x, hence all elements in A are (1, 0), or of the form (1, t),
+(6, t). Since there are at least 8 diﬀerent elements in A, there are at least 6 diﬀerent
+elements of the form (x, 0), which can be written as the sum of one element of the
+form (1, t) and one of the form (6, t). Hence we obtain a zero-sum of length 2 or 3.
+(1, 0), (0, 1) and (4, 4) cannot all occur with multiplicity 2. There are at least
+6 elements occurring with multiplicity 2, thus there are at least two further elements
+outside the subgroup
+immediately gives a zero-sum, and (2, 4) and (4, 2) as well as (5, 3) and (3, 5) cannot
+both occur at the same time, thus we may assume that (5, 3). The only possible
+element in
+is (1, 5), and this element can only occur once. Hence (2, 4)
+becomes impossible, and we conclude that (4, 2) occurs with multiplicity 2. But
+then all elements in
+
+. But every element diﬀerent from (2, 4), (3, 5), (4, 2), (5, 3)
+1)
+i
+
+yield zero-sums.
+
+(3, 1)
+i
+h
+
+(1,
+h
+
+−
+
+We can now ﬁnish the proof. We know that there exist two elements x, y
+x + y
+h
+
+both with multiplicity 2, such that
+We may set x = (1, 0), y = (0, 1), and let (t, t) be the element in
+
+A,
+contains an element of multiplicity 2.
+. Then
+i
+
+x + y
+h
+
+∈
+
+i
+
+(1,
+h
+
+1)
+i
+
+−
+
+10
+
+G. BHOWMIK AND J.-C. SCHLAGE-PUCHTA
+
+t = 0, 3, 5, 6 immediately yields z short zero-sum, while t = 1, 2, 4 was excluded
+(cid:3)
+above. Hence no counterexample exists.
+
+7 is a prime number, and A is a sequence in Zd
+
+Now suppose that p
+= n = pd−p
+
+≥
+
+p2−p (3p
+
+7) + 4 without zero-sums of length
+
+A
+|
+|
+dimensional subgroup of Zd
+p, such that m =
+2-dimensional subgroups containing ℓ. Each such subgroup contains p2
+−p
+outside ℓ. Each point of A is either contained in ℓ or occurs in p
+
+A
+|
+
+−
+
+≤
+
+∩
+
+ℓ
+
+|
+
+2
+
+subgroups. Hence among all subgroups there is one which contains
+⌈
+points outside ℓ. Call this subgroup U . Therefore U contains at least
+
+p with
+p. Let ℓ be a one-
+is maximal. Now consider all
+p points
+pd−p of all such
+m)
+⌉
+
+2
+p
+−p
+pd−p (n
+
+−
+
+−
+
+p2
+pd
+
+p
+p
+
+−
+−
+
+m
+pd−2 +
+
+4
+
+−
+· · ·
+
+(n
+
+m)
+
++ m
+
+3p
+
+7 + m
+
+(cid:25)
+
+−
+
+−
+
+≥ (cid:24)
+
++ 1 (cid:25)
+
+≤
+6 + m
+
+p) = 3p
+3, which implies that
+
+(cid:24)
+−
+elements of A. Since η(Z2
+4.
+2, this quantity is
+−
+−
+pd−2+···+1 is negative, and we ﬁnd that U contains
+Hence m
+3p
+2. However, this implies that each of
+≤
+the p + 1 one-dimensional subgroups of U contain at most 2 elements of A, thus
+3p
+8, hence, by our assumption p = 7. In
+the case p = 7 we obtain that U ∼= Z2
+7 contains a sequence A of 15 elements, such
+that no cyclic subgroup contains more than 2 of them, and A contains no zero-sum
+of length
+
+2p + 2, which implies p
+
+4 points, that is, m
+
+3, which implies m
+
+| ≤
+
+≤ |
+
+m−4
+
+3p
+
+3p
+
+7.
+
+≤
+
+≤
+
+−
+
+−
+
+≤
+
+≤
+
+−
+
+A
+
+U
+
+∩
+
+6
+
+≤
+
+We can now prove Theorem 1.4 for p
+
+7. We take M = pd−p
+p2−p (3p
+let k be the largest integer for which Lemma 2.3 ensures Dk(Zd
+p)
+claim of Theorem 1.4 becomes
+
+≥
+
+≤
+
+7) + 4, and
+−
+M . Then the
+
+for d = 3, and
+
+M
+
+−
+
+(6p
+
+−
+
+for d
+≥
+and 28p4
+Theorem 1.4 is complete.
+
+144p3 + p2
+
+≥
+
+−
+
+M
+−
+3(p
+
+2p
+
+5
+−
+1)/2
+
+−
+
+p + p2
+
+M
+
+≥
+
+2
+p
+
++6p−3
+4p2
+
+4)pd−3
+3(p
+
+−
+
+(cid:0)
+1)/2
+
+1
+dp
+
+−
+
+p + pd−1
+
+(cid:1)
+
+M
+
+≥
+
+33, which are satisﬁed for p
+
+≥
+
+References
+
+4. After some computation one reaches the inequalities 4p2
+
+6p + 25
+7. Hence the proof of
+
+≥
+
+1. R. Balasubramanian, G. Bhowmik, Upper bounds for the Davenport constant, Integers 7(2)
+
+(2007), A03.
+
+2. G. Bhowmik, J.-C. Schlage-Puchta, Davenport’s constant for Groups of the Form Z3⊕Z3⊕Z3d,
+
+CRM Proceedings and Lecture Notes 43 (2007), 307–326.
+
+3. P. van Emde Boas, A co,binatorial problem on ﬁnite Abelian groups II, Math. Centrum
+
+Amsterdam Afd. Zuivere Wisk 1969 ZW-007.
+
+4. P. van Emde Boas, D. Kruyswijk, A combinatorial problem on ﬁnite Abelian groups III, Math.
+
+Centrum Amsterdam Afd. Zuivere Wisk 1969 ZW-008.
+
+5. R. C. Bose, Mathematical theory of the symmetrical factorial design, Sankhya 8 (1947), 107-
+
+166.
+
+6. Y. Edel, S. Ferret, I. Landjev, L. Storme, The classiﬁcation of the largest caps in AG(5, 3), J.
+
+Combin. Theory Ser. A 99 (2002), 95-110.
+
+7. M.Freeze, W.A. Schmid, Remarks on a generalization of the Davenport constant, Discrete
+
+Math. 310 (2010), 3373–3389.
+
+ON DAVENPORT’S CONSTANT
+
+11
+
+8. W. Gao, A. Geroldinger, Zero sum problems in ﬁnite abelian groups: a survey, Expo. Math
+
+24 (2006), 337–369
+
+9. W. Gao, A. Geroldinger, On zero-sum sequences in Z/nZ ⊕ Z/nZ, Integers 3 (2003), A8.
+10. W. D. Gao, Q. H. Hou, W. A. Schmid, R. Thangadurai, On short zero-sum subsequences II,
+
+Integers 7 (2007), A21.
+
+11. A.Geroldinger, Additive group theory and non-unique factorizations, in : Combinatorial Num-
+
+ber Theory and Additive Group Theory, CRM, Barcelona, Birkhauser, 2009, 1–86.
+
+12. B. Lindstr¨om, Determination of two vectors from the sum, J. Combinatorial Theory 6 (1969),
+
+402-407.
+
+13. G. Pellegrino, Sul massimo ordine delle calotte in S4,3, Matematiche (Catania) 25 (1970),
+
+149-157.
+
+14. A. Potechin, Maximal caps in AG(6, 3), Des. Codes Cryptogr. 46 (2008), 243-259.
+15. C. Reiher, A proof of the theorem according to which every prime number possesses property
+
+B, Ph.D. thesis, Rostock, 2010.
+
+16. C. Reiher, On Kemnitz’ conjecture concerning lattice-points in the plane, Ramanujan J. 13
+
+(2007), 333–337.
+
+17. T. Tao, V. H. Vu, Additive combinatorics, Cambridge Studies in Advanced Mathematics, 105.
+
+Cambridge University Press, Cambridge, 2006.
+
+Universit´e de Lille 1, Laboratoire Paul Painlev´e UMR CNRS 8524, 59655 Villeneuve
+
+d’Ascq Cedex, France
+
+E-mail address: bhowmik@math.univ-lille1.fr
+
+Universiteit Gent, Krijgslaan 281, Gebouw S22, 9000 Gent, Belgium
+E-mail address: jcp@math.uni-freiburg.de
+
+

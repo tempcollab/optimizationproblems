@@ -6,3 +6,10 @@
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Lean build artifacts (keep source, manifest, toolchain tracked)
+lean/.lake/
+lean/build/
+**/*.olean
+**/*.ilean
+**/*.trace

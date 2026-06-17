@@ -1,0 +1,1572 @@
+3
+2
+0
+2
+
+t
+c
+O
+9
+
+]
+
+O
+C
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+8
+5
+4
+5
+0
+.
+0
+1
+3
+2
+:
+v
+i
+X
+r
+a
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS
+OF RANK THREE
+
+SHIWEN ZHANG
+
+Abstract. Let G be an additive ﬁnite abelian group with exponent exp(G).
+For L ⊆ N, let sL(G) be the smallest integer ℓ such that every sequence S
+over G of length ℓ has a zero-sum subsequence T of length |T | ∈ L. In this
+paper, we consider the invariants s
+{k exp(G)}(G) (with k ∈ N).
+We obtain precise values as well as upper bounds of the above invariants for
+some abelian groups of rank three. Some of these results improve previous
+results of Gao-Thangadurai and Han-Zhang.
+
+[1,t](G) and s
+
+1. Introduction
+
+Let G be an additive ﬁnite abelian group with exponent exp(G). Let S =
+g1 · . . . · gℓ be a sequence over G (unordered and repetition is allowed), where gi ∈ G
+for 1 ≤ i ≤ ℓ. We denote by |S| := ℓ, which is called the length of the sequence
+ℓ
+S. We call S a zero-sum sequence if σ(S) :=
+i=1 gi = 0. The essential idea of
+the direct zero-sum theory is that a sequence S with enough elements will contain
+a zero-sum subsequence with prescribed properties. For example, in 1961, Erd˝os,
+Ginzburg and Ziv [5] proved that from every sequence S over an abelian group of
+order n of length 2n − 1, we can always ﬁnd a zero-sum subsequence T of length
+n (see [2] for other diﬀerent proofs). For L ⊆ N, let sL(G) be the smallest integer
+ℓ (if there exists) such that every sequence S over G of length ℓ has a zero-sum
+subsequence T of length |T | ∈ L.
+
+P
+
+Deﬁnition 1.1. We denote
+
+• D(G) := sN(G), which is called the Davenport constant of G;
+• sk exp(G)(G) := s{k exp(G)}(G) (with k ∈ N), which is called the k-th Erd˝os-
+
+Ginzburg-Ziv constant of G;
+
+• s≤t(G) := s[1,t](G) (for some t with exp(G) ≤ t ≤ D(G)). In particular, we
+
+denote η(G) := s≤exp(G)(G), which is called the η-constant of G.
+
+The above invariants have received a lot of attention, we refer to [13] for a survey
+of zero-sum theory. We shall focus on sk exp(G)(G) and s≤t(G) in this paper. When
+k = 1, s(G) := sexp(G)(G) is the famous Erd˝os-Ginzburg-Ziv constant. So far,
+roughly speaking, precise values of s(G) have been obtained only for groups of rank
+at most two and few groups of higher rank; see, e.g., [1, 3, 4, 6, 8, 9, 19, 26, 27, 30,
+31, 32, 34, 39] (in particular, s(Cr
+
+3 ) is related to the famous cap-set problem).
+
+It is easy to verify that sk exp(G)(G) ≥ k exp(G) + D(G) − 1 holds for every
+k ≥ 1; see [12]. In 1996, Gao [10] proved that sk exp(G)(G) = k exp(G) + D(G) − 1,
+provided that k exp(G) ≥ |G|. In 2006, Gao and Thangadurai [14] showed that if
+k exp(G) < D(G) then sk exp(G)(G) > k exp(G) + D(G) − 1. Recently, Gao, Han,
+Peng and Sun [15] proposed the following conjecture.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+2
+
+SHIWEN ZHANG
+
+Conjecture 1.2. Let G be a ﬁnite abelian group. If k exp(G) ≥ D(G), then we
+have sk exp(G)(G) = k exp(G) + D(G) − 1.
+Note that, for groups of the form Cr
+
+n, the precise values of their Davenport
+constant are unknown (with the conjecture D(Cr
+n) = r(n − 1) + 1). In this case,
+Kubertin [28] conjectured that skn(Cr
+n) = (k + r)n − r. Conjecture 1.2 has been
+veriﬁed for abelian p-groups G with D(G) ≤ 4 exp(G) with the restriction that
+p ≥ 5 (very recently, this result (also for p ≥ 5 in the rank 3 case) was reproved
+with a new approach by Grynkiewicz [20]). Now, we focus on the cases p = 2 or 3.
+Gao and Thangadurai [14] proved that
+2 ) = 2k + 3, where k ≥ 2;
+3 ) = 13, 15 ≤ s3·3(C3
+Moreover, in [22], Han and Zhang proved that
+
+3 ) = 3k + 6, where k ≥ 4.
+
+• sk·2(C3
+• s2·3(C3
+
+3 ) ≤ 17, sk·3(C3
+
+• sk·2n (C3
+• sk·3n (C3
+
+2n ) = (k + 3)2n − 3, where k ≥ 4,
+3n ) = (k + 3)3n − 3, where k ≥ 6.
+
+Consequently, they obtained the following asymptotically tight bound
+
+(1.1)
+
+skn(C3
+
+n) = (k + 3)n + O(
+
+n
+ln n
+
+), where k ≥ 6.
+
+Therefore, for groups of the form C3
+open for the following cases:
+
+pn (with p ∈ {2, 3}), Conjecture 1.2 remains
+
+• p = 2: k = 3 and n ≥ 2;
+• p = 3: (k = 3, n ≥ 1), (k = 4, n ≥ 2), and (k = 5, n ≥ 2).
+In this paper, we consider the case p = 3 and prove the following result.
+
+Theorem 1.3. For any n ≥ 1, we have
+
+sk·3n (C3
+
+3n ) = (k + 3)3n − 3
+
+for k = 3 and 5.
+
+As a corollary, following the same approach in [22], we have skn(C3
+
+n) = (k +
+3)n + O( n
+ln n ) (where k ≥ 5), which improves the above result (1.1) of Han and
+Zhang. We also refer to [17, 21, 22, 23, 25, 28, 36, 37] for some recent studies on
+sk exp(G)(G) and, in particular, their connections with extremal graph theory and
+coding theory (see [36, 37]).
+
+Next, we consider the invariant s≤t(G). Note that, the invariants sk exp(G)(G)
+and s≤t(G) are closely related. Gao, Han, Peng and Sun [15] conjectured that, for
+any k ≥ 1, we have
+
+sk exp(G)(G) = s≤k exp(G)(G) + k exp(G) − 1.
+(1.2)
+The special case “k = 1” of (1.2) is the well-known conjecture that s(G) = η(G) +
+exp(G) − 1; see [7, 16] for some recent studies. If t < exp(G), then s≤t(G) does
+not exist (consider a sequence S consists of copies of a ﬁxed element of order
+exp(G)). If t ≥ D(G), then we have s≤t(G) = D(G) by deﬁnition. Therefore, it
+suﬃces to study s≤t(G) for exp(G) ≤ t ≤ D(G). It is easy to see that D(Cn) = n
+and s≤n(Cn) = η(Cn) = n. For abelian groups of rank 2, Wang and Zhao [38]
+proved that s≤D(G)−k(G) = D(G) + k, where 0 ≤ k ≤ D(G) − exp(G). Roy and
+Thangadurai [35] also considered this problem for abelian p-groups G satisfying
+D(G) ≤ 2 exp(G)−1 (which are essentially of rank 2). In this paper, we study s≤t(G)
+for abelian p-group G of rank at least 3. It is known that s≤D(G)−1(G) = D(G) + 1
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS OF RANK THREE
+
+3
+
+for any ﬁnite abelian group of rank at least 2; see [38, Lemma 8]. We prove the
+following stronger result for groups of the form Cr
+
+p (with p prime, 3 ≤ r < p).
+
+Theorem 1.4. Let p be a prime, r be a positive integer, 3 ≤ r < p and G = Cr
+p .
+Then we have
+
+s≤D(G)−2(G) = D(G) + 1.
+More generally, we have the following upper bound and lower bound for 2 ≤ k ≤
+
+p − r + 1 and G = Cr
+
+pn (with p prime and 3 ≤ r < p).
+
+Theorem 1.5. Let p be a prime, r and n be positive integers, 3 ≤ r < p, G = Cr
+Then we have
+
+pn .
+
+D(G) +
+
+where 2 ≤ k ≤ p − r + 1.
+
+(cid:24)
+
+k
+r − 1
+
+≤ s≤D(G)−k(G) ≤ D(G) + k.
+
+(cid:25)
+
+For groups of the form C3
+
+pn and k = pn, we obtain the following precise value.
+
+Theorem 1.6. Let p be an odd prime, n be a positive integer, G = C3
+have
+
+pn . Then we
+
+s≤D(G)−pn(G) = D(G) + pn.
+A construction for the lower bound allow us to obtain the following corollary.
+
+Corollary 1.7. Let p be an odd prime, n be a positive integer, G = C3
+we have
+
+pn . Then
+
+For the group C3
+
+D(G) + pn − 1 ≤ s≤D(G)−pn+1(G) ≤ D(G) + pn.
+3 ) = 17([24]), s≤4(C3
+3 , it is known that s≤3(C3
+3 ) = 10 (Theorem
+3 ) = D(C3
+1.6), s≤6(C3
+3 ) = 8 ([38, Lemma 8]), and s≤7(C3
+In the
+3 ) = 7 ([33]).
+following, we provide the precise values of s≤5(C3
+3 ). Note that this result is not
+covered by Theorem 1.4.
+Theorem 1.8. We have s≤5(C3
+
+3 ) = 9.
+
+The following sections are organized as follows. In Section 2, we shall introduce
+some notation and auxiliary results. In Section 3, we will prove our main results.
+
+2. Preliminaries
+
+In this section, we provide more rigorous deﬁnitions and notation. We also
+
+introduce some auxiliary results that will be used repeatedly below.
+
+Let N denote the set of positive integers and N0 = N ∪ {0}. Let G be a ﬁnite
+
+abelian group. By the structure theorem of ﬁnite abelian groups, we have
+
+G ∼= Cn1 ⊕ · · · ⊕ Cnr
+where r is the rank of G, n1, . . . , nr are integers with 1 < n1| . . . |nr. Moreover,
+n1, . . . , nr are uniquely determined by G, and nr = exp(G) is the exponent of G.
+For convenience, we write (i1, . . . , ir) to denote i1e1 + · · · + irer, where ij ∈ Z and
+ej is a generator of Cj.
+
+We deﬁne a sequence over G to be an element of the free abelian monoid
+
+(F (G), ·); see Chapter 5 of [18] for detailed explanation. Let
+
+g[i] = g · . . . · g
+
+∈ F (G) and T [i] = T · . . . · T
+
+∈ F (G)
+
+i
+
+|
+
+{z
+
+}
+
+i
+
+|
+
+{z
+
+}
+
+4
+
+SHIWEN ZHANG
+
+for g ∈ G, T ∈ F (G), and i ∈ N0.
+
+Let
+
+S = g1 · . . . · gℓ
+
+be a sequence over G. We call
+• |S| = ℓ the length of S;
+ℓ
+i=1 gi ∈ G the sum of S;
+• σ(S) =
+• S a zero-sum sequence if σ(S) = 0;
+• S a minimal zero-sum sequence if S contains no zero-sum subsequence T
+
+P
+
+with 1 ≤ |T | < |S|.
+
+Deﬁne
+
+N k(S) = |{I ⊂ [1, ℓ]|
+
+gi = 0, |I| = k}|
+
+to be the number of zero-sum subsequences T of S with |T | = k.
+
+i∈I
+X
+
+Let
+
+r
+
+D∗(G) = 1 +
+
+(ni − 1).
+
+Lemma 2.1. ([33]) Let G be a ﬁnite abelian p-group. Then
+
+i=1
+X
+
+D(G) = D∗(G).
+
+Moreover, if S is a sequence over G with |S| = ℓ ≥ D∗(G), then
+
+1 − N 1(S) + N 2(S) + · · · + (−1)ℓN ℓ(S) ≡ 0 (mod p).
+
+Corollary 2.2. ([16]) Let G be a ﬁnite abelian p-group. If S is a sequence over G
+with |S| = ℓ ≥ D∗(G) + pn − 1, then
+
+1 − N pn
+
+(S) + N 2·pn
+
+(S) + · · · + (−1)⌊ ℓ
+
+pn ⌋N ⌊ ℓ
+
+pn ⌋·pn
+
+(S) ≡ 0 (mod p).
+
+Lemma 2.3. ([12]) Let G be a ﬁnite abelian group, then
+sk exp G(G) ≥ k exp G + D(G) − 1
+
+holds for every k ≥ 1.
+Lemma 2.4. We have s(C3
+
+3 ) = 19 and s2·3(C3
+
+3 ) = 13.
+
+Proof. See [24] and [14, Theorem 1.1] .
+Lemma 2.5. We have s2·3n (C3
+
+3n ) ≤ 7 · 3n − 8.
+
+(cid:3)
+
+Proof. We prove by induction on n. If n = 1, the result is supported by Lemma
+2.4. Now, we suppose n ≥ 2 and the result holds for n − 1, i.e., s
+3n−1 ) ≤
+7 · 3n−1 − 8. Let S be a sequence over C3
+3n of length 7 · 3n − 8. Deﬁne a group
+homomorphism:
+
+2·3n−1(C3
+
+π : C3
+
+3n −→ C3
+3
+g 7→ 3n−1g.
+
+3n−1. We want to show that S contains a zero-sum subsequence of
+
+Then, ker π ∼= C3
+length 2 · 3n.
+Since T = π(S) is a sequence over C3
+3 ) = 19, by
+induction, we can ﬁnd t = 7 · 3n−1 − 8 zero-sum subsequences π(S1), . . . , π(St) of
+T with |Si| = 3. As K = σ(S1) · . . . · σ(St) is a sequence over ker π, we can ﬁnd a
+zero-sum subsequence σ(Si1 ) · . . . · σ(Siu ) of K with u = 2 · 3n−1. Thereby, we get
+
+3 of length 7 · 3n − 8 and s(C3
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS OF RANK THREE
+
+5
+
+a zero-sum subsequence S′ = Si1
+the proof.
+
+· . . . · Siu of S with |S′| = 2 · 3n. This completes
+(cid:3)
+
+Lemma 2.6. (Lucas’ Theorem)([29]) Let a, b be positive integers with a = anpn +
+· · · + a1p + a0 and b = bnpn + · · · + b1p + b0 be the p-adic expansions, where p is a
+prime. Then
+
+a
+b
+
+≡
+
+an
+bn(cid:19)(cid:18)
+
+an−1
+bn−1(cid:19)
+
+· · ·
+
+a0
+b0(cid:19)
+
+(cid:18)
+(cid:19)
+Similar to [16], we have the following result.
+
+(cid:18)
+
+(cid:18)
+
+Lemma 2.7. Let a and k be positive integers. Let
+
+A =
+
+1
+a+k
+1
+a+k
+2
+(cid:0)
+(cid:0)
+a+k
+k
+
+...
+
+(cid:0)
+
+(cid:1)
+(cid:1)
+
+(cid:1)
+
+
+
+
+
+
+
+
+
+
+1
+2k−1
+1
+2k−1
+2
+(cid:0)
+(cid:1)
+(cid:0)
+(cid:1)
+2k−1
+k
+
+...
+
+(cid:0)
+
+(cid:1)
+
+. . .
+. . .
+. . .
+. . .
+. . .
+
+1
+k
+1
+k
+2
+(cid:0)
+(cid:0)
+k
+k
+
+...
+
+(cid:0)
+
+
+(cid:1)
+
+
+(cid:1)
+
+
+
+
+(cid:1)
+
+(mod p).
+
+.
+
+(k+1)×(k+1)
+
+Then, we have
+
+Proof. Let
+
+B =
+
+det(A) = (−1)
+
+k(k+1)
+2
+
+a
+k
+
+(cid:18)
+
+.
+(cid:19)
+
+1
+a + k
+(a + k)(a + k − 1)
+...
+(a + k) · · · (a + 1)
+
+1
+2k − 1
+(2k − 1)(2k − 2)
+...
+(2k − 1) · · · k
+
+. . .
+. . .
+· · ·
+. . .
+. . .
+
+
+
+
+
+
+
+
+
+
+1
+k
+k(k − 1)
+...
+k!
+
+.
+
+
+
+
+
+
+
+
+
+
+Denote the ith row of B by RowB(i). Replacing RowB(3) by RowB(3) + RowB(2),
+we get the following matrix
+
+1
+a + k
+(a + k)2
+...
+(a + k) · · · (a + 1)
+
+1
+2k − 1
+(2k − 1)2
+...
+
+. . .
+. . .
+· · ·
+. . .
+(2k − 1) · · · k . . .
+
+
+
+
+
+
+
+
+
+
+Through the same way, we can get the following matrix
+
+1
+k
+k2
+...
+k!
+
+.
+
+
+
+
+
+
+
+
+
+
+C =
+
+1
+a + k
+(a + k)2
+...
+(a + k)k
+
+
+
+
+
+
+
+
+
+
+1
+2k − 1
+(2k − 1)2
+...
+(2k − 1)k
+
+. . .
+. . .
+· · ·
+. . .
+· · ·
+
+1
+k
+k2
+...
+kk
+
+.
+
+
+
+
+
+
+
+
+
+
+6
+
+SHIWEN ZHANG
+
+It is well known that det(C) is a Vandermonde determinant, which leads to our
+result
+
+det(A) =
+
+1
+k
+l=1 l!
+
+det(C)
+
+=
+
+k(k+1)
+2
+
+(−1)
+Q
+k
+l=1 l!
+
+Q
+= (−1)
+
+k(k+1)
+2
+
+This completes the proof.
+
+a(a − 1) · · · (a − k + 1)
+
+(j − i)
+
+k≤i<j≤2k−1
+Y
+
+a
+k
+
+(cid:18)
+
+.
+(cid:19)
+
+(cid:3)
+
+3. Proof of the main theorems
+
+In this section, we prove the main results.
+Proof of Theorem 1.3. Using Lemma 2.1, we have D(G) = 3 · 3n − 2. By Lemma
+
+2.3 with G = C3
+
+3n , it suﬃces to prove sk·3n (C3
+
+3n ) ≤ (k + 3)3n − 3.
+
+Case 1 : k = 3. Let S be a sequence over C3
+
+3n of length 6 · 3n − 3. Let T be a
+subsequence of S with |T | = 4 · 3n − 3. Using Corollary 2.2 with l = 4 · 3n − 3 and
+D∗(G) = 3 · 3n − 2, we have
+
+1 − N 3n
+
+(T ) + N 2·3n
+
+(T ) − N 3·3n
+
+(T ) ≡ 0
+
+(mod 3).
+
+It follows that
+
+(1 − N 3n
+
+(T ) + N 2·3n
+
+(T ) − N 3·3n
+
+(T )) ≡ 0 (mod 3).
+
+XT |S,|T |=4·3n−3
+
+Analysing the number of times each zero-sum subsequence is counted, we obtain
+
+1 − N 3·3n
+
+(S) ≡ 0
+
+(mod 3).
+
+(S) 6= 0 and S contains a zero-sum subsequence of length 3 · 3n − 3.
+
+Therefore, N 3·3n
+Thus,
+
+s3·3n (C3
+
+3n ) = 6 · 3n − 3.
+
+Case 2 : k = 5. Let S be a sequence over C3
+
+3n of length 8 · 3n − 3. By Lemma
+2.5, we know that S contains a zero-sum subsequence T of length 2 · 3n. Then,
+T ′ = ST −1 satisﬁes |T ′| = 6 · 3n − 3. Using the result above, we can get a zero-sum
+subsequence T ′′ of length 3 · 3n from T ′. Combining T ′ and T ′′, we get a zero-sum
+subsequence of length 5 · 3n. Thus,
+
+s5·3n (C3
+
+3n ) = 8 · 3n − 3.
+
+This completes the proof.
+
+(cid:3)
+
+Proof of Theorem 1.4. First, we prove that sD(G)−2(G) ≥ D(G) + 1. Using
+
+Lemma 2.1, we have D(G) = rp − r + 1. Let
+
+S0 = (1, 0, · · · , 0)[p−1] · (0, 1, · · · , 0)[p−1] · . . . · (0, 0, · · · , 1)[p−1] · (1, 1, · · · , 1)
+be a sequence over G of length rp − r + 1. It is clear that it is a minimal zero-
+sum sequence. Thus, it does not contain a zero-sum subsequence of length at most
+D(G) − 2 and we have sD(G)−2(G) ≥ rp − r + 1 + 1 = D(G) + 1.
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS OF RANK THREE
+
+7
+
+Next, we prove that sD(G)−2(G) ≤ D(G) + 1. Let S be a sequence of G of length
+rp − r + 2. Assume to the contrary that N i(S) = 0, for i = 1, 2, . . . , rp − r − 1.
+Using Lemma 2.1, we have
+
+(3.1)
+
+1 + N rp−r(S) − N rp−r+1(S) ≡ 0 (mod p).
+
+Let T be a subsequence of S with |T | = rp − r + 1. Clearly, N i(T ) = N i(S) = 0,
+for i = 1, 2, . . . , rp − r − 1. Using Lemma 2.1, we have
+
+1 + N rp−r(T ) − N rp−r+1(T ) ≡ 0
+
+(mod p).
+
+It follows that
+
+(1 + N rp−r(T ) − N rp−r+1(T )) ≡ 0
+
+(mod p).
+
+XT |S,|T |=rp−r+1
+
+Analysing the number of times each subsequence is counted, we obtain
+
+(3.2)
+
+rp − r + 2
+rp − r + 1
+
+(cid:18)
+
++
+
+2
+1
+(cid:18)
+
+(cid:19)
+
+N rp−r(S) −
+
+(cid:19)
+
+1
+1
+(cid:18)
+
+By Equations (3.1) and (3.2), we have
+
+N rp−r+1(S) ≡ 0
+
+(mod p).
+
+(cid:19)
+
+N rp−r(S) ≡ r − 1
+N rp−r+1(S) ≡ r
+
+(mod p),
+
+(mod p).
+
+(
+
+So, there are r elements that are the same in S. Without loss of generality, we set
+S = g1 · g2 · . . . · grp−2r+2 · a[r].
+
+Let T be a zero-sum subsequence of S of length rp−r. Then, ST −1 does not contain
+a. Assuming ST −1 = b · c, we have b + c = a. For T ′ = g2 · g3 · . . . · grp−2r+2 · a[r],
+we have
+
+1 + N rp−r(T ′) ≡ 0
+
+(mod p).
+
+Therefore, there are exactly p−1 elements of g2·g3·. . .·grp−2r+2 such that g1+gi = a.
+In the same way, for gj, there are exactly p−1 elements of g1·g2 ·. . .·ˆgj ·. . .·grp−2r+2
+such that gj + gi = a. Without loss of generality, we suppose
+
+g1 = g2 = · · · = gp−1,
+gp = gp+1 = · · · = g2p−2,
+g1 + gp = a,
+
+
+
+
+
+
+
+
+g2p−1 = g2 = · · · = g3p−3,
+g3p−2 = g3p−1 = · · · = g4p−4,
+g2p−1 + g3p−2 = a,
+
+. . .
+
+Then, we have (2p − 2)|(rp − 2r + 2), a contradiction. So, S contains a zero-sum
+subsequence of length at most rp − r + 1 and we have s≤D(G)−2(G) ≤ D(G) + 1. (cid:3)
+
+
+
+Proof of Theorem 1.5. First, we prove that D(G) +
+
+According to Lemma 2.1, D(G) = rpn − r + 1. Let
+
+k
+r−1
+
+l
+
+m
+
+≤ s≤D(G)−k(G).
+
+S0 = (1, 0, , · · · , 0)[pn−1] · . . . · (0, 0, · · · , 1)[pn−1] · (1, 1, · · · , 1)[⌈ k
+
+r−1 ⌉]
+
+8
+
+SHIWEN ZHANG
+
+be a sequence over G of length D(G) +
+subsequence of S0 is
+
+k
+r−1
+
+l
+
+m
+
+− 1. We can see the shortest zero-sum
+
+(1, 0, , · · · , 0)[pn−⌈ k
+
+r−1 ⌉] · . . . · (0, 0, · · · , 1)[pn−⌈ k
+
+r−1 ⌉] · (1, 1, · · · , 1)[⌈ k
+
+r−1 ⌉].
+
+It has length rpn − (r − 1)
+
+k
+r−1
+
+which is greater than D(G) − k. Therefore,
+
+D(G) +
+
+k
+r−1
+
+l
+≤ s≤D(G)−k(G).
+
+m
+
+m
+
+l
+
+Next, we prove s≤D(G)−k(G) ≤ D(G) + k. Let S be a sequence of G of length
+rpn −r+1+k. Assume to the contrary that N i(S) = 0, for i = 1, . . . , rpn −r+1−k.
+Using Lemma 2.1, we have
+
+1 + (−1)rpn−r+2−kN rpn−r+2−k(S) + · · · + (−1)rpn−r+1N rpn−r+1(S) ≡ 0 (mod p).
+
+Let T be a subsequence of S with |T | = |S| − t, where t is an integer such that
+0 ≤ t ≤ k. Using Lemma 2.1 again, we have
+
+1 + (−1)rpn−r+2−kN rpn−r+2−k(T ) + · · · + (−1)rpn−r+1N rpn−r+1(T ) ≡ 0 (mod p).
+
+It follows that
+
+(1 + (−1)rpn−r+2−kN rpn−r+2−k(T )
+
+XT |S,|T |=|S|−t
+
++ · · · + (−1)rpn−r+1N rpn−r+1(T )) ≡ 0
+
+(mod p).
+
+Analysing the number of times each subsequence is counted, we obtain
+
+|S|
+|T |
+
+(cid:18)
+
+(cid:19)
+
++ (−1)rpn−r+2−k
+
+(cid:18)
+
++ · · · + (−1)rpn−r+1
+
+|S| − (rpn − r + 2 − k)
+|T | − (rpn − r + 2 − k)
+
+(cid:19)
+|S| − (rpn − r + 1)
+|T | − (rpn − r + 1)
+
+(cid:18)
+
+|S| − (rpn − r + 2 − k)
+t
+
+(cid:19)
+
+N rpn−r+2−k(S)
+
+N rpn−r+1(S)
+
+(cid:19)
+N rpn−r+2−k(S)
+
+N rpn−r+1(S) ≡ 0
+
+(mod p).
+
+=
+
+|S|
+t
+
++ (−1)rpn−r+2−k
+
+(cid:18)
+
+(cid:19)
++ · · · + (−1)rpn−r+1
+
+(cid:18)
+
+|S| − (rpn − r + 1)
+t
+
+(cid:19)
+
+Let b := (
+
+|S|
+0
+
+,
+
+|S|
+1
+
+, . . . ,
+
+)T and
+
+(cid:18)
+|S|
+k
+
+(cid:0)
+
+(cid:1)
+
+(cid:0)
+
+(cid:1)
+
+(cid:1)
+
+(cid:0)
+
+2k−1
+0
+2k−1
+A := 
+1
+(cid:0)
+. . .
+(cid:0)
+2k−1
+
+
+k
+
+(cid:0)
+Consider the equation in k variables
+
+. . .
+. . .
+. . .
+. . .
+
+(cid:1)
+(cid:1)
+
+(cid:1)
+
+.
+
+k
+0
+k
+1
+(cid:0)
+(cid:1)
+
+. . .
+(cid:0)
+(cid:1)
+k
+
+
+k
+
+(cid:1)
+
+(cid:0)
+
+AX + b ≡ 0
+
+(mod p).
+
+It has a solution
+
+X = ((−1)rpn−r+2−kN rpn−r+2−k(S), . . . , (−1)rpn−r+1N rpn−r+1(S))T .
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS OF RANK THREE
+
+9
+
+Clearly, rank(A) ≤ k. On the other hand, since k ≤ p − r + 1, by Lemmas 2.6 and
+2.7, we have
+
+det((b, A)) = (−1)
+
+k(k+1)
+2
+
+≡ (−1)
+
+k(k+1)
+2
+
+(cid:18)
+
+rpn − r + 1
+k
+p − r + 1
+k
+
+(cid:19)
+6≡ 0 (mod p).
+
+(cid:18)
+Thus, rank((A, b)) = k + 1, a contradiction. So, S contains a zero-sum subsequence
+of length at most rpn − r + 1 − k and we have s≤rpn−r+1−k(G) ≤ rpn − r + 1 + k,
+(cid:3)
+i.e., s≤D(G)−k(G) ≤ D(G) + k.
+
+(cid:19)
+
+Proof of Theorem 1.6. First, we prove that s≤D(G)−pn(G) ≥ D(G) + pn. Accord-
+
+ing to Lemma 2.1, D(G) = 3pn − 2. Let
+
+S0 = (1, 0, 0)[pn−1] · (0, 1, 0)[pn−1] · (0, 0, 1)[pn−1] · (1, 1, −1)[pn−1] · (1, 1, 0)
+be a sequence over G of length D(G) + pn − 1. Let T0 be a zero-sum subsequence
+of S0. Then, the zero-sum subsequences T0 of S0 is in one of the following forms:
+
+• (1, 0, 0)[pn−i−1] · (0, 1, 0)[pn−i−1] · (0, 0, 1)[i] · (1, 1, −1)[i] · (1, 1, 0);
+• (1, 0, 0)[pn−i] · (0, 1, 0)[pn−i] · (0, 0, 1)[i] · (1, 1, −1)[i];
+• (1, 0, 0)[pn−1] · (0, 1, 0)[pn−1] · (1, 1, 0),
+
+where 0 < i ≤ pn − 1. Thus, we have
+
+|T0| ∈ {2pn − 1, 2pn}.
+So, |T0| > D(G) − pn = 2pn − 2. Therefore, we have s≤D(G)−pn(G) ≥ D(G) + pn.
+
+Next, we prove s≤D(G)−pn(G) ≤ D(G)+pn. Let S be a sequence of length 4pn−2.
+Assume to the contrary that N i(S) = 0, for i = 1, 2, . . . , 2pn − 2. Using Lemma
+2.1, we have
+
+1 − N 2pn−1(S) + N 2pn
+
+(3.3)
+Considering the subsequence of length 3pn − 2, we have
+(1 − N 2pn−1(T ) + N 2pn
+
+(S) − · · · − N 3pn−2(S) + N 4p−2(S) ≡ 0
+
+(T ) − · · · − N 3pn−2(T )) ≡ 0
+
+(mod p).
+
+(mod p).
+
+XT |S,|T |=3pn−2
+
+It follows that
+
+3 − N 2pn−1(S) + N 2pn
+
+(3.4)
+Comparing Equations (3.3) and (3.4), we have N 4p−2(S) ≡ 2 (mod p), a contra-
+diction. Therefore, S contains a zero-sum subsequence of length at most 2pn − 2
+(cid:3)
+and we have s≤D(G)−pn(G) ≤ D(G) + pn.
+
+(S) − · · · − N 3pn−2(S) ≡ 0
+
+(mod p).
+
+Proof of Corollary 1.7. By Theorem 1.6, it suﬃces to prove D(G) + pn − 1 ≤
+
+s≤D(G)−pn+1(G). Let
+
+S0 = (1, 0, 0)[pn−1] · (0, 1, 0)[pn−1] · (0, 0, 1)[pn−1] · (1, 1, −1)[pn−1]
+be a sequence of over G length D(G) + pn − 2. Then, the zero-sum subsequence T0
+of S0 is in the form
+
+(1, 0, 0)[pn−i] · (0, 1, 0)[pn−i] · (0, 0, 1)[i] · (1, 1, −1)[i]
+
+where 0 < i ≤ pn − 1. Then, we have
+
+|T0| = (pn − i) + (pn − i) + i + i = 2pn > D(G) − pn + 1 = 2pn − 1.
+
+10
+
+SHIWEN ZHANG
+
+So, D(G) + pn − 1 ≤ s≤D(G)−pn+1(G).
+
+(cid:3)
+
+Proof of Theorem 1.8. According to Lemma 2.1, D(C3
+
+we have 9 ≤ s≤5(C3
+
+3 ) ≤ 10. It suﬃces to prove s≤5(C3
+
+3 ) ≤ 9.
+
+3 ) = 7. By Corollary 1.7,
+
+Let
+
+S = g1 · g2 · . . . · g9
+
+be a sequence over C3
+3 of length 9 with σ(S) = a. Assume to the contrary that
+N i(S) = 0 for i = 1, 2, 3, 4, 5. Take any subsequence T of S with |T | = 8. Clearly,
+N i(T ) = N i(S) = 0 for i = 1, 2, 3, 4, 5. Using Lemma 2.1, we have
+
+1 + N 6(T ) − N 7(T ) ≡ 0 (mod 3),
+8
+1
+
+N 6(T ) −
+
+N 7(T ) ≡ 0 (mod 3).
+
++
+
+2
+1
+
+1
+1
+
+(
+
+It follows that
+
+(cid:0)
+
+(cid:1)
+
+(cid:0)
+
+(cid:1)
+
+(
+
+(cid:0)
+
+(cid:1)
+N 6(T ) ≡ 2 (mod 3),
+N 7(T ) ≡ 0 (mod 3).
+
+Then, we have N 7(T ) = 0, otherwise T contains at least three elements that are
+the same. It follows that N 7(S) = 0.
+
+For T1 = g3 · g4 · . . . · g9, we have 1 + N 6(T1) ≡ 0 (mod 3). Then, there are two
+
+elements of T1 (without lost of generality, we say they are g3 and g4) such that
+
+g1 + g2 + g3 = a,
+g1 + g2 + g4 = a,
+g3 = g4.
+
+
+
+
+Similarly, for T2 = g2 · g4 · g5 · . . . · g9, we have 1 + N 6(T2) ≡ 0 (mod 3). So, there is
+another element(without loss of generality, we say it is g5) such that g1+g3 +g5 = a.
+Analysing T3 = g2 · g3 · g5 · g6 · . . . · g9 in the same way, we have g1 + g4 + g5 = a
+or g1 + g4 + g6 = a. Suppose g1 + g4 + g5 = a (g1 + g4 + g6 = a can be analysed
+similarly). Then,
+
+
+
+g1 + g3 + g5 = a,
+g1 + g4 + g5 = a,
+g2 = g5.
+
+
+
+
+Using the same method, without loss of generality, we have
+
+
+
+g2 + g3 + g6 = a,
+g2 + g4 + g6 = a,
+g1 = g6,
+
+
+
+
+
+
+
+
+g2 + g5 + g7 = a,
+g2 + g5 + g8 = a,
+g7 = g8,
+
+
+(
+
+g2 + g7 + g9 = a,
+g2 + g8 + g9 = a,
+
+g3 + g4 + g7 = a,
+g3 + g4 + g8 = a.
+
+(
+
+ON SOME ZERO-SUM INVARIANTS FOR ABELIAN GROUPS OF RANK THREE
+
+11
+
+Then, for T = g1 · g2 · g4 · g5 · . . . · g8, we have g3 + g9 + gi = 0, where i 6= 3 or
+9. This means that g9 = g1 = g6, g9 = g2 = g5 or g9 = g7 = g8, a contradiction.
+(cid:3)
+Thus, s≤5(C3
+3 ) = 9.
+
+3 ) ≤ 9 and we have s≤5(C3
+
+Acknowledgments. I would like to heartily thank my advisor, Hanbin Zhang, for
+helpful discussions and extensive comments on the manuscript.
+
+References
+
+1. N. Alon and M. Dubiner, A lattice point problem and additive number theory, Combinatorica,
+
+15 (1995) 301–309.
+
+2. N. Alon and M. Dubiner, Zero-sum sets of prescribed size, in: Combinatorics, Paul Erd˝os is
+
+Eighty, Bolyai Society, Mathematical studies, Keszthely, Hungary, 1993, 33–50.
+
+3. Y. Edel, C. Elsholtz, A. Geroldinger, S. Kubertin and L. Rackham. Zero-sum problems in
+ﬁnite abelian groups and aﬃne caps. Quarterly J. Math., Oxford II. Ser., 58(2007) 159–186.
+q with no three-term arithmetic progres-
+
+4. J.S. Ellenberg and D. Gijswijt, On large subsets of Fn
+sion, Ann. of Math. (2) 185 (2017), no.1, 339–343.
+
+5. P. Erd˝os, G. Ginzburg and A. Ziv, Theorem in the additive number theory, Bull. Res. Council
+
+Israel, 10F(1961) 41–43.
+
+6. Y.S. Fan, W.D. Gao and Q.H. Zhong, On the Erd˝os-Ginzburg-Ziv constant of ﬁnite abelian
+
+groups of high rank, J. Number Theory, 131(2011) 1864–1874.
+
+7. Y.S. Fan, W.D. Gao, L.L. Wang and Q.H. Zhong, Two zero-sum invariants on ﬁnite abelian
+
+groups, European J. Combinatorics, 34 (2013) 1331–1337.
+
+8. Y.S. Fan and Q.H. Zhong, On the Erd˝os-Ginzburg-Ziv constant of groups of the form Cr
+
+2 ⊕Cn,
+
+Int. J. Number Theory, 12 (2016), no. 4, 913–943.
+
+9. J. Fox and L. Sauermann, Erd˝os-Ginzburg-Ziv constants by avoiding three-term arithmetic
+
+progressions, Electron. J. Combin. 25 (2018), no.2, Paper No. 2.14, 9 pp.
+
+10. W.D. Gao, A combinatorial problem on ﬁnite abelian groups, J. Number Theory, 58 (1996)
+
+100–103.
+
+11. W.D. Gao, Note on a zero-sum problem, J. Combin. Theory Ser. A 95 (2001) 387–389.
+12. W.D. Gao, On zero-sum subsequences of restricted size II, Discrete Math., 271 (2003) 51–59.
+13. W.D. Gao and A. Geroldinger, Zero-sum problems in abelian groups: A survey, Expo. Math.,
+
+24 (2006) 337–369.
+
+14. W. Gao and R. Thangadurai, On zero-sum sequences of prescribed length, Aequationes Math.
+
+72 (2006) 201–212.
+
+15. W. Gao, D. Han, J. Peng and F. Sun, On zero-sum subsequences of length k exp(G), J.
+
+Combin. Theory Ser. A 125 (2014) 240–253.
+
+16. W. Gao, D. Han and H. Zhang, The EGZ-constant and short zero-sum sequences over ﬁnite
+
+abelian groups, J. Number Theory 162 (2016) 601–613.
+
+17. W. Gao, S. Hong and J. Peng, On zero-sum subsequences of length k exp(G) II, J. Combin.
+
+Theory Ser. A 187 (2022) 105563.
+
+18. A. Geroldinger and F. Halter-Koch, Non-Unique Factorizations. Algebraic, Combinatorial
+and Analytic Theory, Pure and Applied Mathematics, vol. 278, Chapman & Hall/CRC, 2006.
+19. B. Girard and W. Schmid, Direct zero-sum problems for certain groups of rank three, J.
+
+Number Theory, 197 (2019) 297–316.
+
+20. D.J. Grynkiewicz, A Generalization of the Chevalley–Warning and Ax–Katz Theorems with
+
+a View Towards Combinatorial Number Theory, Combinatorica (2023).
+
+21. D. Han and H. Zhang, On zero-sum subsequences of prescribed length, Int. J. Number Theory
+
+14 (2018) 167–191.
+
+22. D. Han and H. Zhang, On generalized Erd˝os-Ginzburg-Ziv constants of Cr
+
+n, Discrete Math.
+
+342 (2019) 1117–1127.
+
+23. D. Han and H. Zhang, Zero-sum invariants on ﬁnite abelian groups with large exponent,
+
+Discrete Math. 342 (2019) 111617.
+
+24. H. Harborth, Ein Extremalproblem f¨ur Gitterpunkte, J. Reine Angew. Math. 262 (1973) 356–
+
+360.
+
+25. X. He, Zero-sum subsequences of length kq over ﬁnite abelian p-groups, Discrete Math. 339
+
+(2016) 399–407.
+
+12
+
+SHIWEN ZHANG
+
+26. G. Heged˝us, The Erd˝os-Ginzburg-Ziv constant and progression-free subsets, J. Number Theory
+
+186 (2018) 238–247.
+
+27. A. Kemnitz, On a lattice point problem, Ars Combin., 16b(1983) 151–160.
+28. S. Kubertin, Zero-sums of length kq in Zd
+29. F.E.A. Lucas, Sur les congruences des nombres eul´eriens et les coeﬃcients diﬀ´erentiels des
+functions trigonom´etriques suivant un module premier.(French), Bull. Soc. Math. France, 6
+(1878) 49–54.
+
+q , Acta Arith. 116 (2005) 145–152.
+
+30. L. Sauermann, On the size of subsets of Fn
+Israel J. Math.243 (2021), no.1, 63–79.
+
+p without p distinct elements summing to zero,
+
+31. L. Sauermann and D. Zakharov, On the Erd˝os-Ginzburg-Ziv Problem in large dimension,
+
+arXiv:2302.14737.
+
+32. E. Naslund, Exponential bounds for the Erd˝os-Ginzburg-Ziv constant, J. Combin. Theory Ser.
+
+A 174 (2020), 105185, 19 pp.
+
+33. J.E. Olson, A combinatorial problem on ﬁnite Abelian groups I, J. Number Theory, 1 (1969)
+
+8–10.
+
+34. C. Reiher, On Kemnitz’ conjecture concerning lattice points in the plane, Ramanujan J., 13
+
+(2007) 333–337.
+
+35. B. Roy and R. Thangadurai, On zero-sum subsequences in a ﬁnite abelian p-group of length
+
+not exceeding a given number, J. Number Theory 191 (2018) 246–257.
+
+36. A. Sidorenko, Extremal problems on the hypercube and the codegree Tur´an density of complete
+
+r-graphs, SIAM J. Discrete Math. 32 (2018) 2667–2674.
+
+37. A. Sidorenko, On generalized Erd˝os-Ginzburg-Ziv constants for Zd
+
+2, J. Combin. Theory Ser.
+
+A 174 (2020), 105254, 20 pp.
+
+38. C. Wang and K. Zhao, On zero-sum subsequences of length not exceeding a given number, J.
+
+Number Theory 176 (2017) 365–374.
+
+39. D. Zakharov, Convex geometry and the Erd˝os-Ginzburg-Ziv problem, arXiv:2002.09892.
+
+School of Mathematics (Zhuhai), Sun Yat-sen University, Zhuhai 519082, Guangdong,
+
+P.R. China
+
+Email address: zhangshw9@mail2.sysu.edu.cn
+
+

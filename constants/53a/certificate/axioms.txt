@@ -1,0 +1,2 @@
+info: Constants/C53a.lean:120:0: 'Constants.C53a.recursion_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:121:0: 'Constants.C53a.comparison_ineq' depends on axioms: [propext, Classical.choice, Quot.sound]
