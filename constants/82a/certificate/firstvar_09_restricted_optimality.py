@@ -110,6 +110,29 @@ import bound_01_doche_base as vu             # rho_full cell enclosure + w_full_
 PINF = math.inf
 NINF = -math.inf
 na = np.nextafter
+_U = 2.0 ** -53                       # IEEE-754 binary64 unit round-off
+
+
+def _sum_up_signed(arr):
+    """Rigorous UPPER bound on the sum of a SIGNED float64 array.
+
+    Recursive float64 summation of n values has absolute forward error
+    <= gamma_{n-1} * sum|x_i|, gamma_{n-1}=(n-1)u/(1-(n-1)u) (Higham Thm 4.1).
+    We add that (over the sum of magnitudes, which dominates cancellation) and
+    round up, so the result provably >= the exact sum.  Margins here are ~1e-3
+    against the certified D_a^hi, so the allowance (~1e-9) is immaterial but now
+    explicit rather than ignored.
+    """
+    s = float(np.sum(arr))
+    n = int(arr.size)
+    if n <= 1:
+        return na(s, PINF)
+    g = (n - 1) * _U
+    if g >= 1.0:
+        return PINF
+    abs_sum = float(np.sum(np.abs(arr)))
+    allowance = na((g / (1.0 - g)) * abs_sum, PINF)
+    return na(na(s + allowance, PINF), PINF)
 TWO_PI = 2.0 * math.pi
 X = sp.Symbol("X")
 
@@ -287,7 +310,8 @@ def certify_diff(a, lib, N):
             leaf = ~refine
             lm = leaf & could_in
             if np.any(lm):
-                upper_sum += float(np.sum(up_contrib[lm]))
+                # directed signed summation: round-off accounted, result >= exact
+                upper_sum = na(upper_sum + _sum_up_signed(up_contrib[lm]), PINF)
                 omega_w += float(np.sum(w[lm]))
                 # m_R lower bounds on leaf could-be-IN cells
                 ra_pos = lm & (k['ra2_lo'] > LOG_FLOOR)

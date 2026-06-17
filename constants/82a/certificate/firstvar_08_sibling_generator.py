@@ -50,9 +50,12 @@ certify: in the case log|R| > log|Q*| (true on 63-73% of W) it needs an upper bo
 on |R| / lower bound on |Q*| that the certified constants do not provide.  It is
 computed and printed only as a NON-CERTIFYING diagnostic.)
 
-FIRING TRANSFER.  If  r_{Q*}(Omega_F) + RHS < log h , then  r_R(Omega_F) < log h ,
-so R fires by Cor. cor:criterion -- and R is admissible coprime to Q* (sympy
-checks), hence adjoinable as an independent denominator factor.
+FIRING TRANSFER (base regime).  The anchor F removes BOTH Q* and R, leaving
+D_B=84 < D_A=125.24, so the perturbing branch does NOT attain D and the entry test
+(thm:unified, s_Q=0) is m_Q < 0 -- equivalently the normalized r_Q < 0, NOT
+r_Q < log h.  If  r_{Q*}(Omega_F) + RHS < 0 , then  r_R(Omega_F) < 0 , so R fires --
+and R is admissible coprime to Q* (sympy checks), hence adjoinable as an independent
+denominator factor.
 
 ==============================  RIGOR (this script)  =========================
 
@@ -118,6 +121,28 @@ import bound_01_doche_base as vu             # rho_full cell enclosure + w_full_
 PINF = math.inf
 NINF = -math.inf
 na = np.nextafter
+_U = 2.0 ** -53                       # IEEE-754 binary64 unit round-off
+
+
+def _sum_up_nonneg(arr):
+    """Upward-rounded sum of a NONNEGATIVE float64 array (round-off accounted).
+
+    Naive float64 summation of n nonnegative terms has relative forward error
+    <= gamma_{n-1} = (n-1)u/(1-(n-1)u) (Higham Thm 4.1).  We inflate by that and
+    round up, so the result provably >= the exact sum.  Margins here are ~1.3
+    against an RHS of ~0.1, so this allowance (~1e-9 relative) is immaterial but
+    now explicit.  Returns 0.0 for an empty/all-zero array.
+    """
+    s = float(np.sum(arr))
+    if s <= 0.0:
+        return 0.0
+    n = int(arr.size)
+    if n <= 1:
+        return na(s, PINF)
+    g = (n - 1) * _U
+    if g >= 1.0:
+        return PINF
+    return na(na(s + na(s * (g / (1.0 - g)), PINF), PINF), PINF)
 TWO_PI = 2.0 * math.pi
 X = sp.Symbol("X")
 
@@ -283,19 +308,25 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
         up1 = na(0.5 * vv.log_up(na(r2hi / q2lo, PINF)), PINF)
         up2 = na(0.5 * vv.log_up(na(q2hi / r2lo, PINF)), PINF)
         logRQ_abs_hi = np.maximum(up1, up2)
-        # whether |R|^2 is certified strictly positive on this cell
+        # whether |R|^2 and |Q*|^2 are certified strictly positive on this cell.
+        # Q_pos is needed for the lemma hypothesis inf|Q*|>0: without it the well
+        # integrand up2 = 0.5 log(|Q*hi|^2/|R lo|^2) and the floored q2_lo in the
+        # ratio could mask an unbounded -log|Q*| contribution on a could-be-active
+        # cell where |Q*| dips to 0.  We refine such cells until q2_lo > 0.
         R_pos = r2_lo > LOG_FLOOR
-        return dict(w=w, geo=geo, logQ_hi=logQ_hi,
+        Q_pos = q2_lo > LOG_FLOOR
+        return dict(w=w, geo=geo, logQ_hi=logQ_hi, q2_lo=q2_lo,
                     in_or_straddle=in_or_straddle, straddle=straddle,
                     could_be_well=could_be_well, could_be_bulk=could_be_bulk,
-                    ratio2_hi=ratio2_hi, logRQ_abs_hi=logRQ_abs_hi,
+                    ratio2_hi=ratio2_hi, logRQ_abs_hi=logRQ_abs_hi, Q_pos=Q_pos,
                     r2_lo=r2_lo, R_pos=R_pos)
 
     # accumulators (rigorous):
     omega0_w = 0.0; delta_w = 0.0; omega_w = 0.0
-    M_Qstar = NINF; m_R = PINF; rQ_upper_int = 0.0
+    M_Qstar = NINF; m_R = PINF; mu_Qstar = PINF; rQ_upper_int = 0.0
     well_int_sharp = 0.0; bulk_int_sharp = 0.0
     n_unresolved = 0     # well cells where |R|^2 enclosure still touches 0 at depth cap
+    n_unresolved_Q = 0   # active cells where |Q*|^2 enclosure still touches 0 (inf|Q*|>0)
 
     # ADAPTIVE driver: start uniform N and bisect a well cell whenever EITHER
     #   (i)  its |R|^2 enclosure is not yet certified > 0 (R's deep wells), OR
@@ -337,8 +368,10 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
             # not R-positive OR still contributes more than WELL_TOL to the sharp
             # well integral.
             well_contrib = w * k['logRQ_abs_hi']
+            # Refine a could-be-active well cell if R or Q* is not yet certified
+            # positive, OR its sharp well contribution still exceeds the tolerance.
             refine = (mask & k['could_be_well']
-                      & ((~k['R_pos']) | (well_contrib > WELL_TOL))
+                      & ((~k['R_pos']) | (~k['Q_pos']) | (well_contrib > WELL_TOL))
                       & (depth < MAX_DEPTH))
             leaf = ~refine
             lm = leaf & mask
@@ -359,10 +392,19 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
                                       np.maximum(k['logQ_hi'], 0.0),
                                       k['logQ_hi'])
                 rQ_upper_int += float(np.sum((w * logQ_sound)[lm]))
+                # certify mu_Qstar = inf_{Omega_F} |Q*| over ALL active leaves
+                # (the lemma hypothesis); a leaf active cell with |Q*|^2 not certified
+                # positive leaves mu_Qstar unestablished -> Q-unresolved.
+                qpos = lm & k['Q_pos']
+                if np.any(qpos):
+                    mu_Qstar = min(mu_Qstar, float(np.min(np.sqrt(
+                        np.maximum(k['q2_lo'][qpos], LOG_FLOOR)))))
+                n_unresolved_Q += int(np.sum(lm & (~k['Q_pos'])))
             # well integral on LEAF well cells
             lw = lm & k['could_be_well']
             if np.any(lw):
-                well_int_sharp += float(np.sum((w * k['logRQ_abs_hi'])[lw]))
+                well_int_sharp = na(
+                    well_int_sharp + _sum_up_nonneg((w * k['logRQ_abs_hi'])[lw]), PINF)
                 pos = lw & k['R_pos']
                 if np.any(pos):
                     m_R = min(m_R, float(np.min(np.sqrt(
@@ -377,7 +419,8 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
                                    THETA)
                 gq_hi = np.minimum(gq_hi, 1.0 - 1e-12)
                 per_b = np.nextafter(-np.log1p(-gq_hi), PINF)
-                bulk_int_sharp += float(np.sum(w[lb] * per_b))
+                bulk_int_sharp = na(
+                    bulk_int_sharp + _sum_up_nonneg(w[lb] * per_b), PINF)
             # collect cells to refine
             if np.any(refine):
                 a_keep.append(a[refine]); b_keep.append(b[refine])
@@ -468,12 +511,12 @@ def certify_seed(seed_name, R_name, tail_name, lib, content, N):
     return dict(
         seed=seed_name, R=R_name, tail=tail_name, deg=deg, content=c,
         omega_meas=omega_meas, omega0_meas=omega0_meas, delta=delta_meas,
-        M_Qstar=M_Qstar, m_R=m_R, rQ_upper=rQ_upper,
+        M_Qstar=M_Qstar, m_R=m_R, mu_Qstar=mu_Qstar, rQ_upper=rQ_upper,
         bulk_term=bulk_term, well_term=well_term,
         bulk_int_sharp=bulk_int_sharp_meas, well_int_sharp=well_int_sharp_meas,
         RHS_global=RHS_global, RHS_sharp=RHS_sharp, RHS=RHS,
         fc_rQ=fc_rQ, fc_rR=fc_rR, fc_transfer=fc_transfer, fc_omega=fc_omega,
-        n_unresolved=n_unresolved, depth=depth,
+        n_unresolved=n_unresolved, n_unresolved_Q=n_unresolved_Q, depth=depth,
     )
 
 
@@ -575,11 +618,16 @@ def main():
         print(f"    M_Q* = sup log|Q*| <= {res['M_Qstar']:.5f}")
         print(f"    m_R  = inf |R|     >= {res['m_R']:.3e}   "
               f"({'contour-root-free on Omega_F' if res['m_R'] > 0 else 'ROOT ON CONTOUR'})")
+        print(f"    mu_Q*= inf |Q*|    >= {res['mu_Qstar']:.3e}   "
+              f"({'lemma hyp inf|Q*|>0 certified' if res['mu_Qstar'] > 0 else 'Q* TOUCHES 0'})")
         print(f"    r_Q*(Omega_F)      <= {res['rQ_upper']:.6f}")
         print(f"    adaptive well-cell refinement: depth {res['depth']}, "
               f"unresolved well cells = {res['n_unresolved']} "
               f"({'all |R|^2>0 certified' if res['n_unresolved'] == 0 else 'INCOMPLETE'})")
-        ok &= res['m_R'] > 0 and res['content'] == 1 and res['n_unresolved'] == 0
+        print(f"    active cells with |Q*|^2 not yet > 0 = {res['n_unresolved_Q']} "
+              f"({'all |Q*|^2>0 certified' if res['n_unresolved_Q'] == 0 else 'INCOMPLETE'})")
+        ok &= (res['m_R'] > 0 and res['mu_Qstar'] > 0 and res['content'] == 1
+               and res['n_unresolved'] == 0 and res['n_unresolved_Q'] == 0)
 
         # (C) firing-transfer verdict
         print(f"(C) theta-split bound (II):  RHS = (1/{res['deg']})[log c + "
@@ -594,11 +642,16 @@ def main():
         print(f"       well = delta(log(1/m_R)+M_Q*)      = "
               f"{res['well_term']:.5f}")
         print(f"       RHS_global (NOT used)              = {res['RHS_global']:.6f}")
-        lhs = res['rQ_upper'] + res['RHS']
-        fires = lhs < log_h
+        # BASE-REGIME firing test (thm:unified, s_Q=0): the anchor F removes BOTH
+        # Q* and R, leaving D_B=84 < D_A=125.24, so the perturbing branch does NOT
+        # attain D and the entry test is m_Q < 0 (the un-normalized active-arc
+        # integral), equivalently the normalized r_Q < 0 -- NOT r_Q < log h, which
+        # would be the test only if the perturbing branch attained D.
+        lhs = res['rQ_upper'] + res['RHS']     # upper bound on r_R (normalized)
+        fires = lhs < 0.0
         res['fires'] = bool(fires)
         print(f"    r_Q*(<= {res['rQ_upper']:.5f}) + RHS_sharp(<= {res['RHS']:.5f}) "
-              f"= {lhs:.5f}   <  log h = {log_h:.5f} ?  "
+              f"= {lhs:.5f}   <  0 (base regime, s_Q=0) ?  "
               f"{'YES -> R FIRES (certified)' if fires else 'NO -> firing NOT certified'}")
         ok &= fires
 
@@ -629,7 +682,7 @@ def main():
         status = ("CERTIFIED-FIRES" if r.get('fires') else
                   "NOT certified (RHS_sharp does not clear)")
         print(f"    {r['seed']} -> {r['R']}: r_Q*+RHS_sharp = "
-              f"{r['rQ_upper'] + r['RHS']:+.5f}  vs log h = {log_h:.5f}   [{status}]")
+              f"{r['rQ_upper'] + r['RHS']:+.5f}  <  0 (base regime, s_Q=0)   [{status}]")
 
     print("\n" + "=" * 78)
     print("PASS: R0,R2 are CERTIFIED degree-preserving coprime firing siblings of "

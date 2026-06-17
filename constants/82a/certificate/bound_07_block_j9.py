@@ -73,6 +73,34 @@ NINF = -np.inf
 PINF = np.inf
 na = np.nextafter
 
+# Unit round-off for IEEE-754 binary64 (rounding to nearest): u = 2^-53.
+_U = 2.0 ** -53
+
+
+def sum_up(arr):
+    """Rigorous UPWARD-rounded sum of a float64 array of NONNEGATIVE terms.
+
+    Naive (recursively-summed) float64 addition of n nonnegative values has
+    relative forward error bounded by gamma_{n-1} = (n-1)u / (1 - (n-1)u),
+    u = 2^-53 (Higham, *Accuracy and Stability*, Thm 4.1; nonnegative terms ->
+    sum of |x_i| = the sum itself).  We add that worst-case allowance, then one
+    more nextafter for the multiply/round of the inflation step, so the result is
+    provably >= the exact sum.  For n up to ~10^7, gamma is ~1e-9, far below the
+    certificate's slack, but it is now ACCOUNTED for rather than ignored.
+    """
+    s = float(np.sum(arr))
+    if s <= 0.0:
+        return na(s, PINF)
+    n = int(arr.size)
+    if n <= 1:
+        return na(s, PINF)
+    g = (n - 1) * _U
+    if g >= 1.0:                       # pathological array size; fall back safely
+        return PINF
+    gamma = g / (1.0 - g)              # bound on relative error
+    allowance = na(s * gamma, PINF)    # round the allowance up
+    return na(na(s + allowance, PINF), PINF)
+
 Q3 = vq6.Q3; DEG_Q3 = vq6.DEG_Q3; ASC_Q3 = vq6.ASC_Q3
 Q4 = vq6.Q4; DEG_Q4 = vq6.DEG_Q4; ASC_Q4 = vq6.ASC_Q4
 Q5 = vq6.Q5; DEG_Q5 = vq6.DEG_Q5; ASC_Q5 = vq6.ASC_Q5
@@ -258,11 +286,13 @@ def certify_maxAB_q8A(q, qB, qC, qE, qF, qG, qH, label, target, M0=200000,
     while True:
         cell_hi, refine = cell_int_maxAB_q8A(a, b, q, qB, qC, qE, qF, qG, qH, rem_cap)
         keep = ~refine
-        total_resolved = na(
-            total_resolved + float(np.sum(np.where(keep, cell_hi, 0.0))), PINF)
+        # Upward-rounded sum of this round's resolved leaves, then upward-rounded
+        # accumulation into the running total (round-off accounted, not ignored).
+        round_sum = sum_up(np.where(keep, cell_hi, 0.0))
+        total_resolved = na(total_resolved + round_sum, PINF)
         n_leaf += int(np.sum(keep))
         nbad = int(np.sum(refine))
-        frontier_flat = float(np.sum(np.where(refine, cell_hi, 0.0)))
+        frontier_flat = sum_up(np.where(refine, cell_hi, 0.0))
         cur_total = na(total_resolved + frontier_flat, PINF)
         cur_logh = na(na(cur_total / TWO_PI, PINF) / D, PINF)
         if verbose:

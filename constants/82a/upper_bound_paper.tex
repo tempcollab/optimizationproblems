@@ -365,21 +365,23 @@ For $q_Q\ne0$ set $\psi_q(s)=\bigl[\max(A_0+q_Q\log|Q|,B)-\max(A_0,B)\bigr]/q_Q$
 evaluated at $\chi(s)$.
 
 \emph{Domination.} The map $t\mapsto\max(a+t,b)$ is $1$-Lipschitz, so
-$|\psi_q(s)|\le|\log|Q(\chi(s))||$; by (L) this dominator lies in $L^1[0,1]$
-uniformly in $q_Q$, including at the contour-root singularities of $A_0$, where
-$\max(A_0,B)=B$ for both $q_Q$ and $0$ so $\psi_q=0$.
+$|\psi_q(s)|\le|\log|Q(\chi(s))||$ pointwise; by (L) this dominator lies in $L^1[0,1]$
+uniformly in $q_Q$. The bound holds everywhere off the finite structural singular set
+$S$ (the contour roots of $A_0,B$, where one branch is $-\infty$); $S$ is null and so
+does not affect dominated convergence, and no directional assumption about which branch
+is attained there is needed.
 
 \emph{Pointwise limit off the switching set.} Let $K=\{s:A_0(s)=B(s)\}$. For
-$s\notin K$ and $s$ not a contour root of $Q$: if $A_0(s)>B(s)$ then the first branch
-dominates for small $|q_Q|$ and $\psi_q(s)\to\log|Q(\chi(s))|$; if $A_0(s)<B(s)$ then
-$\psi_q(s)\to0$. Thus $\psi_q\to\log|Q(\chi)|\cdot\mathbf 1_{\{A_0>B\}}$ a.e.\ off
-$K$.
+$s\notin K\cup S$ and $s$ not a contour root of $Q$: if $A_0(s)>B(s)$ then the first
+branch dominates for small $|q_Q|$ and $\psi_q(s)\to\log|Q(\chi(s))|$; if $A_0(s)<B(s)$
+then $\psi_q(s)\to0$. Thus $\psi_q\to\log|Q(\chi)|\cdot\mathbf 1_{\{A_0>B\}}$ a.e.\ off
+$K\cup S$.
 
 \emph{The switching set is null.} On each of the finitely many closed sub-arcs into
-which the structural singularities divide $[0,1]$, $A_0-B$ is real-analytic and, by
+which the structural singular set $S$ divides $[0,1]$, $A_0-B$ is real-analytic and, by
 (N), not identically zero; a real-analytic function $\not\equiv0$ has isolated
 zeros, and isolated zeros in a compact arc are finite in number, so $K$ is finite,
-hence null. The contour-root singularities lie in $\{A_0<B\}$, not in $K$.
+hence null. Thus $K\cup S$ is null.
 
 \emph{Conclusion.} Dominated convergence gives
 $\Phi^{+\prime}(0)=\lim_{q_Q\to0^+}\int_0^1\psi_q\,ds
@@ -540,17 +542,22 @@ branch to $-\infty$ but the finite branch caps the maximum), an $O(h^2)$
 \emph{straddle} bound from $\max(a+x,b+y)\le\max(a,b)+\max(x,y)$ applied to the
 midpoint Taylor deviation, and an $O(h^3)$ \emph{midpoint} bound where one branch
 dominates---and cells exceeding a deviation cap are bisected, only leaves contributing,
-with exact tiling. Every cell bound and the running sum are rounded toward $+\infty$,
-giving an upper bound $S\ge\int_0^{2\pi}\max(A,B)\,dt$. The normalizers are divisors of
-this numerator, so to keep the quotient an over-estimate they are rounded toward
-$-\infty$: a value $\underline{2\pi}\le2\pi$ and a value $\underline D\le D$ obtained by
-rounding each nonnegative product $q_k\deg Q_k$ and partial sum of the affine
-$D$-formula \eqref{eq:Dformula} downward (the exponents being nonnegative). Then
+with exact tiling. Every cell bound is rounded toward $+\infty$, and the cells are accumulated by a
+\emph{directed} summation: the naive recursive sum of the $n$ nonnegative leaf values is
+inflated by the worst-case round-off allowance $\gamma_{n-1}=(n-1)u/(1-(n-1)u)$, $u=2^{-53}$
+(the standard error bound for floating-point summation), and rounded up, so the result
+provably dominates the exact sum---the accumulated round-off is accounted for, not
+absorbed into a single final \texttt{nextafter}. This gives an upper bound
+$S\ge\int_0^{2\pi}\max(A,B)\,dt$. The normalizers are divisors of this numerator, so to
+keep the quotient an over-estimate they are rounded toward $-\infty$: a value
+$\underline{2\pi}\le2\pi$ and a value $\underline D\le D$ obtained by rounding each
+nonnegative product $q_k\deg Q_k$ and partial sum of the affine $D$-formula
+\eqref{eq:Dformula} downward (the exponents being nonnegative). Then
 $\log h=\Phi/D\le S/(\underline{2\pi}\,\underline D)$, with the final division rounded up.
 The frontier resolves fully ($742266$ leaves, none unresolved), $S/\underline{2\pi}\le
-18.2804777610$ and $\underline D=72.00176$, whence
+18.2804777615$ and $\underline D=72.00176$, whence
 \[
-  \essmin\;\le\;\log h\;\le\;\frac{18.2804777610}{72.00176}=0.2538893183\;<\;0.25443677. \qedhere
+  \essmin\;\le\;\log h\;\le\;\frac{18.2804777615}{72.00176}=0.2538893183\;<\;0.25443677. \qedhere
 \]
 \end{proof}
 
@@ -738,8 +745,9 @@ factors differ: for the subtraction $\pp(Q_1-g_6)$ with tail $P_8$ the degree-$2
 leading terms cancel ($1-1=0$) and the degree drops to $27$, so $a=5$ is sharply maximal;
 for the addition $\pp(Q_2+g_6)$ with tail $P_7$ they add ($1+1=2$) and $a=6$ still has
 degree $28$ but leading coefficient $2$, so there $a=5$ is the maximal
-\emph{monic}-preserving exponent. Either way $a=5$ is the maximal exponent preserving both the degree and the
-leading coefficient of $Q^*$, and $R_0,R_2$ are the instances $a=5$.
+\emph{monic}-preserving exponent (degree alone is not maximal at $a=5$ on this side).
+In both cases $a=5$ is the maximal exponent preserving the \emph{monic leading
+coefficient} of $Q^*$, and $R_0,R_2$ are the instances $a=5$.
 \end{proposition}
 
 \begin{proof}
@@ -924,11 +932,11 @@ with no input---and showing it optimal among generators---is the open problem.
 \end{remark}
 
 \subsection*{The bridge exponent is selected, not merely admitted}
-Proposition~\ref{prop:degfloor} shows $a=5$ is the \emph{maximal} degree-preserving
+Proposition~\ref{prop:degfloor} shows $a=5$ is the \emph{maximal monic-preserving}
 bridge exponent, but admissibility does not by itself single $a=5$ out among the five
 candidates $a\in\{1,\dots,5\}$. The next proposition shows the criterion does single it
-out: among the degree-preserving siblings the firing strength is strictly increasing in
-$a$, so $a=5$ is the firing-\emph{optimal} degree-preserving displacement.
+out: among the monic-preserving (degree-$28$) siblings the firing strength is strictly
+increasing in $a$, so $a=5$ is the firing-\emph{optimal} such displacement.
 
 \begin{proposition}[Restricted firing-optimality of the bridge exponent]
 \label{prop:restricted-opt}
@@ -1093,12 +1101,19 @@ frame is the first-variation calculus above.
 %==============================================================================
 
 Every numerical assertion above is reproduced by a self-contained program in the
-repository \repo, in the directory \texttt{constants/82a/certificate/}. Each program
-prints a \texttt{PASS}/\texttt{FAIL} verdict or the certified value; the certified
-bound uses directed (outward) rounding throughout, and a tamper mode (a target set
-below the truth) is rejected with the frontier resolved, ruling out a grid fallback.
-The scientific Python stack (\texttt{numpy}, \texttt{scipy}, \texttt{mpmath},
-\texttt{sympy}) suffices. Table~\ref{tab:verify} keys each statement to its check.
+repository \repo, in the directory \texttt{constants/82a/certificate/}. The claims fall
+into two kinds, and we are explicit about which is which. The \emph{certified} claims---
+the improved bound (Theorem~\ref{thm:upper}), the sibling-generator firing
+(Theorem~\ref{thm:generator}, Lemma~\ref{lem:transfer}), and the bridge-exponent ordering
+(Proposition~\ref{prop:restricted-opt})---are established by directed (outward) interval
+arithmetic with an explicit accounting of floating-point round-off in the cell sums
+(below), and each rejects a deliberately understated target with the frontier resolved,
+ruling out a grid fallback. The \emph{grid diagnostics}---the record marginals of
+Proposition~\ref{thm:record-fires}---are fine-grid evaluations, not interval certificates,
+and are labelled as such in their statement; the programs reproduce their displayed
+values but do not enclose them rigorously. The scientific Python stack
+(\texttt{numpy}, \texttt{scipy}, \texttt{mpmath}, \texttt{sympy}) suffices.
+Table~\ref{tab:verify} keys each statement to its check, marking the grid diagnostics.
 
 \begin{table}[h]
 \centering\small
