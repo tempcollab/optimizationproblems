@@ -61,12 +61,12 @@ Each round flows **explore → plan → select+rank → build ×(1–3) → revi
 - **No fake solves.** A bound counts only when `proof-reviewer` reproduces the check —
   `lake build` clean (no `sorry`/axiom) for a Lean proof, or an independent re-derivation +
   re-run for a numerical certificate. The orchestrator can't self-approve.
-- **Honest reward.** A milestone is verified **frontier motion** only — the held bound
-  strictly improved, or a named prior gap closed. Reproductions and scaffolding are
-  progress notes, not milestones, so the metric can't drift upward on activity.
-- **Learning from failures.** Reviewer findings and dead ends become persistent Rules and
-  feed the approach ranking (a dead-end loses Elo, a verified line gains it), so later
-  rounds don't re-expand a stalled angle. Ranking sits at the outline-reviewer, which sees
+- **Dense signal — the approach ranking.** Progress isn't a sparse "did we beat the record"
+  count; it's the state of the approach population, which moves every productive round. A
+  verified advance lifts an angle's Elo, a refuted one sinks, the held bound tightens — so
+  the orchestrator can see the search sharpening even between record-breaks. The signal is
+  honest because the lift comes only from an advance the `proof-reviewer` verified, never a
+  builder's claim. Ranking sits at the outline-reviewer, which sees
   the whole candidate field at once and folds in the prior round's recorded outcomes — so
   approaches are scored against each other where the comparison has signal, not on one
   agent's isolated say-so.

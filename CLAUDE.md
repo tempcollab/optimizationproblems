@@ -94,31 +94,26 @@ This is a research repo, not a code repo:
 - **One constant per run.** A run attacks exactly ONE constant `<id>`, chosen in
   round 1 and fixed for the whole run. All rounds push that one constant. Everything
   below — the metric, the eval, `current.md` — is about that single `<id>`.
-- **Goal & eval.** Beating the record can take many rounds — you do not improve the
-  bound every round, and a binary "did we beat the record" metric would read 0 for
-  most of a run and give the loop no signal. So the metric is **verified frontier
-  motion**. A milestone is one of exactly two things, verified by the reviewer:
-  - the **held** bound strictly improved (a tighter verified bound than we held), or
-  - a **named gap closed** — a blocker named in the approach doc (a `sorry` discharged, a
-    feasibility hole filled, a missing lemma proved) now resolved. The gap may have been
-    recorded in a prior round or named this round (round 1 of a multi-round Lean
-    formalization can close a real sub-goal); what makes it a milestone is that it was a
-    *named, load-bearing* gap, not that it predates this round.
-
-  That is the bar. Reproducing the record, building scaffolding, "groundwork on a
-  bold line" — these are **progress notes in the approach doc, not milestones**.
-  Reproducing the record is a one-time **round-1 baseline** ("we hold a confirmed,
-  re-runnable reproduction of the record"), logged once and not counted again. This
-  keeps the reviewer a pure adversarial gate: it does not look for reasons to be
-  generous, only for genuine frontier motion it can verify.
-  - **Metric:** number of reviewer-verified milestones — the `- R<round>:` lines the
-    reviewer appends to the `## Progress log` of the run's constant's
-    `constants/<id>/current.md`. **Baseline: 0.** (Set the eval to a command that
-    counts those lines in that one file.)
-  - A milestone is logged **only by the proof-reviewer, only for verified frontier
-    motion** — so the builder can't pad it, and re-digesting a paper or an
-    unreproducible claim logs nothing and the count plateaus honestly.
-  - The rare actual record-break is additionally flagged: that constant's
+- **Goal & eval — the one signal is the approach ranking.** Beating the record can take
+  many rounds, so a binary "did we beat it" metric reads 0 for most of a run and gives the
+  loop no gradient. The dense signal is the **state of the approach population** — the Elo
+  ranking, which angles are live and which dead-ended, and the best verified bound we hold.
+  That state moves every productive round (a verified advance lifts an approach's Elo, a
+  refuted one sinks; the held bound tightens) even when no record falls, so it is what the
+  orchestrator tracks to judge "are we progressing". The reviewer's per-approach
+  `record_outcome` is what feeds it (see the workflow); the outline-reviewer folds those
+  into the Elo each round.
+  - **Eval:** a command that reads the population state for the run's constant — from the
+    ranker sidecar `constants/<id>/approaches/.ranking.json` (top Elo, live vs dead-ended
+    counts) together with the verified `held` bound and its gap to the record in
+    `current.md` — and prints that as the round's progress line. Progress is the population
+    sharpening and the gap shrinking; regression is the leader stalling while nothing new
+    fires. No milestone-line counting: that was the pre-ranking metric and the ranking
+    subsumes it.
+  - The signal is only as honest as the reviewer is adversarial — an Elo lift comes from a
+    *verified* advance, never the builder's unverified claim, so a round that produced
+    nothing reproducible moves nothing.
+  - The rare actual record-break is the headline event, flagged separately: that constant's
     `current.md` gets `## Status: improved` (else `none`).
 - **Pick the most promising constant, not the widest gap.** Promising means
   *tractable*: a real, attackable opening with the right kind of machinery available.
@@ -126,8 +121,8 @@ This is a research repo, not a code repo:
   Millennium problem — e.g. the de Bruijn–Newman lower bound ⇔ the Riemann
   Hypothesis), and some constants are already closed (upper = lower, e.g. 11b). The
   explorer triages this in round 1; skip the closed and the conjecture-hard, prefer the
-  Lean-fit, and spend the run where verified frontier motion is actually reachable. Steady
-  verified motion on the chosen constant is the win; an actual record-break is the
+  Lean-fit, and spend the run where verified progress is actually reachable. A steadily
+  sharpening approach population on the chosen constant is the win; an actual record-break is the
   breakthrough.
 - **One folder per problem.** Everything for a constant lives in `constants/<id>/`,
   beside Tao's record file `constants/<id>.md`. The record is the current bound to
@@ -171,8 +166,9 @@ counts, stale flag, last outcome) lives in the tool-owned sidecar
 
 ### `current.md` — the tracking file (contract)
 
-The tracking file for the run's constant — the eval counts its milestone lines. It
-MUST contain these sections:
+The tracking file for the run's constant. The eval reads `## Bounds` (the verified `held`
+and its gap to the record) from here, alongside the population state in the ranker sidecar.
+It MUST contain these sections:
 
 ```
 ## Status            improved | none   (only the reviewer sets `improved`)
@@ -181,9 +177,10 @@ MUST contain these sections:
 ```
 
 `held` is the reviewer-verified value, never the builder's unverified claim (a
-numerical-search result is a conjecture — it goes in an approach doc, not `held`).
-The eval counts the `- R<round>:` lines; only the reviewer writes them, and only for
-a verified advance.
+numerical-search result is a conjecture — it goes in an approach doc, not `held`). The
+`## Progress log` is the human-readable trail of what each round verified — not the metric
+(the ranking is the signal); only the reviewer appends to it, and only for a verified
+advance.
 
 ## Rigor rules
 
