@@ -137,6 +137,14 @@ This is a research repo, not a code repo:
   an angle that's really a large construction, dispatch only its first sub-goal and carry the
   rest to later rounds. (This is the repo's reading of the engine's "one large task or ≤3
   small" — here, ≤3 *small* certified steps.)
+- **Dispatch counts per round — don't default to one of everything.** A round is **not**
+  one-agent-per-phase. The counts are fixed except the builders, which fan out:
+  `math-explorer ×1 → proof-outliner ×1 → outline-reviewer ×1 → proof-builder ×(1–3) →
+  proof-reviewer ×1`. The single-dispatch phases each run once; the **proof-builders run in
+  parallel, one per slug in the build set** (next bullet); and **one proof-reviewer reviews
+  all of them** (not one reviewer per build). The internal fan-out *inside* a phase — the
+  outliner sampling up to ~5 approaches, the outline-reviewer's pairwise ranking — is the
+  subagent's own job, done within its single dispatch; you don't manage it.
 - **Build set → parallel builders.** The outline-reviewer ends its report with
   `build set: <slug>[, <slug>...]` — the slugs it chose to build this round (it sizes the
   set, often just 1, at most 3). Dispatch **exactly one proof-builder per slug listed** —
