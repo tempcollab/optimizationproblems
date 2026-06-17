@@ -12,7 +12,7 @@ Four tools:
   - sample_approaches  (math-explorer, proof-outliner) — P-UCB over metadata,
     returns a small candidate set so the caller reads only k bodies, not all of
     them. The explorer samples to report the terrain; the outliner samples to
-    decide the move and propose the ranking.
+    assemble the candidate field. Neither ranks — the outline-reviewer does.
   - register_approach  (outline-reviewer) — the gate: seed an approved new angle
     at the cold-start Elo; a rejected angle is never registered.
   - record_outcome     (proof-reviewer) — record what happened to each approach
@@ -107,7 +107,7 @@ def _view(constant_id: str, record: dict) -> dict:
     the json, not the body, so it is returned explicitly here:
       - path           : repo-relative path to the approach body (Read it for the prose)
       - elo            : current rating (1500 = cold start)
-      - expanded       : how many rounds the builder has actually pushed this angle
+      - expanded       : how many times a builder has actually built this angle
       - stale          : true if a reviewer outcome from last round is not yet in the elo
       - last_outcome   : the reviewer's last verdict — advanced|partial|dead-end|verified-milestone (null if never expanded)
       - reviewer_note  : the reviewer's one-line why for that outcome (null if never expanded)
@@ -163,9 +163,11 @@ def sample_approaches(constant_id: str, k: int) -> dict:
     of how many approaches the constant has accumulated. Ranks by P-UCB (exploit
     high-Elo + explore under-expanded), increments `selected` on the chosen ones.
 
-    Returns each chosen approach as {slug, path, elo, stale}, best-first. Read the
-    `path` for the body (what was tried, the gap). `stale: true` flags an approach
-    whose Elo predates an unprocessed outcome — a priority to re-rank.
+    Returns each chosen approach as {slug, path, elo, expanded, stale,
+    last_outcome, reviewer_note, last_round}, best-first. Read the `path` for the
+    body (what was tried, the gap); `last_outcome`/`reviewer_note` give the
+    reviewer's last verdict without opening the body. `stale: true` flags an
+    approach whose Elo predates an unprocessed outcome — a priority to re-rank.
     """
     records = _load(constant_id)
     if not records:

@@ -43,8 +43,7 @@ update_ranking(constant_id="<id>", comparisons=[
 Anchor each pair to evidence: a `dead-end` last outcome loses to a live sibling; a
 `verified-milestone` wins. Compare only pairs you're sure of. This also clears the `stale`
 flags last round's reviewer set, so the rating is current going into the build. Skip only
-if fewer than 2 approaches are in the population. (`update_ranking` is a tool — never run
-`git commit` or any git command for the ranking.)
+if fewer than 2 approaches are in the population.
 
 ## Verdict — per candidate
 
