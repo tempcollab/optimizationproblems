@@ -1,0 +1,496 @@
+AN UPPER BOUND FOR THE DAVENPORT CONSTANT OF C3
+n
+
+MAX GRINSZTAJN
+
+Abstract. Let D(G) denote the Davenport constant of a ﬁnite abelian group G, and let Cn
+denote a cyclic group of order n. For n ≥ 2, put
+
+P (n) = max
+pa∥n
+
+pa,
+
+the largest primary component of n. We prove the pointwise bound
+
+D(C 3
+
+n) ≤ 4n − P (n) − 2.
+
+In particular, the normalized supremum
+
+S := sup
+n≥2
+
+D(C 3
+
+n) − 1
+
+n − 1
+
+satisﬁes S ≤ 4, improving the known uniform upper bound S ≤ 20369 due to Zakarczemny
+[5]. The conjectural value remains S = 3. The proof combines known local zero-sum estimates
+over C 3
+p with an induction over the prime factors of n/P (n), starting from the largest primary
+component of n. The proof was discovered with assistance from GPT-5.5 Pro. The deduction
+from the cited results in the literature was also checked in a conditional Lean 4 formalization
+with Aristotle [7].
+
+1. Introduction and notation
+
+Throughout, all ﬁnite abelian groups are written additively. For a ﬁnite abelian group G, the
+Davenport constant D(G) is the least integer N such that every sequence over G of length at
+least N contains a non-empty zero-sum subsequence. For k ≥ 1, let Dk(G) be the least integer
+N such that every sequence over G of length at least N contains k pairwise disjoint non-empty
+zero-sum subsequences. Finally, η(G) denotes the least integer N such that every sequence over
+G of length at least N contains a non-empty zero-sum subsequence of length at most exp(G).
+
+We write C3
+
+n for Cn ⊕ Cn ⊕ Cn. The main result is the following.
+
+Theorem 1.1. For every integer n ≥ 2,
+
+D(C3
+
+n) ≤ 4n − P (n) − 2,
+
+P (n) = max
+pa∥n
+
+pa.
+
+Consequently, D(C3
+
+n) ≤ 4(n − 1) for every n ≥ 2.
+
+In particular, if
+
+S := sup
+n≥2
+
+D(C3
+
+n) − 1
+
+n − 1
+
+,
+
+then Theorem 1.1 gives S ≤ 4. The known uniform upper bound is S ≤ 20369, coming from
+the estimate
+
+D(C3
+
+n) ≤ 20369(n − 1) + 1
+
+of Zakarczemny [5]. The standard lower bound gives S ≥ 3 [4], and the conjectural pointwise
+formula is
+
+D(C3
+
+n) = 3(n − 1) + 1
+
+(n ≥ 2),
+
+which is equivalent to S = 3 [4]. Thus the result below improves the known interval from
+3 ≤ S ≤ 20369 to
+
+Date: May 2026.
+grinsztajnmax@gmail.com.
+
+3 ≤ S ≤ 4.
+
+1
+
+An upper bound for the Davenport constant of C3
+n
+
+The proof uses the inductive method for generalized Davenport constants, together with local
+
+estimates for Dk(C3
+
+p ). We shall use the following standard facts from zero-sum theory. If
+
+then
+
+G ≃ Cn1
+
+⊕ · · · ⊕ Cnr ,
+
+1 < n1 | · · · | nr,
+
+D(G) ≥ D∗(G) := 1 +
+
+r∑
+
+i=1
+
+(ni − 1),
+
+and equality holds when G is a p-group; see Gao–Geroldinger [4]. Applying this to C3
+
+pa gives
+
+D(C3
+
+pa) = 3pa − 2.
+
+The same lower bound applied to C3
+
+m gives
+D(C3
+
+m) ≥ 3m − 2.
+
+Thus, in the sequel, we shall use
+D(C3
+
+(1)
+
+pa) = 3pa − 2,
+
+D(C3
+
+m) ≥ 3m − 2.
+
+2. Auxiliary estimates
+
+We ﬁrst record two consequences of the deﬁnitions.
+
+Lemma 2.1 (Inductive method). Let H ≤ G be ﬁnite abelian groups. Then
+
+D(G) ≤ DD(H)(G/H).
+
+Proof. Let S be a sequence over G of length at least DD(H)(G/H), and let S be its image in
+G/H. By the deﬁnition of DD(H)(G/H), the sequence S contains D(H) pairwise disjoint non-
+empty zero-sum subsequences. Lifting them to subsequences T1, . . . , TD(H) of S, their sums lie
+in H. The sequence σ(T1), . . . , σ(TD(H)) over H has a non-empty zero-sum subsequence. The
+□
+union of the corresponding Ti’s is a non-empty zero-sum subsequence of S.
+Lemma 2.2 (Extraction lemma). Let G be a ﬁnite abelian group, let e = exp(G), and let j ≥ 1.
+Assume that η(G) ≤ M and Dj(G) ≤ M . Then, for every k ≥ j,
+
+Dk(G) ≤ M + e(k − j).
+Proof. Let S be a sequence over G of length at least M + e(k − j). Repeatedly using η(G) ≤ M ,
+we may remove k −j pairwise disjoint non-empty zero-sum subsequences, each of length at most
+e. The remaining sequence has length at least M , hence contains j further pairwise disjoint
+□
+non-empty zero-sum subsequences. Altogether S contains k such subsequences.
+
+The following local estimate packages the known zero-sum results over C3
+
+p that are needed
+
+in the proof.
+
+Lemma 2.3 (Local estimate). For every prime p and every k ≥ 3p − 2,
+
+Dk(C3
+
+p ) ≤ pk + p2.
+
+Proof. For p = 2, Freeze–Schmid record that D0(C3
+notation [3]. Thus
+
+2 ) = 3 and kD(C3
+
+2 ) = 2 in their asymptotic
+
+and the desired estimate follows from 2k + 3 ≤ 2k + 4.
+
+Dk(C3
+
+2 ) = 2k + 3
+
+(k ≥ 2),
+
+For p = 3, Bhowmik–Schlage-Puchta prove that every sequence of length 15 over C3
+
+3 contains
+three disjoint zero-sum subsequences [1]; this input is also cited in their later paper, where they
+3 ) ≤ 17. Applying Lemma 2.2 with M = 17 and j = 3, we get,
+use η(C3
+for all k ≥ 3,
+
+3 ) = 17 [2]. Hence D3(C3
+
+Dk(C3
+
+3 ) ≤ 17 + 3(k − 3) = 3k + 8 ≤ 3k + 9.
+
+2
+
+An upper bound for the Davenport constant of C3
+n
+
+For p = 5, the same paper gives η(C3
+5 contains three disjoint zero-sum subsequences [2]. Thus D3(C3
+
+5 ) = 33 and shows that every sequence of length 33 over
+5 ) ≤ 33, and Lemma 2.2 gives,
+
+C3
+for all k ≥ 3,
+
+It remains to consider p ≥ 7. Put
+
+Dk(C3
+
+5 ) ≤ 33 + 5(k − 3) = 5k + 18 ≤ 5k + 25.
+
+M = (p + 1)(3p − 7) + 4 = 3p2 − 4p − 3.
+
+By Bhowmik–Schlage-Puchta [2],
+
+(2)
+and, for every j ≥ 1,
+
+(3)
+
+η(C3
+
+p ) ≤ M,
+
+{
+
+Dj(C3
+
+p ) ≤ max
+
+5p − 2,
+
+}
+
+j + 2p + 5
+
+.
+
+3(p − 1)
+2
+
+Set
+
+M − 2p − 5
+2 (p − 1)
+Since p ≥ 7, we have 5p − 2 ≤ M . Also, by the deﬁnition of j0,
+
+2(3p2 − 6p − 8)
+3(p − 1)
+
+x =
+
+=
+
+3
+
+,
+
+j0 = ⌊x⌋.
+
+3(p − 1)
+2
+
+j0 + 2p + 5 ≤ M.
+
+Therefore (3) gives Dj0(C3
+
+p ) ≤ M . Moreover j0 < 2p < 3p − 2. Finally, since j0 ≥ x − 1,
+
+pj0 + p2 ≥ p(x − 1) + p2 = M +
+
+3p2 − 16p − 9
+3(p − 1)
+
+≥ M,
+
+the last inequality again following from p ≥ 7. Now let k ≥ 3p−2. Then k ≥ j0, and Lemma 2.2,
+together with (2) and Dj0(C3
+
+p ) ≤ M , gives
+Dk(C3
+
+p ) ≤ M + p(k − j0).
+
+Using M ≤ pj0 + p2, we obtain
+
+This proves the lemma in all cases.
+
+□
+
+Dk(C3
+
+p ) ≤ pj0 + p2 + p(k − j0) = pk + p2.
+
+3. Proof of the main theorem
+
+Let n ≥ 2, and put
+
+Q = P (n).
+
+By deﬁnition, Q is a prime-power divisor of n. Factor the remaining part of n as
+
+n = Qp1p2 · · · ps,
+where p1, . . . , ps are primes, counted with multiplicity. Since Q is the largest primary component
+of n, each pi ≤ Q. Put
+
+m0 = Q,
+
+mi = Qp1 · · · pi
+
+(1 ≤ i ≤ s).
+
+We prove by induction on i that
+
+(4)
+
+D(C3
+
+mi) ≤ 4mi − Q − 2.
+
+For i = 0, the integer m0 = Q is a prime power. Hence (1) gives
+D(C3
+
+Q) = 3Q − 2 = 4Q − Q − 2,
+
+which is (4) for i = 0.
+
+Assume (4) for m = mi−1, and write p = pi. The group C3
+
+pm contains a natural subgroup
+
+H ≃ C3
+
+m, with quotient C3
+
+pm/H ≃ C3
+
+p . By Lemma 2.1,
+D(C3
+pm) ≤ DD(C3
+3
+
+m)(C3
+p ).
+
+An upper bound for the Davenport constant of C3
+n
+
+Furthermore, by (1),
+
+since m ≥ Q ≥ p. Lemma 2.3, applied with k = D(C3
+pm) ≤ pD(C3
+
+D(C3
+
+m) ≥ 3m − 2 ≥ 3p − 2,
+m), yields
+m) + p2.
+
+D(C3
+
+Using the induction hypothesis,
+
+It remains to compare this with 4pm − Q − 2. The required inequality is
+
+D(C3
+
+pm) ≤ p(4m − Q − 2) + p2.
+
+p2 − 2p + 2 ≤ (p − 1)Q.
+
+Since Q ≥ p,
+
+(p − 1)Q ≥ p(p − 1) = p2 − p ≥ p2 − 2p + 2
+
+for every prime p ≥ 2. Therefore
+
+D(C3
+
+pm) ≤ 4pm − Q − 2,
+
+which proves the induction step.
+
+Taking i = s, we have ms = n, and hence
+
+Since P (n) ≥ 2, this implies
+
+This proves Theorem 1.1.
+
+We have shown that
+
+D(C3
+
+n) ≤ 4n − Q − 2 = 4n − P (n) − 2.
+
+D(C3
+
+n) ≤ 4n − 4 = 4(n − 1).
+
+4. Conclusion
+
+S = sup
+n≥2
+
+D(C3
+
+n) − 1
+
+n − 1
+
+≤ 4.
+
+This improves the known uniform upper bound S ≤ 20369 to S ≤ 4. The conjectural value
+S = 3, equivalent to the pointwise formula
+
+remains open.
+
+D(C3
+
+n) = 3(n − 1) + 1
+
+(n ≥ 2),
+
+5. Remark on formal verification
+
+A conditional Lean formalization of the deduction in this note is available in [6]. The for-
+malization assumes, as external axioms, the zero-sum inputs cited above: the standard p-group
+formula and lower bound, the inductive method, and the local estimates over C3
+p . It checks the
+global induction and the resulting pointwise estimate of Theorem 1.1.
+
+References
+
+[1] G. Bhowmik and J.-C. Schlage-Puchta, Davenport’s constant for groups of the form Z3 ⊕ Z3 ⊕ Z3d, CRM
+
+Proceedings and Lecture Notes 43 (2007), 307–326.
+
+[2] G. Bhowmik and J.-C. Schlage-Puchta, Davenport’s constant for groups with large exponent, Contemporary
+
+Mathematics 579 (2012), 21–31.
+
+[3] M. Freeze and W. A. Schmid, Remarks on a generalization of the Davenport constant, Discrete Mathematics
+
+310 (2010), 3373–3389.
+
+[4] W. Gao and A. Geroldinger, Zero-sum problems in ﬁnite abelian groups: a survey, Expositiones Mathematicae
+
+24 (2006), 337–369.
+
+[5] M. Zakarczemny, Note on the Davenport’s constant for ﬁnite abelian groups with rank three, arXiv:1910.10984,
+
+2019.
+
+[6] M. Grinsztajn, Conditional Lean formalization for the bound on D(C 3
+
+n), Lean 4 formalization, 2026. https:
+
+//github.com/maaxgrin/davenport-cn3-bound/blob/main/DavenportCn3/Main.lean.
+
+[7] T. Achim, A. Best, A. Bietti, K. Der, M. Fédérico, S. Gukov, D. Halpern-Leistner, K. Henningsgard, Y.
+Kudryashov, A. Meiburg, M. Michelsen, R. Patterson, E. Rodriguez, L. Scharﬀ, V. Shanker, V. Sicca, H.
+Sowrirajan, A. Swope, M. Tamas, V. Tenev, J. Thomm, H. Williams, and L. Wu, Aristotle: IMO-level
+Automated Theorem Proving, arXiv:2510.01346, 2025.
+4
+
+
