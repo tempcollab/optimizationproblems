@@ -42,12 +42,16 @@ update_ranking(constant_id="<id>", comparisons=[
 ])
 ```
 
-Anchor each pair to evidence: a `dead-end` last outcome loses to a live sibling; a
-`verified-milestone` wins; and a **Lean-certifiable** angle beats an equally-promising
-analytic one (its result is a machine-checked theorem, not a hand-verified certificate —
-see `CLAUDE.md`). Compare only pairs you're sure of. This also clears the `stale` flags
-last round's reviewer set, so the rating is current going into the build. Skip only if
-fewer than 2 approaches are in the population.
+**Compare across the whole sampled field, not just within the new cohort.** The sample
+mixes freshly-proposed angles (cold-start Elo) with established ones pulled from the
+population — pair the new against the established so a newcomer's rating anchors to real
+opponents, not only to its sibling newcomers (a newcomer compared only against other
+newcomers never separates from the 1500 start). Anchor each pair to evidence: a `dead-end`
+last outcome loses to a live sibling; a `verified-milestone` wins; and a **Lean-certifiable**
+angle beats an equally-promising analytic one (its result is a machine-checked theorem, not
+a hand-verified certificate — see `CLAUDE.md`). Compare only pairs you're sure of. This also
+clears the `stale` flags last round's reviewer set, so the rating is current going into the
+build. Skip only if fewer than 2 approaches are in the population.
 
 ## Verdict — per candidate
 

@@ -128,6 +128,15 @@ This is a research repo, not a code repo:
   beside Tao's record file `constants/<id>.md`. The record is the current bound to
   beat; edit it only once an improvement is verified. The folder is the scratchpad —
   work there freely.
+- **Scope each round small — one verifiable increment, not the whole bound.** When you
+  scope the round, the build is a single step that finishes and verifies this round: one
+  lemma or `sorry` discharged, one feasibility gap closed, one tightening — never "formalize
+  the entire bound" in a round. A monolithic dispatch produces an unverifiable artifact that
+  fails review and feeds the ranking nothing; many small certified steps are how a constant
+  falls, and each one is a `record_outcome` that moves the signal. If the outliner hands you
+  an angle that's really a large construction, dispatch only its first sub-goal and carry the
+  rest to later rounds. (This is the repo's reading of the engine's "one large task or ≤3
+  small" — here, ≤3 *small* certified steps.)
 - **Build set → parallel builders.** The outline-reviewer ends its report with
   `build set: <slug>[, <slug>...]` — the slugs it chose to build this round (it sizes the
   set, often just 1, at most 3). Dispatch **exactly one proof-builder per slug listed** —
@@ -158,6 +167,11 @@ in the orchestrator bullets above):
 The **outline-reviewer always runs** — it is not the engine's skippable "plan review". It is
 the ranking hub and the gate (it ranks the field, registers approved angles, and emits the
 build set the builders need), so the loop has no build set without it. Don't skip it.
+
+Each round advances the constant by one verifiable increment, not a heroic whole-bound
+attempt (the "Scope each round small" directive above) — so a constant falls over many
+rounds of small certified steps, and the approach doc carries the running state so the next
+round resumes where this one stopped.
 
 Record every attempt in `constants/<id>/`. The next round starts fresh with no memory —
 the folder is how it knows what was tried and why a line stalled.
