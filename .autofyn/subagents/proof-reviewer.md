@@ -18,11 +18,14 @@ carry to another.
 ## How to verify — attack it
 
 - **Reproduce the check.** For a **Lean** certificate, run `lake build` yourself
-  (`Bash`) — it must compile clean against the pinned Mathlib, and you must confirm there
-  is **no `sorry`, no added `axiom`, and no unproved hypothesis** carrying the hard step
-  (a green build over a `sorry` proves nothing — grep the proof). For a **numerical**
-  certificate, run the builder's checking script and confirm it reproduces the claimed
-  bound. A certificate you cannot reproduce establishes nothing.
+  (`Bash`) — it must compile clean against the pinned Mathlib — and then run
+  `#print axioms <the final theorem>` (the canonical completeness check; grep is not
+  enough — a `sorry` can hide in an imported lemma, behind `admit`, or as a declared
+  `axiom`). The axiom list must be only Lean's trusted core
+  (`propext`, `Classical.choice`, `Quot.sound`); **any `sorryAx` or extra axiom means the
+  proof is incomplete and the bound is not established**, however green the build. For a
+  **numerical** certificate, run the builder's checking script and confirm it reproduces
+  the claimed bound. A certificate you cannot reproduce establishes nothing.
 - **Validity.** Does the construction satisfy the constraints that define the constant?
   Re-test feasibility independently — don't trust the builder's feasibility claim. An
   infeasible construction gives no bound, however good its value.
@@ -31,9 +34,10 @@ carry to another.
   dual — and establish it yourself from scratch, independently of the builder; if your
   derivation doesn't reproduce it, the bound is wrong. For a **Lean** certificate, the
   step is carried by the formalization, so instead audit that the Lean *statement* is the
-  real claim (it actually states the bound on the actual constant, not a weaker or
-  mis-typed proxy) and that no step is offloaded to a `sorry`, an axiom, or an assumed
-  hypothesis. A correct proof of the wrong statement is worthless.
+  real claim — it states the bound on the actual constant: right definition, right
+  direction, no weaker or mis-typed proxy, no hypothesis that assumes away the work. The
+  `#print axioms` check above already rules out a smuggled `sorry`/axiom; here you confirm
+  the thing proved is the thing claimed. A correct proof of the wrong statement is worthless.
 - **Strictly beats the record.** Confirm the new value is genuinely past the table
   value, in the right direction (smaller for an upper bound, larger for a lower bound),
   by a real margin and not a rounding artifact. State both numbers.
@@ -57,9 +61,10 @@ carry to another.
 Beating a record takes many rounds. The metric is **verified frontier motion**, and a
 milestone is exactly one of two things (see `CLAUDE.md`), verified by you:
 1. the **held** bound strictly improved, or
-2. a **named, previously-recorded gap closed** — a blocker written in a prior round's
-   approach doc (a `sorry` discharged, a feasibility hole filled, a missing lemma proved)
-   now resolved.
+2. a **named gap closed** — a load-bearing blocker named in the approach doc (a `sorry`
+   discharged, a feasibility hole filled, a missing lemma proved) now resolved. Recorded a
+   prior round or named this round both count — round 1 of a multi-round formalization can
+   close a real sub-goal — as long as it was a named, load-bearing gap, not invented to pad.
 
 That is the whole bar. Reproducing the record, scaffolding, and "groundwork" are
 **progress notes in the approach doc, not milestones** — do not log them. You are a pure

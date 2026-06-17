@@ -59,17 +59,28 @@ This is a research repo, not a code repo:
   - **A scientific Python stack** for building and checking bounds:
     `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` when an angle needs
     an SDP solver or symbolic algebra).
-  - **The Lean toolchain** — the preferred certification path (see below). Install
-    once with `elan` (no root needed — it lands in `~/.elan`): `curl` the elan
-    installer, then in a `lean/` project at the repo root run `lake exe cache get`
-    to pull the prebuilt Mathlib cache (a large one-time download; building it from
-    source would take hours). **Pin the versions in round 1** — commit a
-    `lean-toolchain` file and a fixed Mathlib rev in `lake-manifest.json` — because
-    the sandbox persists across rounds, so a version chosen now holds for the whole
-    run; letting `lake` float to latest risks a proof that compiled in round 3
-    breaking in round 40. The sandbox keeps `~/.elan` and the compiled Mathlib
-    between rounds, so this cost is paid once and every later round just type-checks
-    the new proof against the cached library.
+  - **The Lean toolchain** — the preferred certification path (see below). Round 1
+    scaffolds it once, in order:
+    1. Install `elan` (no root — it lands in `~/.elan`): `curl` the elan installer
+       and run it.
+    2. **Create the project** if `lean/` doesn't exist yet: at the repo root,
+       `lake +<toolchain> new lean math` (the `math` template wires in Mathlib as a
+       dependency), giving `lean/lakefile`, `lean/lean-toolchain`, and a
+       `lean/lake-manifest.json`. If `lean/` already exists, skip this.
+    3. **Pin the versions** — choose a known-good Lean + Mathlib pair and freeze it:
+       the `lean/lean-toolchain` file and the Mathlib rev in `lean/lake-manifest.json`
+       must be committed, because the sandbox persists across rounds, so a version
+       chosen now holds for the whole run; letting `lake` float to latest risks a
+       proof that compiled in round 3 breaking in round 40.
+    4. From `lean/`, `lake exe cache get` to pull the prebuilt Mathlib cache (a large
+       one-time download; building it from source would take hours), then
+       `lake build` once to confirm the project compiles before any proof is written.
+    The sandbox keeps `~/.elan` and the compiled Mathlib between rounds, so this cost
+    is paid once and every later round just type-checks the new proof against the
+    cached library. A constant's Lean proof lives inside the `lean/` project tree (so
+    Lake can build it) — e.g. `lean/Constants/C<id>.lean` — and
+    `constants/<id>/certificate/` records how to build and check it (the `lake build`
+    target and the `#print axioms` line), pointing at that proof file.
   Installing is allowed and expected here — the "no installs" instinct doesn't apply
   to this repo. Beyond these, agents run numerical code and Lean proofs to build and
   check bounds; that's the work, not a build step.
@@ -88,9 +99,11 @@ This is a research repo, not a code repo:
   most of a run and give the loop no signal. So the metric is **verified frontier
   motion**. A milestone is one of exactly two things, verified by the reviewer:
   - the **held** bound strictly improved (a tighter verified bound than we held), or
-  - a **named, previously-recorded gap closed** — a blocker written down in a prior
-    round's approach doc (a `sorry` discharged, a feasibility hole filled, a missing
-    lemma proved) now resolved.
+  - a **named gap closed** — a blocker named in the approach doc (a `sorry` discharged, a
+    feasibility hole filled, a missing lemma proved) now resolved. The gap may have been
+    recorded in a prior round or named this round (round 1 of a multi-round Lean
+    formalization can close a real sub-goal); what makes it a milestone is that it was a
+    *named, load-bearing* gap, not that it predates this round.
 
   That is the bar. Reproducing the record, building scaffolding, "groundwork on a
   bold line" — these are **progress notes in the approach doc, not milestones**.

@@ -17,9 +17,12 @@ approach body and reuse the literature digests.
 - **Produce the bound AND a certificate** the reviewer can independently re-establish.
   The form follows the angle's fit (from the explorer's triage / `CLAUDE.md`):
   - **Lean-fit** (preferred) — write a **Lean proof** that `lake build`s clean against the
-    pinned Mathlib, in `constants/<id>/certificate/` (a `.lean` file in the repo's `lean/`
-    project). A compiling proof with **no `sorry`, no added axiom, no unproved hypothesis**
-    smuggling the hard step is the gold-standard certificate — type-checking is the check.
+    pinned Mathlib. The proof file lives inside the `lean/` project tree so Lake builds it
+    (e.g. `lean/Constants/C<id>.lean`); record the build target and the
+    `#print axioms <theorem>` line in `constants/<id>/certificate/` so the reviewer can
+    re-run them. A compiling proof whose `#print axioms` shows **no `sorryAx`, no added
+    axiom, and no unproved hypothesis** smuggling the hard step is the gold-standard
+    certificate — type-checking is the check.
   - **Lean-hostile** — write a directed-rounded numerical certificate (a re-checking
     script with outward rounding) in `constants/<id>/certificate/`, as for 82a.
   A bound the reviewer can't re-establish — `lake build` fail, or a script that doesn't
