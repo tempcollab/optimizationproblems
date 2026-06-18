@@ -1,0 +1,35 @@
+{
+  "griego-family-larger-mT": {
+    "elo": 1468.0339081301693,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "griego-family-larger-mT",
+    "stale": false,
+    "summary": "Push Griego's fixed alphabet/base-21 family to (m,T)>(80,150) via exact column-DP; cheapest probe, may saturate at the record."
+  },
+  "largedev-rate-optimization": {
+    "elo": 1500.7023986633528,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "largedev-rate-optimization",
+    "stale": false,
+    "summary": "Large-deviation rate guide to predict the optimal (A,r), certified by L1's finite integer check; highest ceiling, slowest first-green."
+  },
+  "noncontig-alphabet-sweep": {
+    "elo": 1531.263693206478,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "noncontig-alphabet-sweep",
+    "stale": false,
+    "summary": "Sweep non-contiguous digit alphabets A (generalize Griego's {0,2..10}) feeding the GHR lemma; finite integer-inequality certificate, Lean-fit."
+  }
+}
