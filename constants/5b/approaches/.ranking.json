@@ -1,11 +1,11 @@
 {
   "branching-transversal-cert": {
-    "elo": 1584.0259088513558,
+    "elo": 1578.957057865326,
     "expanded": 1,
     "last_note": "VERIFIED: Lean tight branching B&B transversal cert (noTransLe + noTransLe_sound + hLe_of_branchCert) closes the R3 fractional integrality gap, reaching integral tau=6 on A_base => tight h<=8 (vs fractional <=9). lake build PASS, clean axioms (decide facts axiom-free, no sorry/native_decide). Independently re-derived: 12 APs = full family, exact tau=6, bridge arith. Machinery only, does NOT beat 4/7; removes the prerequisite blocker for a tight N~30 cert.",
     "last_outcome": "verified-milestone",
     "last_round": 4,
-    "selected": 2,
+    "selected": 4,
     "slug": "branching-transversal-cert",
     "stale": false,
     "summary": "Depth-bounded branch-and-bound transversal certificate in Lean: structurally-recursive certifyTau (remaining, budget) Bool returning true iff no transversal of size <= budget exists; soundness induction gives tau > budget => h(A) <= N - budget - 1. Closes the fractional integrality gap (tight h(A_base)=8, tau>=6). Load-bearing prerequisite for any sub-4/7 Lean cert. A_base validation tree 364 nodes / 3^5=243 worst-case leaves, decide-tractable, zero sorry."
@@ -22,7 +22,7 @@
     "summary": "Unified CP-SAT/SMT/CEGAR feasibility model searching directly for a floor-realizing (4,5)-set at N=17 (h=9, ratio 9/17\u22480.529, most margin) or N=16 (h=9, 0.5625 thin); tight window + transversal cuts to escape round-1 CP-SAT scaling; Lean cert via decide, fallback at N=17."
   },
   "cpsat-exact-existence-N28-N30": {
-    "elo": 1469.777159662287,
+    "elo": 1441.7535426462857,
     "expanded": 1,
     "last_note": "NEGATIVE exact-alpha search for indecomposable N in {30,32,34} (4,5)-set at h=floor+1. Independently reproduced: best is a Fibonacci-subsequence family, exact alpha=floor+3 (N=30: alpha=19, is45set=True, indecomposable, milp==bb and my independent B&B agree). No beat. tau-deficit 2 at every N (best tau-density ~0.367 vs needed ~0.433). Heuristic search so not an impossibility theorem; honestly scoped as conjecture-only obstruction map, nothing written to constants/5b.md. Pairs with interleaved cert but the half-integral A_base degeneracy means even a found candidate must be non-half-integral to certify tightly.",
     "last_outcome": "partial",
@@ -38,7 +38,7 @@
     "last_note": "VERIFIED: engine re-keyed to correct (4,5)-set difference condition (is45setB); MTThm15 + c5b_le_four_sevenths now sound. Clean rebuild, axioms clean, separating set {0,2,5,8,14,21,28} correctly rejected. Closes R2 soundness gap. No bound move (held 4/7).",
     "last_outcome": "verified-milestone",
     "last_round": 3,
-    "selected": 6,
+    "selected": 8,
     "slug": "engine-is45set-difference-fix",
     "stale": false,
     "summary": "Re-key the Lean engine from weakSidonB (sums) to a decidable is45setB difference predicate (every 4-sublist >=5 distinct |x-y|, C(N,4) decide); re-verify A_base certifies 4/7 zero-axiom. No bound move, but a hard correctness prerequisite \u2014 the current MTThm15 would falsely certify a weak-Sidon non-(4,5) gadget."
@@ -55,7 +55,7 @@
     "summary": "Indecomposable N=30 (4,5)-set at h=floor+1=17 (17/30~0.5667 beats 4/7). Buildable sub-goal: an AP-transversal h<=m certificate (covering family F over 3-APs, decide cost poly in |F|*N not C(30,18)), validated on A_base. Only Lean route to h-certification at N>=21."
   },
   "guided-search-N21": {
-    "elo": 1367.7482778080996,
+    "elo": 1349.9779680973882,
     "expanded": 1,
     "last_note": "No strict beat (best ratio ties 4/7). But verified a real obstruction: from proven c*>=9/17, size-N gadget beats 4/7 only if 7*ceil(9N/17)<4N \u2014 independently confirmed N=14 and N=21 are IMPOSSIBLE (floors 8,12 hit 4/7 exactly). Feasible N: 9,11,13,15,16,17,18,20,22,... Window-limited search found no beat at N=9,11 (suggestive only, not global). Reshapes the angle: next searches must target feasible N, not 14/21.",
     "last_outcome": "partial",
@@ -66,14 +66,14 @@
     "summary": "Optimization-guided (SAT/CP/annealing) search directly minimizing max-Sidon-subset size for a ~21-pt (4,5)-set with h/N < 4/7, then certify via the Lean predicates."
   },
   "half-integrality-filtered-search": {
-    "elo": 1534.1884209231014,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
-    "selected": 0,
+    "elo": 1543.2893026358092,
+    "expanded": 1,
+    "last_note": "R7 survey, now reviewed: re-run exit 0 all asserts pass. RAND30 (N=30 (4,5)-set, 0 viol) has INTEGRAL cover LP (nu*=10=tau, all x_v in {0,1}) and is interleaved-FRIENDLY at g=1 (support P: 10/12 edges inside, a(P)=8 + tau(res)=2 = 10) -- all independently reproduced. Retires the certifiability risk that A_base's half-integral pathology is universal. No bound (alpha=20). 5b.md/current.md untouched.",
+    "last_outcome": "verified-milestone",
+    "last_round": 8,
+    "selected": 2,
     "slug": "half-integrality-filtered-search",
-    "stale": false,
+    "stale": true,
     "summary": "Fold an LP-half-integrality filter into the N=30 high-m gadget search: for each density-clearing candidate solve the 3-AP cover LP and reward supports that are partially integral (not fully half-integral like A_base) so the R5 interleaved cert can shrink the branch budget. De-risks certifiability of any beat; yields a verified structural survey even with no beat."
   },
   "hybrid-fractional-plus-branch": {
@@ -88,7 +88,7 @@
     "summary": "Combine the verified fractional lemma (tau >= ceil(nu*), cheap) with the branching cert on the residual via max of two independent sound lower bounds, keeping branch budget = target tau - ceil(nu*) so 3^budget stays tiny at N=30 (budget 1-2 vs standalone 12-13). The version that scales the h-cert to the N=30 gadget. Depends on branching-transversal-cert; budget-1 A_base validation is a clean one-round increment."
   },
   "interleaved-residual-cert": {
-    "elo": 1539.152009315205,
+    "elo": 1556.1228820593612,
     "expanded": 1,
     "last_note": "Sound interleaved (fix-then-branch) Lean lemma hLe_of_interleaved built: disjoint H\u2229P / H\\P partition (no double-count, verified structurally + clean axioms propext/Classical.choice/Quot.sound, no sorry/native_decide). Budget-shrink mechanism (a=2 frac + g=1 branch => tau=4) demonstrated end-to-end on synthetic A_syn \u2014 the shrink R4 max-hybrid could not do. Honest finding (independently reproduced over all 2^14 supports): A_base is fully half-integral, max(a+tau_res)=6 only at P=empty, so g=1-on-A_base is genuinely impossible and the cert degenerates to full budget there. Machinery advance, does NOT beat 4/7. Bound-mover prerequisite still needs a non-half-integral N~30 candidate to fire.",
     "last_outcome": "advanced",
@@ -98,24 +98,35 @@
     "stale": false,
     "summary": "Branch-only-over-the-LP-residual transversal lemma hLe_of_branchOnResidual: refactor hLe_of_fracMatching to expose its dual support, contract the residual family, branch with budget g=tau-a (1-2 units so 3^g tiny at N=30). The named scaling prerequisite the R4 plain-min hybrid is NOT; validate on A_base with g=1 -> tight h<=8. Soundness backed by Nemhauser-Trotter / d-Hitting-Set LP half-integrality (fix LP value >=1/2, branch residual)."
   },
+  "lean-cap-lemma-m-le-n-minus-2": {
+    "elo": 1543.3955272473108,
+    "expanded": 1,
+    "last_note": "Lean cap lemma m_le_n_sub_2 over faithful Is45 predicate: lake build PASS, axioms clean (propext/Classical.choice/Quot.sound, no sorryAx/native_decide). FACT1 (double-midpoint forces 4-subset with <=4 distinct |diffs|) re-derived independently; Is45 verified permutation-faithful to is45setB, non-vacuous. Missing decidable bridge is_45setB->Is45 is a legit next increment, not fatal.",
+    "last_outcome": "verified-milestone",
+    "last_round": 8,
+    "selected": 0,
+    "slug": "lean-cap-lemma-m-le-n-minus-2",
+    "stale": true,
+    "summary": "Formalize Lemma 2.4 in Lean: for any is45setB list, m(A)=#midpoint-distinct 3-APs <= n-2, via FACT1 (a vertex midpoint of two 3-APs forces a 4-subset with exactly 4 distinct |diffs|, contradicting >=5) giving an injective midpoint map into the n-2 interior. New lean/Constants/C5bCap.lean, lake-build-checked, clean axioms, no search/anneal \u2014 immune to the force-kill failure mode. Replaces the trusted external Lemma 2.4 the whole cap/tau analysis rests on."
+  },
   "lean-scaffold-and-warmup": {
-    "elo": 1631.168050121352,
+    "elo": 1643.7588501696266,
     "expanded": 1,
     "last_note": "lake build passes; finite facts Abase_weakSidon & Abase_hLe8 decide with ZERO axioms (kernel only, no sorry/native_decide); combos enumerates all 2002 size-9 subsets (verified via #eval); h(A_base)=8 re-derived independently in Python. Reproduces record 4/7 (no beat). Reusable engine: future gadget = list swap + re-decide. Bridge (Thm 1.5) is explicit hypothesis MTThm15, not smuggled.",
     "last_outcome": "verified-milestone",
     "last_round": 1,
-    "selected": 10,
+    "selected": 12,
     "slug": "lean-scaffold-and-warmup",
     "stale": false,
     "summary": "Build reusable Lean decidable predicates is45set + hLe (Sidon=no-3-AP) and certify the record 14-pt gadget at c*<=4/7; foundation every later beat reuses."
   },
   "milp-coord-place-N30": {
-    "elo": 1455.54737855261,
+    "elo": 1418.2259572749574,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 2,
     "slug": "milp-coord-place-N30",
     "stale": false,
     "summary": "Exact-optimal MILP placing N=30 integer points with the (4,5) difference condition (lazy quad separation) + 3-AP indicators + transversal layer, solved to optimality or a proven dual bound over a fixed window \u2014 turns the heuristic wall into a window-restricted theorem (no \u03b1<18 in window W) or yields a witness. Numerical cert; tractability via lazy constraints is the risk."
@@ -130,6 +141,17 @@
     "slug": "modular-construction",
     "stale": false,
     "summary": "Algebraic/modular (4,5)-set whose weak-Sidon and small-h are provable by congruence/counting (sum-injectivity + AP-pigeonhole), aiming for a provable family below 4/7."
+  },
+  "stage-a-max-m-bounded-N30": {
+    "elo": 1506.1261172379457,
+    "expanded": 1,
+    "last_note": "Verified NEGATIVE over fixed pool P (|P|=1461, window<=2200): max m=26<cap 28; frontier m=26 alpha=20, m=25 alpha=21, both genuine (4,5)-sets, exact alpha re-derived from-scratch (milp==bb==my-own-BB), no beat. Honestly scoped (wall over P, not global). Sharper than R5 blind-alpha wall (direct max-m, bounded window). No bound written.",
+    "last_outcome": "advanced",
+    "last_round": 8,
+    "selected": 0,
+    "slug": "stage-a-max-m-bounded-N30",
+    "stale": true,
+    "summary": "Bounded-compute max-m gadget search at N=30 over a FIXED finite candidate pool (greedy/Fibonacci-lattice coords within window ~1500-2200): Stage A maximizes m (cheap incremental midpoint-distinct 3-AP count, NOT exact-alpha) in hard wall-clock chunks, printing (best m, count, elapsed) per chunk; Stage B runs exact alpha=N-tau only on the tiny m>=27 shell. Either a beat (m=28/alpha<=17 => 17/30) or a sharper VERIFIED NEGATIVE (max m < 28 over the named pool). Progress-emitting, hard-capped \u2014 the reframe of the twice-force-killed blind anneal."
   },
   "transversal-ilp-floor-search-N15": {
     "elo": 1484.5418085299962,

@@ -1,0 +1,24 @@
+==========================================================================
+[stageA] FIXED POOL P built: |P|=1461 in window [0,2200] (A_base + rescaled-Fib + Zeckendorf + QR + grid). saved to /home/agentuser/repo/constants/5b/certificate/stageA_pool.json
+[stageA] target N=30, edge cap m<=n-2=28, shell m>=27; chunks=4 chunk_cap=45.0s total_cap=185.0s
+      [stageA] new best m=23 (visited 73) set=[56, 148, 210, 240, 655, 733, 811, 933, 938, 977, 1070, 1113, 1141, 1158, 1169, 1170, 1211, 1221, 1272, 1288, 1382, 1407, 1432, 1527, 1611, 1694, 2058, 2076, 2096, 2116]
+  [chunk 0] seed_m=22 chunk_best_m=23 global_best_m=23 visited=640 shell=0 elapsed=46s
+  [chunk 1] seed_m=25 chunk_best_m=25 global_best_m=25 visited=687 shell=0 elapsed=91s
+  [chunk 2] seed_m=25 chunk_best_m=25 global_best_m=25 visited=1321 shell=0 elapsed=136s
+  [chunk 3] seed_m=23 chunk_best_m=23 global_best_m=25 visited=608 shell=0 elapsed=181s
+==========================================================================
+[stageA] DONE: global best m over pool P = 25 (edge cap 28); shell |m>=27| = 0 sets; total elapsed 181s
+[stageA] best set (m=25): [31, 51, 71, 555, 568, 598, 646, 816, 824, 932, 988, 1034, 1039, 1044, 1050, 1056, 1065, 1131, 1165, 1197, 1261, 1296, 1314, 1350, 1488, 1594, 1844, 1988, 2037, 2132]
+[stageA] verify is_45set(best)=True
+==========================================================================
+[stageA] FIXED POOL P built: |P|=1461 in window [0,2200] (A_base + rescaled-Fib + Zeckendorf + QR + grid). saved to /home/agentuser/repo/constants/5b/certificate/stageA_pool.json
+[stageA] target N=30, edge cap m<=n-2=28, shell m>=24; chunks=4 chunk_cap=45.0s total_cap=185.0s
+  [chunk 0] seed_m=25 chunk_best_m=25 global_best_m=25 visited=1454 shell=2 elapsed=45s
+  [chunk 1] seed_m=21 chunk_best_m=22 global_best_m=25 visited=589 shell=2 elapsed=90s
+  [chunk 2] seed_m=25 chunk_best_m=25 global_best_m=25 visited=1426 shell=2 elapsed=135s
+      [stageA] new best m=26 (visited 138) set=[66, 241, 308, 416, 466, 504, 524, 537, 550, 655, 657, 684, 790, 844, 866, 942, 982, 1272, 1347, 1409, 1427, 1443, 1521, 1842, 2020, 2121, 2142, 2163, 2170, 2198]
+  [chunk 3] seed_m=25 chunk_best_m=26 global_best_m=26 visited=926 shell=50 elapsed=181s
+==========================================================================
+[stageA] DONE: global best m over pool P = 26 (edge cap 28); shell |m>=24| = 50 sets; total elapsed 181s
+[stageA] best set (m=26): [66, 241, 308, 416, 466, 504, 524, 537, 550, 655, 657, 684, 790, 844, 866, 942, 982, 1272, 1347, 1409, 1427, 1443, 1521, 1842, 2020, 2121, 2142, 2163, 2170, 2198]
+[stageA] verify is_45set(best)=True
