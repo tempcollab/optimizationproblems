@@ -5,7 +5,7 @@
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 1,
     "slug": "griego-family-larger-mT",
     "stale": false,
     "summary": "Push Griego's fixed alphabet/base-21 family to (m,T)>(80,150) via exact column-DP; cheapest probe, may saturate at the record."
@@ -16,7 +16,7 @@
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 1,
     "slug": "largedev-rate-optimization",
     "stale": false,
     "summary": "Large-deviation rate guide to predict the optimal (A,r), certified by L1's finite integer check; highest ceiling, slowest first-green."
@@ -27,7 +27,7 @@
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 1,
     "slug": "noncontig-alphabet-sweep",
     "stale": false,
     "summary": "Sweep non-contiguous digit alphabets A (generalize Griego's {0,2..10}) feeding the GHR lemma; finite integer-inequality certificate, Lean-fit."
