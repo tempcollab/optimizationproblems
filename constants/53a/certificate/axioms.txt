@@ -1,2 +1,15 @@
-info: Constants/C53a.lean:120:0: 'Constants.C53a.recursion_step' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: Constants/C53a.lean:121:0: 'Constants.C53a.comparison_ineq' depends on axioms: [propext, Classical.choice, Quot.sound]
+Axiom audit for lean/Constants/C53a.lean (round 3 — global factorization induction added).
+Pinned Lean v4.31.0 / Mathlib fabf563a7c95a166b8d7b6efca11c8b4dc9d911f.
+Reproduce: export PATH="$HOME/.elan/bin:$PATH"; cd lean; lake build Constants
+
+info: Constants/C53a.lean:242:0: 'Constants.C53a.recursion_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:243:0: 'Constants.C53a.comparison_ineq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:244:0: 'Constants.C53a.acc_cast_bridge' depends on axioms: [propext]
+info: Constants/C53a.lean:245:0: 'Constants.C53a.global_induction' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:246:0: 'Constants.C53a.c53_le_4_per_n' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+All five theorems depend ONLY on the three Lean foundational axioms
+[propext, Classical.choice, Quot.sound] (acc_cast_bridge only [propext]).
+No sorryAx. No problem-specific axiom: the zero-sum number-theory inputs (hbase, hstep)
+are explicit Lean HYPOTHESES of global_induction / c53_le_4_per_n, so the result is
+honestly conditional and the bound 4 is re-derived (not smuggled), as expected infrastructure.

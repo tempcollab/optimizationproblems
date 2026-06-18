@@ -72,11 +72,11 @@ future eta-win plugs into. **The `held` value is unchanged.**
 
 ## What is carried FORWARD (next rounds)
 
-1. **Global factorization induction.** Lift `recursion_step` to the full induction over the
-   prime multiset of `n` (`n = Q * p_1 * ... * p_s`, each `p_i <= Q = P(n)`), giving
-   `D(C_n^3) <= 4n - P(n) - 2` for all `n >= 2`, then the `C_53 <= 4` corollary. Needs an
-   induction over a `Multiset`/`List` of prime factors with `base_in_form` as base and
-   `recursion_step` as step — pure Lean bookkeeping, no new math.
+1. **Global factorization induction.** DONE in round 3 (List form) — see
+   `global-induction-list-fold.md`. The fold `global_induction` lifts `recursion_step` over a
+   `List ℕ` of prime factors with `base_in_form` as base, plus the `c53_le_4_per_n` corollary,
+   all `lake build` green and axiom-clean. Remaining: tie `ps` to the actual prime multiset of
+   `n` (multiset-induction-variant) and the `iSup` packaging.
 2. **Faithful statement of the eta input.** Replace the bare `hstep` hypothesis by deriving
    it inside Lean from named `Lemma 2.2` (extraction `D_k <= M + e(k-j)`) and `Lemma 2.3`
    (`D_k(C_p^3) <= p*k + p^2`) hypotheses, so the dependence on `eta(C_p^3) <= c*p^2` is
