@@ -1,35 +1,68 @@
 {
-  "guided-search-N21": {
-    "elo": 1500.0339081301693,
-    "expanded": 1,
-    "last_note": "No strict beat (best ratio ties 4/7). But verified a real obstruction: from proven c*>=9/17, size-N gadget beats 4/7 only if 7*ceil(9N/17)<4N \u2014 independently confirmed N=14 and N=21 are IMPOSSIBLE (floors 8,12 hit 4/7 exactly). Feasible N: 9,11,13,15,16,17,18,20,22,... Window-limited search found no beat at N=9,11 (suggestive only, not global). Reshapes the angle: next searches must target feasible N, not 14/21.",
-    "last_outcome": "partial",
-    "last_round": 1,
-    "selected": 0,
-    "slug": "guided-search-N21",
-    "stale": true,
-    "summary": "Optimization-guided (SAT/CP/annealing) search directly minimizing max-Sidon-subset size for a ~21-pt (4,5)-set with h/N < 4/7, then certify via the Lean predicates."
-  },
-  "lean-scaffold-and-warmup": {
-    "elo": 1531.263693206478,
-    "expanded": 1,
-    "last_note": "lake build passes; finite facts Abase_weakSidon & Abase_hLe8 decide with ZERO axioms (kernel only, no sorry/native_decide); combos enumerates all 2002 size-9 subsets (verified via #eval); h(A_base)=8 re-derived independently in Python. Reproduces record 4/7 (no beat). Reusable engine: future gadget = list swap + re-decide. Bridge (Thm 1.5) is explicit hypothesis MTThm15, not smuggled.",
-    "last_outcome": "verified-milestone",
-    "last_round": 1,
-    "selected": 0,
-    "slug": "lean-scaffold-and-warmup",
-    "stale": true,
-    "summary": "Build reusable Lean decidable predicates is45set + hLe (Sidon=no-3-AP) and certify the record 14-pt gadget at c*<=4/7; foundation every later beat reuses."
-  },
-  "modular-construction": {
-    "elo": 1468.7023986633528,
+  "cegar-direct-floor-feasibility-N16-N17": {
+    "elo": 1490.6540203292086,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
     "selected": 0,
+    "slug": "cegar-direct-floor-feasibility-N16-N17",
+    "stale": false,
+    "summary": "Unified CP-SAT/SMT/CEGAR feasibility model searching directly for a floor-realizing (4,5)-set at N=17 (h=9, ratio 9/17\u22480.529, most margin) or N=16 (h=9, 0.5625 thin); tight window + transversal cuts to escape round-1 CP-SAT scaling; Lean cert via decide, fallback at N=17."
+  },
+  "guided-search-N21": {
+    "elo": 1453.1923402448779,
+    "expanded": 1,
+    "last_note": "No strict beat (best ratio ties 4/7). But verified a real obstruction: from proven c*>=9/17, size-N gadget beats 4/7 only if 7*ceil(9N/17)<4N \u2014 independently confirmed N=14 and N=21 are IMPOSSIBLE (floors 8,12 hit 4/7 exactly). Feasible N: 9,11,13,15,16,17,18,20,22,... Window-limited search found no beat at N=9,11 (suggestive only, not global). Reshapes the angle: next searches must target feasible N, not 14/21.",
+    "last_outcome": "partial",
+    "last_round": 1,
+    "selected": 2,
+    "slug": "guided-search-N21",
+    "stale": false,
+    "summary": "Optimization-guided (SAT/CP/annealing) search directly minimizing max-Sidon-subset size for a ~21-pt (4,5)-set with h/N < 4/7, then certify via the Lean predicates."
+  },
+  "lean-scaffold-and-warmup": {
+    "elo": 1584.3416008808238,
+    "expanded": 1,
+    "last_note": "lake build passes; finite facts Abase_weakSidon & Abase_hLe8 decide with ZERO axioms (kernel only, no sorry/native_decide); combos enumerates all 2002 size-9 subsets (verified via #eval); h(A_base)=8 re-derived independently in Python. Reproduces record 4/7 (no beat). Reusable engine: future gadget = list swap + re-decide. Bridge (Thm 1.5) is explicit hypothesis MTThm15, not smuggled.",
+    "last_outcome": "verified-milestone",
+    "last_round": 1,
+    "selected": 2,
+    "slug": "lean-scaffold-and-warmup",
+    "stale": false,
+    "summary": "Build reusable Lean decidable predicates is45set + hLe (Sidon=no-3-AP) and certify the record 14-pt gadget at c*<=4/7; foundation every later beat reuses."
+  },
+  "modular-construction": {
+    "elo": 1449.2062596102091,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 2,
     "slug": "modular-construction",
     "stale": false,
     "summary": "Algebraic/modular (4,5)-set whose weak-Sidon and small-h are provable by congruence/counting (sum-injectivity + AP-pigeonhole), aiming for a provable family below 4/7."
+  },
+  "transversal-ilp-floor-search-N15": {
+    "elo": 1530.662304823948,
+    "expanded": 1,
+    "last_note": "No beat at N=15 (cert runs, exact-h via B&B). Surfaced the verified definitional correction (4,5)-set = difference condition, strictly stronger than weak-Sidon; flags Lean engine MTThm15 soundness gap. BUT its specific \"h=10 obstruction wall\" claim is wrong \u2014 N18 cert exhibits a genuine 15-pt (4,5)-set with h=9. Negative result sound, obstruction claim not verified.",
+    "last_outcome": "partial",
+    "last_round": 2,
+    "selected": 0,
+    "slug": "transversal-ilp-floor-search-N15",
+    "stale": true,
+    "summary": "Exact independence-number gadget search at N=15 (target h=8, ratio 8/15\u22480.533) via alpha=N-tau with a min-3-AP-transversal ILP; smallest feasible N, largest small-N margin, certifies in the zero-axiom Lean decide engine (C(15,9)=5005)."
+  },
+  "transversal-ilp-floor-search-N18": {
+    "elo": 1491.9434741109326,
+    "expanded": 1,
+    "last_note": "No beat at N=18 (best genuine (4,5)-set h=11, 1-swap local min; floor h=10 not realized). Cert reproduces deterministically. Verified strategic finding: floor+1 first beats 4/7 only at N=30 (17/30), redirecting the search target. Small-N gadget angle structurally squeezed.",
+    "last_outcome": "partial",
+    "last_round": 2,
+    "selected": 0,
+    "slug": "transversal-ilp-floor-search-N18",
+    "stale": true,
+    "summary": "Same transversal-ILP floor search retargeted to N=18 (target h=10, ratio 10/18\u22480.556) seeded from structured covering designs; more room to pack overlapping 3-APs, hedges N15 window tightness; Lean cert near decide edge (C(18,11)=31824, transversal-certificate fallback if OOM)."
   }
 }
