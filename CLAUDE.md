@@ -43,13 +43,13 @@ This is a research repo, not a code repo:
   - **PDF extractor:** `pip install --user pdfminer.six`; read a saved PDF with `pdf2txt.py`.
   - **Scientific Python:** `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` per
     the angle).
-  - **Lean** (the preferred certification path): install `elan` (→ `~/.elan`); create a
-    `lean/` project at the repo root with the Mathlib `math` template if absent; **pin and
-    commit** `lean/lean-toolchain` + the Mathlib rev in `lean/lake-manifest.json` (a floating
-    version breaks later-round proofs); `lake exe cache get` then `lake build` to confirm. A
-    constant's proof lives in the `lean/` tree (e.g. `lean/Constants/C<id>.lean`) so Lake
-    builds it; `constants/<id>/certificate/` records its `lake build` target + `#print axioms`
-    line.
+  - **Lean** (the preferred certification path): install `elan` (→ `~/.elan`). The first Lean
+    sketch of the run bootstraps a Lake project **at `constants/<id>/lean/`** (Mathlib `math`
+    template); **pin and commit** `lean/lean-toolchain` + the Mathlib rev in
+    `lean/lake-manifest.json` (a floating version breaks later-round sketches); `lake exe cache
+    get` then `lake build` to confirm. Each sketch is a file `constants/<id>/lean/Sketches/<slug>.lean`;
+    later Lean sketches reuse the same project. `constants/<id>/certificate/` records each
+    sketch's `lake build` target + `#print axioms` line.
   Installing is allowed and expected here — the "no installs" instinct doesn't apply
   to this repo. Beyond these, agents run numerical code and Lean proofs to build and
   check bounds; that's the work, not a build step.
@@ -60,10 +60,11 @@ This is a research repo, not a code repo:
 - **One constant per run.** A run attacks exactly ONE constant `<id>`, chosen in
   round 1 and fixed for the whole run. All rounds push that one constant. Everything
   below — the metric, the eval, `current.md` — is about that single `<id>`.
-- **Progress signal — the approach ranking, not a record-count.** Track the state of the
-  approach population: Elo, which angles are live vs dead-ended, and the verified `held`
-  bound's gap to the record. It moves every productive round (a verified advance lifts an
-  Elo, a refuted one sinks) so it gives gradient between record-breaks. **Eval:**
+- **Progress signal — the sketch ranking, not a record-count.** Track the state of the
+  sketch population: Elo, which sketches are live vs dead-ended, holes closing, and the
+  verified `held` bound's gap to the record. It moves every productive round (a closed hole
+  or verified advance lifts an Elo, a refuted one sinks) so it gives gradient between
+  record-breaks. **Eval:**
   `python .autofyn/eval.py <id>`, written into `run_state.md` at the **end of round 1** once
   triage has fixed `<id>` (before that, `<id>` is unknown; the eval prints a cold-start
   baseline). An actual record-break is the headline event, flagged separately by
@@ -74,49 +75,92 @@ This is a research repo, not a code repo:
   round 1.
 - **One folder per problem.** All work for a constant lives in `constants/<id>/`. Edit the
   canonical `constants/<id>.md` record only once an improvement is verified.
-- **Scope each round small — one verifiable increment, not the whole bound.** A round's
-  build is a single step that finishes and verifies this round: one lemma/`sorry`
-  discharged, one gap closed, one tightening. If an angle is really a large construction,
-  dispatch only its first sub-goal and carry the rest forward. (The repo's reading of the
-  engine's "one large task or ≤3 small": ≤3 *small certified* steps.)
-- **Dispatch counts — not one-agent-per-phase.**
-  `math-explorer ×1 → proof-outliner ×1 → outline-reviewer ×1 → proof-builder ×(1–3) →
-  proof-reviewer ×1`. The builders fan out **one per build-set slug, in parallel**; **one
-  proof-reviewer reviews all of them** (not one per build). In-phase fan-out (the outliner's
-  ~5-approach sampling, the outline-reviewer's ranking) is the subagent's own job — you don't
-  manage it.
+- **The unit is a sketch — a population of competing whole attempts, not one growing proof.**
+  An *approach* (slug) is a **sketch**: a complete, building attempt at the target with the
+  unproved steps left as holes (Lean `sorry`, or a Python `# TODO`/`NotImplementedError`).
+  A sketch always builds/runs green — the holes are explicit, not deleted. The run keeps
+  **several rival sketches at once** in the population; the ranker (Elo) scores them and the
+  sampler picks which to work. Progress is *holes closing* across the leading sketch, not
+  "added more theorems to one shared file." Never grow one cumulative proof round-over-round
+  — that's the single-line trap; breadth lives in the population.
+- **Two roles, split by what's hard. Outliner = top-level strategy, builder = everything it can compute.**
+  - **Outliner** owns the *strategy* decision: **open a new sketch** (a fresh attempt,
+    optionally borrowing from 1–2 high-Elo sketches) or **revise a stuck sketch** when a hole
+    dead-ended (`last_outcome` says so), rewriting *that* hole's lemma/decomposition to a
+    different angle. It writes the skeleton (the stub file) and the **top-level theorem
+    statement** — which must encode the registry's definition of the constant exactly. It
+    never fills holes. When the population needs no new strategy, it says so and proposes
+    which live sketches to advance — it still produces a field for the reviewer to rank.
+  - **Builder** discharges holes in one sketch, keeping it green. It may **reshape an
+    intermediate hole's *statement*** when its own computation shows the planned one is wrong
+    (e.g. the right tightening is `pk+p²−(p−1)`, not `pk+p²`) — statement-search over
+    intermediate lemmas is the builder's, since only it computes. It does **not** touch the
+    top-level theorem statement (that's the outliner's, and changing it changes what's being
+    proved) and does not open a *new* sketch. A reshape is recorded in the commentary so the
+    reviewer checks it didn't weaken the claim.
+- **Rank every round — no fast-path.** The outline-reviewer runs **every round** so the Elo
+  always reflects the latest verified outcomes and the sampler's explore term keeps the
+  population broad. There is no "skip the reviewer and just advance the leader" path — that
+  collapses the population to one line (the single-line trap above).
+- **Dispatch counts (every round).**
+  `math-explorer ×1 → proof-outliner ×1 → outline-reviewer ×1 → proof-builder ×(1–N) →
+  proof-reviewer ×1`. Builders fan out **one per sketch in the build set, in parallel** —
+  each owns its own sketch file, so they never collide; **one proof-reviewer reviews all of
+  them**.
 - **Report paths.** Dispatch each subagent to write its report to its canonical
   `/tmp/round-{N}/<agent-name>.md` — don't rename it; the next agent reads that exact path.
 - **Build set.** The outline-reviewer's report ends with `build set: <slug>[, <slug>...]` —
-  dispatch **exactly one proof-builder per slug, no more, no fewer**, each told its slug.
-- **Route per approach (overrides the engine's whole-round "all APPROVE" gate).** One verdict
+  dispatch **exactly one proof-builder per slug**, each told its slug. The set mixes sketches
+  to advance (fill more holes) and any new/revised sketch the outliner opened this round.
+- **Route per sketch (overrides the engine's whole-round "all APPROVE" gate).** One verdict
   per built slug, routed independently:
-  - **APPROVE** — terminal for the round: recorded by the reviewer, not rebuilt. It neither
-    holds the round open nor sends siblings back.
-  - **CHANGES REQUESTED** — re-dispatch only that slug's builder (this round or next; its
-    approach stays live either way).
-  - **RETHINK** — that slug's angle goes back to the outliner; the others are unaffected.
+  - **APPROVE** — target reached hole-free and beats the record: terminal for the round,
+    recorded by the reviewer. Neither holds the round open nor sends siblings back.
+  - **CHANGES REQUESTED** — holes closed but more remain, or a gap to fix: re-dispatch only
+    that slug's builder to fill more (this round or next; its sketch stays live either way).
+  - **RETHINK** — a hole can't be closed the way the sketch sets it up: that slug goes back to
+    the outliner to re-plan; the others are unaffected.
   A mixed result is normal, not a failed round. End once every slug is routed.
 
 ## Workflow
 
-Each run picks **one** constant and loops (each agent's job is in its own prompt; routing
-in the orchestrator bullets above):
+Each run picks **one** constant and loops over a **population of sketches**, one flow every
+round (each agent's job is in its own prompt; routing in the orchestrator bullets above):
 
-**math-explorer → proof-outliner → outline-reviewer → proof-builder ×(1–3) → proof-reviewer**
+`math-explorer → proof-outliner → outline-reviewer → proof-builder ×(1–N) → proof-reviewer`
 
-The **outline-reviewer always runs** — it is the ranking hub + gate + build-set emitter, not
-the engine's skippable "plan review". Each round starts fresh with no memory; `constants/<id>/`
-(and the approach docs) is how the next round knows what was tried and resumes it.
+The outliner's *work* varies — open/revise a sketch when there's strategy to decide, else just
+nominate live sketches to advance — but it always hands a field to the outline-reviewer, which
+**ranks every round** and is the ranking hub + gate + build-set emitter. Each round starts
+fresh with no memory; the sketches in `constants/<id>/` (their files + the `.md` commentary +
+the ranker sidecar) are how the next round knows the population and resumes it.
 
 ## The `constants/<id>/` folder
 
-A constant's workspace holds: `literature/` (paper digests), `approaches/<slug>.md` (one
-living doc per angle — idea, status, how to push it), `certificate/` (the artifacts), and
-`current.md` (the verified bottom line). Approach bodies are free-form; their ranking
-metadata (Elo, counts, stale, last outcome) lives in the tool-owned sidecar
+A constant's workspace. **One approach = one slug = one sketch file + one commentary doc +
+one ranker entry** — no per-approach subfolder. It holds:
+
+- `literature/` — paper digests.
+- `approaches/<slug>.md` — the sketch's **commentary**: the strategy, which holes remain and
+  why, what would push it. Free-form. Not the artifact — the artifact is the sketch file.
+- The **sketch file** — the building attempt itself, keyed by the same slug:
+  - **Lean:** `lean/Sketches/<slug>.lean`, inside the per-problem Lake project at
+    `constants/<id>/lean/` (`lakefile.toml` + `lean-toolchain` + pinned Mathlib). The first
+    Lean sketch of the run **bootstraps** that project; every later Lean sketch is just
+    another file in `Sketches/`, sharing the one Mathlib build. (Lean files only compile
+    inside a Lake project — that's why they live here, not loose in `certificate/`.)
+  - **Python / numerical:** `certificate/<slug>.py` — a standalone script, no project needed.
+- `current.md` — the verified bottom line.
+
+Ranking metadata (Elo, counts, stale, last outcome) lives in the tool-owned sidecar
 `approaches/.ranking.json` — never hand-edited, only the ranking tools (served by
 `.autofyn/approach_ranker.py`) touch it.
+
+A **hole** is the unit of open work inside a sketch: a Lean `sorry` or a Python `# TODO` /
+`raise NotImplementedError`. A sketch with holes still builds/runs — that's what keeps it a
+valid population member while incomplete. The bound is **verified** only when a sketch reaches
+the target with **no hole on the path to it** (Lean: `lake build` green *and* `#print axioms`
+shows no `sorryAx`; Python: the directed-rounded check reproduces with no step hand-waved).
 
 ### `current.md` — the tracking file (contract)
 

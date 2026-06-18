@@ -14,9 +14,10 @@ chain) and the run state (`/tmp/memory/run_state.md`). Then build the picture:
   abstracts, and save a short digest of each under `constants/<id>/literature/` so future
   rounds reuse it. Surface analogous results and techniques worth borrowing, even from
   neighbouring constants.
-- **What's already been tried.** Sample the existing approaches (`sample_approaches`,
-  `k=5`) and read their bodies; their `last_outcome`/`reviewer_note` tell you what's live
-  and what dead-ended. Report it — it's terrain, not a ranking.
+- **What's already been tried.** Sample the existing sketches (`sample_approaches`, `k=5`)
+  and read their commentary + files; their `last_outcome`/`reviewer_note` tell you what's
+  live, what dead-ended, and **on which hole** a stuck sketch stalled. Report it — it's
+  terrain the outliner uses to decide whether to advance, re-plan, or open a new sketch.
 - **Where the slack is** — where the prior work is loose — and angles it didn't try.
 
 ## Triage — is it worth attacking, and is it Lean-fit?

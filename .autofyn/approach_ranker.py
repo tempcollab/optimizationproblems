@@ -1,9 +1,10 @@
 """MCP server: persistent Elo ranking over per-constant proof-approach artifacts.
 
 Context-space expert iteration needs a *selection* layer over the population of
-attack angles a constant accumulates across rounds. The approach bodies stay
-free-form markdown the builder authors (`constants/<id>/approaches/<slug>.md`);
-this server owns ONLY the structured ranking metadata for those approaches, in a
+rival sketches a constant accumulates across rounds. The sketch commentaries stay
+free-form markdown (the outliner seeds each, the builder updates it —
+`constants/<id>/approaches/<slug>.md`); this server owns ONLY the structured
+ranking metadata for those sketches, in a
 sidecar `constants/<id>/approaches/.ranking.json`. Subagents never hand-edit the
 metadata — they go through these tools, so the fields the sampler sorts on can't
 drift or be corrupted at 50+ approaches over a 24h run.
@@ -195,9 +196,9 @@ def register_approach(constant_id: str, slug: str, summary: str) -> dict:
 
     Called by the outline-reviewer on an APPROVEd/CHANGES-REQUESTED new angle so it
     enters the population with a 1500 rating and zero counts; a RETHINK angle is never
-    registered, so a rejected line cannot pollute the pool. The builder still authors
-    the approach BODY in
-    `constants/<id>/approaches/<slug>.md`; this only registers the ranking metadata.
+    registered, so a rejected line cannot pollute the pool. The outliner seeds the
+    sketch's commentary `constants/<id>/approaches/<slug>.md` (the builder updates it);
+    this only registers the ranking metadata.
     A slug that already exists is left untouched (its summary is refreshed).
     """
     records = _load(constant_id)

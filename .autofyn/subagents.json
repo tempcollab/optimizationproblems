@@ -2,7 +2,7 @@
   {
     "name": "math-explorer",
     "type": "explore",
-    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, samples the existing approaches to see what was tried and what the last round's expansion outcome was, and reports the lay of the land — where the gap is exploitable, which bound is softer, what worked and what dead-ended, and relevant papers or analogous angles. Call at the start of each round before any attempt. Pure scouting: does NOT attempt the improvement and does NOT rank.",
+    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, samples the existing sketches to see what was tried and what the last round's outcome was, and reports the lay of the land — where the gap is exploitable, which bound is softer, what worked and what dead-ended, and relevant papers or analogous angles. Call at the start of each round before any attempt. Pure scouting: does NOT attempt the improvement and does NOT rank.",
     "model": "opus",
     "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch", "mcp__approach-ranker__sample_approaches"],
     "prompt_file": ".autofyn/subagents/math-explorer.md",
@@ -11,7 +11,7 @@
   {
     "name": "proof-outliner",
     "type": "plan",
-    "description": "Assembles the round's candidate field. Samples the existing population (up to ~5), and surveys several attack lines (analytic argument, explicit construction, computational certificate) — expanding live approaches and/or opening new angles — with the hard step named in each. Hands the field, each slugged, to the outline-reviewer, which ranks and narrows it. Does NOT rank and does NOT register; it proposes the candidates, not a single finished plan. Call after the explorer, once per problem per round.",
+    "description": "Assembles the round's candidate field. Samples the existing population (up to ~5), and surveys several attack lines (analytic argument, explicit construction, computational certificate) — revising stuck sketches and/or opening new ones — with the hard step named in each. Hands the field, each slugged, to the outline-reviewer, which ranks and narrows it. Does NOT rank and does NOT register; it proposes the candidates, not a single finished plan. Call after the explorer, once per problem per round.",
     "model": "opus",
     "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch", "mcp__approach-ranker__sample_approaches"],
     "prompt_file": ".autofyn/subagents/proof-outliner.md",
