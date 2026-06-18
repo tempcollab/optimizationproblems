@@ -26,6 +26,9 @@ case and to confirm your stub builds green.
 3. **Sample the population.** `sample_approaches(constant_id=<id>, k=5)`; Read each
    returned sketch's commentary (`path`) and the sketch file. `last_outcome`/`reviewer_note`
    tell you which are live, which dead-ended, and *on which hole* — that drives your move.
+4. **Check the shared cache.** Read `constants/<id>/lemmas/` (certified, reusable). A skeleton
+   whose holes reduce to lemmas already there is cheap to build — prefer it, and state the
+   import in the skeleton so the builder pulls it rather than re-proving.
 
 ## Your moves — new sketch, revise a stuck one, or advance
 

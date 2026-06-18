@@ -18,6 +18,10 @@ chain) and the run state (`/tmp/memory/run_state.md`). Then build the picture:
   and read their commentary + files; their `last_outcome`/`reviewer_note` tell you what's
   live, what dead-ended, and **on which hole** a stuck sketch stalled. Report it — it's
   terrain the outliner uses to decide whether to advance, re-plan, or open a new sketch.
+- **What's already proved and reusable.** Read `constants/<id>/lemmas/` — the certified
+  shared cache. A lemma sitting there is a sub-result any new sketch can import for free, so
+  it changes which angles are cheap. List what's available; an angle that reduces to lemmas
+  already in the cache is a strong one to flag to the outliner.
 - **Where the slack is** — where the prior work is loose — and angles it didn't try.
 
 ## Triage — is it worth attacking, and is it Lean-fit?

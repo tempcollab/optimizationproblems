@@ -61,6 +61,17 @@ clean Lean proof is the strongest form) or **minimally verified (`*`)** (holds b
 something you couldn't fully reproduce). A Lean-fit bound that only reaches `*` has an
 incomplete formalization — that's a CHANGES-REQUESTED gap, not a verified advance.
 
+**Certify promotable lemmas into the shared cache.** The builder's report may list
+**Promotable lemmas** — reusable sub-results it proved green and wants admitted to
+`constants/<id>/lemmas/`, where every other sketch may import them *on your certification
+alone*, without re-deriving. That trust is the whole point, so the bar is the bar for a bound:
+the lemma must be genuinely `sorry`-free and axiom-clean (`#print axioms`), and its **statement
+must be correct and general** — not silently specialized so it only happens to hold in this
+sketch's context, and not stronger than what was proved. A wrong lemma admitted here poisons
+every sketch that later imports it. For each one you certify, move/admit it into `lemmas/`
+(Lean: a file in the Lake project, importable by `Sketches/*.lean`; Python: the verified-helpers
+module) and note it in your review. Reject the rest — say why; they stay inside the sketch.
+
 ## Record what you verified — you feed the progress signal
 
 The run's progress signal is the sketch ranking (see `CLAUDE.md`), and you feed it: your

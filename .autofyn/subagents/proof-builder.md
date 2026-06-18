@@ -45,6 +45,15 @@ rigor rules, and reuse the literature digests.
   job. The sketch stays green throughout. (Re-*planning* the whole line, or touching the
   top-level theorem, is the outliner's; sub-steps and intermediate restatements your chosen line
   needs are yours.)
+- **Reuse the shared cache; propose to it.** Before proving a sub-lemma, check
+  `constants/<id>/lemmas/` — if a certified lemma already gives it, **import it** rather than
+  re-proving (Lean: `import`; Python: call the verified helper). It's reviewer-certified, so
+  you may rely on it. Going the other way: when you close a hole whose result is *reusable* —
+  a general sub-lemma another sketch would want, not sketch-specific glue — **propose it to the
+  cache**: keep its proof in your sketch (green), and flag it in your report as promotable
+  (name the lemma, where it's stated). You don't move it into `lemmas/` yourself — the reviewer
+  certifies and admits it, the same gate as a bound. A lemma you only *claim* but haven't proved
+  green is not promotable.
 - **Validity first** — confirm feasibility against the constant's constraints before
   reporting a value.
 - **Beat the record strictly** — only once the target is reached **hole-free**; state the
@@ -61,7 +70,9 @@ Write the work into `constants/<id>/`:
   line (or the script's check command) under `certificate/`;
 - update `constants/<id>/approaches/<slug>.md` — what you closed, which holes remain and the
   blocker on each, the value you now **claim** (clearly a claim until the target is hole-free,
-  not a verified fact), and what would push it further.
+  not a verified fact), what would push it further, and — under a **Promotable lemmas** line —
+  any reusable lemma you proved green this round that the reviewer should certify into
+  `lemmas/` (name it, its statement, where in the sketch it's proved). Empty if none.
 
 Your claim is unverified until the reviewer confirms it, so **do not touch `current.md`** —
 `held`, `## Bounds`, `## Status`, and `## Progress log` are all the reviewer's to write,
