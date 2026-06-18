@@ -77,27 +77,13 @@ This is a research repo, not a code repo:
   canonical `constants/<id>.md` record only once an improvement is verified.
 - **The unit is a sketch — a population of competing whole attempts, not one growing proof.**
   An *approach* (slug) is a **sketch**: a complete, building attempt at the target with the
-  unproved steps left as holes (Lean `sorry`, or a Python `# TODO`/`NotImplementedError`).
-  A sketch always builds/runs green — the holes are explicit, not deleted. The run keeps
-  **several rival sketches at once** in the population; the ranker (Elo) scores them and the
-  sampler picks which to work. Progress is *holes closing* across the leading sketch, not
-  "added more theorems to one shared file." Never grow one cumulative proof round-over-round
-  — that's the single-line trap; breadth lives in the population.
-- **Two roles, split by what's hard. Outliner = top-level strategy, builder = everything it can compute.**
-  - **Outliner** owns the *strategy* decision: **open a new sketch** (a fresh attempt,
-    optionally borrowing from 1–2 high-Elo sketches) or **revise a stuck sketch** when a hole
-    dead-ended (`last_outcome` says so), rewriting *that* hole's lemma/decomposition to a
-    different angle. It writes the skeleton (the stub file) and the **top-level theorem
-    statement** — which must encode the registry's definition of the constant exactly. It
-    never fills holes. When the population needs no new strategy, it says so and proposes
-    which live sketches to advance — it still produces a field for the reviewer to rank.
-  - **Builder** discharges holes in one sketch, keeping it green. It may **reshape an
-    intermediate hole's *statement*** when its own computation shows the planned one is wrong
-    (e.g. the right tightening is `pk+p²−(p−1)`, not `pk+p²`) — statement-search over
-    intermediate lemmas is the builder's, since only it computes. It does **not** touch the
-    top-level theorem statement (that's the outliner's, and changing it changes what's being
-    proved) and does not open a *new* sketch. A reshape is recorded in the commentary so the
-    reviewer checks it didn't weaken the claim.
+  unproved steps left as holes (Lean `sorry`, Python `# TODO`/`NotImplementedError`). The run
+  keeps **several rival sketches at once**; the ranker (Elo) scores them and the sampler picks
+  which to work. You route this breadth — never collapse the population to one cumulative proof
+  (the single-line trap). How a sketch is worked is in the builder/outliner prompts.
+- **Two roles, split by what's hard.** Outliner = strategy + the top-level theorem statement;
+  builder = fills holes + intermediate-statement search. The split is specified in their
+  prompts — you just dispatch the roles, you don't enforce the boundary.
 - **Rank every round — no fast-path.** The outline-reviewer runs **every round** so the Elo
   always reflects the latest verified outcomes and the sampler's explore term keeps the
   population broad. There is no "skip the reviewer and just advance the leader" path — that
