@@ -1,15 +1,67 @@
-Axiom audit for lean/Constants/C53a.lean (round 3 — global factorization induction added).
+Axiom audit for lean/Constants/C53a.lean (round 4 — factorization bridge added).
 Pinned Lean v4.31.0 / Mathlib fabf563a7c95a166b8d7b6efca11c8b4dc9d911f.
 Reproduce: export PATH="$HOME/.elan/bin:$PATH"; cd lean; lake build Constants
 
-info: Constants/C53a.lean:242:0: 'Constants.C53a.recursion_step' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: Constants/C53a.lean:243:0: 'Constants.C53a.comparison_ineq' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: Constants/C53a.lean:244:0: 'Constants.C53a.acc_cast_bridge' depends on axioms: [propext]
-info: Constants/C53a.lean:245:0: 'Constants.C53a.global_induction' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: Constants/C53a.lean:246:0: 'Constants.C53a.c53_le_4_per_n' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:314:0: 'Constants.C53a.recursion_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:315:0: 'Constants.C53a.comparison_ineq' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:316:0: 'Constants.C53a.acc_cast_bridge' depends on axioms: [propext]
+info: Constants/C53a.lean:317:0: 'Constants.C53a.global_induction' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:318:0: 'Constants.C53a.c53_le_4_per_n' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Constants/C53a.lean:319:0: 'Constants.C53a.factors_bridge_max' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-All five theorems depend ONLY on the three Lean foundational axioms
+All six theorems depend ONLY on the three Lean foundational axioms
 [propext, Classical.choice, Quot.sound] (acc_cast_bridge only [propext]).
 No sorryAx. No problem-specific axiom: the zero-sum number-theory inputs (hbase, hstep)
-are explicit Lean HYPOTHESES of global_induction / c53_le_4_per_n, so the result is
-honestly conditional and the bound 4 is re-derived (not smuggled), as expected infrastructure.
+are explicit Lean HYPOTHESES, so the result is honestly conditional and the bound 4 is
+re-derived (not smuggled), as expected infrastructure.
+
+NEW in round 4 — `factors_bridge_max` (approach factors-bridge-max-extract / authors the
+multiset-induction-variant body, Route L):
+  For a concrete n >= 2, ties the abstract factor list of global_induction / c53_le_4_per_n
+  to the ACTUAL prime factorization via Nat.primeFactorsList. The modulus Q is literally the
+  LARGEST PRIME FACTOR of n (Qmax := (primeFactorsList n).maximum_of_length_pos).
+  Conclusion: D n - 1 <= 4 * ((n:Z) - 1), i.e. (D(C_n^3) - 1)/(n - 1) <= 4, read off the
+  real factorization of n. Closes faithfulness-gap #1 (abstract ps -> primeFactorsList n).
+
+  Mechanism (all Mathlib lemmas confirmed present in fabf563):
+    - Nat.primeFactorsList_ne_nil, List.length_pos_of_ne_nil   (n >= 2 => nonempty list)
+    - List.maximum_of_length_pos_mem                            (Qmax in L)
+    - List.perm_cons_erase + List.Perm.prod_eq + List.prod_cons (L ~ Qmax :: erase; product)
+    - Nat.prod_primeFactorsList                                 (L.prod = n)
+    - Nat.prime_of_mem_primeFactorsList, Nat.Prime.two_le       (2 <= every factor; 2 <= Qmax)
+    - List.le_maximum_of_length_pos_of_mem                      (each factor <= Qmax)
+    - List.mem_of_mem_erase                                     (erase subset of L)
+  then c53_le_4_per_n verbatim with Q := (Qmax : Z).
+
+  NOTE (honest): Q = largest PRIME, not Grinsztajn's largest prime POWER P(n). Since
+  largest-prime <= P(n) and both >= 2, the conclusion 4n - Qmax - 2 is >= Grinsztajn's
+  4n - P(n) - 2 but still <= 4(n-1); the record-relevant corollary C_53 <= 4 (which uses
+  only Q >= 2) is fully preserved. Prime-power P(n) form is parked (Route P, multi-round).
+
+  This does NOT move `held` below 4 — it is a faithfulness/infrastructure increment,
+  conditional on the same zero-sum hypotheses (hbase, hstep) by design.
+
+NEW in round 4 — `c53_ratio_real_le` (approach isup-packaging-real, faithfulness-gap #2):
+  Packages the integer per-n bound into the literal REAL-VALUED ratio whose supremum is C_53.
+  For a concrete n >= 2, under the same conditional inputs hbase/hstep as factors_bridge_max
+  (designated factor = largest prime factor of n), concludes
+    ((D n : R) - 1) / ((n : R) - 1) <= 4
+  the literal n-th term of C_53 = sup_{n>=2} (D(C_n^3) - 1)/(n - 1), read off the actual
+  prime factorization (reuses factors_bridge_max verbatim).
+
+  Axiom line (from `lake build Constants`):
+    'Constants.C53a.c53_ratio_real_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+  Mechanism (Mathlib lemmas confirmed present in fabf563):
+    - factors_bridge_max                       (integer per-n bound, real factorization)
+    - exact_mod_cast                           (Z bound -> R: (D n:R)-1 <= 4*((n:R)-1))
+    - div_le_iff0 : 0 < c -> (b/c <= a <-> b <= a*c)   (Algebra.Order.GroupWithZero.Basic)
+      [denominator (n:R)-1 > 0 from n >= 2], then linarith.
+
+  SCOPE (honest): this is the PER-N ratio bound only. The full iSup-over-R packaging
+  (sup over n >= 2 <= 4) is NOT formalized — the iSup-domain-restriction (sup over n >= 2,
+  not all n) needs a guarded/subtype sup + ciSup_le and is deferred (multi-round). No
+  overclaim of the full sup.
+
+  This does NOT move `held` below 4 — faithfulness/infrastructure increment, conditional on
+  the same zero-sum hypotheses by design.

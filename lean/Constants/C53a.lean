@@ -235,6 +235,131 @@ theorem c53_le_4_per_n
   rw [hbridge]
   linarith [hgi, hQ2]
 
+/-! ## Faithfulness bridge: tie `ps` to the actual prime factorization of `n`
+
+`global_induction` / `c53_le_4_per_n` take an ABSTRACT list `ps` of primes in `[2, Q]` and a
+designated factor `Qn`. This was faithfulness-gap #1: the inequality did not yet *literally*
+read off the prime factorization of a concrete `n`. The theorem below closes that gap.
+
+For `n ≥ 2`, set `L := Nat.primeFactorsList n` (the list of prime factors of `n`, with
+multiplicity), let `Qmax := L.maximum_of_length_pos` be the **largest prime factor** (a genuine
+element of `L`), and `ps := L.erase Qmax`. The permutation `L ~ Qmax :: ps`
+(`List.perm_cons_erase`) transports the product, so `Qmax * ps.prod = L.prod = n`
+(`Nat.prod_primeFactorsList`). Every `p ∈ ps` is in `L`, hence prime (`Nat.prime_of_mem_…`,
+so `2 ≤ p`) and `≤ Qmax` (`List.le_maximum_of_length_pos_of_mem`); `Qmax` itself is prime so
+`2 ≤ Qmax`. Feeding these into `c53_le_4_per_n` with `Q := (Qmax : ℤ)` gives the per-`n` bound
+read off the real factorization.
+
+**Modulus = largest PRIME (Route L), honestly noted.** Grinsztajn's `P(n)` is the largest
+prime *power* `max_{pᵃ ∥ n} pᵃ`; here `Q = Qmax` is the largest prime. Since largest-prime
+`≤ P(n)`, this conclusion (`D n ≤ 4n − Qmax − 2`) is `≥` Grinsztajn's `4n − P(n) − 2`, but
+still `≤ 4n − 4 = 4(n−1)` because `Qmax ≥ 2`. So the record-relevant corollary `C_53 ≤ 4`
+(which needs only `Q ≥ 2`) is fully preserved. The prime-POWER `P(n)` form (Route P) needs a
+re-proof of `recursion_step` for prime-power multipliers and is parked (multi-round). -/
+
+/-- **Factorization bridge (Route L), proved.**
+For a concrete `n ≥ 2`, with the same conditional zero-sum inputs `hbase`/`hstep` as
+`global_induction` (now stated for `Qn := largest prime factor of n`), we conclude the per-`n`
+inequality `D n − 1 ≤ 4 * ((n : ℤ) − 1)` — i.e. `(D(C_n^3) − 1)/(n − 1) ≤ 4` — read off the
+**actual** prime factorization of `n`. The modulus `Q` is literally the largest prime factor of
+`n`. No `sorry`, no axiom beyond Lean's three foundational ones. -/
+theorem factors_bridge_max
+    (D : ℕ → ℤ) (n : ℕ) (hn : 2 ≤ n)
+    (hbase : D (n.primeFactorsList.maximum_of_length_pos
+        (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn)))
+      = 3 * (↑(n.primeFactorsList.maximum_of_length_pos
+        (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn))) : ℤ) - 2)
+    (hstep : ∀ (p m : ℕ), D (p * m) ≤ (p : ℤ) * D m + (p : ℤ) ^ 2) :
+    D n - 1 ≤ 4 * ((n : ℤ) - 1) := by
+  -- The factor list is nonempty for `n ≥ 2`.
+  set L : List ℕ := n.primeFactorsList with hL
+  have hne : L ≠ [] := (Nat.primeFactorsList_ne_nil n).2 hn
+  have hlen : 0 < L.length := List.length_pos_of_ne_nil hne
+  -- `Qmax` = largest prime factor, a genuine element of `L`.
+  set Qmax : ℕ := L.maximum_of_length_pos hlen with hQmaxdef
+  have hQmem : Qmax ∈ L := List.maximum_of_length_pos_mem hlen
+  -- `ps := L.erase Qmax`, and `L ~ Qmax :: ps`.
+  set ps : List ℕ := L.erase Qmax with hpsdef
+  have hperm : List.Perm L (Qmax :: ps) := List.perm_cons_erase hQmem
+  -- product transport: `Qmax * ps.prod = L.prod = n`.
+  have hn0 : n ≠ 0 := by omega
+  have hLprod : L.prod = n := by rw [hL]; exact Nat.prod_primeFactorsList hn0
+  have hprodeq : Qmax * ps.prod = n := by
+    have h1 : L.prod = (Qmax :: ps).prod := hperm.prod_eq
+    rw [List.prod_cons] at h1
+    rw [← h1, hLprod]
+  -- `Qmax` is prime, hence `2 ≤ Qmax`.
+  have hQmaxprime : Nat.Prime Qmax :=
+    Nat.prime_of_mem_primeFactorsList (hL ▸ hQmem)
+  have hQmax2 : (2 : ℤ) ≤ (Qmax : ℤ) := by exact_mod_cast hQmaxprime.two_le
+  -- every `p ∈ ps` is in `L`, hence prime (`2 ≤ p`) and `≤ Qmax`.
+  have hps : ∀ p ∈ ps, 2 ≤ (p : ℤ) ∧ (p : ℤ) ≤ (Qmax : ℤ) := by
+    intro p hp
+    have hpL : p ∈ L := List.mem_of_mem_erase (hpsdef ▸ hp)
+    have hpprime : Nat.Prime p :=
+      Nat.prime_of_mem_primeFactorsList (hL ▸ hpL)
+    have hp2 : (2 : ℤ) ≤ (p : ℤ) := by exact_mod_cast hpprime.two_le
+    have hple : p ≤ Qmax := List.le_maximum_of_length_pos_of_mem hpL hlen
+    exact ⟨hp2, by exact_mod_cast hple⟩
+  -- feed the per-`n` corollary with `Q := (Qmax : ℤ)`, designated factor `Qn := Qmax`.
+  have hcor := c53_le_4_per_n D (Qmax : ℤ) Qmax rfl hQmax2 hbase hstep ps hps
+  -- rewrite `Qmax * ps.prod = n` to express the bound about `n`.
+  rw [hprodeq] at hcor
+  exact hcor
+
+/-! ## Faithfulness bridge #2: package the per-`n` bound into the real-valued ratio
+
+`C_53 = sup_{n ≥ 2} (D(C_n^3) − 1)/(n − 1)` is a supremum of a **real-valued** ratio, but every
+theorem above lives over `ℤ` (the per-`n` inequality `D n − 1 ≤ 4*((n:ℤ) − 1)`). This was
+faithfulness-gap #2: the conditional bound was not yet stated about the literal ℝ ratio
+`r n = ((D n : ℝ) − 1) / ((n : ℝ) − 1)` whose supremum *is* `C_53`.
+
+The theorem below closes that gap **per `n`** (the well-scoped increment for this round). For a
+concrete `n ≥ 2`, off the actual prime factorization (reusing `factors_bridge_max` verbatim), we
+conclude `r n ≤ 4`. The mechanism is the standard `div_le_iff₀` bridge:
+
+  `b / c ≤ a  ↔  b ≤ a * c`   for `0 < c`   (`Mathlib.Algebra.Order.GroupWithZero.Basic`),
+
+with `c = (n:ℝ) − 1 > 0` (from `n ≥ 2`), `a = 4`, `b = (D n : ℝ) − 1`; the right-hand side
+`(D n : ℝ) − 1 ≤ 4 * ((n:ℝ) − 1)` is the ℝ-cast of the integer bound from `factors_bridge_max`.
+
+**Scope (honest).** This is the per-`n` ℝ ratio bound, the load-bearing fact behind `C_53 ≤ 4`.
+The full `⨆`/`iSup`-over-`ℝ` packaging is NOT formalized here: the supremum is over the
+restricted domain `n ≥ 2` (not all `n : ℕ`), an `iSup`-domain-restriction wrinkle that is
+multi-round bookkeeping (a subtype/guarded sup plus a `ciSup_le` boundedness argument). Parking
+it keeps this statement honest — we claim only what is proved: the per-`n` ratio is `≤ 4` for
+every valid `n`, which is exactly the family the eventual sup is taken over. This does NOT move
+the repository `held` bound (still `C_53 ≤ 4`); it is a faithfulness/infrastructure increment,
+conditional on the same zero-sum inputs `hbase`/`hstep`. -/
+
+/-- **Per-`n` real-ratio bound (Route L, conditional), proved.**
+For a concrete `n ≥ 2`, under the same conditional zero-sum inputs `hbase`/`hstep` as
+`factors_bridge_max` (with the designated factor being the largest prime factor of `n`), the
+real-valued Davenport ratio satisfies `((D n : ℝ) − 1) / ((n : ℝ) − 1) ≤ 4`.
+
+This is the literal `n`-th term of the family `C_53 = sup_{n ≥ 2} (D(C_n^3) − 1)/(n − 1)`, read
+off the actual prime factorization of `n`. The supremum packaging is deliberately deferred
+(see the section comment). No `sorry`, no axiom beyond Lean's three foundational ones. -/
+theorem c53_ratio_real_le
+    (D : ℕ → ℤ) (n : ℕ) (hn : 2 ≤ n)
+    (hbase : D (n.primeFactorsList.maximum_of_length_pos
+        (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn)))
+      = 3 * (↑(n.primeFactorsList.maximum_of_length_pos
+        (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn))) : ℤ) - 2)
+    (hstep : ∀ (p m : ℕ), D (p * m) ≤ (p : ℤ) * D m + (p : ℤ) ^ 2) :
+    ((D n : ℝ) - 1) / ((n : ℝ) - 1) ≤ 4 := by
+  -- The integer per-`n` bound, read off the real factorization.
+  have hint : D n - 1 ≤ 4 * ((n : ℤ) - 1) := factors_bridge_max D n hn hbase hstep
+  -- Cast it to ℝ: `(D n : ℝ) - 1 ≤ 4 * ((n : ℝ) - 1)`.
+  have hreal : (D n : ℝ) - 1 ≤ 4 * ((n : ℝ) - 1) := by exact_mod_cast hint
+  -- The denominator is strictly positive: `(n : ℝ) - 1 > 0` since `n ≥ 2`.
+  have hden : (0 : ℝ) < (n : ℝ) - 1 := by
+    have : (2 : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn
+    linarith
+  -- `b / c ≤ a ↔ b ≤ a * c` for `0 < c`.
+  rw [div_le_iff₀ hden]
+  linarith [hreal]
+
 end Constants.C53a
 
 -- Axiom audit of the load-bearing recursion step. Expect ONLY the three Lean foundational
@@ -244,3 +369,5 @@ end Constants.C53a
 #print axioms Constants.C53a.acc_cast_bridge
 #print axioms Constants.C53a.global_induction
 #print axioms Constants.C53a.c53_le_4_per_n
+#print axioms Constants.C53a.factors_bridge_max
+#print axioms Constants.C53a.c53_ratio_real_le

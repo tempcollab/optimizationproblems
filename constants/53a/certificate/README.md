@@ -57,5 +57,19 @@ PROVED (fully, no sorry):
 ASSUMED (Grinsztajn's cited zero-sum inputs, carried as hypotheses, NOT proved here):
 - `hstep` = Lemma 2.1 (inductive method) + Lemma 2.3 (local estimate `D_k(C_p^3) <= pk + p^2`).
 - the base value `D(C_Q^3) = 3Q-2` (Gao-Geroldinger p-group lower bound).
-- the global factorization induction over the prime multiset of `n` (carried FORWARD;
-  not formalized this round).
+
+## Update — round 3 + round 4 (later theorems in the same file)
+
+The scaffold has since grown (same file, same pinned env, same reproduction command). The
+authoritative axiom audit for ALL theorems is `axioms.txt`. Highlights:
+
+- ROUND 3: `acc_cast_bridge`, `global_induction` (the List fold over the factor list), and
+  `c53_le_4_per_n` (the per-`n` inequality `D n - 1 <= 4*((n:ℤ)-1)`). The global factorization
+  induction is now formalized (over an abstract factor list).
+- ROUND 4: `factors_bridge_max` — for a concrete `n >= 2`, ties that abstract list to the
+  ACTUAL prime factorization `Nat.primeFactorsList n` (modulus `Q` = largest prime factor),
+  concluding `D n - 1 <= 4*((n:ℤ)-1)`. Closes faithfulness-gap #1. Axioms
+  `[propext, Classical.choice, Quot.sound]`, no `sorryAx`. Reuses `c53_le_4_per_n` verbatim.
+  Honest note: `Q` = largest PRIME, not Grinsztajn's largest prime POWER `P(n)`; since
+  largest-prime `<= P(n)` and both `>= 2`, `C_53 <= 4` is preserved. None of this moves
+  `held` (still 4) — it is conditional infrastructure/faithfulness.
