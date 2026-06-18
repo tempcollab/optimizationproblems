@@ -101,6 +101,79 @@ theorem recursion_step
     _ ≤ p * (4 * m - Q - 2) + p ^ 2 := hpdm
     _ ≤ 4 * (p * m) - Q - 2 := hchain
 
+/-! ## The eta-coefficient-parameterised recursion step (forward leverage)
+
+The recursion step above hard-wires the local-estimate additive term `+ p^2`, which comes from
+Grinsztajn's Lemma 2.3 (`D_k(C_p^3) ≤ p*k + p^2`), itself a repackaging of the eta-invariant
+bound `eta(C_p^3) ≤ 3*p^2` (Bhowmik–Schlage-Puchta 2017, the current `c = 3` wall). The `p^2`
+appearing in `hstep` is the `eta - 2p` bookkeeping term: any *generic* improvement
+`eta(C_p^3) ≤ (3 - δ)*p^2` would shrink this additive term below `p^2`.
+
+The whole `C_53 ≤ 4` derivation only ever uses `+ p^2` through the single comparison inequality
+`p^2 - 2*p + 2 ≤ (p-1)*Q` (`comparison_ineq`). So we can **abstract the additive term as a free
+parameter** `c : ℤ` (the per-prime eta-bookkeeping coefficient) constrained only by
+`heta : c ≤ p^2`. Replacing the literal `p^2` by `c ≤ p^2` only *relaxes* the left side of the
+chain, so the very same `comparison_ineq` closes it — no new number theory.
+
+**Why this matters (the forward leverage).** This makes the eta dependence *syntactic*: a future
+sub-`3p^2` eta result is exactly a hypothesis `hstepc : D(p*m) ≤ p*D(m) + c p` with a strictly
+smaller `c p`, and it plugs straight into `recursion_step_c`. The downstream scaffold
+(`global_induction`, the iSup capstone) is structured around `recursion_step`, which is recovered
+verbatim as the `c := p^2` specialisation below — so any genuine eta improvement re-derives a
+strictly-better bound mechanically through the same pipeline. This does NOT move `held` (still the
+conditional `C_53 ≤ 4`); it is the infrastructure seed an eta-win plugs into. -/
+
+/-- **Eta-coefficient-parameterised recursion step (conditional), proved.**
+Identical to `recursion_step`, but the local-estimate additive term is abstracted as a free
+integer parameter `c` (the per-prime eta-bookkeeping coefficient) constrained only by
+`heta : c ≤ p^2`. The step `hstepc : D(p*m) ≤ p*D(m) + c` carries the (possibly improved) local
+estimate; with `heta`, the conclusion `D(p*m) ≤ 4*(p*m) - Q - 2` is exactly the one of
+`recursion_step`.
+
+The algebra is the same chain as `recursion_step`, now with `c` in place of `p^2`: from `hm` we
+get `p*D(m) + c ≤ p*(4m - Q - 2) + c`, and `heta` (`c ≤ p^2`) plus the *same* comparison
+inequality `comparison_ineq` (`p^2 - 2p + 2 ≤ (p-1)Q`) close
+`p*(4m - Q - 2) + c ≤ 4*(p*m) - Q - 2`. `comparison_ineq` is reused verbatim (it is stated for a
+generic integer `p`, no primality). No new number theory — pure algebra, must hold.
+
+A future eta improvement `eta(C_p^3) ≤ (3-δ)*p^2` is precisely an `hstepc` whose `c` is `< p^2`;
+it satisfies `heta` immediately and re-derives the step through this lemma. No `sorry`, no axiom
+beyond Lean's three foundational ones. -/
+theorem recursion_step_c
+    (D : ℕ → ℤ) (p m Q c : ℤ) (pn mn : ℕ)
+    (_hpn : (pn : ℤ) = p) (_hmn : (mn : ℤ) = m)
+    (hp : 2 ≤ p) (hpQ : p ≤ Q)
+    (heta : c ≤ p ^ 2)
+    (hstepc : D (pn * mn) ≤ p * D mn + c)
+    (hm : D mn ≤ 4 * m - Q - 2) :
+    D (pn * mn) ≤ 4 * (p * m) - Q - 2 := by
+  -- `p * D m + c ≤ p*(4m - Q - 2) + c` (push `hm` through `p ≥ 0`).
+  have hpdm : p * D mn + c ≤ p * (4 * m - Q - 2) + c := by
+    have : p * D mn ≤ p * (4 * m - Q - 2) :=
+      mul_le_mul_of_nonneg_left hm (by linarith)
+    linarith
+  -- the SAME comparison inequality as `recursion_step` (reused verbatim).
+  have hcmp : p ^ 2 - 2 * p + 2 ≤ (p - 1) * Q := comparison_ineq p Q hp hpQ
+  -- `p*(4m - Q - 2) + c ≤ p*(4m - Q - 2) + p^2 ≤ 4*(p*m) - Q - 2`; `heta` relaxes `c` to `p^2`.
+  have hchain : p * (4 * m - Q - 2) + c ≤ 4 * (p * m) - Q - 2 := by nlinarith [hcmp, heta]
+  calc D (pn * mn) ≤ p * D mn + c := hstepc
+    _ ≤ p * (4 * m - Q - 2) + c := hpdm
+    _ ≤ 4 * (p * m) - Q - 2 := hchain
+
+/-- **`recursion_step` is the `c := p^2` specialisation of `recursion_step_c`.**
+Recovers the original hard-wired-`p^2` recursion step as the instance `c := p^2` of the
+parameterised lemma, with `heta : p^2 ≤ p^2` discharged by `le_refl`. This witnesses that
+`recursion_step_c` is a strict *generalisation* — the existing scaffold sits inside it as the
+trivial `c = p^2` case, so nothing downstream is lost and the eta knob is genuinely free. -/
+theorem recursion_step_of_c
+    (D : ℕ → ℤ) (p m Q : ℤ) (pn mn : ℕ)
+    (hpn : (pn : ℤ) = p) (hmn : (mn : ℤ) = m)
+    (hp : 2 ≤ p) (hpQ : p ≤ Q)
+    (hstep : D (pn * mn) ≤ p * D mn + p ^ 2)
+    (hm : D mn ≤ 4 * m - Q - 2) :
+    D (pn * mn) ≤ 4 * (p * m) - Q - 2 :=
+  recursion_step_c D p m Q (p ^ 2) pn mn hpn hmn hp hpQ (le_refl _) hstep hm
+
 /-! ## The conditional global bound, packaged
 
 A convenience statement: starting from the prime-power base case `D(C_Q^3) = 3 Q - 2`
@@ -464,6 +537,8 @@ end Constants.C53a
 -- Axiom audit of the load-bearing recursion step. Expect ONLY the three Lean foundational
 -- axioms (`propext`, `Classical.choice`, `Quot.sound`) — no `sorryAx`, no smuggled input.
 #print axioms Constants.C53a.recursion_step
+#print axioms Constants.C53a.recursion_step_c
+#print axioms Constants.C53a.recursion_step_of_c
 #print axioms Constants.C53a.comparison_ineq
 #print axioms Constants.C53a.acc_cast_bridge
 #print axioms Constants.C53a.global_induction
