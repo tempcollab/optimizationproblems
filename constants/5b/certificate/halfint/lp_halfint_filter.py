@@ -366,6 +366,34 @@ def best_interleaved_budget_heuristic(edges, verts, tau_full, xvals):
             candidates.append(integral[:k])
     for k in range(1, min(9, tau_full + 1)):
         candidates.append(by_deg[:k])
+    # EDGE-UNION supports: the interleaved cert charges only edges ENTIRELY inside P, so the
+    # a(P) part grows ONLY when whole 3-AP triples are absorbed into P.  The principled
+    # friendly candidate is therefore a union of complete edges (greedily by how cheaply each
+    # edge's 3 vertices extend P).  We grow P one whole edge at a time, vertex-disjointly when
+    # possible (a vertex-disjoint union of j edges has a(P)=j by integral matching), and also
+    # try the densest cluster of mutually overlapping edges.
+    deg_e = {v: 0 for v in verts}
+    for e in edges:
+        for v in e:
+            deg_e[v] += 1
+    # (a) greedy vertex-disjoint edge packing -> a(P)=#packed edges, residual = rest
+    used = set()
+    packP = []
+    packed = 0
+    for e in sorted(edges, key=lambda e: -sum(deg_e[v] for v in e)):
+        if not (set(e) & used):
+            used |= set(e)
+            packP.extend(e)
+            packed += 1
+            candidates.append(list(packP))   # try after each added disjoint edge
+    # (b) densest overlapping cluster: all vertices of the top-t highest-degree edges
+    edges_by_dens = sorted(edges, key=lambda e: -sum(deg_e[v] for v in e))
+    clusterP = []
+    for t in range(1, min(len(edges_by_dens), tau_full) + 1):
+        cl = set()
+        for e in edges_by_dens[:t]:
+            cl |= set(e)
+        candidates.append(sorted(cl))
     best = (tau_full - 1, [])
     seen = set()
     for P in candidates:
@@ -424,24 +452,40 @@ class Screen:
             self.best_P = P
             self.nontrivial_shrink = bool(P) and g < self.tau - 1
         self.friendly = self.best_budget < self.tau - 1
-        self.classification = (
-            "partially-integral / interleaved-FRIENDLY" if self.friendly
-            else "fully-half-integral / interleaved-HOSTILE")
+        # Classification reports TWO ORTHOGONAL properties, honestly separated:
+        #   (a) LP structure of the cover polytope  — an EXACT, fully-determined fact:
+        #         'fully-half-integral'  (all coords in {0,1/2}, no x=1; A_base pathology)
+        #         'partially-integral'   (some x=1 vertex the LP forces)
+        #         'mixed-fractional'     (other fractions, e.g. 1/3 — NOT half-integral)
+        #         'large-denom-fractional' (vertex did not certify at small denom => NOT half-int)
+        #   (b) interleaved-cert friendliness — whether SOME support P shrinks the branch
+        #       budget below the full tau-1.  EXHAUSTIVE => a verified two-sided verdict;
+        #       HEURISTIC => one-sided ('no friendly P among the screened supports', NOT a
+        #       proof that none exists).
+        if self.fully_half_integral:
+            self.lp_structure = "fully-half-integral"
+        elif self.integral_verts:
+            self.lp_structure = "partially-integral(x=1)"
+        elif not self.vertex_certified:
+            self.lp_structure = "large-denom-fractional"
+        elif self.all_half:
+            self.lp_structure = "half-integral(no x=1)"
+        else:
+            self.lp_structure = "mixed-fractional"
+        if self.friendly:
+            self.friendliness = "interleaved-FRIENDLY"
+        elif self.exhaustive:
+            self.friendliness = "interleaved-HOSTILE(exhaustive: no shrinking P exists)"
+        else:
+            self.friendliness = "no-shrink-found(heuristic-P: not a proof)"
+        self.classification = f"{self.lp_structure} / {self.friendliness}"
 
     def line(self):
-        if self.fully_half_integral:
-            tag = "fully-half-int"
-        elif self.integral_verts:
-            tag = "has-x=1"
-        elif not self.vertex_certified:
-            tag = "NOT-half-int(large-denom)"
-        else:
-            tag = "mixed-frac"
         return (f"N={self.N} m={self.m} tau={self.tau} alpha={self.alpha} "
-                f"nu*={self.nu_exact} {tag} "
+                f"nu*={self.nu_exact} [{self.lp_structure}] "
                 f"|x=1|={len(self.integral_verts)} "
                 f"budget g={self.best_budget} (vs full tau-1={self.tau-1}) "
-                f"-> {self.classification}"
+                f"-> {self.friendliness}"
                 f"{'' if self.exhaustive else ' [heuristic-P]'}")
 
 
@@ -562,6 +606,10 @@ def survey():
     print("   ", s.line())
     assert s.is45 is True
     assert s.nu_crosscheck_ok
+    # NOT fully half-integral: large-denominator nu*, with one LP-forced x=1 vertex.
+    assert s.fully_half_integral is False
+    assert s.nu_exact.denominator > 2          # large denom => not half-integral
+    assert len(s.integral_verts) == 1, s.integral_verts
     rows.append(("Fibonacci (N=30)", s))
 
     print("\n[5] Random-search (4,5)-set N=30 — a second structural sample")
@@ -570,25 +618,64 @@ def survey():
     print("   ", s.line())
     assert s.is45 is True
     assert s.nu_crosscheck_ok
+    # HEADLINE: a REAL N=30 (4,5)-set whose interleaved-cert budget SHRINKS to g=1 (<<tau-1=9).
+    # Its cover LP is integral (nu*=10=tau, 10 forced x=1 vertices); an EDGE-UNION support P of
+    # 24 vertices absorbs 10 of the 12 3-APs fully (a(P)=8, integral) leaving a 2-edge residual
+    # (tau=2), so a(P)+tau(res)=8+2=10=tau exactly => branch budget g=tau(res)-1=1.
+    assert s.fully_half_integral is False
+    assert s.nu_exact == Fraction(10, 1), s.nu_exact     # integral cover LP
+    assert len(s.integral_verts) == 10, s.integral_verts
+    assert s.friendly is True, "RAND30 must be interleaved-FRIENDLY"
+    assert s.best_budget == 1, s.best_budget
+    # re-derive the support's interleaved value EXACTLY (rational nu*, integer residual tau)
+    a, tr, val = interleaved_value(s.edges, s.best_P)
+    assert val == s.tau == 10 and a == 8 and tr == 2, (a, tr, val, s.tau)
+    print("    HEADLINE: RAND30 interleaved budget g=1 (a(P)=8 + tau(res)=2 = tau=10) — a REAL")
+    print("    N=30 (4,5)-set NOT in the A_base fully-half-integral pathology; cheaply certifiable.")
     rows.append(("Random (N=30)", s))
 
     print("\n" + "=" * 78)
     print("SURVEY VERDICT")
     print("=" * 78)
+    print(f"  {'set':20s} {'m':>3s} {'tau':>3s} {'nu*':>10s} {'x=1':>4s} {'g':>3s} "
+          f"  LP-structure / friendliness")
     for name, s in rows:
-        flag = "FRIENDLY" if s.friendly else "HOSTILE "
-        print(f"  {name:20s} m={s.m:3d} tau={s.tau:2d} nu*={str(s.nu_exact):5s} "
-              f"x1={len(s.integral_verts):2d} g={s.best_budget:2d} [{flag}]")
+        flag = "FRIENDLY" if s.friendly else ("HOSTILE(exh)" if s.exhaustive
+                                              else "no-shrink(heur)")
+        print(f"  {name:20s} {s.m:3d} {s.tau:3d} {str(s.nu_exact):>10s} "
+              f"{len(s.integral_verts):4d} {s.best_budget:3d}   "
+              f"{s.lp_structure} [{flag}]")
     friendly_families = [n for n, s in rows
                          if s.friendly and s.is45 is not False and s.N >= 14]
+    full_half = [n for n, s in rows if s.fully_half_integral and s.N >= 14]
+    print()
+    print("  EXACT LP-structure facts (the two orthogonal properties, kept separate):")
+    print(f"    * Fully half-integral (A_base pathology, NO x=1 vertex): {full_half}")
+    print("      - A_base (N=14) and 2xA_base (N=28) are EXACTLY fully half-integral")
+    print("        (nu*=9/2, 9; all coords {0,1/2}); A_base's interleaved-HOSTILE verdict")
+    print("        is EXHAUSTIVE (all 2^14 supports checked) -> no support shrinks budget.")
+    print("    * The N=30 (4,5)-sets are NOT fully half-integral: the Fibonacci set has")
+    print("      nu*=55303/5896 (large denominator, NOT even half-integral) with one x=1")
+    print("      vertex; the random N=30 set has nu*=10 with 10 x=1 forced vertices.")
+    print("      => their cover LPs DO have integral structure (x=1 vertices) — they are")
+    print("         NOT the A_base pathology.")
     print()
     print("  Interleaved-FRIENDLY (4,5)-families found (small interleaved budget):")
     print("   ", friendly_families if friendly_families else
-          "NONE among the surveyed (4,5)-sets — all real (4,5) families are fully")
-    print("       half-integral / interleaved-hostile (only the synthetic disjoint A_syn is")
-    print("       friendly).  This is the de-risk finding: a beat gadget that LOOKS like")
-    print("       these families would NOT be cheaply Lean-certifiable; the search must add")
-    print("       an LP-half-integrality reward (screen each candidate, prefer x=1>0).")
+          "NONE among the surveyed (4,5)-sets at the budget threshold g<tau-1.")
+    print("    HONEST CAVEAT: for the N=30 sets the support search is HEURISTIC (curated P:")
+    print("    x=1 prefixes + top-degree shells), so 'no shrink found' is ONE-SIDED — it is")
+    print("    NOT a proof that no support shrinks the budget (unlike A_base's exhaustive")
+    print("    verdict).  The x=1 vertices the N=30 LPs force are individually too few to")
+    print("    cover full tau, so single-shell fixing does not yet shrink g; a smarter")
+    print("    multi-shell support search (future work) could still find a friendly P.")
+    print()
+    print("  HEADLINE (the survey question answered): the A_base-type FULLY-half-integral")
+    print("  pathology is NOT universal among N=30 (4,5)-sets — both surveyed N=30 sets")
+    print("  carry x=1 forced vertices (integral structure A_base lacks).  So an N=30 beat")
+    print("  gadget is NOT doomed to be uncertifiable; the interleaved cert can in principle")
+    print("  charge those x=1 vertices.  The remaining de-risk is wiring an x=1-aware support")
+    print("  search into the gadget search so a density-clearing candidate is also FRIENDLY.")
     print("=" * 78)
 
 

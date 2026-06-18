@@ -1,0 +1,71 @@
+==============================================================================
+LP-HALF-INTEGRALITY SURVEY — C_5b (4,5)-set families
+(exact rational cover LP; nu* cross-checked vs scipy float; integer tau)
+==============================================================================
+
+[1] A_base (the record N=14 set) — REPRODUCE the R5 fully-half-integral finding
+    is_45set: True  nu* cross-check (exact==float): True
+    N=14 m=12 tau=6 alpha=8 nu*=9/2 [fully-half-integral] |x=1|=0 budget g=5 (vs full tau-1=5) -> interleaved-HOSTILE(exhaustive: no shrinking P exists)
+    REPRODUCED: nu*=9/2, fully half-integral, no x=1 vertex,
+    best interleaved budget g = tau-1 = 5 (only P=empty reaches tau) => HOSTILE.
+
+[2] A_syn EDGE FAMILY (the cert's vertex-disjoint demo) — FRIENDLY reference
+     N=12 m=4 tau=4 nu*=4 |x=1|=4 budget g=0 (vs full tau-1=3) -> FRIENDLY
+    CONFIRMED: best budget g=0 << tau-1=3 => interleaved-FRIENDLY (the cert's R5
+    Asyn_avoiders_le_8 used a SUBOPTIMAL a=2 + g=1 split, 3 leaves; the LP shows
+    a fully integral cover (a=4, g=0, 1 leaf) is available — disjoint APs are easy).
+
+[3] Two well-separated A_base copies — DECOMPOSABLE control (Lemma 3.6)
+    N=28 m=24 tau=12 alpha=16 nu*=9 [fully-half-integral] |x=1|=0 budget g=11 (vs full tau-1=11) -> no-shrink-found(heuristic-P: not a proof) [heuristic-P]
+    Note: 16/28 = 4/7 EXACTLY (mediant) — a tie, never a beat; still half-integral.
+
+[4] Fibonacci (4,5)-subsequence N=30 — the R5 best low-alpha family
+    is_45set: True  nu* cross-check: True
+    N=30 m=26 tau=11 alpha=19 nu*=55303/5896 [partially-integral(x=1)] |x=1|=1 budget g=10 (vs full tau-1=10) -> no-shrink-found(heuristic-P: not a proof) [heuristic-P]
+
+[5] Random-search (4,5)-set N=30 — a second structural sample
+    is_45set: True  nu* cross-check: True
+    N=30 m=12 tau=10 alpha=20 nu*=10 [partially-integral(x=1)] |x=1|=10 budget g=1 (vs full tau-1=9) -> interleaved-FRIENDLY [heuristic-P]
+    HEADLINE: RAND30 interleaved budget g=1 (a(P)=8 + tau(res)=2 = tau=10) — a REAL
+    N=30 (4,5)-set NOT in the A_base fully-half-integral pathology; cheaply certifiable.
+
+==============================================================================
+SURVEY VERDICT
+==============================================================================
+  set                    m tau        nu*  x=1   g   LP-structure / friendliness
+  A_base (N=14)         12   6        9/2    0   5   fully-half-integral [HOSTILE(exh)]
+  2xA_base (N=28)       24  12          9    0  11   fully-half-integral [no-shrink(heur)]
+  Fibonacci (N=30)      26  11 55303/5896    1  10   partially-integral(x=1) [no-shrink(heur)]
+  Random (N=30)         12  10         10   10   1   partially-integral(x=1) [FRIENDLY]
+
+  EXACT LP-structure facts (the two orthogonal properties, kept separate):
+    * Fully half-integral (A_base pathology, NO x=1 vertex): ['A_base (N=14)', '2xA_base (N=28)']
+      - A_base (N=14) and 2xA_base (N=28) are EXACTLY fully half-integral
+        (nu*=9/2, 9; all coords {0,1/2}); A_base's interleaved-HOSTILE verdict
+        is EXHAUSTIVE (all 2^14 supports checked) -> no support shrinks budget.
+    * The N=30 (4,5)-sets are NOT fully half-integral: the Fibonacci set has
+      nu*=55303/5896 (large denominator, NOT even half-integral) with one x=1
+      vertex; the random N=30 set has nu*=10 with 10 x=1 forced vertices.
+      => their cover LPs DO have integral structure (x=1 vertices) — they are
+         NOT the A_base pathology.
+
+  Interleaved-FRIENDLY (4,5)-families found (small interleaved budget):
+    ['Random (N=30)']
+    HONEST CAVEAT: for the N=30 sets the support search is HEURISTIC (curated P:
+    x=1 prefixes + top-degree shells), so 'no shrink found' is ONE-SIDED — it is
+    NOT a proof that no support shrinks the budget (unlike A_base's exhaustive
+    verdict).  The x=1 vertices the N=30 LPs force are individually too few to
+    cover full tau, so single-shell fixing does not yet shrink g; a smarter
+    multi-shell support search (future work) could still find a friendly P.
+
+  HEADLINE (the survey question answered): the A_base-type FULLY-half-integral
+  pathology is NOT universal among N=30 (4,5)-sets — both surveyed N=30 sets
+  carry x=1 forced vertices (integral structure A_base lacks).  So an N=30 beat
+  gadget is NOT doomed to be uncertifiable; the interleaved cert can in principle
+  charge those x=1 vertices.  The remaining de-risk is wiring an x=1-aware support
+  search into the gadget search so a density-clearing candidate is also FRIENDLY.
+==============================================================================
+
+STATUS: structural LP-half-integrality survey.  No bound written to constants/5b.md.
+        The filter `screen(A)` is composable with search_N30.py: screen every
+        density-clearing candidate and prefer interleaved-FRIENDLY ones.
