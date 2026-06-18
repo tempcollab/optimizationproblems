@@ -127,14 +127,9 @@ A constant's workspace. **One approach = one slug = one sketch file + one commen
 one ranker entry** — no per-approach subfolder. It holds:
 
 - `literature/` — paper digests.
-- `lemmas/` — the **shared goal cache**: lemmas proved in one sketch and *certified* by the
-  reviewer, so every other sketch can import them instead of re-proving. This is how work
-  compounds across the population — a sub-result closed once is reused everywhere. A lemma
-  enters here only on the reviewer's certification (the same gate as a bound): the builder
-  *proposes* it (proves it green, flags it promotable), the reviewer checks it's genuinely
-  `sorry`-free / axiom-clean and generally stated, then admits it. An imported certified
-  lemma is trusted without re-derivation — the kernel already checked it. (Lean: files in the
-  same Lake project, imported by `Sketches/*.lean`. Python: a shared verified-helpers module.)
+- `lemmas/` — the **shared goal cache**: reviewer-certified lemmas any sketch can import
+  instead of re-proving, so work compounds across the population. Builder proposes (flags a
+  green lemma promotable), reviewer certifies and admits; the bar is below in Rigor rules.
 - `approaches/<slug>.md` — the sketch's **commentary**: the strategy, which holes remain and
   why, what would push it. Free-form. Not the artifact — the artifact is the sketch file.
 - The **sketch file** — the building attempt itself, keyed by the same slug:

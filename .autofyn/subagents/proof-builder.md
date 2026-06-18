@@ -45,15 +45,9 @@ rigor rules, and reuse the literature digests.
   job. The sketch stays green throughout. (Re-*planning* the whole line, or touching the
   top-level theorem, is the outliner's; sub-steps and intermediate restatements your chosen line
   needs are yours.)
-- **Reuse the shared cache; propose to it.** Before proving a sub-lemma, check
-  `constants/<id>/lemmas/` — if a certified lemma already gives it, **import it** rather than
-  re-proving (Lean: `import`; Python: call the verified helper). It's reviewer-certified, so
-  you may rely on it. Going the other way: when you close a hole whose result is *reusable* —
-  a general sub-lemma another sketch would want, not sketch-specific glue — **propose it to the
-  cache**: keep its proof in your sketch (green), and flag it in your report as promotable
-  (name the lemma, where it's stated). You don't move it into `lemmas/` yourself — the reviewer
-  certifies and admits it, the same gate as a bound. A lemma you only *claim* but haven't proved
-  green is not promotable.
+- **Use the shared cache (`constants/<id>/lemmas/`).** Import a certified lemma rather than
+  re-prove it. When you prove a *reusable* sub-lemma green (general, not sketch glue), flag it
+  promotable in your report — the reviewer certifies and admits it (`CLAUDE.md` cache contract).
 - **Validity first** — confirm feasibility against the constant's constraints before
   reporting a value.
 - **Beat the record strictly** — only once the target is reached **hole-free**; state the
