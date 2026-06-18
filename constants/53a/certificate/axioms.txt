@@ -65,3 +65,50 @@ NEW in round 4 — `c53_ratio_real_le` (approach isup-packaging-real, faithfulne
 
   This does NOT move `held` below 4 — faithfulness/infrastructure increment, conditional on
   the same zero-sum hypotheses by design.
+
+NEW in round 5 — iSup-over-R capstone (approach isup-packaging-real, faithfulness-gap #2 closed):
+  Packages the per-n real ratio (c53_ratio_real_le) into the LITERAL supremum statement
+  C_53 = sup_{n>=2} (D(C_n^3) - 1)/(n - 1) <= 4, stated as an iSup over all n : N.
+
+  Definitions / theorems added (single downstream addition on lean/Constants/C53a.lean):
+    - def c53Ratio (D) (n) : R := if 2 <= n then ((D n:R)-1)/((n:R)-1) else 0
+        guarded total function; 0-padding for n < 2 so the function is total over N.
+    - c53Ratio_le : forall n, c53Ratio D n <= 4
+        split_ifs: 2<=n branch = c53_ratio_real_le D n h (hbase n h) hstep (verbatim reuse);
+        n<2 branch = 0 <= 4 by norm_num.
+    - c53_isup_real_le : (sup_n c53Ratio D n) <= 4
+        := ciSup_le (c53Ratio_le D hbase hstep).
+    - def C53 (D) : R := sup_n c53Ratio D n        (named constant)
+    - C53_le_4 : C53 D <= 4                         := c53_isup_real_le ... (unfold of C53)
+
+  Axiom lines (from `lake build Constants`):
+    'Constants.C53a.c53Ratio_le'      depends on axioms: [propext, Classical.choice, Quot.sound]
+    'Constants.C53a.c53_isup_real_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+    'Constants.C53a.C53_le_4'         depends on axioms: [propext, Classical.choice, Quot.sound]
+  (C53 / c53Ratio are defs, not theorems; no axiom audit applies.)
+
+  KEY mechanism (pinned Mathlib fabf563, lemma confirmed):
+    - ciSup_le [Nonempty i] {f : i -> a} {c : a} (H : forall x, f x <= c) : iSup f <= c
+      (Mathlib/Order/ConditionallyCompleteLattice/Indexed.lean:139), over a
+      ConditionallyCompleteLattice (R qualifies; [Nonempty N] is an instance).
+      DECISIVE: there is NO separate BddAbove (Set.range r) obligation — the per-term
+      bound (forall n, r n <= 4) IS the boundedness. The Round-4 deferral assumed a
+      "ciSup_le + BddAbove" two-part argument; the BddAbove half collapses into the
+      per-term bound under this signature, making the step genuinely one-round.
+
+  hbase is now UNIVERSALLY QUANTIFIED over all valid n >= 2:
+    hbase : forall (n : N) (hn : 2 <= n),
+              D (n.primeFactorsList.maximum_of_length_pos ...) = 3 * (... : Z) - 2
+  (same per-n base expression as c53_ratio_real_le / factors_bridge_max, now for-all'd).
+  hstep unchanged (forall p m, D (p*m) <= p*D m + p^2). Both remain explicit Lean
+  HYPOTHESES — the result stays honestly conditional and the bound 4 is re-derived, not
+  smuggled.
+
+  NON-VACUITY: the family is over a non-empty honest domain (n = 2 included), and the
+  Round-4 zero-sum witness D m = 3m - 2 gives ratio 3 <= 4 (a genuine non-padded value),
+  so the supremum bounds a real family, not a vacuous sup of zeros.
+
+  This does NOT move `held` below 4 — it is the faithfulness/infrastructure CAPSTONE,
+  conditional on the same zero-sum hypotheses (hbase, hstep) by design. It makes the Lean
+  theorem literally STATE the bound as a supremum (C_53 <= 4), closing the last named
+  faithfulness carry-forward (gap #2).

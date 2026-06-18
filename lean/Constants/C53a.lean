@@ -360,6 +360,105 @@ theorem c53_ratio_real_le
   rw [div_le_iff₀ hden]
   linarith [hreal]
 
+/-! ## Capstone: the iSup-over-`ℝ` packaging `(⨆ n, r n) ≤ 4`
+
+The per-`n` ratio bound `c53_ratio_real_le` is the load-bearing fact, but it speaks about a
+single fixed `n`. The literal constant is the *supremum* of that family:
+
+  `C_53 = sup_{n ≥ 2} (D(C_n^3) − 1)/(n − 1)`.
+
+The wrinkle is that Lean's `⨆ n : ℕ, …` ranges over **all** `n`, whereas the family is indexed
+by `n ≥ 2`. We package this with a **guarded total function**
+
+  `r n = if 2 ≤ n then ((D n : ℝ) − 1)/((n : ℝ) − 1) else 0`,
+
+total over `ℕ`. The `0`-padding for `n < 2` cannot raise the supremum (`0 ≤ 4` and every
+real-domain value is `≤ 4`), so the all-`ℕ` supremum still bounds the intended `n ≥ 2` sup from
+above by exactly `4`.
+
+The boundedness bookkeeping that deferred this in Round 4 collapses: in the pinned Mathlib rev
+the live lemma is
+
+  `ciSup_le [Nonempty ι] {f : ι → α} {c : α} (H : ∀ x, f x ≤ c) : iSup f ≤ c`
+  (`Mathlib/Order/ConditionallyCompleteLattice/Indexed.lean`),
+
+over any conditionally-complete lattice (`ℝ` qualifies, `[Nonempty ℕ]` is an instance). There is
+**no** separate `BddAbove (Set.range r)` obligation: the per-term bound `∀ n, r n ≤ 4` *is* the
+boundedness. So the load-bearing step is exactly the two-branch `split_ifs`:
+
+  * `2 ≤ n` branch: `c53_ratio_real_le` reused verbatim (with the universally-quantified `hbase`
+    specialised at `n`);
+  * `n < 2` branch: `r n = 0 ≤ 4` by `norm_num`.
+
+**Non-vacuity.** The family is over a non-empty honest domain: `n = 2` is included, and the
+Round-4 zero-sum witness `D m = 3m − 2` makes the ratio `3 ≤ 4` (a genuine, non-padded value),
+so the supremum is a real bound on a real family, not a vacuous `⨆` of zeros.
+
+**Scope (honest).** This does NOT move `held`: it is still the conditional `C_53 ≤ 4` (record-
+break is barriered on the open eta-coefficient problem), now stated *literally as a supremum*.
+It is an infrastructure/faithfulness capstone, conditional on the same zero-sum inputs
+`hbase`/`hstep`. The base hypothesis is now universally quantified over all valid `n ≥ 2` — the
+single honest input the supremum statement requires. No `sorry`, no axiom beyond Lean's three. -/
+
+/-- The guarded total real-valued Davenport ratio family. For `n ≥ 2` it is the literal `n`-th
+term `(D(C_n^3) − 1)/(n − 1)`; for `n < 2` it is padded with `0` so the function is total over
+`ℕ` and the supremum can be taken over all of `ℕ`. -/
+noncomputable def c53Ratio (D : ℕ → ℤ) (n : ℕ) : ℝ :=
+  if 2 ≤ n then ((D n : ℝ) - 1) / ((n : ℝ) - 1) else 0
+
+/-- Every term of the guarded family is `≤ 4`: the `2 ≤ n` branch is `c53_ratio_real_le`
+(reused verbatim), the `n < 2` branch is `0 ≤ 4`. -/
+theorem c53Ratio_le
+    (D : ℕ → ℤ)
+    (hbase : ∀ (n : ℕ) (hn : 2 ≤ n),
+      D (n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn)))
+        = 3 * (↑(n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn))) : ℤ) - 2)
+    (hstep : ∀ (p m : ℕ), D (p * m) ≤ (p : ℤ) * D m + (p : ℤ) ^ 2) :
+    ∀ n, c53Ratio D n ≤ 4 := by
+  intro n
+  unfold c53Ratio
+  split_ifs with h
+  · -- `2 ≤ n`: the per-`n` ℝ ratio bound, reused verbatim.
+    exact c53_ratio_real_le D n h (hbase n h) hstep
+  · -- `n < 2`: the padded value `0 ≤ 4`.
+    norm_num
+
+/-- **iSup capstone (Route L, conditional), proved.**
+The supremum over **all** `n : ℕ` of the guarded real ratio family is `≤ 4` — i.e.
+`C_53 = sup_{n ≥ 2} (D(C_n^3) − 1)/(n − 1) ≤ 4`, stated literally as a supremum. Under the same
+conditional zero-sum inputs `hbase`/`hstep` (the base hypothesis now universally quantified over
+all valid `n ≥ 2`), via `ciSup_le` fed by the per-term bound `c53Ratio_le`. No `sorry`, no axiom
+beyond Lean's three foundational ones. -/
+theorem c53_isup_real_le
+    (D : ℕ → ℤ)
+    (hbase : ∀ (n : ℕ) (hn : 2 ≤ n),
+      D (n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn)))
+        = 3 * (↑(n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn))) : ℤ) - 2)
+    (hstep : ∀ (p m : ℕ), D (p * m) ≤ (p : ℤ) * D m + (p : ℤ) ^ 2) :
+    (⨆ n, c53Ratio D n) ≤ 4 :=
+  ciSup_le (c53Ratio_le D hbase hstep)
+
+/-- The conditional Davenport constant `C_53`, defined as the supremum of the guarded real ratio
+family over all `n : ℕ` (the `n < 2` padding does not raise the supremum). -/
+noncomputable def C53 (D : ℕ → ℤ) : ℝ := ⨆ n, c53Ratio D n
+
+/-- **`C_53 ≤ 4` as a single theorem about the named constant `C53`.** Definitional unfolding of
+`C53` onto the iSup capstone `c53_isup_real_le`. No `sorry`, no axiom beyond Lean's three. -/
+theorem C53_le_4
+    (D : ℕ → ℤ)
+    (hbase : ∀ (n : ℕ) (hn : 2 ≤ n),
+      D (n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn)))
+        = 3 * (↑(n.primeFactorsList.maximum_of_length_pos
+          (List.length_pos_of_ne_nil ((Nat.primeFactorsList_ne_nil n).2 hn))) : ℤ) - 2)
+    (hstep : ∀ (p m : ℕ), D (p * m) ≤ (p : ℤ) * D m + (p : ℤ) ^ 2) :
+    C53 D ≤ 4 :=
+  c53_isup_real_le D hbase hstep
+
 end Constants.C53a
 
 -- Axiom audit of the load-bearing recursion step. Expect ONLY the three Lean foundational
@@ -371,3 +470,6 @@ end Constants.C53a
 #print axioms Constants.C53a.c53_le_4_per_n
 #print axioms Constants.C53a.factors_bridge_max
 #print axioms Constants.C53a.c53_ratio_real_le
+#print axioms Constants.C53a.c53Ratio_le
+#print axioms Constants.C53a.c53_isup_real_le
+#print axioms Constants.C53a.C53_le_4

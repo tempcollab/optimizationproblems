@@ -73,3 +73,11 @@ authoritative axiom audit for ALL theorems is `axioms.txt`. Highlights:
   Honest note: `Q` = largest PRIME, not Grinsztajn's largest prime POWER `P(n)`; since
   largest-prime `<= P(n)` and both `>= 2`, `C_53 <= 4` is preserved. None of this moves
   `held` (still 4) — it is conditional infrastructure/faithfulness.
+- ROUND 5: the iSup-over-`R` CAPSTONE (approach `isup-packaging-real`). `c53Ratio` (guarded
+  total ratio family), `c53Ratio_le` (`forall n, c53Ratio D n <= 4`), `c53_isup_real_le`
+  (`(sup_n c53Ratio D n) <= 4` via `ciSup_le`), and named `def C53` + `C53_le_4`. The Lean
+  theorem now LITERALLY STATES the bound as a supremum `C_53 = sup_{n>=2} ... <= 4`, closing
+  faithfulness-gap #2. All new theorems axioms `[propext, Classical.choice, Quot.sound]`, no
+  `sorryAx`. `ciSup_le` needs NO `BddAbove` obligation (the per-term bound is the
+  boundedness). Still conditional on `hbase`/`hstep`; does NOT move `held` (still 4). See the
+  round-5 block in `axioms.txt` for full detail.
