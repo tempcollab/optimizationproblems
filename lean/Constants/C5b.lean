@@ -4,8 +4,15 @@ import Mathlib
 # C_5b : upper-bound certification machinery (warm-up: the record 4/7 gadget)
 
 Constant `C_5b` = `c*` = the largest `c` such that `h(A) ≥ c·|A|` for every
-**(4,5)-set** (weak Sidon set) `A ⊂ ℝ`, where `h(A)` is the size of the largest
-**Sidon** subset of `A`.  (Erdős problem #757.)
+**(4,5)-set** `A ⊂ ℝ`, where `h(A)` is the size of the largest **Sidon** subset of `A`.
+(Erdős problem #757.)
+
+A **(4,5)-set** ([MT26] / arXiv:2602.23282 §Definitions) is one in which every 4-element
+subset has at least 5 distinct pairwise absolute differences `|x−y|`.  This is **strictly
+stronger** than the weak Sidon (distinct sums) condition: every (4,5)-set is weak Sidon,
+but `{0,2,5,8,14,21,28}` is weak Sidon and NOT a (4,5)-set (its 4-subset `{0,14,21,28}`
+has only 4 distinct differences).  R3 keys the certificate to the difference condition
+(`is45setB`), the property [MT26] Theorem 1.5 actually quantifies over.
 
 Source of the record bound and the gadget below:
 Ma & Tang, *"Largest Sidon subsets in weak Sidon sets"* (arXiv:2602.23282, Feb 2026),
@@ -23,8 +30,8 @@ then a one-line swap of `A_base` for a denser gadget plus a re-`decide`.
 The naive route — predicates over `Finset ℤ` with `Finset.powersetCard` and
 `Finset.decidableBAll` — is mathematically clean but the kernel `decide` on it OOMs
 (the `h ≤ 8` check enumerates `C(14,9)=2002` subsets through heavy `Multiset`/quotient
-machinery).  Instead we phrase the two finite facts as **`Bool`-valued computations over
-explicit `List ℤ`** (`weakSidonB`, `noSidonSubsetB`).  Their `= true` statements `decide`
+machinery).  Instead we phrase the finite facts as **`Bool`-valued computations over
+explicit `List ℤ`** (`is45setB`, `noSidonSubsetB`).  Their `= true` statements `decide`
 by ordinary kernel reduction of structurally-recursive list code — fast and with no extra
 axioms.  Each `Bool` procedure is documented to compute exactly the intended combinatorial
 predicate; the meaning is given in the docstrings and is directly auditable.
@@ -33,11 +40,12 @@ predicate; the meaning is given in the docstrings and is directly auditable.
 
 Two finite, decidable combinatorial facts about the 14-point list `Abase`:
 
-1. `Abase_weakSidon : weakSidonB Abase = true`
-   — `A_base` is a weak Sidon set: all pairwise sums `a+b` over *unordered* pairs of
-   distinct elements are distinct.  This is the "(4,5)-set" property
-   ([MT26], §Definitions; the ≥5-distinct-differences form is equivalent to
-   all-pairwise-sums-distinct).
+1. `Abase_is45set : is45setB Abase = true`
+   — `A_base` is a genuine **(4,5)-set**: every one of its `C(14,4)=1001` four-element
+   sublists has ≥ 5 distinct pairwise absolute differences `|x−y|`
+   ([MT26], §Definitions — the difference condition).  (We also keep
+   `Abase_weakSidon` for reference, but it is the strictly weaker sum condition and is
+   NOT what the certificate is keyed to.)
 
 2. `Abase_hLe8 : noSidonSubsetB Abase 9 = true`
    — every 9-element sub-list of `A_base` (drawn from the 14 distinct points) contains a
@@ -49,13 +57,13 @@ A size-8 no-3-AP (hence Sidon) witness shows `h(A_base) ≥ 8`, so in fact `h(A_
 
 ## What is CITED, not proved here (the gadget → bound bridge)
 
-The implication `(A is weak Sidon) ∧ (h(A) ≤ m) ∧ (|A| = N)  ⟹  c* ≤ m/N` is
+The implication `(A is a (4,5)-set) ∧ (h(A) ≤ m) ∧ (|A| = N)  ⟹  c* ≤ m/N` is
 **[MT26], Theorem 1.5** (`c* = inf_{n} f(n)/n`).  We do not formalize the real constant
 `c*` or Theorem 1.5; it is taken on trust from [MT26].  This file formalizes only the
-*finite, decidable load-bearing content* — that `A_base` really is a weak Sidon set with
+*finite, decidable load-bearing content* — that `A_base` really is a (4,5)-set with
 no Sidon 9-subset — the part a finite certificate can carry.  The cited bridge is packaged
-as the explicit hypothesis `MTThm15` of `c5b_le_four_sevenths`, so the one
-trusted-not-proved link is visible.
+as the explicit hypothesis `MTThm15` of `c5b_le_four_sevenths` (keyed to `is45setB`), so
+the one trusted-not-proved link is visible.
 -/
 
 namespace C5b
@@ -89,8 +97,14 @@ def nodupB : List ℤ → Bool
   | x :: xs => (!xs.contains x) && nodupB xs
 
 /-- `weakSidonB l = true` iff all pairwise sums `x+y` over the unordered pairs of `l`
-(`orderedPairs`) are pairwise distinct — i.e. `l` is a weak Sidon set / (4,5)-set.
-(Assumes the points of `l` are themselves distinct, which is checked separately.) -/
+(`orderedPairs`) are pairwise distinct — i.e. `l` is a **weak Sidon set**.
+
+NOTE (R3 correction): a weak Sidon set is **NOT** the same as a (4,5)-set.  The
+(4,5)-set property is the strictly stronger *difference* condition `is45setB` below.
+(4,5)-set ⟹ weak Sidon, not conversely: e.g. `[0,2,5,8,14,21,28]` is weak Sidon but its
+4-subset `{0,14,21,28}` has only 4 distinct `|x−y|` (`{7,14,21,28}`), so it is not a
+(4,5)-set.  `weakSidonB` is kept only for reference; the certified property is
+`is45setB`. -/
 def weakSidonB (l : List ℤ) : Bool :=
   nodupB ((orderedPairs l).map (fun p => p.1 + p.2))
 
@@ -117,6 +131,43 @@ AP — i.e. (by [MT26] Lemma 2.3, for a weak Sidon `l`) `l` has no Sidon subset 
 def noSidonSubsetB (l : List ℤ) (k : ℕ) : Bool :=
   (combos l k).all has3APB
 
+/-! ### The (4,5)-set difference predicate (R3 soundness fix).
+
+A **(4,5)-set** ([MT26] / arXiv:2602.23282 §Definitions) is one in which every 4-element
+subset has at least 5 distinct pairwise absolute differences `|x−y|` (there are
+`C(4,2)=6` such differences).  This is **strictly stronger** than the weak Sidon (sum)
+condition, so the certificate must be keyed to it, not to `weakSidonB`. -/
+
+/-- Number of **distinct** values in a `List ℤ`, by structural recursion (kernel-cheap,
+no `Decidable`-instance unfolding). -/
+def countDistinct : List ℤ → ℕ
+  | [] => 0
+  | x :: xs => (if xs.contains x then 0 else 1) + countDistinct xs
+
+/-- The 6 pairwise **absolute differences** `|x−y|` of a 4-element multiset
+`{a,b,c,d}`, as a `List ℤ` (using `Int.natAbs` cast back to `ℤ`). -/
+def diffs6 (a b c d : ℤ) : List ℤ :=
+  [ ((a - b).natAbs : ℤ), ((a - c).natAbs : ℤ), ((a - d).natAbs : ℤ),
+    ((b - c).natAbs : ℤ), ((b - d).natAbs : ℤ), ((c - d).natAbs : ℤ) ]
+
+/-- `diffs4B a b c d = true` iff the 4-point set `{a,b,c,d}` has **≥ 5 distinct pairwise
+absolute differences** among its `C(4,2)=6` pairwise `|x−y|` — i.e. it satisfies the
+(4,5)-set condition on that single 4-subset. -/
+def diffs4B (a b c d : ℤ) : Bool :=
+  Nat.ble 5 (countDistinct (diffs6 a b c d))
+
+/-- Apply `diffs4B` to a 4-element list (any other length is vacuously `true`; only the
+length-4 sublists produced by `combos l 4` reach this). -/
+def diffs4Bof : List ℤ → Bool
+  | [a, b, c, d] => diffs4B a b c d
+  | _ => true
+
+/-- `is45setB l = true` iff **every** 4-element sublist of `l` has ≥ 5 distinct pairwise
+absolute differences — i.e. `l` is a genuine **(4,5)-set** (the difference condition).
+It enumerates the `C(N,4)` four-sublists via the same `combos` engine. -/
+def is45setB (l : List ℤ) : Bool :=
+  (combos l 4).all diffs4Bof
+
 /-! ### Sanity (`#eval`) — printed at build, not load-bearing. -/
 
 /-- `A_base` really lists 14 *distinct* integers. -/
@@ -133,7 +184,14 @@ theorem Abase_length : Abase.length = 14 := by decide
 
 set_option maxRecDepth 100000
 
-/-- **Fact 1.**  `A_base` is a weak Sidon set (a (4,5)-set): all pairwise sums distinct. -/
+/-- **Fact 1 (R3, the certified property).**  `A_base` is a genuine **(4,5)-set**: every
+one of its `C(14,4)=1001` four-element sublists has ≥ 5 distinct pairwise absolute
+differences.  This is the strictly-stronger *difference* condition (not weak Sidon). -/
+theorem Abase_is45set : is45setB Abase = true := by decide
+
+/-- (Reference only — superseded by `Abase_is45set`.)  `A_base` is also a weak Sidon set:
+all pairwise sums distinct.  Weak Sidon is a strictly weaker property than (4,5)-set, so
+this alone does NOT certify the gadget; `Abase_is45set` does. -/
 theorem Abase_weakSidon : weakSidonB Abase = true := by decide
 
 /-- The size-8 witness is a genuine sub(list)set of `A_base`. -/
@@ -160,12 +218,16 @@ packages exactly the cited content of [MT26] Theorem 1.5 for the form of certifi
 engine produces (a weak-Sidon list of length `N` with no Sidon `(m+1)`-subset). -/
 
 /-- The cited bridge ([MT26] Thm 1.5), as an abstract relation on a real upper bound
-`c5b`:  any weak-Sidon list of `N` distinct points with no Sidon `(m+1)`-subset forces
+`c5b`:  any **(4,5)-set** list of `N` distinct points with no Sidon `(m+1)`-subset forces
 `c5b ≤ m / N`.  This is the ONLY mathematical input taken on trust; the hypotheses it is
-fed (`weakSidonB`, `noSidonSubsetB`, `length`, `Nodup`) are all `decide`-checked above. -/
+fed (`is45setB`, `noSidonSubsetB`, `length`, `Nodup`) are all `decide`-checked above.
+
+R3 SOUNDNESS FIX: the antecedent is keyed to `is45setB` (the difference condition), NOT
+the strictly-weaker `weakSidonB`.  [MT26] Theorem 1.5 is a statement about (4,5)-sets;
+keying it to weak Sidon would let a weak-Sidon-non-(4,5) gadget falsely certify a bound. -/
 def MTThm15 (c5b : ℝ) : Prop :=
   ∀ (l : List ℤ) (N m : ℕ),
-    l.Nodup → l.length = N → weakSidonB l = true → noSidonSubsetB l (m + 1) = true →
+    l.Nodup → l.length = N → is45setB l = true → noSidonSubsetB l (m + 1) = true →
       0 < N → c5b ≤ (m : ℝ) / N
 
 /-- **Warm-up upper bound.**  Granting the cited [MT26] Theorem 1.5 (`MTThm15`), the
@@ -173,7 +235,7 @@ def MTThm15 (c5b : ℝ) : Prop :=
 mathematical input on trust is the explicit hypothesis `hThm15` = [MT26] Theorem 1.5. -/
 theorem c5b_le_four_sevenths (c5b : ℝ) (hThm15 : MTThm15 c5b) :
     c5b ≤ 4 / 7 := by
-  have h := hThm15 Abase 14 8 Abase_nodup Abase_length Abase_weakSidon Abase_hLe8
+  have h := hThm15 Abase 14 8 Abase_nodup Abase_length Abase_is45set Abase_hLe8
     (by norm_num)
   -- `h : c5b ≤ (8 : ℝ) / (14 : ℝ)`; and `8/14 = 4/7`.
   norm_num at h
