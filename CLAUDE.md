@@ -43,13 +43,13 @@ This is a research repo, not a code repo:
   - **PDF extractor:** `pip install --user pdfminer.six`; read a saved PDF with `pdf2txt.py`.
   - **Scientific Python:** `uv pip install --system numpy scipy` (add `cvxpy` / `sympy` per
     the angle).
-  - **Lean** (the preferred certification path): install `elan` (→ `~/.elan`); create a
-    `lean/` project at the repo root with the Mathlib `math` template if absent; **pin and
+  - **Lean** (the preferred certification path): install `elan` (→ `~/.elan`). Round 1
+    bootstraps a Lake project **at `constants/<id>/lean/`** (Mathlib `math` template); **pin and
     commit** `lean/lean-toolchain` + the Mathlib rev in `lean/lake-manifest.json` (a floating
-    version breaks later-round proofs); `lake exe cache get` then `lake build` to confirm. A
-    constant's proof lives in the `lean/` tree (e.g. `lean/Constants/C<id>.lean`) so Lake
-    builds it; `constants/<id>/certificate/` records its `lake build` target + `#print axioms`
-    line.
+    version breaks later-round work); `lake exe cache get` then `lake build` to confirm. There
+    is **one main proof file** for the constant, `constants/<id>/lean/<Id>.lean` (e.g.
+    `C3a.lean`) — the single proof every Lean round advances, not a file per approach;
+    `constants/<id>/certificate/` records its `lake build` target + `#print axioms` line.
   Installing is allowed and expected here — the "no installs" instinct doesn't apply
   to this repo. Beyond these, agents run numerical code and Lean proofs to build and
   check bounds; that's the work, not a build step.
@@ -81,14 +81,18 @@ This is a research repo, not a code repo:
   engine's "one large task or ≤3 small": ≤3 *small certified* steps.)
 - **Dispatch counts — not one-agent-per-phase.**
   `math-explorer ×1 → proof-outliner ×1 → outline-reviewer ×1 → proof-builder ×(1–3) →
-  proof-reviewer ×1`. The builders fan out **one per build-set slug, in parallel**; **one
-  proof-reviewer reviews all of them** (not one per build). In-phase fan-out (the outliner's
+  proof-reviewer ×1`. The build set is 1–3 approaches, but they all advance the **one main
+  proof file** for the constant — so dispatch the builders **one at a time, sequentially**
+  (not in parallel): parallel builders would collide on that single file. Dispatch the next
+  builder only after the previous one returns, each told its slug; **one proof-reviewer
+  reviews all of them** at the end (not one per build). In-phase fan-out (the outliner's
   ~5-approach sampling, the outline-reviewer's ranking) is the subagent's own job — you don't
   manage it.
 - **Report paths.** Dispatch each subagent to write its report to its canonical
   `/tmp/round-{N}/<agent-name>.md` — don't rename it; the next agent reads that exact path.
 - **Build set.** The outline-reviewer's report ends with `build set: <slug>[, <slug>...]` —
-  dispatch **exactly one proof-builder per slug, no more, no fewer**, each told its slug.
+  dispatch **exactly one proof-builder per slug, no more, no fewer**, each told its slug,
+  **sequentially** (they share the one proof file — see Dispatch counts).
 - **Route per approach (overrides the engine's whole-round "all APPROVE" gate).** One verdict
   per built slug, routed independently:
   - **APPROVE** — terminal for the round: recorded by the reviewer, not rebuilt. It neither
@@ -111,12 +115,27 @@ the engine's skippable "plan review". Each round starts fresh with no memory; `c
 
 ## The `constants/<id>/` folder
 
-A constant's workspace holds: `literature/` (paper digests), `approaches/<slug>.md` (one
-living doc per angle — idea, status, how to push it), `certificate/` (the artifacts), and
-`current.md` (the verified bottom line). Approach bodies are free-form; their ranking
-metadata (Elo, counts, stale, last outcome) lives in the tool-owned sidecar
-`approaches/.ranking.json` — never hand-edited, only the ranking tools (served by
-`.autofyn/approach_ranker.py`) touch it.
+A constant's workspace. There is **one proof being built** for the constant; an *approach*
+(slug) is an attempt to do *something* toward it — discharge a lemma, close a gap, tighten a
+piece — not a rival whole-proof. All approaches advance the **same proof artifact**. The
+folder holds:
+
+- `literature/` — paper digests.
+- `approaches/<slug>.md` — one living doc per angle: the idea, its status, how to push it.
+  Free-form. This is commentary, not the proof — the proof is the shared artifact below.
+- The **proof artifact** — the one proof every round advances. Same layout whichever kind it is:
+  - **Lean:** `constants/<id>/lean/` — a per-constant Lake project (`lakefile.toml` +
+    `lean-toolchain` + pinned Mathlib), with **one main file** `lean/<Id>.lean` (e.g.
+    `C3a.lean`). Round 1 bootstraps it; every later Lean round edits that one file. (Lean
+    files only compile inside a Lake project — that's why `lean/` lives here, not loose in
+    `certificate/`.)
+  - **Python / numerical:** `constants/<id>/certificate/` — the directed-rounded checking
+    script(s) for the bound; one main certificate the rounds extend.
+- `current.md` — the verified bottom line.
+
+Approach bodies are free-form; their ranking metadata (Elo, counts, stale, last outcome)
+lives in the tool-owned sidecar `approaches/.ranking.json` — never hand-edited, only the
+ranking tools (served by `.autofyn/approach_ranker.py`) touch it.
 
 ### `current.md` — the tracking file (contract)
 

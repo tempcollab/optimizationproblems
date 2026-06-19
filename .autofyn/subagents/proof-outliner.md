@@ -30,8 +30,8 @@ reason it now works.
 Ambition is in the *angle*, not the per-round bite: a bold line is welcome, but each angle
 should name a **first verifiable step the builder can finish in one round** (one lemma, one
 feasibility check, one tightening), with the rest as later sub-goals. An angle whose only
-plan is "formalize the whole bound" is not buildable — break it. See `CLAUDE.md`, "Small
-steps, many rounds".
+plan is "formalize the whole bound" is not buildable — break it. See `CLAUDE.md`, "Scope
+each round small".
 
 For each angle: which bound it moves and roughly how far, the skeleton, the one hard step
 and why it should hold, and how the builder would certify it — naming the path: **Lean**

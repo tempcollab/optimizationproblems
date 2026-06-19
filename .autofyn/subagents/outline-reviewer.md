@@ -30,8 +30,9 @@ where it's cheap.
    population: `register_approach(constant_id=<id>, slug=<slug>, summary=<one line>)`. A cut
    angle is never registered — junk stays out of the pool.
 2. **Rank the field** with `update_ranking` (below).
-3. **Pick the build set: the 1–3 strongest** to build in parallel. Name them. One is fine;
-   pick more only when they're independent bets worth running at once.
+3. **Pick the build set: the 1–3 strongest** to build (the orchestrator runs the builders
+   sequentially — they all advance the constant's one proof file). Name them. One is fine;
+   pick more only when they're independent bets worth advancing the proof through this round.
 
 ## Rank
 
