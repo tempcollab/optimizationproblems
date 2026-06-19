@@ -78,19 +78,96 @@ partition IS that partition (so `θ = m`, `ω ≤ 5`): fire iff **`m ≥ 64` (�
   μ is either a swept SRG or has its embedding dim grow as fast as n.** This is exactly why
   G2(4) (an exceptional SRG) is special and why the closed SRG line is so constraining.
 
-## Best embedding dim reached (this round, CONJECTURE — not a bound)
-The lowest embedding dim found under the ω≤5 + θ+μ>n constraints **does not beat 63**: the
-best firing-feasible structured object is K5□K5 with fire margin −4 (no fire). No counterexample
-in dim ≤62 was produced. **Claimed (upper) bound: still 63** — i.e. this round produced NO
-improvement, an honest negative-leaning partial result. Nothing is written into `current.md`.
+## Round 4 — the chi_f re-plan: BOTH holes CLOSED, CLEAN NEGATIVE
 
-## Hard step (remaining)
-`maximize_mu_over_edge_flips` reaching the fire condition `θ+μ>n` at ω≤5, n≥316. The mechanism
-and the exact certification are sound and Lean-fit; the evaluator is fast and verified. The
-genuine open construction is **a new ω≤5 graph outside the swept SRG table** whose embedding
-dim grows slower than n — blind editing of a balanced skeleton provably (this round's evidence)
-does not reach it. This is now an outliner-level re-plan question (what ω≤5 family?), not a
-fill-the-blank for the builder.
+The R4 re-plan moved the load-bearing step off blind edge-flips onto the sharper
+`chi_f(G_d)` part-count, searching mu-rich vertex-transitive association-scheme / Cayley
+graphs. This round **closed both re-planned holes with computed, exact content** and the
+result is a clean, reproducible negative.
+
+### Correct firing condition (re-derived, single convention)
+Musin: G = the **smaller-distance** graph; a Borsuk part of smaller diameter is a **clique
+of G**, so parts = clique-cover θ(G) and the part-cap is **ω(G) ≤ 5** (= α(diameter graph)).
+For a vertex-transitive G the fractional clique-cover is exact: **chi_f(G) = n/ω(G)**. Borsuk
+fire iff θ(G)+μ > n; sufficient (and exact for transitive G): `chi_f(G) + μ > n`, i.e.
+**`n/ω(G) > emb+1`** where emb = n−μ−1. (Note: an earlier sweep using α(A) of the *diameter*
+graph as the cap produced spurious "margin 0" tight cases — that mislabels the Musin
+clique-COVER convention; corrected here. The cap is ω of the min-distance graph.)
+
+### Hole 1 — `fractional_part_lower_bound_dual` — CLOSED (exact, Lean-fit)
+The exact uniform fractional-clique-cover dual for vertex-transitive G: `w_v = 1/ω(G)`,
+giving the certified bound `chi_f(G) = n/ω(G)`. Dual feasibility is immediate and exact —
+every clique S of G has |S| ≤ ω(G), so `Σ_{v∈S} w_v = |S|/ω ≤ 1`. No LP solver, no floating
+point; ω(G) is the exact bitset clique number (`g24.max_clique_le`). This is the sharpest a
+uniform transitive dual gives, and for vertex-transitive G it is the exact chi_f (the
+symmetry-averaged LP optimum). Self-tested on T(6): chi_f = 15/5 = 3, w = 1/5, feasible.
+
+### Hole 2 — `search_assoc_scheme_family` — CLOSED as a bounded exact search → NEGATIVE
+A bounded, fully-exact search over the mu-rich vertex-transitive families the re-plan named:
+Johnson J(k,2)=T(k) and J(k,3); Hamming H(d,q); circulant Cayley Cay(Z_n,S) (n<37,
+divisor-coset + random symmetric connection sets, with a sound cheap pre-screen
+`emb+1 < n/2` since ω≥2). Each candidate: exact ω (bitset b&b), exact embedding dim (fast
+modular evaluator + 2-prime agreement), exact rational chi_f = n/ω.
+
+**RESULT: no candidate fires.** Every ω(G)≤5 candidate has `chi_f = n/ω(G) ≤ emb+1`, i.e.
+firing margin `chi_f+μ−n < 0`:
+
+| candidate | n | ω(G) | emb | chi_f=n/ω | margin chi_f+μ−n |
+|-----------|---|------|-----|-----------|------------------|
+| T(6) (best) | 15 | 5 | 5 | 3.0 | **−3** |
+| H(2,4) | 16 | 4 | 6 | 4.0 | −3 |
+| H(2,5) | 25 | 5 | 8 | 5.0 | −4 |
+| J(6,3) | 20 | 4 | 14 | 5.0 | −10 |
+| J(7,3) | 35 | 5 | 20 | 7.0 | −14 |
+| H(3,4) | 64 | 4 | 36 | 16.0 | −21 |
+| circulants n<37 | — | ≤5 | — | — | none fire |
+
+The sharper fractional dual buys **nothing** over Bondarenko's `ceil(n/ω)` for these families:
+a graph that is mu-rich (low emb) with ω(G)≤5 has `n/ω` *far below* emb+1, not marginally
+below. T(6) is the closest at margin −3, and the gap widens for every larger or denser member.
+
+### Why (the structural obstruction, honest)
+Low embedding dim = high algebraic structure (large eigenvalue multiplicities), which in these
+two-distance schemes forces ω(G) up *or* keeps n/ω small relative to the dimension. The named
+mu-rich transitive families sit on or below the Borsuk-tight line `n/ω = emb+1`; they never
+cross it with ω≤5. This is the complementary face of the same `ceil(n/ω) > emb+1` wall that
+all G_2(4)-derived sketches hit at 316 points — chi_f sharpens the *rounding*, but the
+underlying ratio `n/ω ≤ emb+1` is what actually binds, and it binds here.
+
+## Claimed bound (this round)
+**No improvement. Claimed upper bound: still 63** (a claim, and in fact a clean negative — the
+chi_f crack does not open for the mu-rich vertex-transitive scheme/Cayley family). Nothing is
+written into `current.md`. The script runs green in ~6 s, exit 0, both holes computed (no
+`NotImplementedError`), and reproduces the negative.
+
+## Remaining open question (OUTLINER-level, not a builder fill-the-blank)
+Is there ANY two-distance family with ω(G)≤5 escaping `n/ω ≤ emb+1`? The searched
+vertex-transitive scheme/Cayley graphs provably do not (this round). What is NOT covered: (i)
+**non-vertex-transitive** graphs, where chi_f can exceed n/ω (the uniform dual is no longer
+optimal) — but then the dual must be hand-built per graph and the family is unstructured; (ii)
+**non-table, non-scheme** ω≤5 SRG-like graphs (the srg-sweep's 207 open rows). Both are
+outliner-level re-plans; the cheap, structured probe this sketch owned is now a verified clean
+negative — it should be retired or pointed at (i)/(ii) explicitly.
+
+## Promotable lemmas
+**`chi_f_uniform_transitive_dual`** (proved green this round, reusable, also the exact lever
+theta-cover-dual needs). Statement: for a vertex-transitive graph G on n vertices with clique
+number ω(G), the constant weight `w_v = 1/ω(G)` is a feasible fractional-clique-cover dual
+(every clique S satisfies `Σ_{v∈S} w_v = |S|/ω(G) ≤ 1`), so the clique-cover number satisfies
+`θ(G) ≥ chi_f(G) = n/ω(G)`, and for vertex-transitive G this is exact. Proved in
+`certificate/musin-edge-edit.py::fractional_part_lower_bound_dual` (+ `exact_omega`), with the
+feasibility/exactness self-tested on T(6) in `_selftest_fast_evaluator`. The feasibility half
+(`θ(G) ≥ n/ω(G)` from the constant dual) is fully elementary and Lean-fit (finite rational
+inequalities + an exact bitset ω); the "exact for vertex-transitive" half cites the standard
+fractional-chromatic-number identity (Frankl; Scheinerman–Ullman, *Fractional Graph Theory*,
+Prop. 3.1.1 — for vertex-transitive H, χ_f(H) = |V(H)|/α(H)). Reviewer: certify the feasibility
+lower bound at minimum; the exactness is a literature citation, not re-derived here.
+
+## (superseded) Round-3 edge-flip baseline
+The lowest embedding dim found under ω≤5 + θ+μ>n via blind edge-flips did not beat 63: the
+best firing-feasible structured object is K5□K5 with fire margin −4 (no fire). Kept as the
+refuted baseline in the sketch (`maximize_mu_over_edge_flips`). The R4 re-plan above is the
+live load-bearing line, now also closed as a clean negative.
 
 ## Certify
 Lean-fit (preferred path once a winning graph lands): clique partition (finite) ⇒ θ-cap;

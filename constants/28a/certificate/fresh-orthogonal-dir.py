@@ -189,17 +189,70 @@ def search_structured_fresh_direction(A, verts, E):
 
 def search_codim4_vector_general(*args, **kwargs):
     """
-    OPEN HOLE (TODO). The fully-general load-bearing question: does ANY coordinate
-    set Q with |Q| <= 100 satisfy cap_dim(E, Q) >= 3 (=> a >=316-vertex subset of
-    embedding-dim <= 62)? Exhaustive search over C(416,100) is infeasible; this
-    round refutes only the symmetry-defined family (see commentary). Closing this
-    needs either an algebraic non-existence proof (the eigenspace E ∩ span(e_Q)
-    structure) or a smarter exact search over a complete candidate family.
+    OPEN HOLE (kept; superseded as load-bearing by the R4 re-plan below).
+    The brute existence question -- does ANY <=100-coord Q give cap_dim>=3? --
+    is infeasible to settle by enumeration over C(416,100).  Round 4 re-plans the
+    load-bearing step to a NEGATIVE OBSTRUCTION THEOREM (no_fresh_direction_theorem
+    below): a clean algebraic non-existence statement, the right shape to certify.
     """
     raise NotImplementedError(
-        "search_codim4_vector_general: undecided -- general existence of a "
-        "<=100-coord Q with cap_dim>=3. Structured family refuted (best dim-62 "
-        "subset = 270 pts, deficit 46). See commentary for the open hole."
+        "search_codim4_vector_general: superseded by no_fresh_direction_theorem "
+        "(R4 re-plan to an algebraic obstruction, not a brute search)."
+    )
+
+
+# ---------------------------------------------------------------------------
+# ROUND-4 RE-PLAN (advance fresh-orthogonal-dir to a NEGATIVE OBSTRUCTION).
+# ---------------------------------------------------------------------------
+# The structured evidence (3rd direction costs >=146 vertices; the 270-pt
+# ceiling) strongly suggests line A is a genuine WALL.  Settling it NEGATIVELY,
+# algebraically, consolidates the map: "no fresh codim-3 direction of E lives on
+# <=100 coordinates while leaving omega<=5 on >=316 vertices."  That is a finite,
+# Lean-fit statement (exact eigenspace + coordinate-window linear algebra), not a
+# bound -- but high-informativeness (it closes line A and, by inheritance, the
+# gri-augment/mixed cores that fight the same no-spare-direction obstruction).
+#
+# THE OBSTRUCTION, decomposed into checkable sub-claims:
+#   Let E = 65-dim eigenspace of A for eigenvalue 20.  cap_dim(E, Q) = dim of the
+#   coordinate-window intersection E ∩ span{e_q : q in Q}.
+#   (O1) WINDOW BOUND.  For |Q| <= 100, dim(E ∩ span(e_Q)) = |Q| - rank(P_{E^perp}
+#        restricted to coords Q), where P_{E^perp} is the projection onto E^perp
+#        (the 351-dim complement, eigenvalues 100 and -4).  cap_dim>=3 forces a
+#        rank deficiency >= 3 of a 100-column submatrix of P_{E^perp} -- a strong,
+#        ROOT-structure-constrained condition on Q.
+#   (O2) ORBIT REDUCTION.  Aut(G_2(4)) acts on coordinate sets Q; cap_dim is an
+#        Aut-invariant, so the search reduces to Aut-orbit representatives of
+#        <=100-subsets meeting the window non-trivially.  Combined with (O1) this
+#        is a FINITE check (orbits, not C(416,100)).
+#   (O3) COUNT COUPLING.  Any Q achieving cap_dim>=3 with |Q|<=100 must leave
+#        T = complement(Q) with |T|>=316 AND omega(A[T,T])<=5; the structured
+#        family already shows the smallest such Q has |Q|=146 (=> |T|=270<316).
+#        The theorem is: NO <=100-coord Q simultaneously meets (O1)+(O3).
+
+def no_fresh_direction_theorem(A, E, verts):
+    """RE-PLANNED LOAD-BEARING HOLE (round 4): the negative obstruction theorem.
+
+    Prove (or exactly refute) the statement:
+
+        There is NO coordinate set Q with |Q| <= 100, cap_dim(E, Q) >= 3, and
+        omega(A[complement(Q), complement(Q)]) <= 5 on |complement(Q)| >= 316.
+
+    Strategy (the three sub-claims O1/O2/O3 above):
+      1. (O1) Characterise cap_dim>=3 as a rank-deficiency-3 condition on a
+         100-column submatrix of the exact integer projection onto E^perp.
+      2. (O2) Reduce the Q-search to Aut(G_2(4))-orbit representatives (finite).
+      3. (O3) Show every orbit rep with cap_dim>=3 has |Q| >= 117 (=> |T| <= 299
+         < 316), closing the count -- OR exhibits the surviving omega > 5.
+
+    HOLE: fill the orbit enumeration + the rank-deficiency characterisation.  All
+    exact integer linear algebra (exact_rank) -- Lean-fit.  Returns
+    (proved: bool, witness_or_certificate).
+    """
+    raise NotImplementedError(
+        "no_fresh_direction_theorem: prove no <=100-coord Q has cap_dim>=3 with "
+        "omega<=5 on >=316 surviving vertices.  Decompose via O1 (rank-deficiency "
+        "in E^perp), O2 (Aut-orbit reduction to a finite check), O3 (count "
+        "coupling |Q|>=117).  Exact integer linear algebra; Lean-fit."
     )
 
 

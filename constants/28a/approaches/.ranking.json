@@ -1,57 +1,68 @@
 {
   "fresh-orthogonal-dir": {
-    "elo": 1537.3033080566952,
+    "elo": 1547.8653799026815,
     "expanded": 1,
     "last_note": "Holes 1&2 (build_g24 + standard_partition) closed exact and independently reproduced (srg(416,100,36,20), Gram rank 65 over Q, omega=5, |B|=96/3x32, |C|=320). Hole 3 reshaped to exact eigenspace-intersection form and structured family refuted exactly: best dim-62 subset = 270 pts (exact rank 62, omega<=5, ceil=54<64). One honest open hole remains: search_codim4_vector_general (general |Q|<=100 with cap_dim>=3). No bound; record stays 63.",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 2,
+    "selected": 4,
     "slug": "fresh-orthogonal-dir",
     "stale": false,
     "summary": "Find a 4th codimension vector inside G_2(4) via a second isotropic point's partition, dropping a >=316-pt subset to 62 dims with omega<=5; most principled, extends the 65->64->63 machinery."
   },
   "gri-augment": {
-    "elo": 1428.1760646099067,
+    "elo": 1399.883851438888,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 2,
+    "selected": 4,
     "slug": "gri-augment",
     "stale": false,
     "summary": "Augment Gri's 63-dim W-set with engineered points sharing a hyperplane to drop to 62 dims while capping omega<=5; inherits the no-spare-direction obstruction, hard cap-5 packing."
   },
   "mixed-construction": {
-    "elo": 1465.1794787787132,
+    "elo": 1443.4046750138216,
     "expanded": 1,
     "last_note": "build_core hole CLOSED: exact 62-dim 270-pt two-distance G2(4) section (rank 62 over Q, omega=5) independently re-verified; verify() correctness bug (diameter-graph vs complement) fixed correctly. Load-bearing engineer_perturbation still OPEN with precise geometric obstruction (core fills its diameter ball; any added point breaks alpha<=5). Needs a sparser core.",
     "last_outcome": "advanced",
     "last_round": 3,
-    "selected": 2,
+    "selected": 4,
     "slug": "mixed-construction",
-    "stale": true,
+    "stale": false,
     "summary": "A <=62-dim two-distance core plus non-two-distance perturbation points to reach 316 pts with diameter-clique <=5; downstream of srg-sweep, least-structured search."
   },
   "musin-edge-edit": {
-    "elo": 1544.4524580411198,
-    "expanded": 1,
-    "last_note": "Load-bearing hole maximize_mu_over_edge_flips implemented (was NotImplementedError) + fast exact modular mu-evaluator built and verified against exact-rational; mu-raising lever (rook K5[]K_m, emb=s+m-2) exactly confirmed. But does NOT fire: under omega<=5 the structured optimum is rook K5[]K5 (fire margin theta+mu-n=-4, independently re-derived) and edge-flips on a balanced skeleton provably plateau below. Edge-flip-on-skeleton strategy dead-ended; reaching fire needs a new omega<=5 family outside the swept SRG table -> outliner re-plan (RETHINK).",
-    "last_outcome": "partial",
-    "last_round": 3,
-    "selected": 0,
+    "elo": 1538.8925329983604,
+    "expanded": 2,
+    "last_note": "Both R4 re-planned holes CLOSED, verified clean negative. fractional_part_lower_bound_dual: exact uniform dual theta(G)>=n/omega(G) re-derived and correct (promoted as lemma chi-f-uniform-transitive-dual). search_assoc_scheme_family: bounded exact search over Johnson/Hamming/circulant \u2014 NO omega<=5 candidate fires (best T(6) margin -3; emb dims T(6)=5,H(2,4)=6,H(2,5)=8 independently re-derived over Q). The transitive mu-rich scheme/Cayley family is exhausted: omega<=5 forces n/omega far below emb+1. No live hole remains; no bound. Like srg-sweep, a terminal clean negative \u2014 needs outliner re-plan (non-transitive graphs or off-table omega<=5 rows) to revive.",
+    "last_outcome": "dead-end",
+    "last_round": 4,
+    "selected": 2,
     "slug": "musin-edge-edit",
     "stale": true,
     "summary": "Build a balanced cap-5 clique skeleton (m=64, n=320) from scratch and edge-flip between cliques to maximize mu(G); fires when theta+mu>n with embedding dim n-mu-1<=62. Structurally evades all three G2(4)/SRG obstructions; Lean-fit exact CM-rank + bitset omega."
   },
   "srg-sweep": {
-    "elo": 1524.888690513565,
+    "elo": 1507.2519145846024,
     "expanded": 1,
     "last_note": "Certifiable hole closed: full Brouwer table (4538 rows) + 17 big SRGs swept; eigenvalue-mult formula matches table r^f on all 4231 integer rows (0 mismatches, independently reproduced); G_2(4) f=65 sanity holds. 0 rows certify a dim<=62 counterexample. All 357 kills re-derived sound and conservative (structural-lb kills only need_omega<=2 where lambda>=1 forces omega>=3; named-family omega values correct and exceed need). 207 rows left honestly OPEN (need explicit graph's exact omega). Clean negative, no bound; record stays 63.",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 2,
+    "selected": 4,
     "slug": "srg-sweep",
     "stale": false,
     "summary": "Finite sweep of Brouwer's SRG/two-distance tables for a graph with embedding dim f<=62 and ceil(v/omega)>=64; cheapest to run, settles a branch even if empty."
+  },
+  "theta-cover-dual": {
+    "elo": 1562.701646061646,
+    "expanded": 1,
+    "last_note": "Both load-bearing holes advanced: 14 named vertex-transitive families (13 Steiner block-graphs via closed-form pencil/PPC clique lower bounds + Cameron srg(231,30,9,3) exact omega=7) resolved EXACTLY negative, converting loose-DH OPEN srg-sweep rows to exact non-firing. Verified independently (need_omega logic, Steiner LBs as true lower bounds, Cameron srg params + omega=7 by Bron-Kerbosch). build_candidate_graph residual off-table discovery hole (family-b Cayley + dense rows v=220/276/344) STILL OPEN. No bound; held stays 63. theta_designs scaffold promoted.",
+    "last_outcome": "advanced",
+    "last_round": 4,
+    "selected": 0,
+    "slug": "theta-cover-dual",
+    "stale": true,
+    "summary": "Fire Borsuk via chi(G_d) >= chi_f = |X|/alpha (vertex-transitive pin, exact) with a finite rational fractional-clique-cover dual; the only route to a sub-316-point counterexample. Hole: build a denser-than-G2(4)-ratio transitive two-distance set in <=62 dims. Lean-fit."
   }
 }

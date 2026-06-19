@@ -30,3 +30,20 @@ verified no value below 63)
   ω=max(5,m)) exactly re-verified at integer root t=2, and a fast exact modular μ-evaluator
   built; but no ω≤5 edit fires (structured optimum rook K5□K5 has fire margin θ+μ−n=−4,
   independently confirmed). Edge-flip-on-balanced-skeleton strategy dead-ended.
+- R4: No bound change (record stays 63; held 63). Two verified advances, both honest
+  negatives on the chi_f crack. (a) `theta-cover-dual` (new): both load-bearing holes
+  ADVANCED — 14 existence-confirmed named vertex-transitive families resolved EXACTLY in
+  the NEGATIVE (none fires), converting OPEN srg-sweep rows from the loose Delsarte-Hoffman
+  test to exact non-firing resolutions. 13 Steiner block-intersection rows S(2,3,n)/S(2,4,n)
+  killed by closed-form clique LOWER bounds (pencil ω(A)≥(n−1)/(k−1) and partial-parallel-
+  class ω(Ā)≥⌈(n−1)/(k(k−1))⌉, both > need_omega(v), re-derived and confirmed as true lower
+  bounds); Cameron srg(231,30,9,3) built exactly (independently re-verified srg params +
+  ω(A)=7 by Bron–Kerbosch), greedy α≥17 — both > need_omega(231)=3. Residual off-table
+  discovery hole (`build_candidate_graph`: family-b Cayley + dense 2-graph rows
+  v=220/276/344) stays OPEN. `theta_designs.py` scaffold (Bose/Golay/Witt/Cameron) certified
+  & promoted to lemmas/. (b) `musin-edge-edit`: both R4 re-planned holes CLOSED — exact
+  uniform fractional-clique-cover dual θ(G)≥n/ω(G) (re-derived θ(G)=χ(Ḡ)≥χ_f(Ḡ)=n/α(Ḡ)=
+  n/ω(G), exact for vertex-transitive G; promoted as lemma `chi-f-uniform-transitive-dual`),
+  and a bounded exact search over Johnson/triangular/Hamming/circulant families — CLEAN
+  NEGATIVE, no ω≤5 candidate fires (best margin T(6) −3; embedding dims T(6)=5, H(2,4)=6,
+  H(2,5)=8 independently re-derived over Q). chi_f buys nothing over ⌈n/ω⌉ here.
