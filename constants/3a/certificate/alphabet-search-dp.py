@@ -45,15 +45,32 @@ HOLES (status):
        with the fast routines (validated vs the oracle on small cases + vs Griego's literals);
        the winning counts are cached in WINNERS and re-derivable with VERIFY_DP=1.  The d=96,
        T=184 winner's q was independently re-derived (max_U) and matches the cached literal.
+  (H1'') LONGER-d FRONTIER (d=104, d=112) -- CLOSED this round (round 4).  Scanned d=104 and
+       d=112 at the re-tuned T/d grid (c ~ 1.90-1.93), ONE point per background invocation
+       across 64 cores (sumset bitmask ~1000 s/pt at d=104, ~1400-1900 s/pt at d=112 -- higher
+       than the ~600/~830 s solo projection because 10 jobs ran at once; diffset <6 s; flush=True
+       progress; NEVER a single silent foreground >600 s call -- each (d,T) is its own
+       run_in_background job, per the per-role NEVER rule).  Both d have an INTERIOR peak; ALL
+       scanned points beat the prior HELD 1.1752717416788478:
+         d=104: T=197->1.17570263, 198->1.17571163 (peak), 199->1.17571139,
+                200->1.17570192, 201->1.17568322   (c_peak = 1.9038)
+         d=112: T=211->1.17607391, 212->1.17608942, 213->1.17609693 (peak),
+                214->1.17609643, 215->1.17608794   (c_peak = 1.9018)
+       The optimum c keeps drifting down (d=96:1.9167 -> d=104:1.9038 -> d=112:1.9018, all
+       above Griego's 1.875) and theta keeps rising; per-d gain is FLAT (+~4.4e-4 from d=96 to
+       104, +~3.9e-4 from 104 to 112), not decaying.  Winners cached in WINNERS with exact
+       counts; the d=112,T=213 winner re-derived by a fresh independent DP recompute.
   (H3) CERTIFY -- CLOSED (round 2): directed-rounded rational theta_lb via scaled base-2
        log bounds (certify_theta_lb_scaled below; identical to the reviewer-certified
        lemmas/log_bounds.py).  Validated on the record (matches float, beats with margin
-       4.77e-8); applied to the d=96, T=184 winner -> certified theta_lb = 1.1752717416788478
-       (terms=300 already saturated; terms in {300,350,400,500} all give the same safe value).
+       4.77e-8); applied to the d=96, T=184 winner -> certified theta_lb = 1.1752717416788478,
+       to d=104, T=198 -> 1.1757116321651571, to d=112, T=213 -> 1.1760969265776222
+       (terms in {300,400,500} all give the IDENTICAL safe value at every winner; saturated).
 
->>> RESULT (round 3): certified LOWER bound C_3a >= 1.1752717416788478, the NEW BEST, strictly
-    above the prior held 1.1744750903655619 (+7.97e-4) and the record 1.1740744 [G2026]
-    (+1.20e-3).  Construction: A={0,2,3,4,5,6,7,8,9,10}, d=96, T=184, base 21 (c=T/d=1.9167).
+>>> RESULT (round 4): certified LOWER bound C_3a >= 1.1760969265776222, the NEW BEST, strictly
+    above the prior held 1.1752717416788478 (+8.25e-4) and the record 1.1740744 [G2026]
+    (+2.02e-3).  Construction: A={0,2,3,4,5,6,7,8,9,10}, d=112, T=213, base 21 (c=T/d=1.9018).
+    Intermediate certified winner d=104, T=198 -> 1.1757116321651571 (+4.40e-4 over prior held).
     All steps are exact-integer DP + directed-rounded rational log bounds; no hole on the path.
 
 Running this file (<1 s from cached literals): validates the engine + the fixed certifier on
@@ -248,6 +265,30 @@ WINNERS = {
         q=8571410494579611166108619722960490736204749562145503217128903617006442204626527584995605100800210570065634413170633869420430689,
         float_theta=1.1752717416788478,
     ),
+    # --- ROUND 4 (hole H1'' closed): the d=104 / d=112 frontier scan ---------------------
+    # The optimal c keeps drifting DOWN with d (d=96 peak c=1.9167 -> d=104 c=1.9038 ->
+    # d=112 c=1.9018), exactly as the explorer predicted (c ~ 1.91 at these d).  theta keeps
+    # RISING toward the asymptote; per-d gain is still flat (+~4.4e-4 over d=96->104,
+    # +~3.9e-4 over d=104->112), NOT decaying.
+    #
+    # d=104 interior peak at T=198 (c=1.9038); float scan T in {197..201} all beat HELD:
+    #   197->1.17570263, 198->1.17571163 PEAK, 199->1.17571139, 200->1.17570192, 201->1.17568322.
+    (104, 198): dict(
+        s=88841867566592306972826854327854397824598648934594206840803908028908267368058754589773530663527042982,
+        diff=129082080504501002492258263656559638707222734999012713221110818099793574930038844361180528335460048997821011718714219722074041,
+        q=324195253661884085953791845719549042910561438403654190631765490774986625086515399078761776008491133952225056195190376572861191687787996077,
+        float_theta=1.175711632165157,
+    ),
+    # d=112 interior peak at T=213 (c=1.9018); float scan T in {211..215} all beat HELD:
+    #   211->1.17607391, 212->1.17608942, 213->1.17609693 PEAK, 214->1.17609643, 215->1.17608794.
+    # This is the BEST construction this run: certified theta_lb = 1.1760969265776222,
+    # +8.25e-4 over the prior HELD bound 1.1752717416788478, +2.02e-3 over the record 1.1740744.
+    (112, 213): dict(
+        s=5619036280413257036057659205339935854348907407929033590990262334346742346590291914200087618689122724324098661,
+        diff=672360654712406528251662353450887070288206119807747142620847485763388638771312784867513558155969823137309563377242319446360174355914849,
+        q=12261991484757162029314304744186292602509089975156962035420090533132614626405267682582084952845464815370591935037141368690635687428359302009849791627,
+        float_theta=1.176096926577622,
+    ),
 }
 
 
@@ -292,6 +333,30 @@ def scan_d96(T_list=D96_GRID, verbose=True):
     """HOLE H1' (OPEN, round 3): scan d=96 at the planned T-grid, ONE point at a time.
     Each d=96 point is ~300-340 s -- ALWAYS run exactly one T per invocation."""
     return _scan((96,), tuple(T / 96 for T in T_list), cap_T=max(T_list), verbose=verbose)
+
+
+# -- ROUND 4 EXTENSION (hole H1'' CLOSED): the d=104 / d=112 frontier scan -------------------
+# The optimal c drifts DOWN with d (d=96 peak c=1.9167); so the d=104/112 optima sit near
+# c ~ 1.90-1.92 (T~198 / T~213).  Each (d,T) point was run as its OWN run_in_background job
+# via _scan_point.py (never a silent foreground >600 s call -- per-role NEVER): d=104 ~1000 s,
+# d=112 ~1400-1900 s under 10-way contention.  Interior peaks found (d=104 T=198, d=112 T=213),
+# exact counts cached in WINNERS, certified with certify_theta_lb_scaled (H3 path closed).
+D104_GRID = (197, 198, 199, 200, 201)   # d=104, T near c in [1.894, 1.933]
+D112_GRID = (211, 212, 213, 214, 215)   # d=112, T near c in [1.884, 1.920]
+
+
+def scan_d104(T_list=D104_GRID, verbose=True):
+    """HOLE H1'' (CLOSED, round 4): scan d=104 at the planned T-grid, ONE point at a time.
+    Each d=104 point is ~600-1000 s -- ALWAYS run exactly one T per run_in_background job
+    (use _scan_point.py 104 <T>); never a single silent foreground call."""
+    return _scan((104,), tuple(T / 104 for T in T_list), cap_T=max(T_list), verbose=verbose)
+
+
+def scan_d112(T_list=D112_GRID, verbose=True):
+    """HOLE H1'' (CLOSED, round 4): scan d=112 at the planned T-grid, ONE point at a time.
+    Each d=112 point is ~830-1900 s -- ALWAYS run exactly one T per run_in_background job
+    (use _scan_point.py 112 <T>); never a single silent foreground call."""
+    return _scan((112,), tuple(T / 112 for T in T_list), cap_T=max(T_list), verbose=verbose)
 
 
 def _scan(d_list, c_list, cap_T, verbose):
