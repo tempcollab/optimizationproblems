@@ -10,10 +10,13 @@ For the constant the orchestrator assigns (an id like `1a`, `42a`), read its rec
 chain) and the run state (`/tmp/memory/run_state.md`). Then build the picture:
 
 - **The numbers to beat**, and which bound is the softer target, and why.
-- **How the record was actually achieved** — read the FULL papers behind it, not the
-  abstracts, and save a short digest of each under `constants/<id>/literature/` so future
-  rounds reuse it. Surface analogous results and techniques worth borrowing, even from
-  neighbouring constants.
+- **Literature review — what others did and found (your core mandate).** Read the **FULL
+  papers** behind the record, not the abstracts: what technique achieved each bound, what
+  the authors identified as the obstruction, what they left open. Pull in analogous results
+  and borrowable techniques from **neighbouring constants** too. Save a short digest of each
+  under `constants/<id>/literature/` so this round's outliner and every future round reuse it
+  (don't re-read what's already digested there — extend it). The outliner opens its new
+  sketches from what you surface here, so name the techniques and openings concretely.
 - **What's already been tried.** Sample the existing sketches (`sample_approaches`, `k=5`)
   and read their commentary + files; their `last_outcome`/`reviewer_note` tell you what's
   live, what dead-ended, and **on which hole** a stuck sketch stalled. Report it — it's

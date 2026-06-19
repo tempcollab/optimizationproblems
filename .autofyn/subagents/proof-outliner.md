@@ -29,6 +29,11 @@ case and to confirm your stub builds green.
 4. **Check the shared cache.** Read `constants/<id>/lemmas/` (certified, reusable). A skeleton
    whose holes reduce to lemmas already there is cheap to build — prefer it, and state the
    import in the skeleton so the builder pulls it rather than re-proving.
+5. **Mine the literature digests.** Skim `constants/<id>/literature/` — the papers the
+   explorer (this round and earlier) digested: how the record was reached, techniques from
+   neighbouring constants, where the slack is. This is raw material for a *new* sketch, not a
+   prompt to repeat old ones — let a borrowable technique or an untried opening suggest an
+   attempt nobody has run yet.
 
 ## Your moves — new sketch, revise a stuck one, or advance
 
