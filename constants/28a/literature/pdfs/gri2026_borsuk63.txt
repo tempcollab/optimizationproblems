@@ -1,0 +1,434 @@
+A 63-dimensional counterexample to Borsuk’s conjecture
+
+Max Grinsztajn
+grinsztajnmax@gmail.com
+
+May 2026
+
+Abstract
+
+We give a ﬁnite construction showing that Borsuk’s conjecture fails in dimension 63.
+
+Equivalently, if dB denotes the least dimension in which Borsuk’s conjecture fails, then
+
+dB ≤ 63.
+
+The construction is a 321-point set X ⊂ R63 such that every subset of strictly smaller
+diameter has at most 5 points. Hence any partition of X into smaller-diameter subsets
+requires at least ⌈321/5⌉ = 65 > 64 parts. The construction starts from the standard
+G2(4) representation used by Bondarenko and Jenrich–Brouwer; the new step is to take a
+320-point subconﬁguration in a codimension-two subspace and adjoin one projected point.
+
+1 Introduction
+
+Borsuk’s conjecture asks whether every bounded set in Rd can be partitioned into d + 1 subsets
+of strictly smaller diameter. Let dB denote the least dimension in which the conjecture fails.
+Bondarenko’s construction from the G2(4) graph gave dB ≤ 65 [1], and the Jenrich–Brouwer
+reﬁnement gave dB ≤ 64 [2].
+
+We prove the following improvement.
+
+Theorem 1. Borsuk’s conjecture fails in dimension 63. In particular,
+
+dB ≤ 63.
+
+The only external input is the standard G2(4) graph construction and its usual Euclidean
+representation. The additional ﬁnite facts about the partition used here are checked by the
+veriﬁcation script in the accompanying repository [4]. From these facts we prove two new steps:
+a 320-point subconﬁguration lies in a codimension-two subspace of the usual 65-dimensional
+representation, and one can adjoin a projected point in this subspace without allowing any
+smaller-diameter subset to have more than 5 points.
+
+2 The ﬁnite model
+
+We use Brouwer’s projective model of the G2(4) graph [3]. Work in F16 = F2[α]/(α4 + α + 1)
+and in the projective plane PG(2, 16). With respect to the Hermitian form
+
+h(u, w) = u0w4
+
+0 + u1w4
+
+1 + u2w4
+2,
+
+1
+
+the vertices are the unordered triples
+
+A = {a1, a2, a3}
+
+of pairwise orthogonal non-isotropic projective points. For such a triple A, let T (A) be the
+associated isotropic 15-set, namely the set of isotropic projective points lying on the three
+projective lines spanned by pairs of points of A. Two vertices A, A′ are adjacent when
+
+|T (A) ∩ T (A′)| = 3.
+
+Lemma 1 (ﬁnite veriﬁed facts). The veriﬁcation script in the accompanying repository [4]
+veriﬁes the following facts.
+
+1. The graph Γ has 416 vertices and is strongly regular with parameters
+
+(v, k, λ, µ) = (416, 100, 36, 20).
+
+Consequently, its nontrivial adjacency eigenvalues are 20 and −4, with multiplicities 65
+and 350, respectively.
+
+2. The clique number is
+
+ω(Γ) = 5.
+
+Equivalently, the script ﬁnds a 5-clique and veriﬁes that there is no 6-clique.
+
+3. Fix the ﬁrst isotropic point q0 in the deterministic order used by the script. Let B be the
+set of vertices containing a non-isotropic point orthogonal to q0, and put C = V (Γ) \ B.
+Then
+
+The induced graph on B has three connected components
+
+|B| = 96,
+
+|C| = 320.
+
+of size 32.
+
+4. The following degree data hold:
+
+B1, B2, B3
+
+|N (u) ∩ Bi| = 20 (u ∈ Bi),
+|N (u) ∩ Bj| = 0
+|N (u) ∩ C| = 80
+|N (c) ∩ Bi| = 8
+|N (c) ∩ C| = 76
+
+(u ∈ Bi, i ̸= j),
+(u ∈ B),
+(c ∈ C, i = 1, 2, 3),
+(c ∈ C).
+
+3 The standard Euclidean representation
+
+Lemma 2 (standard representation). There are vectors xv ∈ R65, indexed by v ∈ V (Γ), such
+that
+
+
+
+xu · xv =
+
+
+
+u = v,
+90,
+u ∼ v,
+18,
+−6, u ̸∼ v.
+
+2
+
+Consequently, for u ̸= v,
+
+∥xu − xv∥2 =
+
+{
+
+144, u ∼ v,
+192, u ̸∼ v.
+
+Proof. Let A be the adjacency matrix of Γ, and let J be the all-one matrix. Set
+
+G = 96I + 24A − 6J.
+
+Since Γ is strongly regular with parameters (416, 100, 36, 20), its adjacency eigenvalues are
+
+100,
+
+20,
+
+−4
+
+with multiplicities 1, 65, 350. Hence G has eigenvalue
+
+96 + 24 · 100 − 6 · 416 = 0
+
+on the all-one line, eigenvalue 96 + 24 · 20 = 576 on the 65-dimensional 20-eigenspace, and
+eigenvalue 96 + 24(−4) = 0 on the −4-eigenspace. Hence G is positive semideﬁnite of rank 65,
+so it is a Gram matrix for vectors in R65. Its entries are exactly the stated inner products, and
+the distance formula follows from
+
+∥xu − xv∥2 = ∥xu∥2 + ∥xv∥2 − 2xu · xv.
+
+Only the input conﬁguration {xv : v ∈ V (Γ)} is two-distance. The ﬁnal set constructed
+
+below is not two-distance.
+
+4 A codimension-two subspace
+
+For i = 1, 2, 3, deﬁne
+
+∑
+
+Si =
+
+xy.
+
+y∈Bi
+Lemma 3. The points xc, c ∈ C, lie in a common 63-dimensional subspace of the standard
+R65 representation.
+
+Proof. Let c ∈ C. By Lemma 1, the vertex c has exactly 8 neighbors and 24 non-neighbors in
+each Bi. Therefore
+
+xc · Si = 8 · 18 + 24 · (−6) = 0.
+
+Thus every xc, c ∈ C, is orthogonal to S1, S2, S3.
+
+The same degree data give
+
+Si · Si = 32(90 + 20 · 18 + 11 · (−6)) = 12288,
+
+and, for i ̸= j, since there are no edges between Bi and Bj,
+
+Si · Sj = 322(−6) = −6144.
+
+3
+
+Hence the Gram matrix of S1, S2, S3 has diagonal entries 12288 and oﬀ-diagonal entries −6144.
+Its eigenvalues are
+
+0,
+
+18432,
+
+18432,
+
+so dim span(S1, S2, S3) = 2.
+
+Let
+
+W = span(S1, S2, S3)⊥.
+The ambient representation has dimension 65, so dim W = 63. We have shown that xc ∈ W
+for every c ∈ C.
+
+We identify W with R63 from now on.
+
+5 The additional point
+
+Lemma 4. Choose b ∈ B1, and deﬁne
+
+zb = xb − 1
+32
+
+S1.
+
+∥zb∥2 = 78,
+
+zb · xc =
+
+{
+
+18,
+−6,
+
+b ∼ c,
+b ̸∼ c.
+
+xb · S1 = 90 + 20 · 18 + 11 · (−6) = 384,
+
+1
+32
+
+S1 · S1 =
+
+12288
+32
+
+= 384.
+
+Then zb ∈ W ,
+
+and for every c ∈ C,
+
+Proof. First,
+
+and
+
+Thus zb · S1 = 0.
+
+For i = 2, 3, the veriﬁed degree data say that there are no edges between B1 and Bi. Hence
+
+Also
+
+xb · Si = 32(−6) = −192.
+
+1
+32
+
+S1 · Si =
+
+−6144
+32
+
+= −192.
+
+Thus zb · Si = 0 for i = 2, 3. Therefore zb ∈ W .
+
+The norm is
+
+∥zb∥2 = 90 − 2
+32
+
+· 384 +
+
+1
+322
+
+· 12288 = 78.
+
+Finally, Lemma 3 gives S1 · xc = 0 for c ∈ C, so
+
+The displayed formula follows from Lemma 2.
+
+zb · xc = xb · xc,
+
+4
+
+Set
+
+√
+
+t =
+
+222 − 1
+13
+
+,
+
+p = tzb.
+
+Equivalently, t is the positive root of
+
+78t2 + 12t = 102.
+
+Deﬁne
+
+X = {xc : c ∈ C} ∪ {p}.
+By Lemmas 3 and 4, all points of X lie in W ≃ R63. Also p is not one of the xc: every xc has
+squared norm 90, while ∥p∥2 = 78t2; if 78t2 = 90, then the equation 78t2 + 12t = 102 would
+give t = 1, which is not a root of that equation. Hence
+
+X ⊂ R63,
+
+|X| = 321.
+
+6 Diameter and clique bound
+
+Lemma 5. The set X has squared diameter 192. More precisely, for distinct c, c′ ∈ C,
+
+and for c ∈ C,
+
+∥xc − xc′∥2 =
+
+{
+
+144,
+192,
+
+c ∼ c′,
+c ̸∼ c′,
+
+{
+
+∥p − xc∥2 =
+
+192 − 48t,
+192,
+
+b ∼ c,
+b ̸∼ c.
+
+Proof. The formula for distances between points xc, xc′ is Lemma 2. For distances from p, use
+∥p∥2 = 78t2 and Lemma 4. If b ̸∼ c, then
+
+∥p − xc∥2 = 78t2 + 90 + 12t = 192.
+
+∥p − xc∥2 = 78t2 + 90 − 36t = 192 − 48t < 192.
+
+If b ∼ c, then
+
+because t > 0.
+
+Thus all squared distances in X are at most 192. The value 192 is attained between p and
+
+any c ∈ C not adjacent to b; such a c exists because b has 80 neighbors in C and |C| = 320.
+
+Lemma 6. Every subset Y ⊂ X with
+
+diam(Y ) < diam(X)
+
+has at most 5 points.
+
+Proof. First suppose that p /∈ Y . Then Y ⊂ {xc : c ∈ C}. By Lemma 5, two points xc, xc′ are
+at the full diameter exactly when c ̸∼ c′. Hence the vertices corresponding to the points of Y
+must be pairwise adjacent. They form a clique in Γ, and Lemma 1 gives |Y | ≤ 5.
+
+5
+
+Now suppose p ∈ Y . Any other point of Y is some xc. In order to have distance strictly
+smaller than diam(X) from p, Lemma 5 forces b ∼ c. Also, the remaining vertices c must be
+pairwise adjacent. Therefore
+
+{b} ∪ {c ∈ C : xc ∈ Y \ {p}}
+
+is a clique in Γ. By Lemma 1, this clique has at most 5 vertices. Since Y is obtained from this
+clique by replacing b with p, we get |Y | ≤ 5.
+
+Proof of Theorem 1. The set X has 321 points in R63. By Lemma 6, every subset of X of
+strictly smaller diameter has at most 5 points. Thus any partition of X into subsets of smaller
+diameter requires at least
+⌉
+
+⌈
+
+321
+5
+
+= 65
+
+parts. Since 65 > 64 = 63 + 1, Borsuk’s conjecture fails in dimension 63.
+
+7 Computational veriﬁcation
+
+The ﬁnite checks in Lemma 1 are reproduced by the veriﬁcation script in the accompanying
+repository [4]. The script reconstructs the graph from PG(2, 16), veriﬁes the strongly regular
+parameters (416, 100, 36, 20), builds the partition B1, B2, B3, C, checks the degree data used in
+Lemma 3, and checks the clique obstruction used in Lemma 6. It also checks that the selected
+vertex b has no 5-clique inside N (b) ∩ C; this last check is a consistency check and is not needed
+for the proof above.
+
+The script is deterministic and uses exact ﬁnite-ﬁeld arithmetic and integer bitsets.
+
+Statement on AI assistance
+
+The construction and proof were obtained with assistance from GPT-5.5 Pro.
+
+References
+
+[1] A. V. Bondarenko, On Borsuk’s conjecture for two-distance sets, Discrete & Computational
+
+Geometry 51 (2014), 509–515. https://arxiv.org/abs/1305.2584
+
+[2] T. Jenrich and A. E. Brouwer, A 64-dimensional counterexample to Borsuk’s conjec-
+ture, Electronic Journal of Combinatorics 21 (2014), no. 4, Paper 4.29. https://www.
+combinatorics.org/ojs/index.php/eljc/article/view/v21i4p29/pdf
+
+[3] A. E. Brouwer, The G2(4) graph, graph data and construction notes. https://aeb.win.
+
+tue.nl/graphs/G24.html
+
+[4] M. Grinsztajn, A 63-dimensional counterexample to Borsuk’s conjecture, accompanying
+
+repository. https://github.com/maaxgrin/borsuk-63-counterexample
+
+6
+
+

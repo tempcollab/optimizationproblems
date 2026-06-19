@@ -1,0 +1,1150 @@
+3
+1
+0
+2
+
+g
+u
+A
+9
+2
+
+]
+
+G
+M
+.
+h
+t
+a
+m
+
+[
+
+3
+v
+4
+8
+5
+2
+.
+5
+0
+3
+1
+:
+v
+i
+X
+r
+a
+
+On Borsuk’s conjecture for two-distance sets
+
+Andriy Bondarenko∗
+
+Abstract
+
+In this paper we answer Larman’s question on Borsuk’s conjecture
+
+for two-distance sets. We ﬁnd a two-distance set consisting of 416
+R65 which cannot be partitioned into
+points on the unit sphere S64
+83 parts of smaller diameter. This also reduces the smallest dimension
+
+⊂
+
+in which Borsuk’s conjecture is known to be false. Other examples of
+
+two-distance sets with large Borsuk’s numbers will be given.
+
+Keywords: Borsuk’s conjecture, two-distance sets, strongly regular graphs
+AMS subject classiﬁcation. 05C50, 52C35, 41A55, 41A63
+
+1
+
+Introduction
+
+N the Borsuk number b(n) is the minimal number such that
+For each n
+any bounded set in Rn consisting of at least 2 points can be partitioned into
+b(n) parts of smaller diameter. In 1933 Karol Borsuk [3] conjectured that
+
+∈
+
+b(n) = n + 1. The conjecture was disproved by Kahn and Kalai [10] who
+showed that in fact b(n) > 1.2√n for large n. In particular, their construction
+
+∗This work was carried out during the tenure of an ERCIM “Alain Bensoussan” Fel-
+lowship Programme. The research leading to these results has received funding from the
+
+European Union Seventh Framework Programme (FP7/2007-2013) under grant agreement
+no 246016.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+≥
+
+≤
+
+implies that b(n) > n + 1 for n = 1325 and for all n > 2014. This result
+
+attracted a substantial amount of attention from many mathematicians; see
+
+for example [1], [4], and [18]. Improvements on the smallest dimension n such
+
+that b(n) > n + 1 were obtained by Nilli [14] (n = 946), Raigorodskii [17]
+
+(n = 561), Weißbach [19] (n = 560), Hinrichs [8] (n = 323), and Pikhurko [16]
+
+(n = 321). Currently the best known result is that Borsuk’s conjecture is
+
+false for n
+
+298; see [9]. On the other hand, many related problems are still
+
+unsolved. Borsuk’s conjecture can be wrong even in dimension 4. Only the
+
+estimate b(4)
+
+9 is known; see [12].
+
+In the 1970s Larman asked if the Borsuk’s conjecture is true for two-
+
+distance sets; see also [11] and [18]. Denote by b2(n) the Borsuk number for
+
+two-distance sets in dimension n, that is the minimal number such that any
+two-distance set in Rn can be partitioned into b2(n) parts of smaller diameter.
+The aim of this paper is to construct two-distance sets with large Borsuk’s
+
+numbers. Two basic constructions follow from Euclidean representations of
+
+G2(4) and F i23 strongly regular graphs. First we prove
+
+Theorem 1. There is a two-distance subset
+S64
+h
+partitioned into 83 parts of smaller diameter.
+
+R65 such that
+
+= 1/5 or
+
+xi, xj
+
+⊂
+
+−
+
+i
+
+{
+
+x1, . . . , x416
+
+of the unit sphere
+
+1/15 for i
+
+= j which cannot be
+
+Hence b(65)
+
+b2(65)
+
+≥
+
+≥
+
+84. We also prove the following
+
+Theorem 2. There is a two-distance subset
+S781 such that
+xi, xj
+into 1376 parts of smaller diameter.
+
+{
+1/80 for i
+
+= 1/10 or
+
+−
+
+i
+
+h
+
+x1, . . . , x31671
+
+of the unit sphere
+
+= j which cannot be partitioned
+
+}
+
+}
+
+Then, using the conﬁgurations from Theorem 1 and Theorem 2 we prove
+
+Corollary 1. For integers n
+
+1 and k
+
+(1)
+
+and
+
+(2)
+
+≥
+b2(66n + k)
+
+b2(783n + k)
+
+0 we have
+
+≥
+
+84n + k + 1,
+
+1377n + k + 1.
+
+≥
+
+≥
+
+2
+
+6
+6
+Finally, using again the conﬁguration from Theorem 2 we prove slightly
+
+better estimates for b2(781), b2(780), and b2(779) than what can be obtained
+
+by (1).
+
+Corollary 2. The following inequalities hold:
+
+b2(781)
+
+≥
+
+1225,
+
+b2(780)
+
+≥
+
+1102,
+
+and b2(779)
+
+1002.
+
+≥
+
+The paper is organized as follows. First, in Section 2 we describe Eu-
+
+clidean representations of a strongly regular graph by two-distance sets and
+
+then in Section 3 we prove our main results.
+
+2 Euclidean representations of strongly reg-
+
+ular graphs
+
+A strongly regular graph Γ with parameters (v, k, λ, µ) is an undirected reg-
+
+ular graph on v vertices of valency k such that each pair of adjacent vertices
+
+has λ common neighbors, and each pair of nonadjacent vertices has µ com-
+
+mon neighbors. The adjacency matrix A of Γ has the following properties:
+
+AJ = kJ
+
+and
+
+A2 + (µ
+
+−
+
+λ)A + (µ
+
+−
+
+k)I = µJ,
+
+where I is the identity matrix and J is the matrix with all entries equal to 1
+
+of appropriate sizes. These conditions imply that
+
+(3)
+
+(v
+
+k
+
+−
+
+−
+
+1)µ = k(k
+
+λ
+
+−
+
+−
+
+1).
+
+Moreover, the matrix A has only 3 eigenvalues: k of multiplicity 1, one
+
+positive eigenvalue
+
+r =
+
+1
+2
+
+λ
+
+−
+
+(cid:16)
+
+µ +
+
+(λ
+
+−
+
+µ)2 + 4(k
+
+p
+
+3
+
+µ)
+
+−
+
+(cid:17)
+
+of multiplicity
+
+(4)
+
+f =
+
+1
+2  
+
+v
+
+1
+
+−
+
+−
+
+2k + (v
+
+(λ
+
+−
+
+1)(λ
+−
+µ)2 + 4(k
+
+−
+
+µ)
+µ) !
+
+−
+
+and one negative eigenvalue
+
+p
+
+s =
+
+1
+2
+
+(cid:16)
+
+µ
+
+λ
+
+−
+
+−
+
+(λ
+
+−
+
+µ)2 + 4(k
+
+p
+
+−
+
+µ)
+
+(cid:17)
+
+of multiplicity
+
+g =
+
+1
+2  
+
+v
+
+1 +
+
+−
+
+2k + (v
+
+(λ
+
+−
+
+1)(λ
+−
+µ)2 + 4(k
+
+−
+
+µ)
+µ) !
+
+−
+
+,
+
+.
+
+Clearly, both f and g must be integers. This together with (3) gives a
+
+p
+
+collection of feasible parameters (v, k, λ, µ) for strongly regular graphs.
+
+Let V be the set of vertices Γ. Consider the columns
+
+yi : i
+
+{
+
+V
+
+}
+
+∈
+
+of the
+
+matrix A
+
+−
+
+sI and put xi := zi/
+
+k
+
+zi
+
+, where
+
+yj,
+
+i
+
+k
+1
+v
+
+V.
+
+∈
+
+zi = yi
+
+−
+
+V
+j
+X
+∈
+Note that while the vectors xi lie in Rv, they span at most an f -dimensional
+vector space. Thus for convenience we consider them to lie in Rf . By easy
+calculations
+
+1,
+
+if i = j,
+
+xi, xj
+
+h
+
+i
+
+if i and j are adjacent,
+
+otherwise,
+
+p,
+
+q,
+
+= 
+
+
+β
+
+−
+
+where
+
+(5)
+
+p =
+
+2s
+λ
+−
+s2 + k
+
+−
+−
+
+β
+β
+
+,
+
+q =
+
+µ
+−
+s2 + k
+
+,
+
+β
+
+β =
+
+1
+v
+
+(s2 + k + k(λ
+
+2s) + (v
+
+k
+
+−
+
+−
+
+1)µ).
+
+−
+
+Denote by Γf the conﬁguration xi, i
+V . Similarly, we can deﬁne the
+conﬁguration Γg in Rg. The conﬁgurations Γf and Γg were also considered
+in [6] and have many other fascinating properties. For example, they are
+
+∈
+
+spherical 2-designs.
+
+4
+
+3 Proof of main results
+
+For any vertex v
+
+V of a strongly regular graph Γ, let N(v) be the set
+
+of all neighbors of v and let N ′(v) be the set of non-neighbors of v, i.e.
+N ′(v) = V
+
+N(v)).
+
+v
+
+(
+
+∈
+
+\
+
+{
+
+} ∪
+
+Proof of Theorem 1 We consider the conﬁguration Γf of the well-known
+strongly regular graph Γ = G2(4) with parameters (416, 100, 36, 20). By (4)
+
+we have that f = 65. Moreover by (5), p = 1/5 and q =
+1/15. Therefore
+the diameter of Γf is the distance between xi and xj where i and j are non-
+adjacent. Hence, the conﬁguration cannot be partitioned into less than v/m
+
+−
+
+parts, where m is the size of the largest clique in Γ. To prove Theorem 1 it
+
+is enough to show that Γ has no 6-clique. We will use the following theorem
+
+consisting of four independent results that can be found in [5].
+
+Theorem A
+
+(i) For each u
+
+∈
+
+V the subgraph of Γ induced on N(u) is a strongly regular
+
+graph with parameters (100, 36, 14, 12) (the Hall-Janko graph). In other
+
+words the Hall-Janko graph is the ﬁrst subconstituent of Γ.
+
+(ii) The ﬁrst subconstituent of the Hall-Janko graph is the U3(3) strongly
+
+regular graph with parameters (36, 14, 4, 6).
+
+(iii) The ﬁrst subconstituent of U3(3) is a graph on 14 vertices of regularity
+
+4 (the co-Heawood graph).
+
+(iv) The co-Heawood graph has no triangles.
+
+Parts (i)-(iii) are folklore. They follow from D.G. Higman’s theory of
+
+rank 3 permutation groups (see also [7] and [13]). Part (iv) follows from the
+
+fact that the co-Heawood graph is a subgraph of the Gewirtz graph with
+
+parameters (56,10,0,2); see also [2].
+
+5
+
+Now, for vertices u, v, w
+
+∈
+
+V forming a triangle, (i)-(iii) imply that
+
+N(u)
+
+|
+
+∩
+
+N(v)
+
+N(w)
+
+|
+
+∩
+
+= 14.
+
+∩
+
+∩
+
+Moreover, the subgraph induced on N(u)
+
+N(v)
+
+N(w) is the co-Heawood
+
+graph. Therefore by (iv) the maximal cliques in Γ are of size 5.
+Proof of Theorem 2 Consider the conﬁguration Γf of the F i23 graph with pa-
+rameters (31671, 3510, 693, 351). We have f = 782, p = 1/10, and q =
+1/80.
+Hence, the diameter of Γf is the distance between nonadjacent vertices.
+Therefore Γf cannot be partitioned into less than v/m parts, where m is
+the size of the largest clique in Γ. We will use the well-known fact (see [15])
+
+−
+
+that the ﬁrst subconstituent of Γ is the strongly regular graph with param-
+
+eters (3510, 693, 180, 126) and the second subconstituent of Γ is the strongly
+
+regular graph G with parameters (693, 180, 51, 45). Now we will estimate
+
+from above the size of a clique in G. To this end consider the complement
+graph ¯G having parameters (693, 512, 376, 384). For the conﬁguration ¯Gf ,
+1/20. Therefore, the size of a
+we have that f = 440, p = 1/64, and q =
+
+clique K in G cannot be larger than 21. Otherwise the vector
+
+−
+
+xi,
+
+K
+i
+X
+∈
+
+¯Gf ,
+
+xi
+
+∈
+
+is of negative norm. Thus, the size of a clique in Γ is not larger than 23
+and hence Γf cannot be partitioned into less than 31671/23 = 1377 parts of
+smaller diameter.
+
+Proof of Corollary 1 Let us ﬁrst prove (1) for k = 0. Fix n
+
+66n. Consider the following coordinate representation of a vector y
+
+N and put m =
+
+∈
+
+Rm:
+
+∈
+
+y = (y1, . . . , yn
+
+a1, . . . , an),
+
+|
+
+R65 and ak
+
+where yk
+∈
+unit vectors in Rm: Y =
+
+∈
+
+R, k = 1, . . . , n. Now we take the following set of
+vik, i = 1, . . . , 416, k = 1, . . . , n
+}
+
+, where
+
+{
+
+vik = (0, . . . , 0,
+
+√15
+4
+
+xi, 0, . . . , 0
+
+0, . . . , 0,
+
+|
+
+1
+4
+
+, 0, . . . , 0), i = 1, . . . , 416, k = 1, . . . , n,
+
+6
+
+Here each vik has only two nonzero coordinates yk and ak, and vectors xi are
+such as in Theorem 1. Clearly,
+
+= l. Moreover,
+
+= 0 if k
+
+vik, vjl
+
+h
+
+i
+
+1,
+
+if i = j,
+
+vik, vjk
+
+h
+
+i
+
+= 
+1/4,
+
+0,
+
+
+if i and j are adjacent,
+
+otherwise.
+
+Therefore, Y is a two-distance set consisting of 416n vectors. Now, by The-
+
+orem 1, this set cannot be partitioned into less than 84n parts of smaller
+diameter. Adding the vector v which is at distance √2 to each vector of Y
+
+(α is a solution of the equation (α
+
+v = (0, . . . , 0
+
+α, . . . , α), α =
+
+1 + √1 + 16n
+4n
+1)α2 = 17/16) we obtain
+84n + 1. Finally we note that all these 416n + 1 vectors are at
+
+1/4)2 + (n
+
+−
+
+−
+
+|
+
+that b2(m)
+
+≥
+
+the same distance R to the vector (0, . . . , 0
+
+γ, . . . , γ), where
+
+|
+
+γ =
+
+α
+4nα
+
+−
+
+1
+
+and R =
+
+4√n
+√16n + 1
+
+< 1
+
+−
+
+1/4)2 + (n
+
+1)γ2 + 15/16 = n(α
+
+γ)2).
+(γ is a solution of the equation (γ
+Hence we can add a new vector at the diameter distance √2 to each of these
+416n + 1 vectors to get a new set of 416n + 2 vectors in Rm+1 provided that
+b2(m + 1)
+84n + 2. We can also rescale this new set to be on the sphere
+Sm. Now inductive application of this procedure immediately gives us (1).
+This procedure was also described in [9, Lemma 9]. Similarly, Theorem 2
+
+−
+
+−
+
+≥
+
+implies (2).
+
+Proof of Corollary 2 Let Γ be the F i23 graph. For a vertex u
+
+{
+
+N ′(u)
+
+the subset
+
+xi : i
+xu, x
+i
+Hence, b2(781) > [28160/23] = 1224.
+
+hyperplane
+
+∈
+=
+
+−
+
+}
+
+h
+
+V , consider
+of the conﬁguration Γf . This subset lies in the
+1 = 28160 vectors.
+
+1/80 and consists of 31671
+
+3510
+
+∈
+
+−
+
+−
+
+Similarly, for adjacent vertices u and v, the subset
+
+N ′(v)
+}
+3510 + 693 = 25344 vectors. This subset lies in the
+
+N ′(u)
+
+xi : i
+
+∈
+
+∩
+
+{
+
+consists of 31671
+
+2
+
+×
+
+−
+
+7
+
+6
+hyperplane
+
+R782 :
+
+x
+
+{
+
+∈
+
+b2(780) > [25344/23] = 1101.
+Finally, consider a subset
+
+xu, x
+i
+
+h
+
+=
+
+1/80 and
+
+−
+
+xv, x
+i
+
+h
+
+=
+
+1/80
+
+−
+
+}
+
+, and hence
+
+{
+
+∈
+
+∩
+
+∩
+
+−
+
+×
+
+693
+
+xi : i
+
+N ′(v)
+
+N ′(u)
+
+180 = 23040 vectors, and hence b2(779) > [23040/23] = 1001.
+
+N ′(w)
+}
+vertices u, v, w form a triangle. This subset consists of 31671
+3
+Acknowledgements The author thanks Danylo Radchenko and Kristian
+Seip for several fruitful discussions. The author also wish to thank the Cen-
+tre for Advanced Study at the Norwegian Academy of Science and Letters in
+Oslo, and Mathematisches Forschungsinstitut Oberwolfach for their hospital-
+ity during the preparation of this manuscript and for providing a stimulating
+atmosphere for research.
+
+such that the
+3510 +
+
+×
+
+−
+
+3
+
+References
+
+[1] N. Alon, Discrete mathematics: methods and challenges, Proceedings of the Interna-
+
+tional Congress of Mathematicians, Beijing 2002, vol. 1, 119-135.
+
+[2] J. Bamberg, F. de Clerck, and N. Durante, Intriguing sets in partial quadrangles,
+
+Journal of Combinatorial Designs, 19 (2011), 217-245.
+
+[3] K. Borsuk. Three theorems on the n-dimensional sphere, (in German) Fund. Math.,
+
+20 (1933), 177-190.
+
+[4] P. Brass, W. Moser, and J. Pach, Research Problems in Discrete Geometry, Springer-
+
+Verlag, 2005.
+
+[5] A. Brouwer, A slowly growing collection of graph descriptions, published electronically
+aeb/graphs/index.html.
+
+at http://www.win.tue.nl/
+
+∼
+
+[6] P. Cameron, Strongly regular graphs, in Selected Topics in Algebraic Graph Theory
+
+(eds. L.W. Beineke and R.J. Wilson), Cambridge Univ. Press, 2004.
+
+[7] R. Griess, Twelve sporadic groups, Springer Monographs in Mathematics, 1998.
+
+[8] A. Hinrichs, Spherical codes and Borsuk’s conjecture, Discrete Math. 243 (2002), 253-
+
+256.
+
+[9] A. Hinrichs, C. Richter, New sets with large Borsuk numbers, Discrete Math. 270
+
+(2003), 137-147.
+
+[10] J. Kahn, G. Kalai, A counterexample to Borsuk’s conjecture, Bull. Amer. Math. Soc.
+
+29 (1993), 60-62.
+
+8
+
+[11] G. Kalai,
+
+Around Borsuk’s Conjecture,
+
+published
+
+electronically
+
+at
+
+http://gilkalai.wordpress.com.
+
+[12] M. Lassak, An estimate concerning Borsuk’s partition problem, Bull. Acad. Pol. Sci.
+
+Ser. Math. 30 (1982), 449-451.
+
+[13] D. Leemans, A Family of Geometries Related to the Suzuki Tower, Comm. Algebra
+
+33 (2005), 2201-2217.
+
+[14] A. Nilli, On Borsuk’s problem, In Jerusalem combinatorics ’93, 209-210. Amer. Math.
+
+Soc., Providence, RI, 1994.
+
+[15] D. Pasechnik, Geometric characterization of the sporadic groups F i22, F i23, and F i24,
+
+Journal of Combinatorial Theory, Series A, 68 (1994), 100-114.
+
+[16] O. Pikhurko,
+
+Borsuk’s
+
+conjecture
+
+fails
+
+in
+
+dimensions
+
+321
+
+and
+
+322,
+
+arXiv:math.CO/0202112, 2002.
+
+[17] A. M. Raigorodskii, On dimensionality in the Borsuk problem [in Russian], Uspekhi
+Mat. Nauk 52 (1997), 181-182. English translation in Russian Math. Surveys 52
+(1997), 1324-1325.
+
+[18] A. Raigorodskii, Around Borsuk’s hypothesis, Journal of Mathematical Sciences, 154
+
+(2008), 604-623.
+
+[19] B. Weißbach, Sets with large Borsuk number, Beitr¨age Algebra Geom. 41 (2000),
+
+417-423.
+
+Andriy V. Bondarenko
+Department of Mathematical Analysis,
+
+Taras Shevchenko National University of Kyiv, str. Volodymyrska, 64,
+Kyiv, 01033, Ukraine
+
+and
+Department of Mathematical Sciences, Norwegian University of Science and Technology,
+
+NO-7491 Trondheim, Norway
+Email address: andriybond@gmail.com
+
+9
+
+

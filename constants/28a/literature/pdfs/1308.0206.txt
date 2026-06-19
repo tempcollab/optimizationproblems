@@ -1,0 +1,531 @@
+4
+1
+0
+2
+
+g
+u
+A
+0
+2
+
+]
+
+G
+M
+.
+h
+t
+a
+m
+
+[
+
+6
+v
+6
+0
+2
+0
+.
+8
+0
+3
+1
+:
+v
+i
+X
+r
+a
+
+A 64-dimensional two-distance counterexample to Borsuk’s
+conjecture
+
+Thomas Jenrich
+
+2014-08-20
+
+1 Abstract and introduction
+
+In [1] (1933) Karol Borsuk asked whether each bounded set in the n-dimensional Euclidean space
+can be divided into n+1 parts of smaller diameter. The diameter of a set is deﬁned as the supremum
+(least upper bound) of the distances of contained points. Implicitly, the whole set is assumed to
+contain at least two points.
+The hypothesis that the answer to that question is positive became famous under the name Borsuk’s
+conjecture. Beginning with Jeﬀ Kahn and Gil Kalai, from 1993 to 2003 several authors have proved
+that in certain (almost all) high dimensions such a division is not generally possible.
+In [2] (2013) and ﬁnally [3] Andriy V. Bondarenko constructed a 65-dimensional two-distance set of
+416 vectors that cannot be divided into less than 84 parts of smaller diameter. That was not just the
+ﬁrst known two-distance counterexample to Borsuk’s conjecture but also a considerable reduction
+of the lowest known dimension the conjecture fails in in general.
+This article presents a 64-dimensional subset of the vector set mentioned above that cannot be
+divided into less than 71 (by [3] 72) parts of smaller diameter, that way delivering a two-distance
+counterexample to Borsuk’s conjecture in dimension 64.
+The contained proof relies on the results of some (combinatorial) calculations. The additionally (in
+the source package) provided small computer program G24CHK needs about one second for that
+task on a 1 GHz Intel PIII.
+Meanwhile a short paper by this author and Andries E. Brouwer that follows the principal idea
+of this article but avoids the extensive computational part has been submitted to The Electronic
+Journal of Combinatorics.
+
+2 Euclidean representations of strongly regular graphs
+
+The following is mainly an essence of the content of the corresponding section in [2], giving just the
+needed basic facts. Detailed information can be found e.g. in [4].
+Saying G is a srg(v, k, λ, µ), where srg abbreviates “strongly regular graph”, means that there is a
+set V of v elements (vertices) such that G ⊂ V × V , for all i ∈ V ¬G(i, i) ∧ |{j : G(i, j)}| = k, and
+for all diﬀerent i, j ∈ V
+
+G(i, j) = G(j, i)
+
+and
+
+|{p ∈ V : G(p, i) ∧ G(p, j)}| =
+
+λ if G(i, j)
+µ otherwise
+
+(cid:26)
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+The adjacency matrix A of G has exactly 3 diﬀerent eigenvalues: k of multiplicity 1, one positive
+eigenvalue of multiplicity
+
+f =
+
+1
+2  
+
+v − 1 −
+
+2k + (v − 1)(λ − µ)
+(λ − µ)2 + 4(k − µ) !
+
+,
+
+and one negative eigenvalue
+
+s =
+
+1
+2
+
+p
+
+λ − µ −
+
+(cid:16)
+
+(λ − µ)2 + 4(k − µ)
+(cid:17)
+
+p
+
+In the remaining part of this article we use these notations: I is the identity matrix of size v, y is
+A − sI, yi, where i ∈ V , are the columns of y, and yi,j, where i, j ∈ V , are the entries of y.
+The given properties of the eigenvalues imply dim{yi : i ∈ V } ≤ f .
+
+3 The G2(4) graph
+
+Let G be isomorphic to a graph known as G2(4) graph, a srg(416,100,36,20). The value of s is −4,
+thus for i, j ∈ V
+
+4
+1
+0
+
+if i = j
+if G(i, j)
+otherwise
+
+yi,j =
+
+
+
+
+For i ∈ V , yi consists of one 4 (at position i), 100 1’s, and 315 0’s. For diﬀerent i, j ∈ V
+
+
+
+kyi − yjk2 =
+
+(cid:26)
+
+2 × (100 − 36 − 1 + (4 − 1)2) = 144 if G(i, j)
+2 × (100 − 20 + 42) = 192 otherwise
+
+The value of f is 65 and therefore dim{yi : i ∈ V } ≤ 65.
+For each W ⊆ V : {yi : i ∈ W } has a smaller diameter than {yi : i ∈ V } iﬀ all members of W are
+pairwise adjacent.
+By [2] the G2(4) graph does not contain a clique (subgraph of pairwise adjacent vertices) with more
+than 5 vertices, and because there are 416 vertices (and corresponding vectors), {yi : i ∈ V } cannot
+be divided into less than 84 subsets of smaller diameter.
+
+4 A construction of the G2(4) graph
+
+The following algorithm is an extract of the description given in [5] and [6], there originated to [7],
+meanwhile arrived in the joint paper [8]. See also [9] and [10]. Notice: The points mentioned here
+are strictly to distinct from the points in the n-dimensional Euclidean space.
+“Consider the projective plane PG(2,16) provided with a nondegenerate Hermitean form. It has 273
+points, 65 isotropic and 208 nonisotropic. There are 416 = 208 · 12 · 1/6 orthogonal bases. These
+are the vertices of G. [...] Associated with a basis {a,b,c} is the triangle consisting of the 15 isotropic
+points on the three lines ab, ac, and bc. [...] G can be described as the graph on the 416 triangles,
+adjacent when they have 3 points in common.”
+
+5 A division of the vertices of the G2(4) graph
+
+The construction given in the previous section assigns a set of 15 diﬀerent isotropic points to each
+of the 416 vertices/triangles. Assume that integer numbers from 1 to 65 are given to the isotropic
+
+2
+
+points and consider the sets of the numbers of the isotropic points, here shortly named iso-sets. Thus
+two vertices are adjacent if the cardinality of the intersection of their iso-sets is 3. Now we start to
+divide the set of the 416 vertices: First we deﬁne B to be the set of all vertices in V containing the
+number 1 in their iso-set and C to be the set of the remaining vertices. The edges of G connecting
+two vertices in B constitute a subgraph of G. We divide B into non-empty subsets Bh, h positive
+integer, such that two diﬀerent vertices are in the same subset iﬀ G contains a path between them
+not leaving B.
+
+6 The computer program G24CHK
+
+The computer program G24CHK, provided in the source package of this article and described in
+more detail in the last sections before the references, implements the construction of the iso-sets
+of the members of V and its just deﬁned subsets. Additionally, it checks that B consists of 3
+pairwise disjunctive subsets (B1, B2, and B3), each containing exactly 32 vertices. Consequently,
+|B| = 96 ∧ |C| = 416 − 96 = 320.
+Finally, G24CHK is able to check this claim:
+(1) ∀i ∈ V, h ∈ {1, 2, 3}
+
+20 if i ∈ Bh
+0
+8
+
+if i ∈ B \ Bh
+otherwise
+
+|{j ∈ Bh : G(i, j)}| =
+
+
+
+The second case is already implied by the construction of the Bh. The number and cardinalities
+
+of the unconnected subsets of B and the ﬁrst two cases in (1) correspond with this slightly cut
+quotation from [6], section Subgraphs:
+“b) Three copies of the 2-coclique extension of the Clebsch graph.
+The 65520 nonedges of G [...] fall into 1365 sets of 48, where each set induces a subgraph of size 96
+that is the disjoint union of three copies of the 2-coclique extension of the Clebsch graph (the halved
+5-cube), and the 48 nonedges are the 2-cocliques.”
+So actually just for the proof of the third case in (1) the actual construction and counting are needed
+here.
+However, in the following two sections the claims concerning G and the subsets of V are taken as
+facts.
+
+7 The 64-dimensional counterexample
+
+Recall that for i, j ∈ V
+
+Therefore statement (1) implies
+(2) ∀i ∈ V, h ∈ {1, 2, 3}
+
+4
+1
+0
+
+if i = j
+if G(i, j)
+otherwise
+
+yi,j =
+
+
+
+
+
+
+yi,j =
+
+
+
+
+j∈Bh
+X
+
+20 × 1 + 1 × 4 = 24 if i ∈ Bh
+
+0 if i ∈ B \ Bh
+
+8 × 1 = 8 otherwise
+
+We deﬁne a vector p in the same 416-dimensional space as the yi, i ∈ V , consisting of entries pj,
+
+
+
+3
+
+j ∈ V :
+
+1
+
+if j ∈ B2
+−1 if j ∈ B3
+
+0
+
+otherwise.
+
+pj =
+
+
+
+
+Combined with (2) this deﬁnition implies ∀i ∈ V
+
+
+
+hp, yii =
+
+yi,j −
+
+j∈B2
+X
+
+yi,j = 
+
+
+j∈B3
+X
+
+0 − 0 = 0
+
+if i ∈ B1
+24 − 0 = 24 if i ∈ B2
+0 − 24 = −24 if i ∈ B3
+otherwise
+
+8 − 8 = 0
+
+
+The essence is that p is orthogonal to {yi : i ∈ C ∪ B1}, but not to {yi : i ∈ V }. Therefore
+dim{yi : i ∈ C ∪ B1} ≤ dim{yi, i ∈ V } − 1. Because dim{yi : i ∈ V } ≤ 65 is known, we have
+dim{yi : i ∈ C ∪ B1} ≤ 64.
+The proofs are not included here, but one can show (e.g. by actual vector calculations) that these
+statements stay valid if we replace ≤ by =.
+Because {yi : i ∈ C ∪ B1} contains 352 vectors and a subset of smaller diameter contains at most
+5 vectors, a division into less than 71 parts of smaller diameter is impossible. Because 71 > 64 + 1,
+the answer to Borsuk’s question for n = 64 is negative.
+In [3] A. Bondarenko states in a remark that a computer check had shown that the number of parts
+of smaller diameter is at least 72.
+
+8 A 63-dimensional almost-counterexample
+
+We deﬁne a vector q in the same 416-dimensional space as the yi, i ∈ V , consisting of entries qj,
+j ∈ V :
+
+2 if j ∈ B1
+
+qj =
+
+
+
+
+−1 if j ∈ B2 ∪ B3
+0 otherwise.
+
+Observe that hp, qi = 0 − 32 + 32 = 0.
+Combined with (2) the deﬁnition of q implies ∀i ∈ V
+
+
+
+hq, yii = 2 ×
+
+yi,j −
+
+yi,j −
+
+j∈B1
+X
+
+j∈B2
+X
+
+j∈B3
+X
+
+48 − 0 − 0 = 48 if i ∈ B1
+0 − 24 − 0 = −24 if i ∈ B2
+0 − 0 − 24 = −24 if i ∈ B3
+otherwise
+
+16 − 8 − 8 = 0
+
+yi,j = 
+
+
+
+The essence is that q is orthogonal to {yi : i ∈ C}, but not to {yi : i ∈ C ∪ B1}. Therefore
+dim{yi : i ∈ C} ≤ dim{yi : i ∈ C ∪ B1} − 1. Because dim{yi : i ∈ C ∪ B1} ≤ 64 has been derived,
+we have dim{yi : i ∈ C} ≤ 63.
+Again, these statements stay valid if we replace ≤ by =.
+But {yi : i ∈ C} contains just 320 vectors. The proof is not included here, but one can divide C into
+64 5-cliques and therefore {yi : i ∈ C} into 64 parts of smaller diameter.
+As checked computationally, one such partition uniquely fulﬁlls the additional requirement that for
+each of the 64 5-cliques the (common) intersection of the iso-sets of all ﬁve contained vertices has
+size 3. Because of this property, that partition is relatively easy to ﬁnd.
+
+4
+
+9 Mathematical foundations of the implementation in G24CHK
+
+The G2(4) graph construction algorithm given above is very concise. Suﬃcient information on
+projective planes can be found in [11]. The implementation of the algorithm uses elements of the
+three-dimensional vector space over the ﬁnite ﬁeld GF(16) to constitute and represent the objects
+in the projective plane PG(2,16). Enough information on ﬁnite ﬁelds can be found in [12], using just
+GF(16) as example. Unfortunately, the calculation of the list of the polynomials representing the
+elements of GF(16) contains an error, resulting especially in the impossible relation x11 = x13.
+The applied Hermitean form takes three-dimensional vectors a and b over GF(16) and returns
+a1b3 + a2b2 + a3b1, where addition, multiplication, and conjugation operate in GF(16).
+Finally, [13] contains enough information on isotropic objects.
+
+10 Compiling and executing G24CHK
+
+To compile the provided source code ﬁle G24CHK.PAS you will need a PASCAL compiler compatible
+with Turbo Pascal 4.0. Even Turbo Pascal versions 3.02 and 1.0 are suﬃcient after removing the
+right half of the ﬁrst occurrence of the sequence (**), this way transforming the source up to the
+next occurrence of *) into pure comment.
+The compilers listed below have successfully compiled the program on a 1 GHz Intel PIII running
+MS Windows 98 SE and partly on a 500 MHz AMD K6-II running MS DOS 5.0; the respective
+execution times, roughly measured with some overhead utilizing the PC clock (resolution: 0.055 s),
+are given.
+Turbo Pascal 1.0 : 1.373 s / 2.527 s
+Turbo Pascal 3.02 : 1.428 s / 2.636 s
+Turbo Pascal 5.5 : 2.636 s / 2.856 s
+Turbo Pascal 7.01 : 0.879 s / 0.989 s
+Borland Delphi 4.0 build 5.37 : 0.824 s / -
+Virtual Pascal 2.1 build 279 : 0.989 s / -
+Free Pascal 2.4.4 i386-Win32 : 0.769 s / -
+
+To avoid a compilation result depending on the settings you could (not in the case of Turbo Pascal
+versions 1.0 and 3.02) use the command line versions of the compilers (TPC for Turbo Pascal, BPC
+for Borland Pascal 7, DCC32 for Borland Delphi (32 bit versions; do not miss to use the -CC option
+in order to generate a console executable), VPC for Virtual Pascal, FPC for Free Pascal) instead of
+the compilers integrated in the IDEs.
+
+The program uses the heap and pointers in general just to store the vectors constituting the adjacency
+matrix. It does it in a way reducing the readabilty as little as possible while still allowing the use of
+compilers storing each Boolean value in a separate byte and unable to handle memory block sizes
+reaching or exceeding 64 KB.
+If you don’t change the respective compiler directives, range checks and (if the compiler is compatible
+with Turbo Pascal 4.0) stack overﬂow checks are generated. So the resulting executable will be very
+safe. It is also quite small and needs less then 1 KB for the stack. Turbo Pascal versions before 4.0
+do not know conditional compiling and interpret some compiler options diﬀerently. For enabling or
+disabling the generation of stack overﬂow checks, the relevant letter is K (instead of S). So you could
+insert the sequence {$K+} (e.g. after {$R+}) in order to generate those checks.
+
+The program ignores any command line parameters or inputs other than pressing Ctrl-C to cancel
+the execution.
+It writes only to the standard output device. In the default case that will be the monitor screen.
+
+5
+
+But if the used compiler was compatible with Turbo Pascal 4.0 you can redirect the output to a
+ﬁle. That way the lines below enclosed in <<< and >>> were generated. You could use them to
+compare your results with.
+
+<<<
+=== Constructing and checking a G2(4) graph representation ===
+=== Version 1 Copyright (c) 2013-07-31 Thomas Jenrich ===
+
+Search for orthogonal bases ... OK
+Filling iso-sets ... OK
+Allocating dynamic memory ... OK
+Filling the adjacency matrix ... OK
+Separating subsets B 1, B 2, B 3, C ... OK
+Checking the counts of adjacencies in B 1, B 2, B 3 ... OK
+OK
+== Regular program stop ==
+>>>
+
+References
+
+[1] Karol Borsuk, Drei S¨atze ¨uber die n-dimensionale euklidische Sph¨are, Fund. Math., 20 (1933), 177-190.
+
+[2] Andriy V. Bondarenko, On Borsuk’s conjecture for two-distance sets, arXiv:math.MG/1305.2584
+
+(version 2), http://front.math.ucdavis.edu/1305.2584v2
+
+[3] Andriy Bondarenko, On Borsuk’s Conjecture for Two-Distance Sets, Discrete Comput. Geom., Springer
+
+2014, DOI 10.1007/s00454-014-9579-4
+
+[4] Andries E. Brouwer, Willem H. Haemers, Spectra of graphs, Monograph, 2012, Springer
+
+[5] Andries E. Brouwer, A construction of the Suzuki Graph, 2008-07-08,
+
+http://www.win.tue.nl/~aeb/preprints/Suz.pdf
+
+[6] Andries E. Brouwer, G2(4) graph,
+
+http://www.win.tue.nl/~aeb/graphs/G24.html, retrieved 2013-05-22
+
+[7] N. Horiguchi, M. Kitazume, H. Nakasora, A construction of the sporadic Suzuki graph from U3(4),
+
+preprint, 2008
+
+[8] Andries E. Brouwer, Naoyuki Horiguchi, Masaaki Kitazume, Hiroyuki Nakasora,
+
+A construction of the sporadic Suzuki graph from U3(4),
+Journal of Combinatorial Theory, Series A 116 (2009), 1056-1062
+
+[9] Leonard H. Soicher, Three new distance-regular graphs,
+
+Europ. J. Combin. 14 (1993), 501-505
+
+[10] Dean Crnkovi´c, Vedrana Mikuli´c, BLOCK DESIGNS AND STRONGLY REGULAR GRAPHS
+CONSTRUCTED FROM THE GROUP U (3, 4), GLASNIK MATEMATI ˇCKI, Vol. 41(61)(2006),
+189-194
+
+[11] William Cherowitzo, A Short Introduction to Projective Geometry,
+
+http://www-math.ucdenver.edu/~wcherowi/courses/m5410/pgintro.pdf
+
+[12] Robert Campbell, Lectures 12 & 13: Finite Fields, (Course) Number Theory, Math 413, 26 Jan 2003
+
+http://userpages.umbc.edu/%7Ercampbel/Math413Spr05/Notes/12-13_Finite_Fields.html
+
+[13] Namik Ciblak, Harvey Lipkin, ORTHONORMAL ISOTROPIC VECTOR BASES, Proceedings of the
+1998 ASME Design Engineering Technical Conference, September, 13-16, 1998, Atlanta, Georgia
+
+[14] Turbo Pascal versions 1.0, 3.02, and 5.5 (binaries only)
+
+http://edn.embarcadero.com/museum/antiquesoftware#
+For downloading one has to register or sign-in.
+
+6
+
+[15] Virtual Pascal (Closed Source freeware)
+
+One ZIP-ﬁle including binaries and documentation for Win32, OS/2, and Linux
+Oﬃcial forum:
+http://vpascal.ning.com/
+Forum entry Where can I download VP? :
+http://vpascal.ning.com/forum/topic/show?id=854411%3ATopic%3A9
+
+[16] Free Pascal (Open Source freeware)
+
+Sources, documentation, and binaries for several systems
+http://www.freepascal.org
+
+Author’s eMail address: thomas.jenrich@gmx.de
+
+7
+
+

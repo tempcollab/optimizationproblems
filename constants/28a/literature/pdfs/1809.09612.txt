@@ -1,0 +1,1680 @@
+8
+1
+0
+2
+
+t
+c
+O
+1
+1
+
+]
+
+O
+C
+.
+h
+t
+a
+m
+
+[
+
+4
+v
+2
+1
+6
+9
+0
+.
+9
+0
+8
+1
+:
+v
+i
+X
+r
+a
+
+On the counterexamples to Borsuk’s conjecture by Kahn and
+Kalai
+
+Thomas Jenrich
+
+2018-10-11
+
+1 Abstract
+
+In the concluding remarks of their 1993 published and now famous paper [3], Jeﬀ Kahn and Gil
+Kalai wrote in particular:
+“Our construction shows that Borsuk’s conjecture is false for d = 1, 325 and for every d > 2, 014.”
+But, as Bernulf Weißbach remarked in his paper [5] from 2000, a simple (few steps for an upper-class
+pocket calculator) computation indicates that that claim is not true for d = 1325.
+William Kretschmer (Univ. of Texas) sent me his writeup on that paper by Kahn and Kalai, in
+particular pointing out that the derivation of the formula used in that computation disregarded a
+certain aspect, that way missed the chance to remove one ﬁnal halving from that formula and to
+indeed provide a proof that a certain point set is a counterexample for dimension 1325 (and all
+higher dimensions up to 1560, too).
+This updated article takes a closer look at that derivation, gives an own, much more detailed
+and formal version of it that delivers the improved/corrected formula, and contains some further
+conclusions.
+
+2 Borsuk’s conjecture
+
+In [1] (1933) Karol Borsuk asked whether each bounded set in the n-dimensional Euclidean space
+can be divided into n+1 parts of smaller diameter. The diameter of a set is deﬁned as the supremum
+(least upper bound) of the distances of contained points. Implicitly, the whole set is assumed to
+contain at least two points. The hypothesis that the answer to that question is positive became
+famous under the name Borsuk’s conjecture.
+
+2.1 The special case of (0,1)-vectors with constant weight
+
+In [4] (1984) D. Larman gave a translation of Borsuk’s conjecture for this case into the terminology
+of ﬁnite sets:
+such that every two members of K have t elements
+Let K be a family of k-subsets of
+in common. Then K can be partitioned into n parts so that in each part every two members have
+(t + 1) elements in common.
+
+1, 2, ..., n
+
+{
+
+}
+
+Disproving this conjecture means disproving Borsuk’s conjecture, too.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+3 The counterexamples by Kahn and Kalai
+
+3.1 The Frankl-Wilson theorem
+
+Theorem 2 (quoted below) plays an important role in [3]. It is not exactly the theorem proved in [2]
+by P. Frankl and R. Wilson but derived from it in few steps, mainly to let ﬁnite sets be the objects.
+
+Let k be a prime power and n = 4k. Let K be a family of n/2-subsets of
+sets in the family have intersection of size n/4. Then
+.
+
+K
+
+2
+
+1, 2, ..., n
+
+}
+
+{
+
+, so that no two
+
+|
+
+| ≤
+
+n−1
+n/4−1
+(cid:0)
+(cid:1)
+
+·
+
+3.2 The construction
+
+3.2.1 The original description
+
+While the respective section of [3] is clear enough with respect to construction, cardinality and
+dimension of the relevant point set K, the derivation of an upper bound for the cardinality of
+subsets of smaller diameter is rather sketchy. It seems that not taking in account that each of the
+partitions used to construct K exclusively contains two subsets of V (to count in the application
+of the Frankl-Wilson theorem) caused that the resulting upper bound is exactly the double of what
+proper reasoning would give. Consequently, the lower bound of the number of subsets of smaller
+diameter is unnecessarily halved, in particular too small for the else possible direct proof that the
+1325-dimensional point set generated in the case k = 13 is a counterexample to Borsuk’s conjecture.
+
+3.2.2 A more detailed and formal description
+
+There are propositions (deﬁnitions, premisses and conclusions) and comments. If the symbol * starts
+the visible part of a line, the remaining part of the line is a comment, with respect to the preceding
+line.
+The strings dist, diam and dim denote the functions distance, diameter and dimension, resp.
+Premiss (k)
+k is a prime power
+Deﬁnitions (m, V, W, H, N, S, K, R)
+m = 4k
+V =
+{
+W =
+}
+{{
+V :
+A
+H =
+{
+H : N (A) = V
+A
+∈
+∀
+H : S(A) =
+A
+∀
+∈
+K =
+S(A) : A
+{
+∈
+K : R(T ) =
+T
+⊆
+
+V
+∈
+∧
+= 2k
+}
+A
+\
+a, b
+
+}
+: a, b
+A
+|
+
+N (A)
+}
+
+1, 2, ..., m
+
+H : S(A)
+
+{{
+H
+}
+A
+
+= b
+
+a, b
+
+: a
+
+⊂
+
+A
+
+∈
+
+∈
+
+∧
+
+∈
+
+∈
+
+T
+
+a
+
+{
+
+}
+
+}
+
+}
+
+b
+
+|
+
+=
+=
+
+∀
+Conclusions
+W
+|
+H
+|
+X
+∈
+A
+∈
+A, B
+
+|
+|
+∀
+∀
+∀
+* Because
+
+m
+2
+m
+(cid:0)
+(cid:1)
+2k
+K :
+(cid:0)
+(cid:1)
+|
+H : N (A)
+H :
+A
+|
+A
+
+X
+
+∈
+
+|
+
+= (2k)2
+H
+B
+|
++
+
+∈
+∩
+B
+H : S(N (A)) = S(A)
+
+= k
+A
+
+∩
+
+∩
+
+|
+
+|
+
+|
+
+A
+⇐⇒ |
+N (B)
+|
+
+∩
+=
+
+= k
+
+N (B)
+|
+= 2k
+A
+|
+
+|
+
+A
+∈
+∀
+A, B
+∀
+T
+∀
+K
+|
+
+|
+
+∈
+K :
+⊆
+= 1
+
+H : S(A) = S(B) =
+= 2
+m
+2k
+(cid:0)
+
+R(T )
+|
+|
+= 1
+H
+2
+2 · |
+
+· |
+
+T
+
+(cid:1)
+
+|
+
+|
+
+⇒
+
+A = B
+
+∨
+
+A = N (B)
+
+2
+
+6
+}
+
+W
+1
+
+⊆
+| −
+
+Deﬁnitions (L, d)
+X
+L =
+{
+d =
+W
+|
+Conclusions
+L
+K
+⊂
+m
+d =
+2
+−
+dim(L) =
+(cid:0)
+|
+|
+* Treating the sets in L as
+1 = d
+dim(L)
+dim(K)
+* K is in a hyperplane of L because all X
+Deﬁnitions (
+L : X
+
+, dist, diam, M)
+Y = (X
+
+1
+W
+
+X, Y
+
+X)
+
+0,1
+
+Y )
+
+(Y
+
+−
+
+≤
+
+}
+
+{
+
+(cid:1)
+
+△
+△
+
+-vectors with index set W .
+
+K do have the same size.
+
+∈
+
+∈
+
+∀
+∪
+* The less-known general set operation symmetric diﬀerence.
+X
+
+Y
+
+\
+
+\
+
+△
+-vectors represented by subsets.
+
+|
+
+dist(X, Y ) : X, Y
+
+T
+
+∈
+
+0
+
+)
+
+}
+
+} ∪ {
+
+∈
+
+X, Y
+
+L : dist(X, Y ) =
+∀
+* Euclidean distance for
+
+|
+0,1
+p
+{
+K : diam(T ) = max(
+{
+
+⊂
+
+T
+
+}
+
+∀
+M = diam(K)
+Conclusions
+
+A, B
+
+B
+H :
+∃
+* For instance A =
+
+A
+
+∈
+
+∩
+
+|
+
+= k
+1, 2, ..., 2k
+
+|
+{
+
+∈
+
+} ∧
+
+B =
+
+A, B
+
+H : dist(S(A), S(B)) = M =
+
+k + 1, k + 2, ..., 3k
+= k
+A
+∀
+* Not obvious, not proved in [3], but we give a proof at the end of this subsection.
+Deﬁnition (Z)
+Z =
+H : (
+F
+Conclusions
+
+= k)
+}
+
+{
+⇒ |
+
+A, B
+
+F :
+
+⊆
+
+B
+
+B
+
+A
+
+∩
+
+∈
+
+∩
+
+∀
+
+| 6
+
+}
+
+{
+
+|
+
+|
+
+F
+
+T
+F
+
+⊂
+∈
+
+K : diam(T ) < M =
+2
+Z :
+
+∀
+∀
+* Instantiation of the Frankl-Wilson theorem.
+(cid:1)
+m−1
+k−1
+
+K : diam(T ) < M =
+
+m−1
+k−1
+
+R(T )
+
+R(T )
+
+| ≤
+
+⇒
+
+Z
+
+∈
+
+T
+
+2
+
+(cid:0)
+
+·
+
+|
+
+⇒ |
+
+| ≤
+
+·
+
+⊆
+
+∀
+Deﬁnitions (G, q)
+P
+G =
+⊆ {
+{
+m
+q = 1
+/
+2
+2k
+Conclusion
+(cid:0)
+(cid:0)
+(cid:1)
+P
+G :
+
+T
+⊆
+m−1
+k−1
+
+(cid:1)
+K
+
+P
+
+∀
+
+∈
+
+|
+
+| ≥ |
+
+/
+
+|
+
+m−1
+k−1
+
+= q
+
+(cid:0)
+3.2.3 Textual summary of the result
+
+(cid:1)
+
+K : diam(T ) < M
+
+:
+
+}
+
+S
+
+T ∈P T = K
+
+}
+
+T
+
+|
+
+∧ |
+
+= |R(T )|
+
+2 ≤
+
+m−1
+k−1
+
+(cid:0)
+
+(cid:1)
+
+(cid:0)
+
+(cid:1)
+
+The point set K lies in the Euclidean space of dimension d =
+less than
+
+m
+2
+
+(cid:0)
+
+(cid:1)
+
+−
+
+1 and can not be covered by
+
+q =
+
+m
+1
+2
+2k
+(cid:0)
+(cid:1)
+m−1
+k−1
+
+(cid:0)
+
+(cid:1)
+
+=
+
+2
+
+·
+
+m
+2k
+(cid:0)
+(cid:1)
+m−1
+k−1
+
+(cid:0)
+
+(cid:1)
+
+subsets of smaller diameter. If q > d + 1 then K is a counterexample to Borsuk’s conjecture, in
+dimension d and all higher dimensions below q
+Compared to the respective formula given in [3], our formula for the lower bound delivers doubled
+values. This results in extended possibilities with respect to direct veriﬁcations of constructed point
+sets as counterexamples.
+
+1. Otherwise we can not prove it this way.
+
+−
+
+3
+
+3.2.4 Modiﬁed formulas and bounds for q
+
+Observe that for all positive integers a and b, a
+
+b, it is
+
+≥
+
+a
+b · (cid:18)
+
+a
+b
+
+−
+−
+
+1
+1(cid:19)
+
+=
+
+a
+b ·
+
+(a
+((a
+
+−
+−
+
+1)!
+1)
+
+−
+
+1))!
+
+(b
+
+−
+
+=
+
+a
+(b
+
+·
+−
+
+(a
+1)!
+
+−
+·
+
+1)!
+(a
+
+−
+
+b
+
+·
+
+=
+
+b)!
+
+a!
+(a
+
+−
+
+b!
+
+·
+
+=
+
+a
+b(cid:19)
+
+(cid:18)
+
+b)!
+
+(b
+
+1)!
+
+·
+
+−
+
+Here we set a = m = 4k, b = k and get 4
+
+m−1
+k−1
+
+=
+
+m
+k
+
+and can derive
+
+=
+
+q/2 =
+
+−
+−
+We can use the last expression for q/2 this way
+
+(cid:1)
+(cid:1)
+
+=
+
+·
+
+m!
+(2k)!·(m−2k)!
+m!
+k!·(m−k)!
+
+m
+2k
+m
+(cid:0)
+k
+(cid:0)
+
+·
+
+(cid:0)
+(m
+(m
+
+k!
+·
+(2k)!
+
+(cid:0)
+
+(cid:1)
+k)!
+2k)!
+
+(cid:1)
+
+=
+
+k!
+·
+(2k)!
+
+(3k)!
+
+(2k)!
+
+·
+
+=
+
+(3k)!
+(2k)!
+(2k)!
+k!
+
+=
+
+(3k)!
+k!·(2k)!
+(2k)!
+k!·k!
+
+=
+
+3k
+k
+(cid:0)
+2k
+k
+
+(cid:0)
+
+(cid:1)
+
+(cid:1)
+
+but also interpret the third-last one this way
+
+q = 2
+
+3k
+k
+2k
+k
+
+3k
+k
+(cid:0)
+(cid:1)
+2k−1
+k−1
+
+(cid:0)
+
+(cid:1)
+
+=
+
+(cid:1)
+
+(cid:1)
+
+· (cid:0)
+(cid:0)
+
+Both expressions include relatively few multiplications and just one division.
+
+q = 2
+
+· Q
+Q
+
+3k
+i=2k+1 i
+2k
+i=k+1 i
+
+=
+
+Q
+
+3k
+i=2k+1 i
+2k−1
+i=k i
+
+Q
+
+In order to estimate bounds, we use the ﬁrst expression and derive
+
+q = 2
+
+2k
+
+Yi=k+1
+
+k + i
+i
+
+2k
+
+= 2
+
+(1 +
+
+Yi=k+1
+
+k
+i
+
+)
+
+The second expression proves that the iterated factor gets its minimum and its maximum iﬀ i = 2k
+and i = k+1, respectively, but using the iterated factor of the ﬁrst expression shortens the derivation.
+
+2k
+
+7→
+
+k + 2k
+2k
+
+=
+
+3
+2
+
+, k + 1
+
+k + k + 1
+k + 1
+
+=
+
+1
+
+2k + 2
+
+−
+k + 1
+
+7→
+
+= 2
+
+1
+k + 1
+
+−
+
+< 2
+
+Consequently
+
+(
+
+3
+2
+
+)k
+
+2
+
+·
+
+q
+
+(2
+
+2
+
+·
+
+−
+
+≤
+
+≤
+
+1
+k + 1
+
+)k < 2k+1
+
+With respect to k, d grows quadratically and q grows exponentially.
+
+3.2.5 Actual calculation results and covered dimensions
+
+≈
+
+≈
+
+548.70
+
+1561.91
+
+k = 11, d = 945, q
+* Point set not veriﬁed as counterexample
+k = 13, d = 1325, q
+* Counterexample for 1325
+k = 16, d = 2015, q
+* Counterexample for 2015
+k = 17, d = 2277, q
+* Counterexample for 2277
+k = 29, d = 6669, q
+
+d
+≤
+12659.44
+d
+
+≤
+6745998.54
+
+≤
+7502.65
+
+12658
+
+7501
+
+1560
+
+≤
+
+≈
+
+≤
+
+≈
+
+≤
+
+d
+
+≈
+
+4
+
+k = 31, d = 7625, q
+k = 32, d = 8127, q
+
+19209098.12
+32414445.61
+
+≈
+≈
+
+To provide counterexamples for any d
+onwards and one of the prime powers from 17 to 29 (to avoid a gap before k = 32 applies).
+
+2015 it suﬃces to consider for k the powers of two from 16
+
+≥
+
+3.2.6 Proof that the maximality of dist(S(A), S(B)) implies
+
+A
+
+|
+
+B
+
+|
+
+∩
+
+= k
+
+This proof is aimed to justify the above (3.2.2) conclusion
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+b
+
+\
+
+a
+
+∩
+
+∈
+
+A
+
+B
+
+|
+B
+
+⇒ |
+
+∈
+∈
+
+A, B
+
+H
+H
+
+a)
+|
+
+∅
+=
+|
+
+\
+∩
+\
+
+∪
+\
++
+
+(a
+|
+b)
+a
+
+b)
+(b
+b
+
+(b
+\
+a) =
+a
+b
+
+H : dist(S(A), S(B)) = M =
+
+= k
+∀
+within its environment (preceding propositions), i.e. the premisses and deﬁnitions stated herein are
+additional.
+Premisses (A, B)
+A
+B
+Deﬁnitions (a, b, g, p)
+a = S(A)
+b = S(B)
+b
+a
+g =
+△
+|
+p =
+A
+∩
+|
+Conclusions
+Because dist(a, b) = √g, it suﬃces to prove that g reaches its maximum if and only if p = k .
+g =
+(a
+\
+g =
+a
+a
+|
+Now we know that g is maximal if and only if
+|
+reaches its minimum if and only if p = k.
+a
+|
+|
+Conclusions
+: x
+a =
+}
+{{
+b =
+: x
+}
+{{
+x, y
+a
+b =
+}
+∩
+{{
+a
+x, y
+b =
+}
+{{
+∩
+x, y
+=
+a
+b
+}
+|{{
+∩
+|
+|
+B
+b
+a
+A
+=
+| · |
+∩
+|
+∩
+|
+|
+A
+=
+N (B)
+A
+| − |
+|
+|
+∩
+|
+B
+B
+N (A)
+=
+∩
+| − |
+|
+|
+|
+N (A)
+=
+N (B)
+|
+|
+∩
+|
+= p2 + (2k
+b
+a
+|
+−
+Deﬁnition (v)
+k
+v = p
+−
+Conclusions
+p = k + v
+b
+a
+|
+Thus, the minimum value of
+
+∩
+∩
+N (A)
+A
+|
+p
+p
+B
+(2k
+p) = p
+|
+4kp + p2 = 2p2 + 4k2
+
+N (A)
+}
+N (B)
+}
+y
+B
+∈
+∧
+y
+B
+∈
+∧
+B
+y
+∈
+∧
+∩
+N (B)
++
+|
+∩
+= 2k
+B
+|
+−
+= 2k
+A
+|
+−
+N (A)
+∩
+| − |
+p)2 = p2 + 4k2
+−
+
+−
+is 2k2, and it is reached if and only if v = 0, i.e. p = k.
+
+∈
+∈
+∩
+∩
+A
+∈
+N (A)
+A
+∩
+B
+∩
+N (A)
+
+N (B)
+A
+∩
+: x
+x, y
+}
+x, y
+B
+
+is minimal and it just remains to show that
+
+4k(k + v) = 2k2 + 4kv + 2v2 + 4k2
+
+∈
+∨
+} ∪ {{
++
+}|
+N (A)
+
+= 2(k + v)2 + 4k2
+
+∧
+∧
+∈
+∈
+: x
+
+A
+∈
+B
+∈
+: x
+: x
+
+4kv = 2k2 + 2v2
+
+∈
+N (B)
+A
+
+∩
+y
+∧
+N (B)
+
+}
+N (A)
+y
+
+B
+∩
+N (A)
+
+N (B)
+N (B)
+
+N (A)
+N (A)
+
+(2k)2
+b
+
+∧
+A
+∈
+: x
+
+y
+y
+A
+A
+
+∩
+N (B)
+
+x, y
+x, y
+
+= 2
+a
+
+|{{
+∩
+
+N (B)
+
+N (A)
+
+∩
+∈
+
+= 2k
+
+∈
+∧
+
+| − |
+
+| − |
+
+4k2
+
+4kp
+
+}
+∩
+
+·
+∩
+
+| · |
+
+}|
+
+· |
+
+−
+
+−
+
+−
+
+−
+
+−
+
+−
+
++
+
+B
+
+B
+
+∩
+
+∩
+
+∩
+
+∩
+
+∩
+
+∩
+
+∩
+
+∩
+
+∈
+
+x
+
+a
+
+a
+
+}
+
+2
+
+y
+
+b
+
+b
+
+b
+
+b
+
+b
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+∩
+
+|
+
+References
+
+[1] K. Borsuk, Drei S¨atze ¨uber die n-dimensionale euklidische Sph¨are, Fund. Math., 20 (1933),
+
+177-190.
+
+5
+
+[2] P. Frankl and R. Wilson, Intersection theorems with geometric consequences, Combinatorica 1
+
+(1981), 357-368.
+
+[3] J. Kahn and G. Kalai, A counterexample to Borsuk’s conjecture, Bull. Amer. Math. Soc. 29
+
+(1993), 60-62. arXiv:math.MG/9307229v1
+
+[4] D. Larman, Open problem 6, Convexity and Graph Theory (M. Rozenfeld and J. Zaks, eds.),
+
+Ann. Discrete Math., vol. 20, North-Holland, Amsterdam and New York, 1984, p. 336.
+
+[5] B. Weißbach, Sets with large Borsuk number, Beitr¨age Algebra Geom. 41 (2000), 417-423.
+
+Author’s eMail address: thomas.jenrich@gmx.de
+
+6
+
+
