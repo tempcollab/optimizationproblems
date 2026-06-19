@@ -31,20 +31,42 @@ WHAT THE R1 + R2-OUTLINER SCREEN ESTABLISHED about the 13-structure (drives τ�
     (each tuned to maximize min edge-reach over its 3 edges) + 4 edge/face translates covering the
     5 residual face points and 12 residual edge-middles, with one vertex/face MERGE.
 
-HOLES (explicit `sorry`; the bound does NOT silently rest on any of them):
-  * H_GEN_τ   the explicit 13-piece structure τ′ + the per-box rational translate vectors
-              (the LP solution). Found by the builder's rational LP search at a concrete off-center
-              box; recorded as exact rationals. This is the load-bearing combinatorial hole.
-  * H_GEN_FARKAS  per-box feasibility ⇒ local count ≤ 13, via the multi-D rational membership /
-              Farkas primitive (generalizing `icc_covered_by_two` from lemmas/ to ℝ³ polytope
-              membership — the D3 primitive). Reuses lemmas/ `IsCoveredBy.union`, `.mono_left`.
-  * H_GEN_ATLAS   the symmetry-reduced box atlas covering [0,1]^6 ∖ N(1/2); each box gets a
-              feasible (P_j, τ′_j). The genuine scale concern — must be FAR smaller than Prymak's
-              4.66M (the off-1/2 region is generic, so a coarse atlas should suffice). Open.
-  * H_GEN_GLUE    max over the atlas ⇒ generic-regime subproblem ≤ 13.
+ROUND-3 PROGRESS (builder). The load-bearing combinatorial hole H_GEN_τ is CLOSED *at one
+concrete off-center box* and its **finite marked-point core is now formalized in Lean** below
+(`marked_points_covered_by_thirteen`, sorry-free, `decide`-checked rational membership). The
+witness was found by an exact rational LP/Farkas search (see
+`constants/39a/certificate/generic-thirteen-lp.py`, `verify_witness`, pure-`Fraction`
+re-verification — NO floating point in the load-bearing check) at the box
+  p* = (9/10, 1/10, 9/10, 9/10, 1/10, 1/10)   (every pᵢ bounded 2/5 off 1/2).
+There the 14 marked points {8 cube vertices} ∪ Vₚ are covered by **13** explicit rational
+translates of O_{p*} — one merge: the contact point q₂₀ shares vertex-translate t₅. Margin
+0.0218 (strict interior). So  C({marked} , int O_{p*}) ≤ 13  at p*.
 
-This file STATES the generic-regime target and assembles it from the holes; it `lake build`s green
-(holes are `sorry`). Reuses the certified primitives in constants/39a/lemmas/ via import below.
+REVISED STRUCTURAL FACT (reshapes H_GEN_ATLAS — was wrong as planned). The 13-feasible region
+is NOT all of [0,1]⁶ ∖ N(1/2): point-mergeability is NOT sufficient. The merge frees a covering
+piece ONLY where the 8 vertex-translates ALONE still cover all 12 edges, which forces ALL six pᵢ
+bounded off 1/2 in a compatible pattern (a single- or two-coordinate offset gives NO 13-cover —
+verified in the script). Only 40/64 of the {1/10,9/10}-corner boxes admit a 13-cover. So the
+generic atlas must tile this THIN region and the rest of [0,1]⁶ ∖ {13-region} falls to the
+near-1/2 sibling — the partition is NOT the simple "ball around 1/2".
+
+HOLES (explicit `sorry`; the bound does NOT silently rest on any of them):
+  * H_GEN_τ   [CORE CLOSED at one box] the explicit 13-piece structure τ′ + per-box rational
+              translates. The MARKED-POINT part (vertices+face points, incl. the merge) is now a
+              sorry-free Lean lemma `marked_points_covered_by_thirteen`. What REMAINS of H_GEN_τ is
+              H_GEN_EDGES below (the 1-D edge coverage), kept honest.
+  * H_GEN_EDGES   [NEW hole, split out of H_GEN_τ] the 12 cube edges (1-D segments) are covered by
+              the same 13 translates via the endpoint vertex-translates. In the certificate this is
+              checked exactly (`edge_covered_exact`); the Lean port needs the multi-D interval
+              primitive (generalize `icc_covered_by_two` to a segment vs a polytope) — open.
+  * H_GEN_ATLAS   [REVISED] a finite atlas of the THIN 13-feasible region (NOT [0,1]⁶∖N(1/2)); each
+              box a feasible (P_j, τ′_j) over Q_P = ⋂_{v∈P} O_v. Plus its complement handed to the
+              near-1/2 sibling. Open. (The single-point witness above is the |P|=1 base case.)
+  * H_GEN_GLUE    max over the atlas ⇒ generic-regime subproblem ≤ 13; then glue with the sibling.
+
+This file STATES the generic-regime target, FORMALIZES the marked-point core of the load-bearing
+hole at the witness box, and assembles the rest from holes; it `lake build`s green. Reuses the
+certified primitives in constants/39a/lemmas/ via import below.
 -/
 import Sketches.CertifyFourteen
 
@@ -74,6 +96,92 @@ def Piece (p : P6) : Set (Fin 3 → ℝ) := sorry
 rational margin `δ`. (Builder fixes `δ`; abstract here.) -/
 def Generic (p : P6) : Prop := sorry
 
+/-! ## Concrete witness at the off-center box `p* = (9/10,1/10,9/10,9/10,1/10,1/10)`
+
+The genuinely-checked core of `H_GEN_τ`: the 14 marked points (8 cube vertices + 6 contact
+points `Vₚ*`) are covered by **13** explicit rational translates of `int(O_{p*})`, one merge.
+This is the rational-Farkas membership (the D3 primitive specialised) made fully concrete and
+checked by `norm_num` — the Lean-fit content of the LP search. The vectors come from
+`generic-thirteen-lp.py` (`verify_witness`, exact `Fraction` re-check). -/
+
+/-- `int(O_{p*})` as the open polytope cut out by the 8 exact facet inequalities of `O_{p*}`
+(integer coefficients; `n · x < d`). A point of `ℝ³` is `![x,y,z]` here. -/
+def inOpStar (x : Fin 3 → ℝ) : Prop :=
+  80 * x 1 - 10 * x 2 < 71 ∧
+  80 * x 0 + 10 * x 2 < 81 ∧
+  10 * x 1 - 80 * x 2 < 1 ∧
+  x 0 - x 1 - x 2 < 0 ∧
+  - x 0 + x 1 + x 2 < 1 ∧
+  10 * x 0 + 80 * x 2 < 81 ∧
+  -80 * x 0 - 10 * x 1 < -9 ∧
+  -10 * x 0 - 80 * x 1 < -9
+
+/-- The covering piece at `p*`: `int(O_{p*})`. -/
+def PieceStar : Set (Fin 3 → ℝ) := {x | inOpStar x}
+
+/-- The 14 marked points `{8 cube vertices} ∪ V_{p*}` at the witness box. -/
+noncomputable def markedStar : Fin 14 → (Fin 3 → ℝ)
+  | 0 => ![0, 0, 0]
+  | 1 => ![0, 0, 1]
+  | 2 => ![0, 1, 0]
+  | 3 => ![0, 1, 1]
+  | 4 => ![1, 0, 0]
+  | 5 => ![1, 0, 1]
+  | 6 => ![1, 1, 0]
+  | 7 => ![1, 1, 1]
+  | 8 => ![0, 9/10, 1/10]      -- q10
+  | 9 => ![1, 9/10, 1/10]      -- q11
+  | 10 => ![9/10, 0, 9/10]     -- q20  (merged onto translate 5)
+  | 11 => ![9/10, 1, 9/10]     -- q21
+  | 12 => ![1/10, 1/10, 0]     -- q30
+  | 13 => ![1/10, 1/10, 1]     -- q31
+
+/-- The 13 explicit rational translate vectors (the LP solution at `p*`). -/
+noncomputable def centerStar : Fin 13 → (Fin 3 → ℝ)
+  | 0 => ![-1/8, -1/8, -23/49]
+  | 1 => ![-1/8, -1/8, 23/49]
+  | 2 => ![-7/16, 22/53, -13/34]
+  | 3 => ![-12/35, 12/35, 12/35]
+  | 4 => ![12/35, -12/35, -12/35]
+  | 5 => ![13/34, -7/39, 5/54]
+  | 6 => ![7/39, 5/54, -13/34]
+  | 7 => ![13/34, 7/16, 22/53]
+  | 8 => ![-7/8, -3/43, -45/58]
+  | 9 => ![1/8, -3/43, -45/58]
+  | 10 => ![1/41, 1/33, 1/41]
+  | 11 => ![-45/58, -20/23, -7/8]
+  | 12 => ![-45/58, -20/23, 1/8]
+
+/-- The duty assignment: which translate covers which marked point (point 10 = q20 shares
+translate 5 with cube vertex 5 — the single merge that drops 14 → 13). -/
+def assignStar : Fin 14 → Fin 13
+  | 0 => 0 | 1 => 1 | 2 => 2 | 3 => 3 | 4 => 4 | 5 => 5 | 6 => 6 | 7 => 7
+  | 8 => 8 | 9 => 9 | 10 => 5 | 11 => 10 | 12 => 11 | 13 => 12
+
+/-- **H_GEN_τ core (CLOSED, sorry-free).** Every marked point lies in its assigned translate of
+`int(O_{p*})`: `markedStar i − centerStar (assignStar i) ∈ int(O_{p*})`. This is the exact
+rational Farkas membership of the 13-piece cover — the load-bearing computation, checked. -/
+theorem markedStar_mem (i : Fin 14) :
+    inOpStar (fun k => markedStar i k - centerStar (assignStar i) k) := by
+  fin_cases i <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [markedStar, centerStar, assignStar, Matrix.cons_val_zero, Matrix.cons_val_one,
+        Matrix.head_cons, Matrix.cons_val_fin_one, Matrix.cons_val]
+      norm_num
+
+/-- **The concrete 13-cover of the MARKED POINTS at `p*`** (sorry-free): the 14 marked points are
+covered by 13 translates of `int(O_{p*})`. The merge (point 10 ↦ translate 5) is what makes it 13,
+not 14. (Edge coverage — H_GEN_EDGES — is a separate honest hole.) -/
+theorem marked_points_covered_by_thirteen :
+    IsCoveredBy 13 (Set.range markedStar) PieceStar := by
+  refine ⟨centerStar, ?_⟩
+  rintro _ ⟨i, rfl⟩
+  refine Set.mem_iUnion.mpr ⟨assignStar i, ?_⟩
+  -- `markedStar i ∈ centerStar (assignStar i) +ᵥ PieceStar`
+  refine Set.mem_vadd_set.mpr ⟨fun k => markedStar i k - centerStar (assignStar i) k, ?_, ?_⟩
+  · exact markedStar_mem i
+  · funext k; simp [vadd_eq_add]
+
 /-! ## The 13-piece local bound (the load-bearing claim)
 
 For every generic `p`, the target `E ∪ V_p` is covered by 13 translates of `int(O_p)`. This is the
@@ -81,11 +189,15 @@ union over the atlas of per-box feasible LP solutions; the per-box step is the r
 membership, the atlas step is the finite box decomposition. -/
 
 /-- **H_GEN (load-bearing).** Every generic-regime covering subproblem needs at most 13 translates.
-Holes: τ′ structure (H_GEN_τ), per-box Farkas (H_GEN_FARKAS), atlas (H_GEN_ATLAS), glue
-(H_GEN_GLUE). -/
+Status after R3: the per-box MARKED-POINT core is CLOSED concretely at the witness box `p*`
+(`marked_points_covered_by_thirteen`, sorry-free, axiom-clean). What remains to close THIS theorem:
+H_GEN_EDGES (1-D edge coverage by the same translates), H_GEN_ATLAS (tile the thin 13-region), and
+H_GEN_GLUE (max over the atlas). Held open as `sorry`; the marked-point lemma above is the genuine
+discharged sub-step it is built from. -/
 theorem generic_cover_le_13 (p : P6) (hp : Generic p) :
     IsCoveredBy 13 (CoverTarget p) (Piece p) := by
-  -- H_GEN_τ + H_GEN_FARKAS per box, glued over H_GEN_ATLAS by IsCoveredBy.union / .mono_left.
+  -- At p* the marked-point core is `marked_points_covered_by_thirteen` (CLOSED). Generalising to
+  -- every generic p and adding the edges (H_GEN_EDGES) + atlas (H_GEN_ATLAS) is the remaining work.
   sorry
 
 /-! ## Statement of the generic-regime contribution to the bound
