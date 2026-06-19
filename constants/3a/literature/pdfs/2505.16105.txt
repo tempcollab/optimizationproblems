@@ -1,0 +1,366 @@
+5
+2
+0
+2
+
+y
+a
+M
+2
+2
+
+]
+T
+N
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+5
+0
+1
+6
+1
+.
+5
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+SUMS AND DIFFERENCES OF SETS ( IMPROVEMENT OVER
+ALPHAEVOLVE )
+
+ROBERT GERBICZ
+
+Abstract. On May 14, 2025, DeepMind announced that AlphaEvolve, a large
+language model applied to a set of mathematical problems, had matched or
+exceeded the best known bounds on several problems. In the case of the sum
+and diﬀerence of sets problem, AlphaEvolve, using a set of 54265 integers,
+improved the known lower bound of θ = 1.14465 to θ = 1.1584. In this paper,
+we present an improved bound θ = 1.173050 using an explicit construction
+of a U set that contains more than 1043546 elements. For fast integer and
+ﬂoating-point arithmetic, we used the (free) GMP library.
+
+1. Introduction and preliminaries
+
+Let K > 1 be a real number. In [3] the authors asked for the largest possible
+value of θ such that there exist integer sets A and B, with |A| arbitrarily large,
+satisying the condition that for some constant c(K) > 0:
+
+|A + B| ≤ K|A| and |A − B| ≥ c(K) · |A + B|θ
+
+(1.1)
+
+They showed that θ ≥ 1 +
+
+integers containing zero.
+
+log ( |U −U |
+|U +U | )
+
+log (2·max(U )+1) where U is a set of non-negative
+
+m+L
+m
+
+.
+(cid:1)
+
+In their constructions, they started from the set V = V (m, L) = {(x1, . . . , xm) ∈
+Nm : x1 + . . . + xm ≤ L}, where m ≥ 0 and L ≥ 0. From combinatorics, it is well
+known that |V (m, L)| =
+
+To obtain the integers of the set, they used the function f : (x1, . . . xm) →
+m−1
+k=0 xk · Lk, where L0 = 1 and Lk = 2L · Lk−1 + 1 for k > 0. It is easy to see
+that the function f is injective on both V + V and V − V . The required integers
+P
+of the U set were then deﬁned by U = {f (x) : x ∈ V (m, L)}.
+
+(cid:0)
+
+Using formulas for |V − V |, |V + V | and max(U) they were able to establish
+a lower bound of θ = 1.14465. The known upper bound is θ ≤ 4
+3. DeepMind’s
+AlphaEvolve (see [4]), using a large language model, improved the lower bound
+to θ = 1.1584.
+
+My idea was based on the observation that for x1 + . . . + xm = s ≤ L, the
+average value of each xi is only s
+m . So for vectors x and x′, the average
+value of xk + x′
+k is still relatively small. This suggests that we might improve
+the value of θ by reducing the large Lk values, which are roughly (2L)k. To
+achieve this, we restrict the coordinates by requiring xk ≤ B, and then we can
+
+m ≤ L
+
+Date: May 22, 2025.
+1991 Mathematics Subject Classiﬁcation. 11B75.
+Key words and phrases. Sumset, Diﬀerence set, AlphaEvolve.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+2
+
+ROBERT GERBICZ
+
+use Lk = (2 · B + 1)k. This ensures that the function f remains injective on the
+sets V − V and V + V .
+
+Let B ≥ 0 be an integer. Deﬁne:
+
+2. Main results
+
+W = W (m, L, B) = {x = (x1, . . . , xm) ∈ Nm ∧ x1 ≤ B, . . . , xm ≤ B}
+
+(2.1)
+
+Clearly, if m = 0 ∨ L = 0 ∨ B = 0, then |W (m, L, B)| = 1. Therefore, in
+the following formulas, we may assume m > 0, L > 0, B > 0. For 1 ≤ k ≤
+m, let Hk = {x : x = (x1, . . . , xm) ∈ W (m, L, B) ∧ xk ≥ B + 1}. We easily
+have |H1 ∩ . . . ∩ Hk| = |V (m, L − k(B + 1))| =
+, since for any
+x ∈ H1 ∩ . . . ∩ Hk, the ﬁrst k coordinates are each at least B + 1. Thus, we
+(cid:1)
+are left with a coordinate sum of at most L − k(B + 1) for the shifted vector
+(x1 − (B + 1), . . . , xk − (B + 1), xk+1, . . . , xm). Because this holds for any choice
+of k coordinate indices, using the inclusion-exclusion principle, we obtain:
+
+m+L−k(B+1)
+m
+
+(cid:0)
+
+|W (m, L, B)| = |V (m, L) \ (H1 ∪ . . . ∪ Hm)| =
+
+⌊
+
+L
+B+1 ⌋
+
+|V (m, L)| +
+
+(−1)k
+
+m
+k (cid:19)(cid:18)
+
+m + L − k(B + 1)
+m
+
+(cid:18)
+
+=
+
+(cid:19)
+
+Xk=1
+⌊
+
+L
+B+1 ⌋
+
+Xk=0
+
+(−1)k
+
+m
+k (cid:19)(cid:18)
+
+(cid:18)
+
+m + L − k(B + 1)
+m
+
+(cid:19)
+
+(2.2)
+
+So we have:
+
+⌊
+
+L
+B+1 ⌋
+
+|W (m, L, B)| =
+
+(−1)k
+
+Xk=0
+
+m
+k (cid:19)(cid:18)
+
+m + L − k(B + 1)
+m
+
+(cid:18)
+
+(cid:19)
+
+(2.3)
+
+To obtain the required set of integers U, consider the function
+
+g : (x1, . . . , xm) →
+W (m, L, B)}. It is clear that g is injective on both W + W and W − W .
+
+m−1
+k=0 xk(2 · B + 1)k, and deﬁne U = U(m, L, B) = {g(x) : x ∈
+
+P
+
+We have:
+
+s(U) := |U + U| = |W + W | = |W (k, 2L, 2B)|
+
+(2.4)
+
+since for each vector in W + W , the coordinate sum is at most 2L, and each
+coordinate is at most 2B.
+
+To compute |W − W |, observe that x ∈ W − W if and only if the absolute
+value of each coordinate is at most B, the sum of positive coordinates is at most
+L, and the absolute value of the sum of the remaining non-positive coordinates
+is also at most L. Suppose there are k positive coordinates. Then, we can choose
+ways. There are |W (k, L − k, B − 1)| ways to set these k
+their positions in
+coordinates. For the remaining m − k coordinates, there are |W (m − k, L, B)|
+choices to assign values to the non-positive coordinates. Since these choices are
+
+m
+k
+
+(cid:0)
+
+(cid:1)
+
+SUMS AND DIFFERENCES OF SETS ( IMPROVEMENT OVER ALPHAEVOLVE )
+
+3
+
+independent:
+
+d(U) := |U −U| = |W −W | =
+
+min(m,L)
+
+m
+k (cid:19)
+
+(cid:18)
+
+·|W (k, L−k, B −1)|·|W (m−k, L, B)|
+
+Xk=0
+
+(2.5)
+Since each coordinate is at most B, we may assume L ≤ mB. The maximum of
+U, denoted max(U), is obtained when the coordinate sum reaches its maximum,
+namely L. So in a greedy way set the largest coordinates to B, while we can,
+then set a coordinate to L%B, and set the rest to zero.
+
+For example, if m = 4, L = 8, B = 3, then max(U) = 3·73+3·72+2·71 = 1190.
+
+In general, using t = ⌊ L
+
+B ⌋, we can compute:
+
+q(U) := 2 max(U)+1 = (2B+1)m−(2B+1)m−t+2(L%B)(2B+1)m−t−1+1 (2.6)
+
+Example 2.1. For m = 4, L = 8, B = 3, we have U = U(4, 8, 3) with: |U| =
+221, s(U) = |U +U| = 2075, d(U) = |U −U| = 2307, q(U) = 2 max(U)+1 = 2381.
+
+These values yield: θ ≥ 1 +
+
+log (2·max(U )+1) = 1.013631.
+
+log ( |U −U |
+|U +U | )
+
+Theorem 2.2. For the sums and diﬀerences of sets problem, we have
+θ ≥ 1.173050.
+
+Proof. Larger values of m and L yield very large integers for s(U), d(U) and
+|U|. Therefore, we ﬁrst use ﬂoating-point arithmetic to search for good candidates
+yielding larger values of θ, and then conﬁrm these values using integer arithmetic.
+The formula in (2.3) can result in large numerical errors when using ﬂoating-
+point arithmetic, as it involves an alternating sum. Grouping positive and neg-
+ative terms does not suﬃciently mitigate this precision issue. Thus, when only
+an approximation of W (m, L, B) is needed, we compute it exactly using integer
+arithmetic and then round the result.
+
+To ﬁnd a better value than AlphaEvolve’s θ = 1.1584, we performed a some-
+what restricted search with 1 ≤ m ≤ 128, L = 64 and 1 ≤ B ≤ 7.
+In less
+than one second (on a single CPU core), the search revealed that the maximum
+value, θ = 1.162997, is achieved for m = 80, L = 64, B = 5. Integer arithmetic
+conﬁrms this value of θ.
+
+In these small-scale searches, we observed that for ﬁxed L, the largest θ value
+tends to occur when B = 5 and m ≈ 5
+4 L. In the above example, this relation
+holds exactly, though it is not universally true. For L = 216 = 65536, we searched
+values of m near 5
+4 · 65536 = 81920, and found that (via ﬂoating point estimation)
+that m = 81411 likely provides the best θ value. Using exact integer arithmetic,
+we conﬁrmed in approximately 15 hours that θ = 1.173050 for m = 81411, L =
+65536, B = 5. Rounding the calculated exact values gives:
+
+|U| ≈ 6.314107319 · 1043546
+s(U) = |U + U| ≈ 3.208492702 · 1061228
+d(U) = |U − U| ≈ 6.587554451 · 1075899
+q(U) = 2 max(U) + 1 ≈ 6.605282799 · 1084780
+
+4
+
+ROBERT GERBICZ
+
+For eﬃcient integer and ﬂoating-point arithmetic, we used the (free) GMP
+[2]. The GMP code and the exact computed values for the triple m =
+
+library:
+81411, L = 65536, B = 5 are available in [1].
+
+Further improvements might be possible by increasing the value of L, but
+any additional gain is likely to be less than 0.0001 beyond the achieved value of
+θ = 1.173050.
+
+References
+
+1. Sums and diﬀerences of sets. https://bit.ly/43mWCVC
+2. The GNU Multiple Precision Arithmetic Library. https://gmplib.org/
+3. K. Gyarmati, F. Hennecart, and I. Z. Ruzsa (2007). Sums and diﬀerences of ﬁ-
+nite sets. Functiones et Approximatio Commentarii Mathematici, 37(1):175–186, 2007.
+https://gyarmatikati.web.elte.hu/publ/sumdiffv.pdf
+
+4. Alexander Novikov, Ngˆan Vu, Marvin Eisenberger, Emilien Dupont, Po-Sen Huang, Adam
+Zsolt Wagner, Sergey Shirobokov, Borislav Kozlovskii, Francisco J. R. Ruiz, Abbas Mehra-
+bian, M. Pawan Kumar, Abigail See, Swarat Chaudhuri, George Holland, Alex Davies, Se-
+bastian Nowozin, Pushmeet Kohli and Matej Balog (2025). AlphaEvolve: A coding agent
+for scientiﬁc and algorithmic discovery. http://bit.ly/4jkeOoX
+
+1 Halasztelek, Hungary.
+Email address: robert.gerbicz@gmail.com
+
+

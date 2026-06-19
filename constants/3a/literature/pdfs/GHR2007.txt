@@ -1,0 +1,3604 @@
+SUMS AND DIFFERENCES OF FINITE SETS
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+To Jean-Marc Deshouillers, for his 60th birthday
+
+Abstract. In a given abelian group, let A and B be two ﬁnite subsets satisfying
+A
+K
+the small sumset condition
+. We consider the problem of estimating
+|
+|
+how large
+and K and the one of estimating the ratio
+A
+−
+|
+|
+when X runs over all the non-empty subsets of A.
+/
+X
+|
+|
+
+A + B
+|
+| ≤
+can be in terms of
+
+A
+|
+X
+|
+
+−
+
+B
+
+B
+
+|
+
+|
+
+1. Introduction and statement of the results
+
+|
+
+|
+
+−
+
+b) where a
+
+B) the set of all sums a+b (resp. diﬀerences a
+
+Let A and B be two non-empty and ﬁnite subsets of an abelian group G. The
+. As usual, we denote by A + B (resp.
+X
+cardinality of any ﬁnite set X is written
+B. The set
+A
+of all sums of h elements of B is denoted by hB. In the last ﬁfteen years, several papers
+were concerning with the problem of comparing the relative sizes of A + B and A
+B.
+. The upper bound is achieved when
+We clearly have max(
+|
+A,
+A and B are generic sets, that is when the only solutions of a + b = a′ + b′, a, a′
+B are the trivial solutions (a, b) = (a′, b′). This shows that there is no non-trivial
+b, b′
+A
+solution for a
+.
+−
+|
+|
+A
+A
+A + B
+. In this paper
+=
+If
+|
+|
+we consider the question of comparing the size of A
+B with that of A + B when
+A + B
+
+B, thus we also have
+=
+
+∈
+∈
+B = A, which implies
+
+b′ = a′
+, then A + B
+
+A and b
+
+A, b, b′
+
+−
+A
+|
+|
+
+b, a, a′
+
+| ≤ |
+
+A
+|
+
+≤ |
+
+K
+
+−
+
+−
+
+−
+
+−
+
+±
+
+−
+
+−
+
+=
+
+|
+|
+
+B
+
+B
+
+B
+
+B
+
+B
+
+B
+
+A
+
+A
+
+A
+
+| |
+
+| |
+
+∈
+
+∈
+
+∈
+
+∈
+
+)
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+,
+
+.
+
+For multiple addition or diﬀerence, sharp results have been obtained thanks to a
+very eﬃcient theorem of Pl¨unnecke. According to [4], this result known as Pl¨unnecke
+inequalities, can be stated as follows:
+A
+|
+
+. Then for any positive integer h, there exists a
+
+A + B
+non-empty subset X of A such that
+
+(i) Assume that
+
+| ≤
+
+K
+
+|
+
+|
+
+|
+
+| ≤
+
+A
+|
+
+|
+
+(1)
+
+X + hB
+
+|
+
+K h
+
+X
+
+.
+
+|
+
+|
+
+| ≤
+
+Date: May 30, 2008.
+1991 Mathematics Subject Classiﬁcation. 11B75.
+Key words and phrases. Sumset, Diﬀerence set, Pl¨unnecke inequality.
+The research of the ﬁrst-named author is partially supported by Hungarian National Foundation
+
+for Scientiﬁc Research (OTKA), Grants No. T043631, T043623 and T049693.
+
+The research of the third-named author is supported by Hungarian National Foundation for Scien-
+
+tiﬁc Research (OTKA), Grants No. T042750, T043623 and T061908.
+
+1
+
+2
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+integer h
+
+≥
+
+(2)
+
+(ii) Assume that for a positive integer j one has
+
+A
+|
+j, there exists a non-empty subset X of A such that
+
+A + jB
+
+| ≤
+
+K
+
+|
+
+|
+
+. Then for any
+
+|
+K
+
+A
+|
+
+|
+hB
+
+X + hB
+
+K h/j
+
+X
+
+.
+
+|
+
+|
+
+| ≤
+
+jB
+
+K h+j
+
+.
+
+A
+|
+
+(iii) Assume that
+
+A + B
+
+|
+
+| ≤
+
+. Then for any nonnegative integers h, j, one has
+
+| ≤
+Assertion (i) is a particular case of (ii) and assertion (iii) is obtained by using (ii)
+
+−
+
+|
+
+|
+
+and the inequality (cf. [4])
+
+(3)
+
+X
+
+|
+
+−
+
+Y
+
+| ≤
+
+|
+
+X + Z
+
+Y + Z
+
+|
+
+,
+
+||
+Z
+
+|
+
+|
+
+which is valid for any ﬁnite sets X, Y, Z. It is quite clear that in general the set X in (i)
+and (ii) of Pl¨unnecke inequalities cannot be reduced to a singleton (just think A = B
+being a large ﬁnite arithmetic progression). On the other hand, it is worth mentioning
+that in general one cannot take X = A (see [6] for more details on this question).
+2B
+Letting j = 0 and h = 2 in assertion (iii) of Pl¨unnecke inequality, we obtain
+
+|
+
+| ≤
+
+A + B
+
+|
+
+2/
+
+A
+|
+
+|
+
+|
+
+. Thus we have
+
+2B
+
+A + B
+B
+
+3
+
+A + B
+B
+A
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+A
+
+B
+
+=
+
+≤
+
+−
+
+(4)
+
+| ≤
+
+||
+||
+|
+are of comparable size, this
+by using inequality (3). When
+. If we only assume
+inequality shows that
+A
+that
+is bounded by some constant
+|
+|
+depending on K, except in the special case K = 1. Indeed, the third-named author
+proved in [6] the following result: There exists a real number θ > 1 such that for any
+K > 1 and arbitrarily large integers n, there are two sets of integers A and B satisfying
+
+has also a bounded ratio with
+
+|
+, it is not true that
+
+|
+||
+|
+and
+
+(cid:18)
+|
+A + B
+
+|
+| (cid:19)
+
+A + B
+
+|
+B
+
+A
+|
+
+A
+|
+
+A
+|
+
+| ≤
+
+A + B
+
+K
+
+−
+
+−
+
+B
+
+B
+
+A
+
+A
+
+/
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+,
+
+,
+
+2
+
+A + B
+B
+A
+
+(5)
+
+A
+|
+where c(K) > 0.
+
+|
+
+= n,
+
+A + B
+
+K
+
+A
+|
+
+|
+
+| ≤
+
+|
+
+and
+
+A
+
+|
+
+−
+
+B
+
+| ≥
+
+c(K)
+
+|
+
+A + B
+
+θ,
+
+|
+
+The discussion above shows that the only way to extend this statement to K = 1 is
+
+to let c(1) = 0.
+
+As shown in [6], the choice θ = 2
+
+is based on a elementary construction which uses the fact that the set U =
+satisﬁes
+notice that (3) yields
+
+log 6
+log 7 = 1.0792 . . . is admissible in (5). The proof
+0, 1, 3
+}
+= 7. In this connection and for future references we
+
+= 6 and
+
+U + U
+
+−
+
+−
+
+U
+
+U
+
+{
+
+|
+
+|
+
+|
+
+|
+
+U
+
+U
+
+(6)
+| ≤ |
+In [2], it is shown that for any λ < log(1+√2)
+log 2 = 1.2715 . . . , there exist sets A of non-
+λ, but A does not fulﬁll the condition
+A + A
+negative integers such that
+|
+any more. Nevertheless these sets allow us to show that the exponent θ
+A + A
+|
+in (5) can be slightly improved as regards to the original result:
+
+U + U
+
+| ≍ |
+
+| ≍ |
+
+A
+|
+
+−
+
+−
+
+A
+
+A
+
+|
+
+|
+
+|
+
+4/3.
+
+SUMS AND DIFFERENCES OF FINITE SETS
+
+3
+
+Theorem 1. Let K > 1 be a real number. There exist a real number θ0 > 1.14465 and
+two sets of integers A and B with
+
+arbitrarily large such that
+
+A
+|
+
+|
+
+(7)
+
+A + B
+
+K
+
+A
+|
+
+|
+
+| ≤
+
+|
+
+and
+
+A
+
+|
+
+−
+
+B
+
+| ≥
+
+2(K
+
+−
+3K
+
+(cid:18)
+
+5/4
+
+1)
+
+(cid:19)
+
+A + B
+
+|
+
+θ0.
+
+|
+
+Using similar ideas, one can show that there exists a positive real number c(K) such
+that for any positive integer n, there exists two sets of integers A and B for which (5)
+holds with θ = θ0.
+The easy bound
+
+≤
+|
+1/2 (see [6, Theorem 7.2] and also [7]), the following result provides a strenghtened
+
+2B
+|
+|
+estimate.
+Theorem 2. Let A and B two ﬁnite sets in an abelian group. Then
+
+2 and (4) imply
+
+1/2. Since
+
+A+B
+
+| ≤ |
+
+| ≤ |
+
+2B
+
+2B
+
+3B
+
+−
+
+B
+
+B
+
+A
+
+1/3
+
+||
+
+|
+
+|
+
+|
+
+|
+
+|
+
+(8)
+
+(9)
+
+A
+|
+
+−
+
+B
+
+| ≤ |
+
+A + B
+
+3B
+
+1/3 .
+
+| |
+
+|
+
+In [7], the third-named author suggested that perhaps, the sequence (
+|
+non-increasing. A natural problem is to ﬁnd for which integers h we have
+
+hB
+
+1/h)h
+
+1 is
+
+≥
+
+|
+
+A
+
+B
+
+A + B
+
+hB
+
+1/h
+
+|
+
+−
+for any sets A and B. Assume that this bound holds for some h
+1
+inequality, we have
+K 1
+−
+end of Section 2).
+
+|
+1+1/h. This contradicts Theorem 1 for h
+
+, where K =
+
+A + B
+
+A + B
+
+A + B
+
+| ≤ |
+
+A
+|
+
+K h
+
+| ≤
+
+hB
+
+≥
+
+1/h
+
+||
+
+/
+
+−
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+1. By Pl¨unnecke
+A
+
+B
+
+. Therefore
+
+≥
+
+|
+
+| ≤
+7 (see also the remark at the
+
+−
+
+|
+
+|
+
+Using the trivial fact that
+
+A
+
+B
+
+A
+
+B
+
+, the bound
+
+A
+
+B
+
+|
+
+||
+
+| ≥ |
+
+| ≤ |
+from (4). This estimate can be strengthened if we further assume that
+Corollary 3. Let A and B be two ﬁnite sets such that
+|
+4/3.
+−
+2 by Pl¨unnecke inequality, Theorem 2 gives
+
+Indeed, as
+
+|
+A + B
+| ≤
+. Then
+
+A + B
+
+A + B
+
+A + B
+
+|
+A
+|
+
+K 2/3
+
+|
+3/
+
+| ≤
+
+| ≤
+
+3B
+
+K
+
+−
+
+−
+
+B
+
+A
+
+|
+
+|
+
+|
+
+|
+
+|
+
+A + B
+
+3/2 follows
+A
+K
+:
+|
+
+|
+
+|
+
+| ≤ |
+
+|
+
+|
+B
+
+A
+|
+
+| ≤
+
+A
+
+|
+
+−
+
+2
+
+|
+
+A + B
+A
+|
+
+|
+
+|
+2/3 ≤
+
+K 2/3
+
+|
+
+A + B
+
+4/3.
+
+|
+
+From Corollary 3 we deduce that the value of θ in (5) and that of θ0 in (7) cannot
+
+be larger than 4/3.
+
+|
+
+X
+
+, how large can be
+
+We now consider the following related question: under the same assumption
+A
+|
+
+| ≤
+K
+where X runs over all the subsets of A? Using
+Pl¨unnecke inequality (1), it is possible to obtain the following upper bound for this
+ratio:
+Theorem 4. Let A and B be non-empty and ﬁnite subset of some abelian group such
+that
+
+. Then there exists some non-empty subset X of A such that
+
+A + B
+
+A+B
+
+K
+
+X
+
+−
+
+B
+
+/
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+| ≤
+
+A
+|
+
+|
+
+(10)
+
+X
+
+|
+
+|
+
+−
+X
+
+B
+
+|
+
+|
+
+≤
+
+K exp
+
+2
+
+(log K)(log
+
+(cid:16)
+
+p
+
+)
+
+A
+|
+
+|
+
+.
+
+(cid:17)
+
+Then for any c <
+A + B
+
+K
+
+|
+
+| ≤
+
+A
+|
+X
+
+|
+|
+
+q
+B
+
+|
+
+−
+X
+
+|
+
+|
+
+≥
+
+4
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+|
+
+|
+
+A
+
+B
+
+A
+|
+
+We observed above that
+/
+
+A +
+is bounded. The following result shows that this fact is in some sense uniform
+A
+A
+|
+|
+1
+. By a modiﬁcation of the
+3(log
+
+B
+(see [6]): There exist two sets A and B with
+such that for any X
+A, one has
+|
+argument, this result may be improved in the following way:
+
+can be very large even in the case where
+
+arbitrarily large and
+
+|
+| ≥
+
+A + B
+
+A
+|
+
+A
+|
+
+| ≤
+
+X
+
+X
+
+⊂
+
+−
+
+−
+
+B
+
+3
+
+/
+
+)
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+Theorem 5. Let K > 1 and τ such that 0 < τ < 1
+
+1/K, and deﬁne
+
+f (τ ) = (
+
+τ log τ
+
+(1
+
+−
+2
+3f (τ ) there exist two sets A and B with
+
+−
+
+−
+
+−
+
+τ )).
+
+−
+τ ) log(1
+
+such that for any non-empty subset X of A, one has
+
+arbitrarily large and
+
+A
+|
+
+|
+
+exp
+
+c
+
+(log((1
+
+τ )K))(log
+
+)(log log
+
+A
+|
+
+|
+
+1
+
+)−
+
+A
+|
+
+|
+
+−
+
+As an immediate consequence, we obtain for K not too close to 1:
+
+(cid:16)
+
+p
+
+.
+
+(cid:17)
+
+Corollary 6. Let K > 2. Then for any c < √2 log 2
+A
+|
+|
+one has
+
+arbitrarily large and
+
+A + B
+
+A
+|
+
+| ≤
+
+K
+
+|
+
+|
+
+, there exist two sets A and B with
+such that for any non-empty subset X of A,
+
+√3
+
+X
+
+|
+
+−
+X
+
+B
+
+|
+
+≥
+
+exp
+
+c
+
+(log(K/2))(log
+
+|
+(cid:16)
+This uniform lower bound for
+
+|
+
+p
+X
+|
+
+−
+
+|
+
+|
+
+|
+
+)(log log
+
+A
+|
+
+|
+
+1
+
+)−
+
+A
+|
+
+|
+
+.
+
+(cid:17)
+
+B
+
+/
+
+X
+
+can be compared to the upper bound
+
+(10) obtained in Theorem 4.
+Acknowledgement. We are grateful to the referee for his valuable comments and sug-
+gestions helping us to improve on the submitted version of the present paper.
+
+Proof of Theorem 1. The result will follow from
+
+2. Sumset and diﬀerence set
+
+Lemma. Let K > 1 be a real number and let U be a ﬁnite, non-empty set of nonnegative
+, q = 2 max U + 1 and θ = 1 +
+integers containing 0. Set s =
+log(d/s)/ log q. If d < q, then there exist pairs (A, B) of ﬁnite, non-empty integer sets
+with
+
+arbitrarily large such that
+
+, d =
+
+and
+
+2U
+
+A + B
+
+−
+
+B
+
+U
+
+U
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+(11)
+
+|
+Proof. We ﬁx k any arbitrary large integer. Set
+
+| ≥
+
+−
+
+−
+
+|
+(2(K
+
+A
+|
+
+K
+| ≤
+|
+1)/3K)5/4
+
+A
+
+B
+
+A + B
+
+|
+
+θ.
+
+|
+
+and
+
+B =
+
+k
+
+1
+
+−
+
+(
+
+j=0
+X
+
+ujqj
+
+: uj ∈
+
+U, j = 0, . . . , k
+
+,
+
+1
+
+−
+
+)
+
+A = [1, L]
+
+∪
+
+m
+
+(ai + B),
+
+i=1
+[
+
+SUMS AND DIFFERENCES OF FINITE SETS
+
+5
+
+where the ai’s are positive integers larger than L+qk and such that ai−
+unless i = j. Since max B < qk, we have
+
+aj 6∈
+
+(B
+
+B)
+
+∪
+
+−
+
+2B
+
+⊂
+
+1)
+
+L =
+
+(cid:22)
+
+3qk
+
+2(K
+−
+qk +t
+
+A
+
+L + 1,
+
+A + B
+
+= msk + t,
+
+|
+
+| ≥
+[1, L] + B
+
+|
+[1, L]
+
+=
+
+|
+
+|
+
+B
+
+|
+
+−
+
+|
+. Since B
+
+where t :=
+We choose
+
+|
+
+A
+|
+[0, qk
+
+= mdk + t,
+
+B
+
+|
+
+−
+
+2 ], we note that L
+
+t
+
+≤
+
+≤
+
+L + qk
+2 .
+
+.
+
+k
+
+q
+Letting m =
+, we obtain
+s
+⌊
+⌋
+( qd
+dk +t
+s )k
+B
+A
+and
+(cid:0)
+(cid:1)
+| ≥
+large. Consequently
+
+−
+
+≥
+
+−
+
+|
+
+A
+A+B
+|
+≤
+|
+( qd
+s )k if we assume further that d < q and k is suﬃciently
+
+K(L+1)
+
+1) ≤
+
+| ≤
+
+K
+
+≤
+
+≤
+
+−
+
+|
+
+3Kqk
+2(K
+
+(cid:23)
+3
+2qk +L
+
+k
+
+qd
+s
+
+A
+
+|
+
+B
+
+| ≥
+
+−
+≥
+(cid:18)
+max(q, s4/3), thus
+
+(cid:19)
+
+(cid:18)
+
+≤
+
+2(K
+
+−
+
+A + B
+
+1)
+|
+3K
+
+1+ log d−log s
+log q
+
+|
+
+(cid:19)
+
+.
+
+By (6), we have d
+
+(12)
+
+1 +
+
+We ﬁnally get (11).
+
+log d
+
+log s
+
+−
+log q
+
+5
+4
+
+.
+
+≤
+
+(cid:3)
+
+Remark. It is worth mentioning that (12) implies that the largest exponent θ that
+could be eventually obtained by this method is at most equal to 5/4.
+
+U + U
+
+By an exhaustive computational research, we got the set U =
+U
+
+|
+= 1.1078 . . . is admissible in (5) with c(K) =
+
+which satisﬁes
+1 + log 39
+−
+log 43
+provides the optimal value of log d(U )
+−
+log q(U )
+integers of cardinality less than or equal to 11.
+
+= 26,
+
+0, 1, 3, 6, 13, 17, 21
+}
+= 39 and q = 43, thus the exponent θ =
+2(K
+
+−
+3K
+when U runs over all sets of nonnegative
+
+. This set U
+
+log s(U )
+
+log 26
+
+−
+
+5/4
+
+U
+
+(cid:16)
+
+(cid:17)
+
+{
+
+1)
+
+|
+
+|
+
+|
+
+In order to improve the admissible exponent in (5), we will use some idea from [2].
+
+We denote N the set of all nonnegative integers. Let
+
+(13)
+
+V = V (m, L) =
+
+(x1, . . . , xm)
+
+{
+
+Nm : x1 +
+
+∈
+
++ xm ≤
+
+.
+
+L
+}
+
+· · ·
+
+Then by lemmas 1 and 2 of [2], we get
+
+(14)
+
+=
+
+V
+
+|
+
+|
+
+(cid:18)
+Let Λ = (Lj)j
+
+≥
+
+m + L
+m
+
+m + 2L
+m
+
+=
+
+2V
+
+,
+(cid:19)
+
+,
+(cid:19)
+0 be the sequence deﬁned by
+
+(cid:18)
+
+|
+
+|
+
+V
+
+|
+
+V
+
+|
+
+−
+
+=
+
+min(m,L)
+
+m
+k
+
+2
+
+L + m
+m
+
+(cid:18)
+
+k
+
+−
+
+.
+(cid:19)
+
+Xk=0 (cid:18)
+
+(cid:19)
+
+(15)
+
+L0 = 1, Lj+1 = 2LLj + 1, j
+
+0.
+
+≥
+
+By projection of V on the set of nonnegative integers (x1, . . . , xm)
+x3L2 +
+
+x1 + x2L1 +
+1, by which the number of sums and the number of diﬀerences are
+
++ xmLm
+
+7→
+
+· · ·
+
+−
+
+6
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+preserved, we get a set U verifying max U = LLm
+1 = (2L)m
+(15), we obtain Lm
+−
+m = 8, L = 9 gives a set U with
+q(U) = 11668193551. This yields the exponent
+
+1 , thus q(U) = 2 max U + 1 = (2L)m+1
+
+1. Solving the linear recurrence
+. The choice
+= 24310, s(U) = 1562275, d(U) = 23301307 and
+
+U
+
+2L
+
+2L
+
+−
+
+−
+
+−
+
+−
+
+−
+
+|
+
+|
+
+1
+
+1
+
+1
+
+θ = 1 +
+
+in (5).
+
+log d(U)
+
+log s(U)
+
+−
+log q(U)
+
+= 1.1165 . . .
+
+−
+
+We may observe that when projecting V on the set of integers, we only need to
+select a sequence Λ = (Lj)j=0,...,m
+1 such that the number of sums (and hence also the
+number of diﬀerences) are preserved. For this we can argue by induction applying the
+1,
+following greedy algorithm:
+−
+L0 < L1 <
+x1 +
+· · ·
+x2L1 +x3L2 +
+Nj : x1 +
+
+let L0 = 1, and assume that for some 1
+≤
+1 have been chosen so that the mapping pj : (x1, . . . , xj)
+
+−
++xjLj
+1 preserves the number of sums from S(j, L) :=
+−
+. Put U(j, L) := pj(S(j, L)) and let
+L
+}
+l > LLj
+
+U(j, L) + U(j, L)
+
+(x1, . . . , xj)
+
+U(j, L)
+
+U(j, L
+
+< Lj
+
+1 : l
+
+7→
+
+m
+
+≤
+
+∈
+
+{
+
+j
+
+.
+
+· · ·
++ xj ≤
+· · ·
+Lj := min
+{
+
+−
+
+6∈
+
+Then the projection pj+1 : (x1, . . . , xj+1)
+· · ·
+preserves the number of sums from S(j + 1, L). Indeed let x, y, z, t
+that
+
+7→
+
+∈
+
+−
+−
+x1 + x2L1 + x3L2 +
+
+−
++ xjLj
+
+1)
+}
+1 + xj+1Lj
+S(j + 1, L) such
+
+−
+
+(16)
+
+pj+1(x) + pj+1(y) = pj+1(z) + pj+1(t).
+
+If xj+1 = yj+1 = zj+1 = tj+1 = 0, then
+(17)
+
+pj(x1, . . . , xj) + pj(y1, . . . , yj) = pj(z1, . . . , zj) + pj(t1, . . . , tj),
+hence by induction hypothesis x + y = z + t. Otherwise, we may assume that xj+1 +
+0 and xj+1 ≥
+tj+1 ≥
+zj+1 −
+yj+1 −
+1) and by (16),
+−
+pj(y1, . . . , yj)
+zj+1 −
+one has (xj+1 + yj+1 −
+−
+−
+1). Since max(U(j, L) + U(j, L)
+U(j, L) + U(j, L)
+pj(x1, . . . , xj)
+∈
+−
+−
+U(j, L)
+U(j, L
+1)) < 2Lj and Lj 6∈
+U(j, L
+1), we clearly
+−
+−
+tj+1 = 0, giving (17) again. By the induction hypothesis, we
+zj+1 −
+have xj+1 + yj+1 −
+deduce (x1, . . . , xj) + (y1, . . . , yj) = (z1, . . . , zj) + (t1, . . . , tj), and ﬁnally x + y = z + t.
+For m = 9 and L = 7, a short program gives the sequence
+
+S(j, L
+tj+1)Lj = pj(t1, . . . , tj) + pj(z1, . . . , zj)
+
+−
+U(j, L)+U(j, L)
+
+1. Then (x1, . . . , xj)
+
+U(j, L)
+
+U(j, L)
+
+U(j, L
+
+−
+
+−
+
+−
+
+−
+
+∈
+
+Λ = (1, 15, 211, 1590, 14976, 109870, 788046, 5535439, 38772709)
+
+23
+9
+
+= 817190 and d(U) =
+
+yielding by projection a sequence U of integers such that q(U) = 2 max U + 1 =
+542817927. Since sums and diﬀerences are preserved in cardinality, of course by (14)
+we have s(U) =
+= 12494233. We thus get
+θ = 1.135596 as an admissible exponent.
+(cid:1)
+
+P
+It is still possible to improve it by relaxing the deﬁnition of the sequence Λ =
+1. We thus obtain a new
+
+(Lj)j=0,...,m
+1 by removing the condition Lj > LLj
+sequence Λ for which the projection pj : (x1, . . . , xj)
+1
+−
+does not necessary preserve the number of sums nor the number of diﬀerences. However
+
+x1 + x2L1 + x3L2 +
+
++ xjLj
+
+−
+7→
+
+6
+k=0
+
+16
+−
+9
+
+1, j
+
+· · ·
+
+≥
+
+9
+k
+
+(cid:0)
+
+(cid:1)
+
+(cid:1)
+
+(cid:0)
+
+(cid:0)
+
+−
+
+k
+
+2
+
+SUMS AND DIFFERENCES OF FINITE SETS
+
+7
+
+only a few number of sums and diﬀerences are lost through the projection pj. This
+gives for m = 11, L = 7 and
+
+Λ = (1, 15, 211, 1590, 14976, 109870, 605315, 3362489, 17767138, 80137194, 408850463)
+
+a set U verifying
+
+s(U) = 4455634,
+
+d(U) = 110205905,
+
+q(U) = 2 max U + 1 = 5723906483.
+
+This yields the admissible exponent θ = 1.144655.
+
+(cid:3)
+
+Proof of Theorem 2. The Pl¨unnecke inequality (i) given in the introduction has the
+disadvantage not to give any information on the size of the subset X of A. However
+by repeated application of it, it has been shown by the third-named author that an
+analogue result holds with a large subset X of A (see [7, Theorem 3.3]). In a weaker
+but more convenient form, it can be stated as follows:
+
+Lemma. Let K and δ be positive real numbers, h be a positive integer and A, B be
+. Then there
+ﬁnite and non-empty subsets of an abelian group such that
+.
+exists a subset X of A with
+X
+
+A + B
+X + hB
+
+A
+K
+|
+|
+2K hδ1
+−
+
+such that
+
+(1
+
+δ)
+
+|
+
+h
+
+|
+
+| ≥
+
+−
+
+A
+|
+
+|
+
+|
+
+| ≤
+| ≤
+
+We now complete the proof of Theorem 2. We use the following notation:
+
+= m,
+
+= nj,
+
+B
+
+|
+
+|
+
+= n = n1,
+
+A + B
+
+|
+
+|
+
+jB
+
+|
+|
+(18)
+
+= s and
+
+A
+
+|
+
+−
+mn.
+
+d
+
+= d. We obviously have
+
+B
+
+|
+
+≤
+We also use several instances of (3). First we put X = A, Y = B, Z = B to obtain
+
+|
+
+A
+|
+A
+|
+
+|
+
+(19)
+
+sn2
+n
+
+.
+
+d
+
+≤
+
+Next we put Y = B, Z = 2B to obtain
+
+(20)
+
+X
+|
+
+−
+
+B
+
+X + 2B
+
+| ≤ |
+
+n3
+n2
+
+.
+
+|
+
+We will use this for a large subset X of A for which X + 2B is small and in view of
+(20) we will then estimate A
+
+B by
+
+A
+
+B
+
+X
+
+B
+
+(A r X)
+
+B
+
+X + 2B
+
+|
+For the set X given in the lemma with h = 2, we deduce
+
+| ≤ |
+
+| ≤ |
+
+−
+
+−
+
+−
+
+|
+
+|
+
+−
++
+
+n3
+n2
+
+|
+
++ n(m
+
+X
+
+− |
+
+).
+
+|
+
+(21)
+
+A
+
+|
+
+−
+
+B
+
+| ≤
+
+2n3s2
+n2δm
+
++ δnm.
+
+Choosing δ = s
+m
+
+2n3
+nn2
+
+1/2
+
+in this inequality, we ﬁnd
+
+(cid:16)
+
+(cid:17)
+
+A
+
+|
+
+−
+
+B
+
+2
+
+|
+
+≤
+
+(2s)2
+
+2nn3
+n2 (cid:19)
+
+.
+
+(cid:18)
+
+2sn1/3
+Multiplying this inequality with (19) and taking the cube root, we obtain d
+,
+3
+which is the requested inequality apart from the factor 2. We can remove it as follows.
+
+≤
+
+8
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+Take our sets A, B and apply the result to the k-fold Cartesian products Ak and Bk.
+Every quantity is then raised to the k-th power, and by taking k-th root we have our
+theorem with the factor 21/k. By taking the limit we derive the theorem with the
+(cid:3)
+factor 1.
+
+≥
+
+Remark. We saw in the introduction that the bound (9) is not true in general for
+7. Let A = B = V (m, m/2) be the set deﬁned in (13) with L = m/2. We have by
+h
+= (2 log(1 + √2) + o(1))m
+(14) the estimates log
+as m tends to inﬁnity (see [2] for more details). Moreover 6A = V (m, 3m), thus, by
+3 log 3 + o(1))m as m tends to inﬁnity.
+Stirling’s formula, we have
+Since 2 log(1 + √2)
+1/6 for
+A
+|
+m suﬃciently large, disproving the bound (9) for h = 6. For h = 4 or 5, it is an open
+question to decide whether or not (9) holds for any sets A and B.
+
+6A
+|
+|
+2 log 2 > 4 log 4
+−
+4
+
+−
+, we obtain that
+
+= (2 log 2 + o(1))m, log
+
+= (4 log 4
+3 log 3
+
+2A
+|
+
+6A
+|
+
+A
+|
+
+2A
+
+−
+
+−
+
+−
+
+>
+
+A
+
+A
+
+||
+
+|
+
+|
+
+|
+
+|
+
+3. How large can
+
+Proof of Theorem 4. For an integer N
+
+≥
+
+X
+
+B
+
+be for X
+
+−
+
+|
+1 (to be speciﬁed later) put
+
+⊂
+
+|
+
+A?
+
+Then by Pl¨unnecke inequality, λN
+
+B
+
+|
+
+| ≤ |
+
+λ = min
+N
+1
+≤
+
+≤
+
+j
+
+|
+
+(j + 1)B
+jB
+
+|
+
+.
+
+|
+|
+(N + 1)B
+
+K 1+1/N
+
+λ
+
+≤
+
+(cid:18)
+
+A
+|
+|
+B
+|(cid:19)
+|
+
+| ≤
+1/N
+
+K N +1
+
+, thus
+
+A
+|
+
+|
+
+.
+
+Together with the trivial bound λ
+exists j, 1
+
+N, such that
+
+j
+
+≤
+
+≤
+
+B
+
+|
+
+≤ |
+
+, we get λ
+
+K
+
+A
+|
+
+|
+
+≤
+
+1/(N +1). Therefore there
+
+jB + B
+
+K
+
+A
+|
+
+|
+
+| ≤
+
+|
+
+1/(N +1)
+
+jB
+
+.
+
+|
+
+|
+
+Inequality (3) yields for any X
+
+A,
+
+⊂
+
+X
+
+|
+
+−
+
+B
+
+| ≤
+
+|
+
+X + jB
+
+(j + 1)B
+
+||
+jB
+
+|
+
+|
+
+|
+
+.
+
+By Pl¨unnecke’s theorem, there exists a non-empty subset X
+K j
+
+, thus
+
+X
+
+A such that
+
+X + jB
+
+|
+
+| ≤
+
+⊂
+
+|
+
+|
+
+Taking
+
+X
+
+|
+
+−
+
+B
+
+| ≤
+
+K j+1
+
+A
+|
+
+|
+
+1/(N +1)
+
+X
+
+|
+
+| ≤
+
+K N +1
+
+A
+|
+
+|
+
+1/(N +1)
+
+X
+
+.
+
+|
+
+|
+
+N =
+
+A
+log
+|
+|
+log K
+
+&(cid:18)
+
+1/2
+
+1,
+
+' −
+
+(cid:19)
+
+we ﬁnally obtain the bound (10).
+
+(cid:3)
+
+Let (ei)1
+
+≤
+
+i
+≤
+
+and
+
+A =
+
+{
+
+B =
+
+{
+
+SUMS AND DIFFERENCES OF FINITE SETS
+
+9
+
+Proof of Theorem 5. Let d
+1 be an integer. We will construct a pair of sets A and
+B in Zd satisfying the conclusion of Theorem 5. Then by projection on Z, using for
+1xd where q is suﬃciently
+instance the mapping (x1, . . . , xd)
+x1 + qx2 +
+large to have the number of sums and that of diﬀerences unchanged, we may obtain
+the same result with A and B being sets of integers.
+
++ qd
+−
+
+· · ·
+
+7→
+
+≥
+
+For a given d-tuple x = (x1, x2, . . . , xd)
+
+Nd, we denote by ν(x) the number its
+
+non-zero coordinates, and by σ(x) the sum of all its coordinates:
+
+∈
+
+ν(x) =
+
+1,
+
+σ(x) =
+
+xi.
+
+i
+d
+X1
+≤
+≤
+=0
+xi
+
+d
+i
+X1
+≤
+≤
+
+d be the canonical basis of Zd and u
+
+[1, d] be an integer. We let
+
+x = (x1, x2, . . . , xd)
+
+∈
+
+∈
+
+Nd : ν(x) = J and σ(x) = k
+
+,
+
+}
+
+ei1 + ei2 +
+
++ eiu : 1
+
+i1 < i2 <
+
+· · ·
+
+≤
+
+< iu ≤
+
+d
+
+.
+
+}
+
+· · ·
+
+The set A is formed with integral points of certains J-dimensional edges of a simplex
+and the set B by some vertices of an hypercube. The sumset A + B has the same
+structure than A and its size is controlled by the parameters k and u:
+large k and
+B having exactly u
+A + B
+small u make
+B, for an unique
+negative coordinates (all are equal to
+a
+J as large as possible, in relation
+A. It follows that choosing the parameter d
+−
+X
+with k and u, will imply a large lower bound for
+|
+We have by easy combinatorical considerations
+
+−
+1) belongs to a certain a
+
+−
+, for any ∅
+
+. Now each element of A
+
+close to
+
+= X
+
+A
+|
+
+A.
+
+X
+
+−
+
+⊂
+
+−
+
+B
+
+∈
+
+/
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+(22)
+
+Put for i = 0, 1, . . . , u
+
+=
+
+A
+|
+
+|
+
+d
+J
+
+(cid:18)
+
+k
+J
+
+.
+
+1
+1
+(cid:19)
+
+−
+−
+
+(cid:19)(cid:18)
+
+Ci =
+
+Then A + B
+
+⊂
+
+{
+
+x = (x1, x2, . . . , xd)
+∈
+u
+i=0 Ci. We also have
+
+Nd : ν(x) = J + i and σ(x) = k + u
+
+.
+
+}
+
+S
+
+=
+
+Ci|
+
+|
+
+From this and (22) we get
+
+d
+J + i
+
+(cid:18)
+
+(cid:19)(cid:18)
+
+k + u
+J + i
+
+1
+1
+
+.
+(cid:19)
+
+−
+−
+
+(d
+
+−
+
+=
+
+Ci|
+|
+A
+|
+|
+
+J)(d
+
+J
+
+1) . . . (d
+
+J + i
+
+1)
+
+(k + u
+
+−
+
+−
+
+−
+
+−
+
+(J + 1)(J + 2) . . . (J + i)
+
+1)(k + u
+
+−
+1)(J + i
+
+2) . . . (k + u
+2) . . . J
+
+i)
+
+−
+
+(k + u
+
+·
+i
+−
+i)(k
+
+−
+−
+
+−
+(J + i
+1)(k + u
+J + u
+
+−
+
+−
+i
+−
+i
+−
+
+−
+2) . . . k
+
+−
+1) . . . (k
+
+J + 1)
+
+−
+
+d
+
+−
+J
+
+i
+
+J
+
+(cid:19)
+
+≤
+
+(cid:18)
+
+·
+(k + u)u
+J)u
+
+J i(k
+
+(k
+
+−
+i .
+
+−
+
+−
+
+J + u
+
+−
+
+6
+6
+10
+
+KATALIN GYARMATI, FRANC¸ OIS HENNECART, AND IMRE Z. RUZSA
+
+Thus
+
+If we assume
+
+(23)
+
+we get
+
+(24)
+
+For each x
+elements in x
+A
+X
+
+⊂
+
+∈
+−
+
+u
+
+i=0
+X
+
+Ci|
+|
+A
+|
+|
+
+k + u
+J
+k
+
+−
+
+≤
+
+(cid:18)
+
+u u
+
+(cid:19)
+
+i=0 (cid:18)
+X
+
+(d
+
+−
+
+J)(k
+J 2
+
+J)
+
+−
+
+i
+
+.
+
+(cid:19)
+
+(d
+
+−
+
+J)(k
+J 2
+
+−
+
+J)
+
+τ,
+
+≤
+
+|
+
+A + B
+A
+|
+
+|
+
+≤
+
+u
+
+Ci|
+|
+A
+|
+|
+
+(1
+
+≤
+
+−
+
+1
+
+τ )−
+
+k + u
+J
+k
+
+u
+
+.
+
+|
+A, there are (d
+B which are uniquely determined by x in A
+
+−
+J) zero coordinates xi, thus there are at least
+
+i=0
+X
+
+−
+
+(cid:18)
+
+(cid:19)
+
+d
+
+J
+
+−
+u
+
+B. This gives for any
+(cid:1)
+
+(cid:0)
+
+−
+
+X
+
+B
+
+d
+
+J
+
+−
+u
+
+X
+
+.
+
+−
+We now come to the choice of the parameters. Let ε > 0 such that (1
+1/2
+
+|
+(cid:19)
+
+| ≥
+
+(cid:18)
+
+|
+
+|
+
+We introduce θ =
+
+log((1
+
+τ )K 1−ε)
+J
+
+−
+
+, λ = τ
+
+θ and put
+
+τ )K 1
+−
+
+ε > 1.
+
+−
+
+(1 + θ)J
+⌊
+Condition (23) is clearly fulﬁlled thus (24) holds. A short calculation yields
+
+(1 + λ)J
+⌊
+
+τ θJ
+⌊
+
+k =
+
+,
+⌋
+
+.
+⌋
+
+,
+⌋
+
+(cid:16)
+u =
+
+(cid:17)
+d =
+
+1
+
+τ )−
+
+(1
+
+−
+
+(cid:18)
+
+u
+
+k + u
+J
+k
+
+(cid:19)
+−
+A + B
+
+as J tend to inﬁnity, thus
+Stirling’s formula gives
+
+|
+
+(1
+
+−
+
+≤
+
+τ )−
+
+1(1
+
+−
+
+τ )K 1
+−
+
+ε(1 + o(1))
+
+K
+
+≤
+
+K
+
+A
+|
+
+|
+
+| ≤
+
+can be achieved by taking J large enough.
+
+J
+
+d
+
+−
+u
+
+(cid:18)
+
+(cid:19)
+
+=
+
+θJ
+⌋
+⌊
+τ θJ
+⌋(cid:19)
+(cid:18)
+⌊
+
+as J tends to inﬁnity. Thus we have
+
+exp ((f (τ ) + o(1))θJ) ,
+
+≥
+
+X
+
+|
+
+|
+By (22), we obtain
+
+(25)
+
+B
+
+|
+
+−
+X
+
+|
+A
+
+|
+
+| ≤
+
+≥
+
+J
+
+3
+
+exp
+
+(f (τ ) + o(1))
+
+J log((1
+
+τ )K 1
+
+−
+
+ε)
+
+.
+
+−
+
+(cid:16)
+
+p
+
+2 J(1+o(1)) as J tends to inﬁnity, hence
+
+(cid:17)
+
+log
+
+|
+
+A
+
+| ≤
+
+3
+2
+
+(cid:18)
+
++ o(1)
+
+J log J,
+
+(cid:19)
+
+giving J
+
+≥
+so that (1
+
+2+o(1)
+log
+|
+3
+log log
+ε)1/2f (τ )
+
+A
+
+|
+A
+
+|
+
+−
+
+q
+
+. Theorem 5 follows easily by choosing ε > 0 suﬃciently small
+
+|
+
+2
+3 > c and then by taking J large enough.
+
+(cid:3)
+
+SUMS AND DIFFERENCES OF FINITE SETS
+
+11
+
+References
+
+[1] Freiman, G. A., Pigarev W. P.: The relation between the invariants R and T (Russian), Kalinin.
+
+Gos. Univ. Moscow (1973), 172–174.
+
+[2] Hennecart, F., Robert, G., Yudin, A.: On the number of sums and diﬀerences. In Structure theory
+
+of set addition. Ast´erisque No. 258 (1999), 173–178.
+
+[3] Ruzsa, I. Z.: On the cardinality of A + A and A
+
+A. In Coll. Math. Soc. Bolyai 18, Combinatorics
+
+(Keszthely 1976), Akad´emiai Kiad´o (Budapest 1979), 933–938.
+
+−
+[4] Ruzsa, I. Z.: An application of graph theory to additive number theory. Scientia 3 (1989), 97–109.
+[5] Ruzsa, I. Z.: On the number of sums and diﬀerences. Acta Math. Hungar. 59 (1992), 439–447.
+[6] Ruzsa, I. Z.: Sums of ﬁnite sets. In Number theory (New York, 1991–1995), 281–293, Springer,
+
+New York, 1996.
+
+[7] Ruzsa, I. Z.: Cardinality questions about sumsets. to appear.
+
+K. Gyarmati, Alfr´ed R´enyi Institute of Mathematics, Budapest, Pf. 127, H-1364
+
+Hungary
+
+E-mail address: gykati@cs.elte.hu
+
+F. Hennecart, LaMUSE, 23 rue Michelon, 42023 Saint-Etienne cedex 2, France
+E-mail address: francois.hennecart@univ-st-etienne.fr
+
+I. Z. Ruzsa, Alfr´ed R´enyi Institute of Mathematics, Budapest, Pf. 127, H-1364
+
+Hungary
+
+E-mail address: ruzsa@renyi.hu
+
+

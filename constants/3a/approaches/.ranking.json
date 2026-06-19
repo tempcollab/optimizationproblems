@@ -1,0 +1,46 @@
+{
+  "alphabet-search-dp": {
+    "elo": 1545.8278203282016,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "alphabet-search-dp",
+    "stale": false,
+    "summary": "Re-optimize the non-uniform digit alphabet (A,d,T) with the validated exact-integer DP; certify any winner by directed-rounded rational log bound. Direct, Lean-feedable bound."
+  },
+  "ghr-lemma-lean": {
+    "elo": 1471.454243906308,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "ghr-lemma-lean",
+    "stale": false,
+    "summary": "Formalize the GHR single-set lemma in Lean and import a winner's exact counts as a lake-build-green theorem; gated on a heavy bootstrap and on a numerical winner existing first."
+  },
+  "per-position-alphabet": {
+    "elo": 1515.362039086379,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "per-position-alphabet",
+    "stale": false,
+    "summary": "Position-dependent digit alphabets \u2014 strict superset of the homogeneous family; needs a reasoned tapered schedule. Same exact-DP certificate path."
+  },
+  "zheng-nonuniform-ratefn": {
+    "elo": 1467.3558966791115,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "zheng-nonuniform-ratefn",
+    "stale": false,
+    "summary": "Extend Zheng's Cramer rate function to non-uniform digit distributions to guide the search and give a ceiling; asymptotic must be realized as a finite certified construction."
+  }
+}

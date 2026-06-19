@@ -1,0 +1,1059 @@
+5
+2
+0
+2
+
+n
+u
+J
+
+2
+
+]
+
+O
+C
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+6
+9
+8
+1
+0
+.
+6
+0
+5
+2
+:
+v
+i
+X
+r
+a
+
+Sums and differences of sets: a further
+improvement over AlphaEvolve
+
+Fan Zheng
+
+June 11, 2025
+
+Abstract
+
+We present a new advancement in the sum and difference of sets
+problem, which improves upon recent results by both DeepMind’s Al-
+phaEvolve (θ = 1.1584) and subsequent explicit constructions (θ =
+1.173050). In this work, we construct a sequence of U sets which in
+the limit establishes a new lower bound of θ = 1.173077.
+
+Keywords and phrases: Sumset, Difference set, AlphaEvolve
+
+MSC (2020): 11B75
+
+1
+
+Introduction
+
+Let K > 1 be a real number.
+In [2], the authors studied the growth of
+sumsets and difference sets of integers and posed the problem of determining
+the largest possible exponent θ such that, for arbitrarily large finite sets A
+and B of integers, the following holds for some constant c(K) > 0:
+
+|A + B| ≤ K|A| and |A − B| ≥ c(K) · |A + B|θ.
+
+(1)
+
+They showed that for any finite set U ⊂ N containing zero, the inequality
+
+θ ≥ 1 +
+
+log
+
+(cid:17)
+
+(cid:16) |U −U |
+|U +U |
+
+log(2 max(U ) + 1)
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+provides a lower bound on the attainable exponent θ. Their constructions
+were based on a combinatorial set V = V (m, L) ⊂ Nm defined by
+
+V (m, L) = {(x1, . . . , xm) ∈ Nm : x1 + · · · + xm ≤ L} ,
+
+which satisfies |V (m, L)| = (cid:0)m+L
+transform vectors into integers via
+
+m
+
+(cid:1). An injective mapping f was used to
+
+f (x1, . . . , xm) =
+
+m−1
+(cid:88)
+
+k=0
+
+xk · Lk, with L0 = 1, Lk = 2L · Lk−1 + 1 for k > 0,
+
+ensuring that f is injective on both V + V and V − V . The image U = f (V )
+then served as the key set for evaluating θ. This approach established the
+bound θ ≥ 1.14465.
+
+More recently, DeepMind’s AlphaEvolve system [4] applied large language
+models to this problem and achieved an improved bound of θ = 1.1584 using
+a set of 54,265 integers. A subsequent explicit construction [1] raised this to
+θ = 1.173050 using a U set with over 1043,546 elements.
+
+In this work, we construct a sequence of U sets which, in the limit, es-
+
+tablishes a new lower bound of
+
+θ = 1.173077.
+
+Our approach builds on the previous combinatorial framework and extends it
+to U sets of arbitrarily large size. To achieve this, we analyze the asymptotic
+behavior of sets of the form
+
+W (m, L, B) = {x = (x1, . . . , xm) ∈ V (m, L) : x1 ≤ B, . . . , xm ≤ B} ,
+
+where each coordinate is individually bounded. Estimating the size of such
+sets for large m and L requires a new ingredient: large deviation estimates,
+which allow us to quantify the distribution of constrained integer partitions
+and obtain precise asymptotic counts necessary for bounding θ.
+
+2 Large deviation estimates
+
+Let m, L and B be nonnegative integers. Define:
+
+W (m, L, B) = {x = (x1, . . . , xm) ∈ V (m, L) : x1 ≤ B, . . . , xm ≤ B} .
+
+2
+
+Lemma 1.
+
+where
+
+lim
+m→∞
+
+log |W (m, ⌊rm⌋, B)|
+m
+
+= log(B + 1) − I(r, B),
+
+I(c, B) =
+
+(cid:40)0,
+
+supt
+
+(cid:16)
+
+tc − log 1+et+···+eBt
+
+B+1
+
+c ≥ B/2,
+
+c < B/2.
+
+(cid:17)
+
+,
+
+Proof. We regard each xi as an independent random variable uniformly dis-
+tributed over the set {0, 1, . . . , B}. Then the mean value of each xi is B/2.
+By the law of large numbers, as m → ∞,
+
+|W (m, ⌊mB/2⌋, B)|
+(B + 1)m
+
+= P(x1 + · · · + xm ≤ mB/2) →
+
+1
+2
+
+.
+
+If r ≥ B/2, then W (m, ⌊rm⌋, B) ⊇ W (m, ⌊mB/2⌋, B), so
+
+lim inf
+m→∞
+
+|W (m, ⌊rm⌋, B)|
+(B + 1)m
+
+≥
+
+1
+2
+
+.
+
+Then
+
+Then
+
+lim inf
+m→∞
+
+(log |W (m, ⌊rm⌋, B)| − m log(B + 1)) ≥ − log 2.
+
+lim inf
+m→∞
+
+log |W (m, ⌊rm⌋, B)|
+m
+
+≥ log(B + 1).
+
+On the other hand,
+
+so
+
+log |W (m, ⌊rm⌋, B)|
+m
+
+≤
+
+log(B + 1)m
+m
+
+= log(B + 1),
+
+lim
+m→∞
+
+log |W (m, ⌊rm⌋, B)|
+m
+
+= log(B + 1).
+
+If r < B/2, note that c (cid:55)→ I(c, B) is the Legendre transformation of the
+generating function of the random variable xi, so by Cramer’s theorem [?],
+
+lim
+m→∞
+
+log P(x1 + · · · + xm ≤ mB/2)
+m
+
+= −I(r, B).
+
+On the other hand,
+
+log
+
+P(x1 + · · · + xm ≤ mB/2)
+m
+
+=
+
+log |W (m, ⌊mB/2⌋, B)|
+m
+
+− log(B + 1),
+
+3
+
+so
+
+lim
+m→∞
+
+log |W (m, ⌊rm⌋, B)|
+m
+
+= log(B + 1) − I(r, B).
+
+Lemma 2. For any c0 > 0 we have
+
+lim sup
+c→c0
+
+I(c, B) ≤ I(c0, B).
+
+Proof. If c0 > B/2 then both sides are zero so the inequality trivially holds.
+
+If c0 < B/2, by the AM–GM inequality, for t ≥ 0 we have
+
+tc0 − log
+
+1 + et + · · · + eBt
+B + 1
+
+≤ tc0 − log e
+
+Bt
+2 = t
+
+(cid:18)
+
+c0 −
+
+(cid:19)
+
+B
+2
+
+≤ 0,
+
+with equality attained when t = 0. Hence for any c < B/2 we have
+
+(cid:18)
+
+I(c, B) = sup
+t≤0
+
+tc − log
+
+1 + et + · · · + eBt
+B + 1
+
+(cid:19)
+
+.
+
+On the other hand, if c > c0/2 and t < − 2 log(B+1)
+
+c0
+
+then
+
+tc − log
+
+1 + et + · · · + eBt
+B + 1
+
+< − log(B + 1) − log
+
+1
+B + 1
+
+= 0,
+
+so for c ∈ (c0/2, B/2) we have
+
+I(c, B) =
+
+sup
+− 2 log(B+1)
+c0
+
+(cid:104)
+
+t∈
+
+(cid:105)
+
+,0
+
+(cid:18)
+
+tc − log
+
+1 + et + · · · + eBt
+B + 1
+
+(cid:19)
+
+.
+
+Then for any ϵ > 0 there is t0 ∈
+
+(cid:104)
+− 2 log(B+1)
+c0
+
+(cid:105)
+, 0
+
+such that
+
+t0c − log
+
+1 + et0 + · · · + eBt0
+B + 1
+
+> I(c, B) − ϵ.
+
+Then
+
+t0c0 − log
+
+1 + et0 + · · · + eBt0
+B + 1
+
+> I(c, B) − ϵ −
+
+2 log(B + 1)
+c0
+
+|c − c0|.
+
+4
+
+Then there is δ > 0 such that for any c ∈ (c0 − δ, c0 + δ) we have
+
+I(c0, B) ≥ t0c0 − log
+
+1 + et0 + · · · + eBt0
+B + 1
+
+> I(c, B) − 2ϵ,
+
+showing the claim.
+
+If c0 = B/2, then for any c ≥ c0, I(c, B) = 0, so
+
+lim sup
+c→c0+
+
+I(c, B) = I(c0, B) = 0.
+
+For c ∈ (c0/2, c0) we also have
+
+t0c0 − log
+
+1 + et0 + · · · + eBt0
+B + 1
+
+> I(c, B) − ϵ −
+
+2 log(B + 1)
+c0
+
+|c − c0|.
+
+On the other hand,
+
+t0c0 − log
+
+1 + et0 + · · · + eBt0
+B + 1
+
+≤ t0c0 − log e
+
+Bt0
+2 = 0,
+
+so
+
+and then
+
+I(c, B) ≤ ϵ +
+
+2 log(B + 1)
+c0
+
+|c − c0|,
+
+lim sup
+c→c0−
+
+I(c, B) ≤ 0 = I(c0, B).
+
+3 Main result
+
+Theorem 1. For the sums and differences of sets problem, we have θ ≥
+1.173077.
+
+Proof. Following [1], we construct the set U as the image of W (m, L, B)
+under the map g : (x1, . . . , xm) (cid:55)→ (cid:80)m−1
+k=0 xk(2B + 1)k, with B > 0 fixed and
+m and L → ∞. Then according to [2], we have
+
+θ ≥ 1 +
+
+log d(U ) − log s(U )
+log q(U )
+
+,
+
+where d(U ) = |U − U |, s(U ) = |U + U | and q(U ) = 2 max(U ) + 1.
+
+5
+
+Since each coordinate xk ≤ B, we have
+
+max U ≤ B
+
+m−1
+(cid:88)
+
+k=0
+
+(2B + 1)k = B
+
+(2B + 1)m − 1
+2B
+
+,
+
+so q(U ) = 2 max(U ) + 1 ≤ (2B + 1)m, and then
+
+log q(U )
+m
+
+≤ log(2B + 1).
+
+(2)
+
+In [1] it was shown that s(U ) = W (m, 2L, 2B). We now let L = ⌊rm⌋.
+
+Then 2L ≤ ⌊2rm⌋, so W (m, 2L, 2B) ⊆ W (m, ⌊2rm⌋, 2B), so by Lemma 1,
+
+lim sup
+m→∞
+
+log s(U )
+m
+
+≤ lim
+m→∞
+
+W (m, ⌊2rm⌋, 2B)
+m
+
+= log(2B + 1) − I(2r, 2B). (3)
+
+In [1] it was also shown that
+
+d(U ) =
+
+min(m,L)
+(cid:88)
+
+k=0
+
+(cid:19)
+
+(cid:18)m
+k
+
+|W (k, L − k, B − 1)||W (m − k, L, B)|.
+
+Then for any k = 0, . . . , min(m, L) we have
+(cid:18)m
+k
+
+d(U ) ≥
+
+(cid:19)
+
+|W (k, L − k, B − 1)||W (m − k, L, B)|.
+
+We now let k = ⌊aL⌋, where a ∈ (0, min(1, 1/r)) is to be determined. Then
+
+L − k ≥ (1 − a)L ≥
+
+1 − a
+a
+
+k ≥ ⌊
+
+1 − a
+a
+
+k⌋,
+
+so W (k, L − k, B − 1) ⊇ W (k, ⌊ 1−a
+
+a k⌋, B − 1). By Lemma 1 then,
+
+lim inf
+m→∞
+
+log |W (k, L − k, B − 1)|
+k
+
+≥ log B − I
+
+(cid:18) 1 − a
+a
+
+(cid:19)
+
+, B − 1
+
+.
+
+Since
+
+k = ⌊aL⌋ > aL − 1 = a⌊rm⌋ − 1 > arm − a − 1,
+
+we have k
+
+m → ar as m → ∞, so
+
+lim inf
+m→∞
+
+log |W (k, L − k, B − 1)|
+m
+
+(cid:18)
+
+≥ ar
+
+log B − I
+
+(cid:18) 1 − a
+a
+
+(cid:19)(cid:19)
+
+, B − 1
+
+.
+
+(4)
+
+6
+
+Note that in the set W (m, k, 1), exactly k of the m coordinates are 1,
+and the rest are 0, so (cid:0)m
+(cid:1) = W (m, k, 1). Since k
+m → ar as m → ∞, for any
+c < ar, if m is sufficiently large then k > cm, so W (m, k, 1) ⊇ W (m, cm, 1).
+By Lemma 1 then,
+
+k
+
+log (cid:0)m
+(cid:1)
+m
+
+k
+
+lim inf
+m→∞
+
+≥ log 2 − I (c, 1) .
+
+(5)
+
+By Lemma 2, we then have
+
+log (cid:0)m
+(cid:1)
+m
+
+k
+
+lim inf
+m→∞
+
+≥ log 2 − lim sup
+c→ar−
+
+I (c, 1) ≥ log 2 − I(ar, 1).
+
+Likewise,
+
+so
+
+as m → ∞, so
+
+m − k < m − aL + 1 < m − arm + a + 1
+
+L
+m − k
+
+>
+
+rm − 1
+m − arm + a + 1
+
+→
+
+r
+1 − ar
+
+lim inf
+m→∞
+
+log |W (m − k, L, B)|
+m − k
+
+≥ log(B + 1) − I
+
+(cid:18) r
+
+1 − ar
+
+(cid:19)
+
+, B
+
+.
+
+Since m−k
+
+m → 1 − ar as m → ∞,
+
+lim inf
+m→∞
+
+log |W (m − k, L, B)|
+m
+
+(cid:18)
+
+≥ (1 − ar)
+
+log(B + 1) − I
+
+(cid:18) r
+
+1 − ar
+
+(cid:19)(cid:19)
+
+, B
+
+.
+
+Adding (5), (4) and (6) we get
+
+lim inf
+m→∞
+
+d(U )
+m
+
+≥ log 2 + ar log B + (1 − ar) log(B + 1) − I(ar, 1)
+
+− arI
+
+(cid:18)1 − a
+a
+
+(cid:19)
+
+, B − 1
+
+− (1 − ar)I
+
+(cid:18) r
+
+1 − ar
+
+(cid:19)
+
+, B
+
+.
+
+Putting (7), (3) and (2) together we have
+
+θ ≥
+
+log 2+ar log B+(1−ar) log(B+1)−I(ar,1)−arI( 1−a
+
+a ,B−1)−(1−ar)I( r
+
+1−ar ,B)+I(2r,2B)
+
+log(2B+1)
+
+7
+
+(6)
+
+(7)
+
+.
+
+We first maximize in a over (0, min(1, 1/r)), then maximize in r > 0, and
+
+finally maximize in B. Thus theoretically we would have θ ≥ θ0, where
+
+θ0 = sup
+B≥1
+
+sup
+r>0
+
+sup
+a∈(0,min(1,1/r))
+
+log 2+ar log B+(1−ar) log(B+1)−I(ar,1)−arI( 1−a
+
+a ,B−1)−(1−ar)I( r
+
+1−ar ,B)+I(2r,2B)
+
+log(2B+1)
+
+.
+
+In reality we maximize θ − 1 and take the supreme in a more restricted
+yetrelevant region:
+
+θ0 − 1 ≥
+
+10
+sup
+B=3
+
+sup
+r∈(0.5,2)
+
+sup
+a∈(0,min(1,1/r))
+log 2+ar log B+(1−ar) log(B+1)−I(ar,1)−arI( 1−a
+
+a ,B−1)−(1−ar)I( r
+
+1−ar ,B)−log(2B+1)+I(2r,2B)
+
+We compute this (restricted) supreme in MATLAB® 2024b using the
+
+code listed in the next section, with the result given below:
+
+log(2B+1)
+
+.
+
+B
+3
+4
+5
+6
+7
+8
+9
+10
+
+ϵ = 10−4
+0.168700179529982
+0.172137890281832
+0.173077285664668
+0.172855934276473
+0.172060244111987
+0.170975347606027
+0.169749937706638
+0.168465310171444
+
+ϵ = 10−6
+0.168700179627153
+0.172137890014041
+0.173077279785044
+0.172855932676982
+0.172060243359401
+0.170975345188620
+0.169749936705626
+0.168465310634718
+
+ϵ = 10−8
+0.168700179627163
+0.172137890014121
+0.173077279785136
+0.172855932676998
+0.172060243360376
+0.170975345189401
+0.169749936705622
+0.168465310634737
+
+ϵ = 10−10
+0.168700179627163
+0.172137890014121
+0.173077279785136
+0.172855932676998
+0.172060243360376
+0.170975345189401
+0.169749936705623
+0.168465310634737
+
+Table 1: Numerical data table
+
+Here ϵ is the tolerance used by MATLAB®’s fminunc and fminbnd func-
+tions. Note that for B = 5 and ϵ = 10−8 or 10−10 the maximal values
+attained, marked in blue, are identical, up to 15 decimal places. Hence we
+have
+
+θ ≥ θ0 = 1.173077 . . .
+
+8
+
+4 MATLAB® Code
+
+The main script is as follows:
+
+B = 1:10;
+a = zeros(max(B), 4);
+for x = B
+
+a(x,:) = theta(x);
+
+end
+a
+
+The function theta(B) computes the optimal value for a fixed B, with the
+tolerance set at 10−4, 10−6, 10−8 and 10−4 successively:
+
+function ret = theta(B)
+
+ret = zeros(1, 4);
+ret(1) = theta_eps(B, 1e-4);
+ret(2) = theta_eps(B, 1e-6);
+ret(3) = theta_eps(B, 1e-8);
+ret(4) = theta_eps(B, 1e-10);
+
+end
+
+The function theta(B, eps) computes the optimal value for a fixed B at a
+fixed tolerance ϵ:
+
+function ret = theta_eps(B, eps)
+
+fun = @(r) -(logD(r, B, eps) - logW(2*r, 2*B, eps));
+options = optimset(’TolX’, eps);
+[~, val] = fminbnd(fun, 0.5, 2, options);
+ret = -val/log(2*B+1);
+
+end
+
+The function logD(r, B, eps) maximizes the value
+
+log 2+ar log B+(1−ar) log(B+1)−I(ar, 1)−arI
+
+(cid:18) 1 − a
+a
+
+(cid:19)
+
+, B − 1
+
+−(1−ar)I
+
+(cid:18) r
+
+1 − ar
+
+(cid:19)
+
+, B
+
+in a over the interval (0, min(1, 1/r)), at a fixed tolerance ϵ:
+
+9
+
+function ret = logD(r, B, eps)
+
+fun = @(a) -term(r, B, a, eps);
+options = optimset(’TolX’, eps);
+[~, val] = fminbnd(fun, 0, min(1, 1/r), options);
+ret = -val;
+
+end
+
+The function term(r, B, a, eps) computes the value above, at a fixed
+tolerance ϵ:
+
+function ret = term(r, B, a, eps)
+ret = logW(a*r, 1, eps);
+ret = ret + a*r * logW(1/a-1, B-1, eps);
+ret = ret + (1-a*r) * logW(1/(1/r-a), B, eps);
+
+end
+
+The function logW(c, B, eps) computes the value log(B + 1) − I(c, B), at
+a fixed tolerance ϵ:
+
+function ret = I(c, B, eps)
+
+if c < B/2
+
+ret = log(B + 1) - sup(c, B, eps);
+
+else
+
+ret = log(B + 1);
+
+end
+
+end
+
+Finally the function sup(c, B, eps) computes the supremum
+
+(cid:18)
+
+sup
+t
+
+tc − log
+
+1 + et + · · · + eBt
+B + 1
+
+(cid:19)
+
+for fixed c and B, at a fixed tolerance ϵ:
+
+function ret = sup(c, B, eps)
+
+logE = @(t) log(mean(exp(t * (0:B))));
+opt = optimoptions(’fminunc’, ’Display’,’notify’,...
+
+’OptimalityTolerance’,eps,...
+’StepTolerance’,eps,...
+’FunctionTolerance’,eps);
+
+[~, ret] = fminunc((@(t) logE(t) - t * c), 0, opt);
+ret = -ret;
+
+end
+
+10
+
+References
+
+[1] Robert Gerbicz, Sums and differences of sets (improvement over AlphaE-
+
+volve), arXiv preprint arXiv:2505.16105, 2025.
+https://arxiv.org/abs/2505.16105
+
+[2] K. Gyarmati, F. Hennecart, and I. Z. Ruzsa, Sums and differences
+of finite sets, Functiones et Approximatio Commentarii Mathematici,
+37(1):175–186, 2007.
+https://gyarmatikati.web.elte.hu/publ/sumdiffv.pdf
+
+[3] Achim Klenke, Probability Theory, Springer, Berlin, 2008, pp. 508.
+
+ISBN: 978-1-84800-047-6.
+DOI: 10.1007/978-1-84800-048-3
+
+[4] Alexander Novikov, Ngˆan Vu, Marvin Eisenberger, Emilien Dupont, Po-
+Sen Huang, Adam Zsolt Wagner, Sergey Shirobokov, Borislav Kozlovskii,
+Francisco J. R. Ruiz, Abbas Mehrabian, M. Pawan Kumar, Abigail See,
+Swarat Chaudhuri, George Holland, Alex Davies, Sebastian Nowozin,
+Pushmeet Kohli, and Matej Balog,
+AlphaEvolve: A coding agent for scientific and algorithmic discovery,
+2025.
+http://bit.ly/4jkeOoX
+
+11
+
+
