@@ -1,3 +1,74 @@
+# Sketch E — octahedral-direct (E1 RE-PLANNED R4)
+
+## R4 BUILD — E1b STRUCTURE closed (exact, finite); E1a + E1b coverability/budget honestly OPEN
+
+Worked the asymmetry-tolerant `<=13` re-plan. Concrete progress this round, all CHECKED IN CODE
+(`certificate/octahedral-direct.py`, runs clean, exit 0 — load-bearing predicate in exact `Fraction`):
+
+**Closed / checked this round (new):**
+- **E1b-PREDICATE (EXACT).** `illumination_predicate_exact` — Boltyanski illumination predicate from
+  integer-cross-product facet normals, in exact Fractions: $d$ illuminates vertex $y$ iff $d\cdot m<0$
+  for every active normal $m$; corner $-s$ illuminates iff $s\cdot m>0$ for all active $m$. The broken
+  set and its corner-cover are exact rational objects (no float on the load-bearing test).
+- **E1b-FINITENESS (EXACT, conditional).** `corner_cover_is_finite_hitting_set` — the corrective cover
+  is a FINITE HITTING-SET over the 8 corner (inward octant-diagonal) directions, so *whenever every
+  broken vertex is corner-coverable* the corrective budget $\le 8$. This finitizes the E1b cover — once
+  coverability holds the cover is a finite rational object (a step toward Lean-fit).
+- **E1b-BUDGET SCREEN (CONJECTURE, reproducible).** `broken_set_budget_screen` — 12000 forced-family-
+  proxy bodies (6 face-center contacts + arbitrary cube-interior vertices, incl. all-8-corners-bulged):
+  broken set ALWAYS corner-coverable, min hitting-set NEVER $> 5$ ($\le 7$). Strong support for the
+  $6+7=13$ budget with large slack. A SCREEN, not a proof.
+- **E1b-HONEST LIMIT (EXACT).** `corner_coverability_is_not_generic` — the abstract
+  "pointed+broken $\Rightarrow$ corner-coverable" is provably FALSE (exact integer witness
+  $\{(3,0,-3),(-1,1,0),(0,3,3),(-1,0,-1)\}$). So forced-family coverability is a real cube-geometry fact,
+  NOT generic — this PINS exactly where the open continuum content lives (it is the link from the box
+  structure to the normal cones, the same content E1a needs).
+
+**Still open (honest holes, the continuum wall):**
+- **E1a** `broken_set_bounded_by_min_vol_box` — bound $|B(K)|$ from min-vol-box tilt. Screened
+  $|B(K)|\le 5$, UNPROVED. Continuum/affine.
+- **E1b** `perturbed_directions_cover_broken_set` — (coverability) every forced-family broken vertex is
+  corner-coverable, and (budget$\le 7$) $\le 7$ corners suffice. Both SCREENED, never refuted, but
+  UNPROVED — the abstract version is false, so the proof must use the cube structure (E1a's content).
+- **E1** `near_one_half_illuminated_by_13` — assembly $I(K)\le 6+7=13$. Rests on E1a+E1b.
+
+**Net:** the E1b *cover mechanism* went from a raw `NotImplementedError` to an EXACT, FINITE,
+rational structure (corner hitting-set over 8 directions, $\le 8$ always, $\le 5$ observed), with the
+illumination predicate verified exactly and the precise location of the remaining continuum gap pinned
+(coverability is forced-family-specific, provably not generic). The two unproved hypotheses are now
+sharply stated and heavily screened. **Claimed bound: NONE** (target not hole-free; beats 14: no).
+
+## Promotable lemmas
+None this round. The exact illumination predicate is sketch glue (numerical, not a cached Lean lemma);
+the closed E1b structure is conditional on the still-open coverability hypothesis, so not certifiable.
+
+---
+
+## R4 outliner re-plan — E1 dropped orthant-coherence (<=6), now asymmetry-tolerant <=13
+
+The R3 E1 (`family_meets_orthant_coherence`) demanded the forced family be orthant-coherent, giving
+a `<=6` cover. That target is FALSE for the forced family (face-center contacts do NOT force
+coherence — `counterexample_face_center_not_symmetric`). R4 retires it and re-plans E1 to the
+**asymmetry-tolerant `<=13`-perturbed-directions budget** (the R3 reviewer/builder's suggested route,
+the softest near-1/2 mechanism):
+
+- **CORE 6:** `D0 = -V = {±e₁,±e₂,±e₃}` illuminates the symmetric core (E0, CLOSED, exact). Base
+  case verified this round: `broken_vertices_under_core(octahedron) = 0`.
+- **E1a (open hole):** `broken_set_bounded_by_min_vol_box` — bound `|B(K)|` (vertices broken under
+  the core 6) from the min-vol-box tilt. Same continuum content the old E1 needed, but now feeds a
+  `<=13` budget with large slack, not a `<=6` coherence claim.
+- **E1b (open hole):** `perturbed_directions_cover_broken_set` — the broken set is illuminated by
+  `<=7` perturbed corrective directions (corner-cone grouping + volume-balancing exclusion). Total
+  `6 + 7 = 13`.
+- **E1 (assembly):** `near_one_half_illuminated_by_13` — `I(K) <= 13` for the forced family.
+
+Certificate runs clean (exit 0). The budget target has large slack (bodies handled cleanly take
+only `<=6`, leaving 7 corrective directions). If E1b reduces to a finite rational perturbed-direction
+sub-cover over a finite triangulation, the route becomes Lean-fit; otherwise it is a directed-rounded
+continuum certificate. This is the run's load-bearing open problem; E1a/E1b are the genuine wall.
+
+---
+
 # Sketch E — octahedral-direct
 
 **Goal:** push the upper bound to $H_3 \le 13$ (beat the verified Prymak $\le 14$).

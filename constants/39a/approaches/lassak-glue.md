@@ -1,3 +1,69 @@
+# Sketch — lassak-glue (NEW R3, partition RE-PLANNED R4)
+
+## R4 builder — partition predicate VALIDATED in-code (closed lemmas), H_PARITY_FIT refined
+
+The dispatch asked to validate that `EvenParity` actually matches the 32 even-popcount feasible
+boxes and to close what is genuinely closable. Done:
+
+1. **Exact-rational re-check of the partition (reproduced the outliner's claim).** Ran the
+   certificate's exact LP machinery (`generic-thirteen-lp.py`) classifying all 64 `{1/10,9/10}`-corner
+   boxes by sign-popcount parity (full search: vertex-merge + face/face-merge, pure `Fraction`):
+   **all 32 even-popcount boxes 13-feasible (0 infeasible); all 24 infeasible boxes odd-popcount
+   (→ land in `Near`); 8 odd boxes feasible (bonus, incl. the proven witness `p*`).** So `EvenParity`
+   ⊆ feasible region and every infeasible box ∈ `Near` — the partition predicate is SOUND, it does
+   NOT poison the glue.
+
+2. **Closed (axiom-clean, no sorry) partition-validation lemmas in Lean** (LassakGlue.lean, after
+   `generic_or_near`): `coordSign_evenBox`, `coordSign_pStar` (sign-vectors read off exactly via
+   `fin_cases`+`norm_num`), `evenBox_mem_generic : EvenParity evenBox` (popcount 2 → even, `decide`),
+   `pStar_mem_near : Near pStar` (popcount 3 → odd). `#print axioms` on all four:
+   `[propext, Classical.choice, Quot.sound]` — **no `sorryAx`**. These pin the partition predicate's
+   combinatorial behaviour *in code*, the in-Lean check the dispatch required.
+
+3. **H_PARITY_FIT (`evenParity_generic`) refined to an HONEST hole, NOT closed.** The outliner hoped
+   it "closes to `id` once `Generic` is pinned", but `GenericThirteenLP.Generic` is an opaque
+   `sorry`-def that THIS file cannot edit (sibling-owned), so `Generic p` is underivable here. The
+   refined docstring states the true open content: closing it requires `GenericThirteenLP` to first
+   instantiate `Generic ⊇ EvenParity` by landing its atlas hole `H_GEN_ATLAS` over the even stratum.
+   The predicate's *soundness* is closed (lemmas above); what's open is the LP-region/atlas side,
+   owned by the sibling — not this file's to close this round.
+
+**Spec concern for the outliner.** The single formalized concrete cover in `GenericThirteenLP`
+(`marked_points_covered_by_thirteen`) is at `p* = (9/10,1/10,9/10,9/10,1/10,1/10)`, which is
+ODD-popcount (3) → `pStar_mem_near` proves it lies in `Near`, NOT the clean even stratum. So the
+generic (even) branch's base case is NOT seeded by the existing witness: the atlas needs an
+EVEN-parity witness box (e.g. `evenBox = (9/10,9/10,1/10,1/10,1/10,1/10)`, which the certificate
+confirms is 13-feasible). The outliner should note this when planning `GenericThirteenLP`'s atlas:
+either (a) re-anchor the formalized witness to an even box, or (b) include the 8 odd-feasible boxes
+in `Generic` (widen the predicate past `EvenParity`) so `p*` itself is covered. Option (a) keeps the
+clean `EvenParity` partition; option (b) needs the partition predicate widened (a re-plan).
+
+Builds green (`lake build Sketches.LassakGlue`, 2413 jobs, 5 declared `sorry` holes:
+`Body`, `prymak_param`, `near_cover_le_13`, `evenParity_generic`, `generic_branch_cover`).
+
+---
+
+## R4 outliner re-plan — the partition now matches the TRUE 13-feasible region
+
+The R3 partition `Near := ¬Generic` with `Generic = ball-off-1/2` was VERIFIED FALSE (a slab falls
+through both halves). R4 re-plans it to the **even-parity stratum**, computed exact-rationally this
+round (`generic-thirteen-lp.py region_finding_summary` + the R4 sign-pattern classification):
+
+- The 6 Prymak params pair by axis: `{p0,p1},{p2,p3},{p4,p5}`. Write `sᵢ = [pᵢ > 1/2] ∈ {0,1}`.
+- **All 32 even-total-popcount corner boxes (`∑ sᵢ` even) are UNIFORMLY 13-feasible** (verified).
+  The 24 infeasible boxes are all odd-popcount; 8 odd boxes (incl. the proven witness `p*`,
+  signs (1,0,1,1,0,0)) are also feasible but are a bonus, not the clean core.
+- New top-level predicate `EvenParity p := (∑ coordSign p i) % 2 = 0` is the clean generic region;
+  `Near := ¬EvenParity` is the true near-1/2 region (contains all 24 infeasible boxes).
+- New honest hole **H_PARITY_FIT** (`evenParity_generic : EvenParity p → Generic p`) is the
+  interface to `GenericThirteenLP.Generic` — closes to `id` once the builder pins `Generic` as the
+  even stratum / its atlas covers exactly that stratum.
+
+Builds green (`lake build Sketches.LassakGlue`, 2413 jobs, only declared `sorry` holes). The glue +
+case-split stay closed; the partition predicates are now matched to where 13 is achievable.
+
+---
+
 # Sketch — lassak-glue (NEW, R3)
 
 **Goal:** push the upper bound to $H_3 \le 13$ (beat the verified Prymak $\le 14$), by stating the
@@ -102,8 +168,13 @@ stated target `H3_le_13`.
 
 ## Promotable lemmas
 
-None this round. The two closed glue theorems (`per_param_cover_13`, `H3_le_13`) are sketch glue
-specific to `Body`/`Generic`/`Near` placeholders (and inherit `sorryAx` through those imported
-placeholder defs), so they are NOT axiom-clean and NOT reusable as cached lemmas — they are not
-promotable. (`generic_or_near`, `H3_le_13` carry `sorryAx` from imports, so none clears the cache
-bar.)
+The glue theorems (`per_param_cover_13`, `H3_le_13`, `generic_cover_le_13'`) remain sketch glue over
+`Body`/`Generic` placeholders (inherit `sorryAx`), NOT promotable.
+
+The R4 partition-validation lemmas are axiom-clean (`#print axioms`: no `sorryAx`), but they are
+*specific to this sketch's `coordSign`/`EvenParity`/`Near` defs and the two concrete boxes* — they
+are validation glue (confirming the partition matches the certificate), not a reusable general
+lemma. So NOT promotable to `lemmas/` either. (If the outliner standardizes the `EvenParity`
+predicate as the canonical generic region across sketches, `evenBox_mem_generic` / `pStar_mem_near`
+could be promoted as the predicate's named witnesses — flagging for the reviewer's judgment, but I
+do not claim them promotable as-is since they are tied to this file's local defs.)

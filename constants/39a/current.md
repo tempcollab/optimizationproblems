@@ -30,3 +30,21 @@ held: $H_3 \le 14$ (the known record; this run has not yet beaten it).
   13-feasible region is THIN — only 40/64 corner boxes admit a 13-cover, single-/two-coordinate
   offsets do not (point-mergeability ≠ edge-feasible 13-cover) — so the two-regime partition must be
   re-planned. No bound improvement this round (held stays 14; target NOT reached hole-free).
+- R4: Closed generic-thirteen-lp's edge half H_GEN_EDGES in Lean, sorry-free, axiom-clean
+  (`edges_covered_by_thirteen`, `target_star_covered_by_thirteen`: `[propext, Classical.choice,
+  Quot.sound]`, no sorryAx). Independently re-derived in exact rationals: the 12 genuine cube
+  edges (verified = the real adjacent-vertex edge set) are each covered by 2 of the same 13
+  translates of `int(O_{p*})` along the edge line, strict interior at every subinterval endpoint
+  (tightest slack 1/35 > 0); the 8 facets recover exactly the 6 vertices V_{p*}, so `PieceStar`
+  is the genuine octahedron (no proxy). With the R3 marked-point core, the FULL target E ∪ V_{p*}
+  is now covered by 13 translates of int(O_{p*}) hole-free AT THE WITNESS BOX p* — the per-box
+  generic step is hole-free; H_GEN_ATLAS (tile the thin region) + the near-1/2 glue remain open.
+  Promoted `segment_covered_by_two` (+ `edgeSeg`) to lemmas/ (multi-D companion of
+  `icc_covered_by_two`, axiom-clean). Independently reproduced lassak-glue's even-parity partition:
+  all 32 even-popcount corner boxes exact-verified 13-feasible (0 infeasible), all 24 infeasible
+  boxes odd-popcount → land in Near; so `EvenParity ⊆ 13-feasible` (sound partition predicate, does
+  not poison the glue); 4 partition-validation lemmas axiom-clean. octahedral-direct advanced E1b
+  structure (exact rational illumination predicate, finite corner hitting-set, honest-limit
+  counterexample independently reproduced); E1a + E1b coverability/budget stay open (budget≤7 is a
+  labeled conjecture, not certified). No bound improvement this round (held stays 14; no global
+  ≤13 reached hole-free — H_GEN_ATLAS + the near-1/2 wall remain).

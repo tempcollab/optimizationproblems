@@ -1,17 +1,17 @@
 {
   "certify-fourteen": {
-    "elo": 1514.450146576708,
+    "elo": 1498.5170961341626,
     "expanded": 1,
     "last_note": "Lean/Lake bootstrapped (pinned v4.31.0). 4 holes closed: genuine sorry-free axiom-clean H3 registry def (no bound smuggling, verified faithful to ABP2024-def-Hn) + IsCoveredBy.mono_left/.union, coveringNumber_mono_left, icc_covered_by_two \u2014 all #print-axioms clean (reviewer-reproduced), promoted to lemmas/. Holes D1-D5 (reduction, discretization, per-box Farkas, atlas, assemble) remain on path to H3_le_14 (lone sorryAx). No bound (D can't beat 14).",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 4,
+    "selected": 6,
     "slug": "certify-fourteen",
     "stale": false,
     "summary": "Machine-checked Lean proof of the EXISTING H_3 \u2264 14 (not a record-break): compress Prymak's 4.66M-box rational-LP/Farkas certificate to a lake-build-checkable theorem. De-risks the Lean LP core reused by A and C."
   },
   "circumscribed-frame": {
-    "elo": 1387.2219365092371,
+    "elo": 1373.9126169110777,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
@@ -22,18 +22,18 @@
     "summary": "Replace the minimal-volume parallelotope normalization with a frame chosen to minimize worst-case per-cell count (or a two-frame split) so p=1/2 is never forced; requires re-deriving Prymak's reduction. Lean-hostile, high variance."
   },
   "generic-thirteen-lp": {
-    "elo": 1573.3124960335426,
-    "expanded": 1,
-    "last_note": "H_GEN_\u03c4 marked-point core CLOSED in Lean (sorry-free, axiom-clean: 13 translates cover 14 marked points, independently re-derived, min slack 1/35, polytope verified = genuine int(O_p*)). Holes remaining on path to 13: H_GEN_EDGES (12 edges, Python-exact not yet Lean), H_GEN_ATLAS (REVISED \u2014 thin region, only 40/64 corner boxes 13-feasible), H_GEN_GLUE. Genuine Spec finding: point-mergeability != edge-feasible 13-cover, partition mismatch.",
+    "elo": 1623.9283088037594,
+    "expanded": 2,
+    "last_note": "Closed H_GEN_EDGES axiom-clean: 12 genuine cube edges covered by same 13 translates of int(O_p*) at witness box p*, exact-rational re-derived (slack 1/35>0), capstone target_star_covered_by_thirteen makes per-box step hole-free at p*. Remaining holes: H_GEN_ATLAS (tile thin even-parity region), H_GEN_GLUE (near-1/2). Not a global bound. Promoted segment_covered_by_two to lemmas/.",
     "last_outcome": "advanced",
-    "last_round": 3,
-    "selected": 0,
+    "last_round": 4,
+    "selected": 2,
     "slug": "generic-thirteen-lp",
     "stale": true,
     "summary": "Generic-regime (p bounded away from 1/2) 13-piece cover of E\u222aV_p as a finite rational LP/Farkas, certified in Lean (GenericThirteenLP.lean). Carries forward special-case-p-half's Lean-fit A2/A3 engine; load-bearing hole is the redesigned edge-inclusive 13-structure \u03c4\u2032. Preferred Lean-fit lead."
   },
   "larger-covering-piece": {
-    "elo": 1465.7378138012466,
+    "elo": 1418.0209462317657,
     "expanded": 1,
     "last_note": "Reshaped C1 to an impossibility theorem but its load-bearing step is FALSE: claims cube is the octahedron's minimal-volume circumscribing parallelotope (it is not \u2014 min box vol=2<8, refuted by A's F2 and reviewer re-derivation). guaranteed_inscribed_set=Op is hard-coded, not verified. C1 hole NOT genuinely closed; uniform line unfillable as set up. C0/F1 distances are true. No bound.",
     "last_outcome": "dead-end",
@@ -44,34 +44,34 @@
     "summary": "Find a uniform enlargement O_p \u2286 W_p \u2286 int(K) for all p whose difference body covers one marked-pair difference, dropping the per-cell count to 13; contact-only admissibility is the crux."
   },
   "lassak-glue": {
-    "elo": 1527.5035422574224,
-    "expanded": 1,
-    "last_note": "Final glue closed: H3_le_13 = Nat.sInf_le every_body_cover_13, type-checked by rfl as genuine registry membership (no smuggling, direction \u226413). Case-split per_param_cover_13 closed via generic_or_near. Hard content honest open holes: prymak_param (H_RED), generic_branch_cover (H_GENERIC transport), near_cover_le_13 (H_NEAR), Body placeholder. Partition Near:=\u00acGeneric mismatched per thin-region finding \u2014 needs outliner re-plan.",
+    "elo": 1551.509916440958,
+    "expanded": 2,
+    "last_note": "Re-planned partition to even-parity stratum; independently reproduced (exact): all 32 even-popcount boxes 13-feasible, all 24 infeasible boxes odd-popcount, so EvenParity subset of 13-feasible (sound predicate). Closed 4 axiom-clean partition-validation lemmas. Holes still open: H_PARITY_FIT (blocked on sibling instantiating Generic), H_GENERIC transport, H_NEAR, prymak_param (H_RED), Body. Witness p* is odd-parity (lands in Near) - outliner must re-anchor an even base box. Top H3_le_13 registry-faithful, sorryAx via the 5 holes only.",
     "last_outcome": "advanced",
-    "last_round": 3,
-    "selected": 0,
+    "last_round": 4,
+    "selected": 2,
     "slug": "lassak-glue",
     "stale": true,
     "summary": "Top-level Lean assembly of H3\u226413 (faithful registry H3 def, correct direction) from a total two-regime partition of [0,1]^6: generic half imported from generic-thirteen-lp, near-1/2 half from octahedral-direct. Case split + partition closed (no sorry); holes are H_RED (Prymak reduction), H_GENERIC, H_NEAR, transport."
   },
   "octahedral-direct": {
-    "elo": 1475.067128199215,
-    "expanded": 1,
-    "last_note": "E0 (6-direction illumination of octahedron) + E2-core (orthant-coherence criterion) closed and independently confirmed, but these are conditional/known sub-results (I(octahedron)\u22646 is classical for the symmetric octahedron, does not bound H3 for arbitrary bodies). Load-bearing E1 (forced near-1/2 family meets orthant-coherence) STILL STUCK: face-center contacts do NOT force coherence, builder flags orthant-coherence target as likely too strong \u2014 RETHINK-adjacent on E1's route.",
-    "last_outcome": "partial",
-    "last_round": 3,
-    "selected": 4,
+    "elo": 1468.3627398755377,
+    "expanded": 2,
+    "last_note": "Advanced E1b structure: exact-rational illumination predicate (was float in R3), finite corner hitting-set over 8 dirs, honest-limit counterexample (pointed+broken does NOT force corner-coverability) independently reproduced - pins the open content. Budget-le-7 correctly labeled CONJECTURE (12000-body screen, max 5 observed), not certified, not written to held. Load-bearing holes E1a (|B(K)| bound from min-vol-box tilt) and E1b (coverability+budget) still raise NotImplementedError - the near-1/2 wall did NOT close.",
+    "last_outcome": "advanced",
+    "last_round": 4,
+    "selected": 6,
     "slug": "octahedral-direct",
     "stale": true,
     "summary": "Bypass the skeleton reduction at p=1/2: characterize the near-symmetric body family forcing p\u22481/2 and cover each directly by \u226413 translates (Lassak core + bounded asymmetry correction). Continuum-heavy."
   },
   "special-case-p-half": {
-    "elo": 1556.7069366226283,
+    "elo": 1565.7483756027389,
     "expanded": 1,
     "last_note": "Closed F0/F1/F2 sub-facts (exact, reviewer-reproduced+re-derived); F2 (octahedron min-vol box=2<8) is CORRECT. Holes A1' (uniform rational corner-slack W \u2014 Lean-hostile, can't close in contact-only frame), A2 (edge-aware 13-piece rational LP \u2014 naive merge edge-infeasible), A3 (atlas) remain open on path to 13. No bound (still 14).",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 4,
+    "selected": 6,
     "slug": "special-case-p-half",
     "stale": false,
     "summary": "Split p-space: generic boxes get a 13-piece rational LP; a neighborhood of p=1/2 gets a larger admissible covering piece W enlarging O_p toward two adjacent cube vertices to defeat Remark 2.3 locally."

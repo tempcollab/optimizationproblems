@@ -51,14 +51,16 @@ generic atlas must tile this THIN region and the rest of [0,1]⁶ ∖ {13-region
 near-1/2 sibling — the partition is NOT the simple "ball around 1/2".
 
 HOLES (explicit `sorry`; the bound does NOT silently rest on any of them):
-  * H_GEN_τ   [CORE CLOSED at one box] the explicit 13-piece structure τ′ + per-box rational
-              translates. The MARKED-POINT part (vertices+face points, incl. the merge) is now a
-              sorry-free Lean lemma `marked_points_covered_by_thirteen`. What REMAINS of H_GEN_τ is
-              H_GEN_EDGES below (the 1-D edge coverage), kept honest.
-  * H_GEN_EDGES   [NEW hole, split out of H_GEN_τ] the 12 cube edges (1-D segments) are covered by
-              the same 13 translates via the endpoint vertex-translates. In the certificate this is
-              checked exactly (`edge_covered_exact`); the Lean port needs the multi-D interval
-              primitive (generalize `icc_covered_by_two` to a segment vs a polytope) — open.
+  * H_GEN_τ   [FULLY CLOSED at one box, R4] the explicit 13-piece structure τ′ + per-box rational
+              translates. The MARKED-POINT part is `marked_points_covered_by_thirteen` (R3); the
+              EDGE part is `edges_covered_by_thirteen` (R4); the capstone
+              `target_star_covered_by_thirteen` covers the full E ∪ V_{p*} by 13 — all sorry-free,
+              axiom-clean. The per-box content of the load-bearing hole is now hole-free at p*.
+  * H_GEN_EDGES   [CLOSED, R4] the 12 cube edges (1-D segments) are covered by the same 13
+              translates via the endpoint vertex-translates. Ported from the certificate's exact
+              `edge_covered_exact` via the reusable multi-D segment primitive
+              `segment_covered_by_two` (generalizes `icc_covered_by_two` to a segment vs a
+              polytope), one rational split σ per edge. See `edges_covered_by_thirteen` below.
   * H_GEN_ATLAS   [REVISED] a finite atlas of the THIN 13-feasible region (NOT [0,1]⁶∖N(1/2)); each
               box a feasible (P_j, τ′_j) over Q_P = ⋂_{v∈P} O_v. Plus its complement handed to the
               near-1/2 sibling. Open. (The single-point witness above is the |P|=1 base case.)
@@ -181,6 +183,287 @@ theorem marked_points_covered_by_thirteen :
   refine Set.mem_vadd_set.mpr ⟨fun k => markedStar i k - centerStar (assignStar i) k, ?_, ?_⟩
   · exact markedStar_mem i
   · funext k; simp [vadd_eq_add]
+
+/-! ## H_GEN_EDGES — the 12 cube edges covered by the same 13 translates
+
+The marked POINTS are covered above. Prymak's reduction also requires covering the cube
+1-skeleton `E` (the 12 edges), each a 1-D segment. This is the multi-D generalization of the
+cached `icc_covered_by_two` primitive: along each edge line `v₀ + s·u` (`s ∈ [0,1]`), each
+translate of `int(O_{p*})` cuts out an OPEN `s`-interval (one `n·u` ratio per facet — the D3
+rational-Farkas primitive specialised). The exact-verified certificate
+(`generic-thirteen-lp.py`, `edge_covered_exact`) shows each edge is covered by a 2-body chain:
+its two endpoint vertex-translates `t_a, t_b`. We port that here.
+
+`segment_covered_by_two` is the reusable primitive: a segment `{v₀ + s·u : s ∈ [0,1]}` is
+covered by two translates `c_a, c_b` of an open piece `P` whenever there is a split point
+`σ ∈ [0,1]` with `v₀ + s·u − c_a ∈ P` for `s ∈ [0,σ]` and `v₀ + s·u − c_b ∈ P` for `s ∈ [σ,1]`.
+This is `icc_covered_by_two` lifted from the line to a parametrized segment in ℝ³ against an
+arbitrary (here polytopal-open) piece. -/
+
+/-- The point on the edge line through `v₀` with direction `u` at parameter `s`. -/
+def edgeSeg (v0 u : Fin 3 → ℝ) (s : ℝ) : Fin 3 → ℝ := fun k => v0 k + s * u k
+
+/-- **Reusable multi-D segment-cover primitive** (generalizes cached `icc_covered_by_two` from a
+1-D interval to a parametrized segment vs an arbitrary piece `P ⊆ ℝ³`). If a split parameter
+`σ ∈ [0,1]` exists with the first translate covering the segment for `s ∈ [0,σ]` and the second
+for `s ∈ [σ,1]`, the whole segment `{v₀ + s·u : s ∈ [0,1]}` is covered by the two translates
+`c_a, c_b` of `P`. -/
+theorem segment_covered_by_two (v0 u c_a c_b : Fin 3 → ℝ) (P : Set (Fin 3 → ℝ)) (σ : ℝ)
+    (hσ0 : 0 ≤ σ) (hσ1 : σ ≤ 1)
+    (ha : ∀ s, 0 ≤ s → s ≤ σ → (fun k => edgeSeg v0 u s k - c_a k) ∈ P)
+    (hb : ∀ s, σ ≤ s → s ≤ 1 → (fun k => edgeSeg v0 u s k - c_b k) ∈ P) :
+    IsCoveredBy 2 (edgeSeg v0 u '' Set.Icc (0 : ℝ) 1) P := by
+  refine ⟨![c_a, c_b], ?_⟩
+  rintro _ ⟨s, ⟨hs0, hs1⟩, rfl⟩
+  by_cases hmid : s ≤ σ
+  · refine Set.mem_iUnion.mpr ⟨0, ?_⟩
+    refine Set.mem_vadd_set.mpr ⟨fun k => edgeSeg v0 u s k - c_a k, ha s hs0 hmid, ?_⟩
+    funext k; simp [vadd_eq_add, Matrix.cons_val_zero]
+  · push_neg at hmid
+    refine Set.mem_iUnion.mpr ⟨1, ?_⟩
+    refine Set.mem_vadd_set.mpr ⟨fun k => edgeSeg v0 u s k - c_b k, hb s hmid.le hs1, ?_⟩
+    funext k; simp [vadd_eq_add, Matrix.cons_val_one]
+
+/-- **Subset form** of `segment_covered_by_two` against a fixed family `t : Fin 13 → ℝ³`: the
+edge segment is contained in the union of the 13 translates, picking the two indices `a, b` whose
+translates `t a, t b` are `c_a, c_b`. This is what `edges_covered_by_thirteen` glues over the 12
+edges (so each edge's two translates land inside the same 13-piece union as the marked points). -/
+theorem segment_subset_two (v0 u : Fin 3 → ℝ) (P : Set (Fin 3 → ℝ)) (t : Fin 13 → (Fin 3 → ℝ))
+    (a b : Fin 13) (σ : ℝ)
+    (ha : ∀ s, 0 ≤ s → s ≤ σ → (fun k => edgeSeg v0 u s k - t a k) ∈ P)
+    (hb : ∀ s, σ ≤ s → s ≤ 1 → (fun k => edgeSeg v0 u s k - t b k) ∈ P) :
+    edgeSeg v0 u '' Set.Icc (0 : ℝ) 1 ⊆ ⋃ i : Fin 13, t i +ᵥ P := by
+  rintro _ ⟨s, ⟨hs0, hs1⟩, rfl⟩
+  by_cases hmid : s ≤ σ
+  · refine Set.mem_iUnion.mpr ⟨a, ?_⟩
+    refine Set.mem_vadd_set.mpr ⟨fun k => edgeSeg v0 u s k - t a k, ha s hs0 hmid, ?_⟩
+    funext k; simp [vadd_eq_add]
+  · push_neg at hmid
+    refine Set.mem_iUnion.mpr ⟨b, ?_⟩
+    refine Set.mem_vadd_set.mpr ⟨fun k => edgeSeg v0 u s k - t b k, hb s hmid.le hs1, ?_⟩
+    funext k; simp [vadd_eq_add]
+
+/-- The 12 cube edges as `(v₀, u)` pairs: `v₀` an endpoint vertex, `u` the unit axis direction to
+the other endpoint, so the edge is `{v₀ + s·u : s ∈ [0,1]}`. (Matches `CUBE_EDGES` in the
+certificate.) -/
+def cubeEdge : Fin 12 → (Fin 3 → ℝ) × (Fin 3 → ℝ)
+  | 0 => (![0, 0, 0], ![0, 0, 1])   -- v0 → v1
+  | 1 => (![0, 0, 0], ![0, 1, 0])   -- v0 → v2
+  | 2 => (![0, 0, 0], ![1, 0, 0])   -- v0 → v4
+  | 3 => (![0, 0, 1], ![0, 1, 0])   -- v1 → v3
+  | 4 => (![0, 0, 1], ![1, 0, 0])   -- v1 → v5
+  | 5 => (![0, 1, 0], ![0, 0, 1])   -- v2 → v3
+  | 6 => (![0, 1, 0], ![1, 0, 0])   -- v2 → v6
+  | 7 => (![0, 1, 1], ![1, 0, 0])   -- v3 → v7
+  | 8 => (![1, 0, 0], ![0, 0, 1])   -- v4 → v5
+  | 9 => (![1, 0, 0], ![0, 1, 0])   -- v4 → v6
+  | 10 => (![1, 0, 1], ![0, 1, 0])  -- v5 → v7
+  | 11 => (![1, 1, 0], ![0, 0, 1])  -- v6 → v7
+
+/-- For each edge `e`, the two endpoint vertex-translates `(t_a, t_b)` that cover it and the split
+parameter `σ`, exactly as computed in the certificate. (`t_a` reaches the start `s=0`, `t_b` the
+end `s=1`; they overlap across `σ`.) -/
+noncomputable def edgeCover : Fin 12 → Fin 13 × Fin 13 × ℝ
+  | 0 => (0, 1, 1/2)
+  | 1 => (0, 2, 1/2)
+  | 2 => (0, 4, 5/12)
+  | 3 => (1, 3, 5/12)
+  | 4 => (1, 5, 1/2)
+  | 5 => (2, 3, 5/12)
+  | 6 => (2, 6, 1/2)
+  | 7 => (3, 7, 7/12)
+  | 8 => (4, 5, 7/12)
+  | 9 => (4, 6, 7/12)
+  | 10 => (5, 7, 1/2)
+  | 11 => (6, 7, 1/2)
+
+/-- **H_GEN_EDGES, edge 0** (v0->v1). Covered by `centerStar 0` / `centerStar 1`, split `s=1/2`. -/
+theorem edge0_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 0, 0] ![0, 0, 1] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 0) (centerStar 1) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 1** (v0->v2). Covered by `centerStar 0` / `centerStar 2`, split `s=1/2`. -/
+theorem edge1_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 0, 0] ![0, 1, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 0) (centerStar 2) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 2** (v0->v4). Covered by `centerStar 0` / `centerStar 4`, split `s=5/12`. -/
+theorem edge2_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 0, 0] ![1, 0, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 0) (centerStar 4) PieceStar (5/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 3** (v1->v3). Covered by `centerStar 1` / `centerStar 3`, split `s=5/12`. -/
+theorem edge3_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 0, 1] ![0, 1, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 1) (centerStar 3) PieceStar (5/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 4** (v1->v5). Covered by `centerStar 1` / `centerStar 5`, split `s=1/2`. -/
+theorem edge4_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 0, 1] ![1, 0, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 1) (centerStar 5) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 5** (v2->v3). Covered by `centerStar 2` / `centerStar 3`, split `s=5/12`. -/
+theorem edge5_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 1, 0] ![0, 0, 1] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 2) (centerStar 3) PieceStar (5/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 6** (v2->v6). Covered by `centerStar 2` / `centerStar 6`, split `s=1/2`. -/
+theorem edge6_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 1, 0] ![1, 0, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 2) (centerStar 6) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 7** (v3->v7). Covered by `centerStar 3` / `centerStar 7`, split `s=7/12`. -/
+theorem edge7_covered :
+    IsCoveredBy 2 (edgeSeg ![0, 1, 1] ![1, 0, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 3) (centerStar 7) PieceStar (7/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 8** (v4->v5). Covered by `centerStar 4` / `centerStar 5`, split `s=7/12`. -/
+theorem edge8_covered :
+    IsCoveredBy 2 (edgeSeg ![1, 0, 0] ![0, 0, 1] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 4) (centerStar 5) PieceStar (7/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 9** (v4->v6). Covered by `centerStar 4` / `centerStar 6`, split `s=7/12`. -/
+theorem edge9_covered :
+    IsCoveredBy 2 (edgeSeg ![1, 0, 0] ![0, 1, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 4) (centerStar 6) PieceStar (7/12)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 10** (v5->v7). Covered by `centerStar 5` / `centerStar 7`, split `s=1/2`. -/
+theorem edge10_covered :
+    IsCoveredBy 2 (edgeSeg ![1, 0, 1] ![0, 1, 0] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 5) (centerStar 7) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- **H_GEN_EDGES, edge 11** (v6->v7). Covered by `centerStar 6` / `centerStar 7`, split `s=1/2`. -/
+theorem edge11_covered :
+    IsCoveredBy 2 (edgeSeg ![1, 1, 0] ![0, 0, 1] '' Set.Icc (0 : ℝ) 1) PieceStar := by
+  refine segment_covered_by_two _ _ (centerStar 6) (centerStar 7) PieceStar (1/2)
+    (by norm_num) (by norm_num) ?_ ?_ <;> intro s hs0 hs1 <;>
+    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+        Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+        Matrix.cons_val]
+      linarith
+
+/-- The set of points on cube edge `e` (the image of `[0,1]` under its parametrization). -/
+noncomputable def cubeEdgeSet (e : Fin 12) : Set (Fin 3 → ℝ) :=
+  edgeSeg (cubeEdge e).1 (cubeEdge e).2 '' Set.Icc (0 : ℝ) 1
+
+/-- Each cube edge `e` is contained in the union of the 13 `centerStar` translates of
+`int(O_{p*})`, via its two endpoint vertex-translates and split parameter from `edgeCover`. -/
+theorem cubeEdge_subset (e : Fin 12) :
+    cubeEdgeSet e ⊆ ⋃ i : Fin 13, centerStar i +ᵥ PieceStar := by
+  rw [cubeEdgeSet]
+  refine segment_subset_two _ _ PieceStar centerStar (edgeCover e).1 (edgeCover e).2.1
+    (edgeCover e).2.2 ?_ ?_ <;>
+  · intro s hs0 hs1
+    fin_cases e <;>
+    · simp only [cubeEdge, edgeCover] at hs0 hs1 ⊢
+      refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+      · simp only [edgeSeg, centerStar, PieceStar, Set.mem_setOf_eq, inOpStar,
+          Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_fin_one,
+          Matrix.cons_val]
+        linarith
+
+/-- **H_GEN_EDGES (CLOSED, sorry-free).** The full cube 1-skeleton — the union of all 12 edge
+segments — is covered by the **same 13 translates** `centerStar` of `int(O_{p*})` that cover the
+marked points. Each edge is covered by its two endpoint vertex-translates (`cubeEdge_subset` via
+`segment_subset_two`, with the exact split parameters from the certificate), and all those
+translates are among the 13.
+
+This is the multi-D edge-coverage step of Prymak's reduction at the witness box `p*`, generalizing
+the cached 1-D `icc_covered_by_two` primitive. With `marked_points_covered_by_thirteen`, the FULL
+target `E ∪ V_{p*}` (edges ∪ marked points) is now covered by 13 translates of `int(O_{p*})`. -/
+theorem edges_covered_by_thirteen :
+    IsCoveredBy 13 (⋃ e : Fin 12, cubeEdgeSet e) PieceStar := by
+  refine ⟨centerStar, ?_⟩
+  rw [Set.iUnion_subset_iff]
+  exact cubeEdge_subset
+
+/-- **The full witness target at `p*` (CLOSED, sorry-free).** The complete covering subproblem at
+the witness box — the cube 1-skeleton `E` (all 12 edges) together with the 14 marked points
+`V_{p*}` ∪ vertices — is covered by **13** translates of `int(O_{p*})`. This combines
+`edges_covered_by_thirteen` and `marked_points_covered_by_thirteen` over the SAME 13 translates
+`centerStar`, so no extra pieces are spent: `C(E ∪ V_{p*}, int(O_{p*})) ≤ 13` at `p*`, with the
+14→13 saving coming from the single merge (point `q₂₀` shares vertex-translate `t₅`). -/
+theorem target_star_covered_by_thirteen :
+    IsCoveredBy 13 ((⋃ e : Fin 12, cubeEdgeSet e) ∪ Set.range markedStar) PieceStar := by
+  -- The marked points lie in the SAME 13-translate union as the edges (`centerStar`).
+  have hM : Set.range markedStar ⊆ ⋃ i : Fin 13, centerStar i +ᵥ PieceStar := by
+    rintro _ ⟨i, rfl⟩
+    refine Set.mem_iUnion.mpr ⟨assignStar i, ?_⟩
+    refine Set.mem_vadd_set.mpr ⟨fun k => markedStar i k - centerStar (assignStar i) k,
+      markedStar_mem i, ?_⟩
+    funext k; simp [vadd_eq_add]
+  have hE : (⋃ e : Fin 12, cubeEdgeSet e) ⊆ ⋃ i : Fin 13, centerStar i +ᵥ PieceStar := by
+    rw [Set.iUnion_subset_iff]; exact cubeEdge_subset
+  refine ⟨centerStar, ?_⟩
+  rw [Set.union_subset_iff]
+  exact ⟨hE, hM⟩
 
 /-! ## The 13-piece local bound (the load-bearing claim)
 
