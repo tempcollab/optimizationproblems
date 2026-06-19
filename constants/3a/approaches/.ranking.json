@@ -1,0 +1,57 @@
+{
+  "asymptotic-per-digit-ratio-optimization": {
+    "elo": 1486.2648217592416,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "asymptotic-per-digit-ratio-optimization",
+    "stale": false,
+    "summary": "Optimize the per-digit limit (d\u2192\u221e, cap density c) via the log-spectral-radius of the cap-constrained transfer matrix; maximize R-(c)-R+(c) per log(B) toward the 1.25 ceiling, then instantiate a concrete finite U."
+  },
+  "beyond-digit-set-structured-U": {
+    "elo": 1439.9958111825085,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "beyond-digit-set-structured-U",
+    "stale": false,
+    "summary": "Scout non-digit-set structured U (GAPs/Bohr-like, convex-body projections, Sidon/B_h) \u2014 the only family that can exceed the 1.25 digit-set ceiling; score 2-3 families' exact GHR bound, no promised beat."
+  },
+  "digit-dp-count-engine-and-record-baseline": {
+    "elo": 1559.729526119354,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "digit-dp-count-engine-and-record-baseline",
+    "stale": false,
+    "summary": "Exact carry-free cap-coupled DP count engine for |U+U|,|U-U|,max(U); reproduce the record 1.174074447 (search-immune baseline, gap 0, machinery \u2014 analogous to 9a-367)."
+  },
+  "directed-param-sweep-exact-beat": {
+    "elo": 1530.0162152183386,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "directed-param-sweep-exact-beat",
+    "stale": false,
+    "summary": "Bounded exact-integer sweep over (alphabet A, base B, length d, cap T) around the hand-tuned record for a strict beat of 1.1740744 by a clean integer margin (Fraction + rational-power compare, never float)."
+  },
+  "lean-cert-rational-power": {
+    "elo": 1483.993625720557,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "lean-cert-rational-power",
+    "stale": false,
+    "summary": "Machine-checked GHR bound: rationalize 1+log(N-/N+)/log(2M+1)\u2265c to the pure integer inequality N-^q \u2265 N+^q\u00b7(2M+1)^p and prove it in Lean (decide/norm_num) + GHR-lemma bridge as a named trust boundary."
+  }
+}
