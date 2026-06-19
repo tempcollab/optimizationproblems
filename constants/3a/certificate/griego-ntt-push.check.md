@@ -1,4 +1,30 @@
-# Check — griego-ntt-push (C_3a LOWER bound; R8 push to m=150, held candidate 1.1774)
+# Check — griego-ntt-push (C_3a LOWER bound; R12 push to m=170, held candidate 1.1779)
+
+## R12 HELD CANDIDATE — (m,T)=(170,321), tight cert C_3a > 11779/10000 = 1.1779
+
+CHEAP REVIEWER CHECK (the certificate itself, ~2 s, no DP recompute):
+```
+# tight integer-inequality cert from the committed exact counts (PASS 11779 / FAIL 11780):
+python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 170 321   # ~2s, EXIT 0
+```
+FULL INDEPENDENT VERIFICATION (each its own short printing step; the m=170 --point sum-set DP is
+~175-217s and MUST be backgrounded — it exceeds the ~3-min foreground watchdog wall):
+```
+python3 -u constants/3a/certificate/griego-ntt-push.py --gate                 # ~2min, 20-case gate, EXIT 0
+python3 -u constants/3a/certificate/griego-ntt-push.py --point 170 321        # ~260s, indep s,d,M recompute (BACKGROUND), EXIT 0
+```
+R12 re-run results (this round):
+- `--gate`: 3-way `brute==indep==oracle` on 15 cases + 2-way `indep==oracle` on 5 cases — all OK, EXIT 0.
+- `--point 170 {319,321,323,325}` (stale cache cleared first; T-window to find the per-m peak):
+  θ(319)=1.1779005457, **θ(321)=1.1779141101 (PEAK)**, θ(323)=1.1779135193, θ(325)=1.1778987775.
+  Peak T=321 (ratio T/m=1.888). At T=321: s=166d (t_s=172.9s), d=206d (t_d=83.2s), M=225d.
+  Rows for T=321 (peak) and T=323 appended to committed `scan-mT-results.txt`.
+- `--certify-from-scan 170 321`: k=11779 PASS, k=11780 FAIL (tight), EXIT 0, ~2s. Independently
+  re-derived outside the script (raw big-int powers): PASS k=11778,11779; FAIL k=11780,11781.
+  Log-margins: +73.03 at k=11779 (genuine PASS), −444.54 at k=11780 (genuine FAIL).
+- carry-free precondition: b=21 > 2·max(A)=20 (injective digit map), 11779/10000 ≥ 1.1740744 record.
+- exact integers (170,321): s head `14558078951161095656`, d head `14261126710543722641`,
+  M head `29939883706029187284`.
 
 ## R8 HELD CANDIDATE — (m,T)=(150,285), tight cert C_3a > 11774/10000 = 1.1774
 
