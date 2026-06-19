@@ -3,10 +3,40 @@
 - **Lake project:** `constants/3a/lean/` (Lean v4.31.0; Mathlib pinned to the `v4.31.0` tag, rev
   `fabf563a7c95a166b8d7b6efca11c8b4dc9d911f`). Sketch file
   `constants/3a/lean/Sketches/C3aDef.lean`, imported via the C3a lib glob and the root `C3a.lean`.
-- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R12: EXIT 0, 2970 jobs.**
-  `Build completed successfully (2970 jobs).` Exactly 3 `declaration uses 'sorry'` warnings, at
-  `Sketches/C3aDef.lean:139` (`realizes_one`), `:150` (`realizableSet_bddAbove`), `:169`
-  (`griego_realizes`) — the 3 documented holes; no smuggled `sorry` elsewhere.
+- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R14: EXIT 0, 2970 jobs.**
+  `Build completed successfully (2970 jobs).` 12 `declaration uses 'sorry'` warnings (see the R14
+  hole inventory below) — all documented; no smuggled `sorry`.
+
+## R14 — sub-hole B1 CLOSED (finite disjoint-union count)
+`griego_disjoint_union_count` (B1, the load-bearing finite combinatorics) is now proved
+**sorry-free**, plus reusable axiom-clean counting lemmas. `#print axioms` (R14, verbatim, from a
+temporary `AxCheck.lean`, since removed):
+- `C3a.setSum_card_decompose` → `[propext, Classical.choice, Quot.sound]` (NO sorryAx)
+- `C3a.setDiff_card_decompose` → `[propext, Classical.choice, Quot.sound]` (NO sorryAx)
+- `C3a.setSum_tr_card` / `setDiff_tr_card` / `setSum_biUnion` / `setDiff_biUnion`
+  → `[propext, Classical.choice, Quot.sound]` (NO sorryAx)
+- `C3a.griego_disjoint_union_count` → `[propext, sorryAx, Classical.choice, Quot.sound]`. Proof TERM
+  sorry-free; sorryAx enters ONLY via the documented holes it consumes (`griego_ak_disjoint` (B1a) +
+  witness data `Ubase`/`Qbase`/`Ubase_carryfree`/`an_interval`/`an_index`/`an_shift`).
+
+Two intermediate-statement fixes (recorded in `approaches/lean-c3a-def.md`): exponent `^ n → ^ (n+1)`
+(forced by `bk n = tpow Q U n` ⟹ `n+1` factors); single `tₙ` → two witnesses `tsum`/`tdiff` (GHR's
+shared `t` needs `|I+B|=|I−B|`, deferred to B3). `bk`/`ak` are now PINNED to the GHR composite shape
+(no longer opaque sorry).
+
+### R14 hole inventory (12, all documented)
+`realizes_one` (139), `realizableSet_bddAbove` (150); witness data `Ubase`/`Qbase`/`Ubase_carryfree`
+(302–304), `an_interval`/`an_index`/`an_shift` (309–311); **B1a `griego_ak_disjoint` (330) — NEW,
+the uncached separation/disjointness**; B2 `griego_bounded_doubling` (392), B3
+`griego_diff_lower_bound` (401), B4 `griego_card_tendsto` (409).
+
+### R14 promotable (flagged for reviewer)
+`setSum_card_decompose` / `setDiff_card_decompose` (+ supports `setSum/Diff_tr_card`,
+`setSum/Diff_union`, `setSum/Diff_biUnion`, `setSum/Diff_tr`) — all sorry-free, axiom-clean, general
+(not sketch glue), proved in `Sketches/C3aDef.lean`.
+
+---
+## R12 record (superseded by R14 above for the build-target/hole lines)
 
 ## Purpose
 NOT a bound. A scoped definition-only sketch: put a FAITHFUL Lean definition of C_3a as the

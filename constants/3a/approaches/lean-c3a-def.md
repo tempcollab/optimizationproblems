@@ -145,13 +145,92 @@ machine-checked `C_3a > 1.1771` over the concrete registry definition.
 3. Close `realizes_one`: any explicit bounded-doubling family with `|A−B| ≥ |A+B|` (e.g. an
    arithmetic progression pair) suffices.
 
+## R14 — B1 CLOSED (the finite/combinatorial disjoint-union count)
+
+This round's deliverable: **sub-hole B1 (`griego_disjoint_union_count`) is now proved sorry-FREE**,
+together with a reusable, fully-axiom-clean finite combinatorics toolkit. `lake build C3a` EXIT 0
+(2970 jobs); `#print axioms` confirms the split below.
+
+### What I closed (sorry-free, `[propext, Classical.choice, Quot.sound]`, NO sorryAx)
+The genuine load-bearing finite content of the GHR composite count, added to `C3aDef.lean`:
+- `tr`, `setSum_tr`/`setDiff_tr` (sum/diff of a one-coordinate translate = translate of the
+  sum/diff — pure ring algebra), `setSum_tr_card`/`setDiff_tr_card` (a translate's sum/diff has the
+  SAME cardinality — translation injective);
+- `setSum_union`/`setDiff_union`, `setSum_biUnion`/`setDiff_biUnion` (distributivity over `∪`/`biUnion`);
+- **`setSum_card_decompose` / `setDiff_card_decompose`** — the GHR additive identity at the
+  cardinality level: for pairwise-disjoint translate images + a disjoint interval piece,
+  `|(I ∪ ⋃ᵢ(aᵢ+B)) ± B| = mₙ·|B±B| + |I±B|`, via `Finset.card_biUnion` + `card_union_of_disjoint` +
+  `setSum/Diff_tr_card`. These two are the reusable heart and are **promotable** (see below).
+
+`#print axioms setSum_card_decompose` / `setDiff_card_decompose` / the four `*_tr_card`/`*_biUnion`
+helpers: all `[propext, Classical.choice, Quot.sound]` — sorryAx-free.
+
+### B1 itself — `griego_disjoint_union_count`, proved sorry-free
+`#print axioms griego_disjoint_union_count` → `[propext, sorryAx, Classical.choice, Quot.sound]`.
+The proof TERM is sorry-free; the `sorryAx` enters ONLY via the explicitly-named hypotheses/data it
+consumes (`griego_ak_disjoint` (B1a) + the witness data `Ubase`/`Qbase`/`Ubase_carryfree`/
+`an_interval`/`an_index`/`an_shift`). No smuggled axiom; the count derivation is real.
+
+### Two intermediate-statement fixes (my job, recorded)
+1. **Exponent `^ n → ^ (n+1)`.** With `bk n = U^{⊗n} = tpow Qbase Ubase n`, the cached
+   `tensor_pow_sumset_card` gives `|U±U|^(n+1)` (the `tpow … n` convention has `n+1` factors). The
+   planned B1 exponent `^ n` was off by one; the true, provable statement is `^ (n+1)`.
+2. **One shared `tₙ` → two witnesses `tsum`, `tdiff`.** GHR's single interval term `t` additionally
+   relies on `|I+B| = |I−B|` for the long interval — a SEPARATE finite fact, not part of the
+   disjoint-union count. Carrying `tsum = |[1,Lₙ]+Bₙ|` and `tdiff = |[1,Lₙ]−Bₙ|` separately makes B1
+   exactly the count the decomposition lemmas prove, with no smuggled interval-symmetry; the
+   `tsum = tdiff` reconciliation is deferred to B3.
+
+Also: `bk`/`ak` are no longer opaque `sorry` defs — `bk n := tpow Qbase Ubase n` and
+`ak n := an_interval n ∪ (an_index n).biUnion (fun i => tr (an_shift n i) (bk n))` are now PINNED to
+the GHR composite shape. This pinning is what made B1 provable; only the disjointness of the pieces
+(which needs the separation choice) stays a hole.
+
+### Holes remaining (12 documented `sorry`, all build GREEN)
+- **B1a `griego_ak_disjoint` (line 330) — NEW named sub-hole exposed by closing B1.** The pairwise
+  disjointness of the `mₙ` translate images + the interval piece, in both sums and diffs. This is the
+  genuine *uncached* combinatorial content (GHR's separation `aᵢ−aⱼ ∉ Bₙ−Bₙ`), depending on the
+  explicit shift choice. Finite once `an_shift` is pinned, but no cached lemma supplies it. BLOCKER:
+  needs an explicit `an_shift`/`an_interval`/`an_index` construction + a range/pigeonhole disjointness
+  proof — substantial but strictly finite; the natural next builder target.
+- **Witness data (lines 302–311):** `Ubase`/`Qbase`/`Ubase_carryfree` (the Griego digit set + base +
+  carry-free property), `an_interval`/`an_index`/`an_shift` (the dilution data). Documented holes —
+  the explicit numeric/shift literals.
+- **B2 `griego_bounded_doubling` (392), B3 `griego_diff_lower_bound` (401), B4 `griego_card_tendsto`
+  (409)** — the three real-analysis sub-holes (floor-dilution doubling; θ-reconciliation via cached
+  `log_bridge` + the `tsum=tdiff` interval-symmetry; atTop sup packaging). Left documented, NOT scoped
+  this round (multi-round analysis infra, as planned).
+- **Pre-existing:** `realizes_one` (139), `realizableSet_bddAbove` (150).
+
+`griego_realizes` (assembled from B2/B3/B4), `c3a_ge_theta`, `c3a_lower_bound_def` are unchanged and
+still assemble; B1's exponent/witness reshape did not touch them (the assembly routes through B2/B3/B4,
+not B1 — B1 is the finite content B3 will consume).
+
+## Claim
+NO held raise — this is structural Lean progress only (B1 closed). `held` stays the verified Python
+value C_3a > 1.1779 (R13). Even fully closed, the wired bridge certifies only θ>1.1771 (the B-side
+reads `NativeDecideSmallMT`), not the held 1.1779. The claim of this round is solely that the
+load-bearing finite combinatorial sub-hole B1 is now a real sorry-free Lean derivation (depending only
+on the documented B1a + witness-data holes), and that two general axiom-clean counting lemmas are
+available for reuse.
+
 ## Status
-R12: faithfulness fix landed; `lake build C3a` EXIT 0 (2970 jobs); 3 documented `sorry`
-(`realizes_one`, `realizableSet_bddAbove`, `griego_realizes`); axioms clean apart from the honest
-hole `sorryAx`. No `held` raise — definitional scoping only.
+R14: B1 (`griego_disjoint_union_count`) CLOSED sorry-free; new axiom-clean general lemmas
+`setSum_card_decompose`/`setDiff_card_decompose` (+ translate/distributivity helpers). `lake build C3a`
+EXIT 0 (2970 jobs). 12 documented `sorry` (B1a `griego_ak_disjoint` newly exposed; witness data;
+B2/B3/B4; realizes_one; bddAbove). No smuggled axiom. No `held` raise — structural only.
 File: `lean/Sketches/C3aDef.lean`.
 
+(Superseded: the R12 "3 documented sorry" status above — that predates the R14 B1 split/close.)
+
 ## Promotable lemmas
-None this round. No reusable sorry-free lemma was proved (the round's work was a definitional
-reshape; `setSum`/`setDiff` are trivial glue, the substantive lemmas remain holes). The cached
-`tensor-multiplicativity` and `log-bridge` lemmas are already promoted and are imported as-is.
+**Flag for certification** (proved sorry-free this round in `lean/Sketches/C3aDef.lean`, all
+`#print axioms = [propext, Classical.choice, Quot.sound]`, general — not sketch glue):
+- `setSum_card_decompose` / `setDiff_card_decompose` (lines ~271/285) — the disjoint-union GHR
+  additive count `|(I ∪ ⋃ᵢ(aᵢ+B)) ± B| = |shifts|·|B±B| + |I±B|` under pairwise + interval
+  disjointness. The reusable heart of any composite-dilution count.
+- Supports: `setSum_tr_card` / `setDiff_tr_card` (translate cardinality-invariance),
+  `setSum_union`/`setDiff_union`, `setSum_biUnion`/`setDiff_biUnion` (sum/diff distributivity),
+  `setSum_tr`/`setDiff_tr` (translate-pushout). All sorry-free, axiom-clean.
+
+(The earlier R12 "None this round" note is superseded.)
