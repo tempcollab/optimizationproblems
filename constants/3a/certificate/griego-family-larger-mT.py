@@ -212,7 +212,7 @@ def self_test():
 
 
 # ---------------------------------------------------------------- main
-def report(m, T, coarse=(11741, 10000)):
+def report(m, T, coarse=(11760, 10000)):
     """Recompute s,d,M EXACTLY at (m,T) and report theta + the two record certificates:
        - EXACT big-integer: theta > coarse num/den (>= TARGET), via d^den > s^den*q^(num-den)
        - RIGOROUS log:      theta > TARGET=1.1740744, via directed-rounded high-precision logs.
@@ -237,31 +237,47 @@ PEAK_MT = (110, 210)   # best verified point in this round's scan
 
 def main():
     print("L2: push Griego's family A={0,2,..,10}, b=21 to larger (m,T).")
-    print("Bar to beat (best verified): C_3a > 1.1740744 (Griego 2026).\n")
+    print("Bar to beat (best verified): C_3a > 1.1740744 (Griego 2026); prev held 1.1741 (R3).\n")
     self_test()
     print()
-    # the record point reproduced exactly, then the climb past it
-    print("Reproduce Griego's record point and the climb past it (exact DP):")
-    for (m, T) in [(80, 150), (80, 154), (100, 190), (110, 210)]:
-        s, d, M, th, ok_int, ok_log = report(m, T)
-        tag = "(= Griego record point)" if (m, T) == (80, 150) else ""
-        print(f"  m={m:3d} T={T:3d}: theta~{th:.10f}  "
-              f"exact_int(theta>1.1741)={ok_int}  rig_log(theta>1.1740744)={ok_log} {tag}")
-    print()
+
+    # ---- Re-derive (s,d,M) FROM SCRATCH at the best verified point (110,210), once. ----
     m, T = PEAK_MT
-    s, d, M, th, ok_int, ok_log = report(m, T)
+    print(f"Re-deriving (s,d,M) from scratch at best point m={m} T={T} (exact column DP)...")
+    s = count_sumset(A_GRIEGO, m, T)
+    print(f"  s=|U+U| computed: {len(str(s))} digits, leading {str(s)[:15]}...", flush=True)
+    d = count_diffset(A_GRIEGO, m, T)
+    print(f"  d=|U-U| computed: {len(str(d))} digits, leading {str(d)[:15]}...", flush=True)
+    M = max_U(A_GRIEGO, m, T, B_GRIEGO)
+    print(f"  M=max(U) computed: {len(str(M))} digits, leading {str(M)[:15]}...", flush=True)
+    q = 2 * M + 1
+    th = theta_value(s, d, M)
+    print()
     print(f"BEST VERIFIED POINT  m={m} T={T}:")
     print(f"  s=|U+U|={s}")
     print(f"  d=|U-U|={d}")
     print(f"  M=max(U)={M}")
     print(f"  theta ~ {th:.10f}")
-    print(f"  EXACT integer certificate  d^10000 > s^10000 * (2M+1)^1741  =>  theta > 1.1741 : {ok_int}")
-    print(f"  rigorous log certificate   theta > 1.1740744 (Griego record)               : {ok_log}")
-    if ok_int and ok_log:
-        assert certifies_target_int(s, d, M, 11741, 10000)
-        print(f"  CERTIFIED: C_3a >= theta > 1.1741 > 1.1740744 -- BEATS the record.")
-    else:
-        print(f"  NOT certified at this point.")
+    print()
+
+    # ---- The load-bearing certificate: theta > k/10000 iff d^10000 > s^10000 * q^(k-10000). ----
+    # k=11760 must PASS (held 1.176) and k=11761 must FAIL (1.176 is the tight rational at den=10000).
+    ok_1760 = certifies_target_int(s, d, M, 11760, 10000)   # d^10000 > s^10000 * q^1760
+    fail_1761 = not certifies_target_int(s, d, M, 11761, 10000)  # negative control
+    ok_log = certifies_target(s, d, M)                      # rigorous log: theta > 1.1740744
+    print("Pure big-integer record certificate (no float on the load-bearing step):")
+    print(f"  k=11760  d^10000 > s^10000 * q^1760  =>  theta > 1.1760  : PASS = {ok_1760}")
+    print(f"  k=11761  d^10000 > s^10000 * q^1761  =>  theta > 1.1761  : FAIL = {not fail_1761} "
+          f"(negative control, must be a strict FAIL) -> tightness OK = {fail_1761}")
+    print(f"  rigorous log certificate   theta > 1.1740744 (Griego record): {ok_log}")
+    print()
+
+    # Hard asserts so the script exits nonzero if any leg of the certificate breaks.
+    assert ok_1760, "k=11760 (theta>1.176) must HOLD -- the held bound depends on it"
+    assert fail_1761, "k=11761 (theta>1.1761) must FAIL -- 1.176 is the tight rational at den=10000"
+    assert ok_log, "rigorous log certificate theta>1.1740744 must hold"
+    print("CERTIFIED: C_3a >= theta > 11760/10000 = 1.176 > 1.1740744 (Griego record).")
+    print("  11760/10000 is the LARGEST k/10000 that certifies here (11761 fails) -> held = 1.176.")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,32 @@
 
 **Slug:** `griego-family-larger-mT`   **Target:** lower bound, beat `C_3a > 1.1740744`.
 
+## R4 TIGHTEN (revise of the certification step — free verified advance) — BUILT & SELF-VERIFIED R4
+The R3 held value 1.1741 was recorded only against the COARSE rational `11741/10000`, but the
+exact θ at (110,210) is 1.1760056. R4 re-derived **from scratch** (recomputed the DP, no trusted
+external value) the largest `k/10000` for which the SAME integer certificate holds at the SAME
+(re-computed) (s,d,M): a scan of `k ∈ {11758,11759,11760,11761,11762}` shows `11760/10000 = 1.176`
+holds and `11761/10000` FAILS, both by the pure big-int inequality `d^10000 > s^10000·(2M+1)^(k-10000)`.
+So `1.176` is the LARGEST k/10000 that certifies — tight at denominator 10000. The held value rises
+**1.1741 → 1.176 with ZERO new compute** — same (110,210) (s,d,M), finer rational.
+
+**Re-derived (s,d,M) at (110,210), from scratch (recompute, not trusted):**
+- `s=|U+U|` = 107 digits, leading `927052801501495…`, trailing `…95284`
+- `d=|U−U|` = 133 digits, leading `368199722009600…`, trailing `…22441`
+- `M=max(U)` = 146 digits, leading `139024846765954…`, trailing `…60010` ; `q=2M+1`
+- float θ ≈ 1.176005593 (consistent with the integer cert; θ itself is NOT load-bearing).
+
+The certificate file `certificate/griego-family-larger-mT.py` now (R4):
+- re-derives `(s,d,M)` once at (110,210) with per-step `flush` prints (s→d→M digit counts);
+- PRINTS the explicit `k=11760 PASS` and `k=11761 FAIL` (negative control) lines to stdout;
+- hard-asserts all three legs (k=11760 holds, k=11761 fails, rigorous-log θ>1.1740744) so it exits
+  nonzero if any leg breaks;
+- runs green (EXIT 0) in ~2 min (self-test + one (110,210) DP), well under the 5-min watchdog,
+  printing incrementally.
+
+Reviewer re-run: `python3 constants/3a/certificate/griego-family-larger-mT.py` — confirm the
+`k=11760 PASS` / `k=11761 FAIL` pair and the rigorous-log line, then register held = 1.176.
+
 ## Strategy
 Keep Griego's exact alphabet and base — `A = {0,2,3,4,5,6,7,8,9,10}`, `b = 21` — fixed, and push
 the parameters `m` (digit count) and `T` (digit-sum cap) **past** the recorded `(m,T) = (80,150)`.

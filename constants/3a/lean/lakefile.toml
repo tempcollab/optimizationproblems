@@ -1,0 +1,13 @@
+name = "c3a"
+defaultTargets = ["C3a"]
+
+# Minimal standalone Lake project (no Mathlib): the load-bearing C_3a lower-bound
+# certificate is a single big-integer inequality discharged by `native_decide`,
+# which needs only Lean core `Nat` arithmetic — no Mathlib dependency, so this
+# project builds in seconds and pins cleanly. The GHR2007 read-off (C_3a >= theta)
+# is the only non-decidable step; it is recorded as a documented hypothesis in the
+# sketch, not re-proved here (it is the cited GHR2007 lemma).
+
+[[lean_lib]]
+name = "C3a"
+globs = ["C3a", "Sketches.+"]
