@@ -1,0 +1,3 @@
+# Lake build artifacts and fetched dependencies — never commit (multi-GB).
+# Reproduce with: lake exe cache get && lake build  (manifest + toolchain are pinned).
+/.lake/
