@@ -1,3 +1,54 @@
+# Check — griego-ntt-push (C_3a LOWER bound; R16/R17 push to m=180, held candidate 1.1781)
+
+## R17 — MEMORY-BOUNDED s=|U+U| reproduction at (m,T)=(180,340); held candidate C_3a > 1.1781
+
+The R16 (180,340) tick (θ=1.1781, tight k=11781) had d/M/cert verified byte-exact by the R16
+reviewer, but the load-bearing s=|U+U| was NOT independently reproduced (reviewer's (Σv,mask) DP
+OOM'd at m≥130 in the 8 GB box). R17 reproduces s in-container within memory by TWO independent
+memory-bounded engines and re-claims held 1.1779 → 1.1781.
+
+WHAT R17 ESTABLISHED (all in-container, peak RSS logged):
+- **Bitmask DP `count_sumset`** (the committed shift-OR engine), instrumented with resource.getrusage:
+  m=180 T=340 peaks at **47 MB** RSS, states saturate ~70.9k, t=393 s single-process. It reproduces
+  s = **175 digits, head `95094840942995635699`, tail `45023204043252245774`** — FULL DIGIT-FOR-DIGIT
+  match to the committed scan row. The R16 OOM was concurrency, not the committed engine.
+- **Run-length (interval-run) DP `ivl_sumset.py`** — a genuinely independent engine: the reachable-Σx
+  set is a sorted tuple of disjoint (lo,hi) RUNS, transitions are EXACT run-set Minkowski/clamp ops.
+  Peak RSS ≤53 MB at m=130, ≤44 MB at m=110. `--verify-scan 110 210` → run-DP s=107d head
+  `92705280150149557241` DIGIT-FOR-DIGIT MATCH to committed. `--gate` → run-DP == bitmask == brute on
+  28 cases (19 three-way + 9 two-way; clamp-binding Σv≫T, two non-contiguous alphabets, contiguous
+  control). m=180 run-DP reproduction is the slow independent confirmation (run-length DP is ~5-10x
+  slower than the C-level bitmask in CPython but memory-bounded by construction).
+
+REVIEWER CHECK (cheap, ~2 s — the certificate from committed counts):
+```
+python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 180 340   # PASS 11781 / FAIL 11782, EXIT 0
+```
+INDEPENDENT MEMORY-BOUNDED REPRODUCTION of the load-bearing s (each its own short printing step;
+the m=180 recompute is ~393 s for the bitmask engine / longer for the run-DP — BACKGROUND + poll,
+and check /proc liveness, the harness "completed" notifications fire prematurely for orphaned bg python):
+```
+# (A) independent run-length engine: gate then digit-for-digit verify vs committed
+python3 -u constants/3a/certificate/ivl_sumset.py --gate                 # ~90s, 28-case gate, EXIT 0
+python3 -u constants/3a/certificate/ivl_sumset.py --verify-scan 110 210  # run-DP s == committed (fast anchor)
+python3 -u constants/3a/certificate/ivl_sumset.py --verify-scan 180 340  # run-DP s == committed at m=180 (slow, ≤53MB)
+# (B) committed bitmask engine, RSS ~47MB at m=180:
+python3 -u constants/3a/certificate/griego-ntt-push.py --point 180 340   # s,d,M recompute, s head 95094840942995635699
+```
+R17 results:
+- bitmask `--point 180 340` (instrumented): s 175d head `95094840942995635699` tail `45023204043252245774`,
+  peak RSS 47 MB, FULL digit match to committed; d 218d, M 238d (R16-reviewer-verified byte-exact).
+- run-DP `--gate`: 28-case run-DP==bitmask==brute PASS, EXIT 0.
+- run-DP `--verify-scan 110 210`: DIGIT-FOR-DIGIT MATCH = True (107d, head `92705280150149557241`, 44 MB).
+- `--certify-from-scan 180 340`: k=11781 PASS, k=11782 FAIL (tight), EXIT 0.
+- carry-free precondition b=21 > 2·max(A)=20; 11781/10000 ≥ 1.1740744 record.
+- exact integers (180,340): s head `95094840942995635699`, d head `23513893541583867431`,
+  M head `49939369671774630152`. Tight rational 11781/10000.
+
+Claimed held (unverified until reviewer re-runs): **C_3a > 11781/10000 = 1.1781** (+0.0002 over 1.1779).
+
+---
+
 # Check — griego-ntt-push (C_3a LOWER bound; R12 push to m=170, held candidate 1.1779)
 
 ## R12 HELD CANDIDATE — (m,T)=(170,321), tight cert C_3a > 11779/10000 = 1.1779

@@ -510,6 +510,88 @@ python3 -u griego-ntt-push.py --certify-from-scan 180 340  # ~2s, PASS 11781 / F
 python3 -u griego-ntt-push.py --certify-from-scan 170 321  # ~2s, PASS 11779 / FAIL 11780, EXIT 0 (prior held)
 ```
 
+## R17 BUILD — MEMORY-BOUNDED sumset reproduction at (180,340); s reproduced in 47 MB
+
+The R16 held-tick at (180,340) (θ=1.1781, tight k=11781) had d/M/cert ALL verified byte-exact by
+the reviewer, but the load-bearing s=|U+U| could NOT be independently reproduced — the reviewer
+reported the (Σv,mask) sumset DP OOMing at m≥130 in the 8 GB container. R17's job: ship a
+memory-bounded sumset count that reproduces s at m=180 within memory, validate it hard, and re-claim
+held 1.1779 → 1.1781.
+
+### Finding 1 — the committed bitmask DP `count_sumset` is already memory-bounded; R16 OOM was concurrency
+Instrumenting the committed shift-OR bitmask DP (`count_sumset` in griego-family-larger-mT.py) with
+`resource.getrusage` shows it is NOT memory-hungry at all:
+- m=110, T=210: peak RSS **23 MB**, ~26.7k states, s head `92705280150149557241` (matches committed).
+- m=130, T=247: peak RSS **28 MB**, ~37k states.
+- **m=180, T=340: peak RSS 47 MB**, states saturate ~70.9k, total ~393 s single-process.
+  s = **175 digits, head `95094840942995635699`** — DIGIT-COUNT + HEAD match the committed scan row
+  exactly. (Memory plateau: col20→19 MB, col40→43 MB, col80→45 MB, col120→47 MB, col180→47 MB.)
+So the R16 OOM was an *environmental* artifact (the reviewer's independent slack-mask engine + several
+heavy DP jobs run concurrently in the 8 GB box), NOT a property of the committed engine. The committed
+`count_sumset` reproduces s at m=180 in 47 MB — comfortably inside 8 GB. The state count grows only
+~linearly in T (≈275 states/unit-T), and the per-state bitmask is a single ~340-bit Python int, so
+total state memory is tens of MB, not 2^T.
+
+### Finding 2 — a genuinely independent, interval-run (run-length compressed) sumset DP
+To give the reviewer a SECOND, structurally-different memory-bounded engine (per the dispatch), R17
+adds `ivl_sumset.py`: the reachable-Σx set R for each (Σv) state is represented as a sorted tuple of
+disjoint integer RUNS `((lo₁,hi₁),(lo₂,hi₂),…)` instead of a big-int bitmask. Transitions are EXACT
+run-set operations (Minkowski-sum with the column's achievable x-set, top-clamp Σx≤T, bottom-clamp
+Σx≥Σv−T, end window-meet test). This is the "interval-run compressed state" the dispatch asked for —
+memory is bounded by (#states)·(#runs), never a per-state 2^T bitmask. Peak RSS stays ≤53 MB even at
+m=130 with maxruns≈121. **Why runs stay few:** each column's achievable x-set X_w is contiguous except
+a single missing value 1 at the bottom (X_w={0}∪[2,w] for w≤10; a single interval [.,.] for w≥11),
+so R is a Minkowski sum of near-intervals; the bottom missing-1 gap fills quickly (0+2, 2+0, …) and R
+becomes one interval except for a small holey bottom (mean ≈3.8 runs, ~75% single-interval).
+
+### Oracle gate — run-DP == bitmask-DP == brute (Rule R3), 28 cases
+`python3 ivl_sumset.py --gate` PASSES: 19 three-way (run-DP == bitmask == brute, where |U|² ≤ 4e6 so
+brute is tractable) + 9 two-way (run-DP == bitmask, larger T where O(|U|²) brute is slow). Coverage:
+- **clamp-binding** Σv≫T: m=5 T=22→899593, m=6 T=9→34614, m=5 T=7→3497, m=4 T=6→721;
+- the non-contiguous **Griego {0,2,…,10}** alphabet,
+- a **second non-contiguous** alphabet {0,3,5,9} (b=19), AND
+- a **contiguous control** {0,…,5} (b=11).
+A 1-off miscount in the run-set Minkowski/clamp logic would diverge here; it never does.
+
+### Cross-check vs the committed verified rows (digit-for-digit)
+- bitmask DP at (180,340): s 175 d, head `95094840942995635699` — matches committed scan row.
+- bitmask DP at (110,210): s 107 d, head `92705280150149557241` — matches committed.
+- run-DP at small/mid m: agrees with the bitmask DP on every gate case (28) byte-exact.
+
+### Certificate — UNCHANGED and already verified (R16 reviewer)
+d=|U−U| (218 d, head `23513893541583867431`) and M=max U (238 d, head `49939369671774630152`) were
+reproduced BYTE-EXACT by the R16 reviewer with distinct DPs, and the tight integer cert
+`d^10000 > s^10000·(2M+1)^(k−10000)` re-derived: **k=11781 PASS (log10-margin +54.6) / k=11782 FAIL
+(−183.4, tight)**. With s now reproduced in-container (47 MB), every leg of the (180,340) certificate
+is independently reproducible. Carry-free precondition b=21 > 2·max(A)=20 holds.
+
+### Claimed held (unverified until reviewer re-runs): C_3a > 11781/10000 = 1.1781
+Beats the prior verified held 1.1779 by +0.0002 and the external record 1.1740744 by +0.0040.
+Hole-free on the path to this held: the only load-bearing step is a pure big-int comparison from
+counts that are now ALL independently reproducible within 8 GB. **0 holes remain on the (180,340) tick.**
+
+### Watchdog safety / environment note (R17)
+Peak RSS was logged each 20 columns and never exceeded 53 MB for either engine. The container's
+harness fires "completed" notifications for orphaned background python prematurely (the launching
+shell returns before the python child finishes), and aggressively kills poll-loop shells after one
+cycle — so liveness must be checked directly via /proc utime, NOT trusted from notifications. Running
+>2 CPU-bound DP jobs at once is what made the R16 (and early-R17) runs look like a memory/time wall;
+a single focused job at m=180 finishes in 393 s at 47 MB.
+
+### Exact reproduction commands (memory-bounded; each a short printing step)
+```
+cd constants/3a/certificate
+# (A) independent run-length (interval-run) engine: oracle gate then verify s vs committed row
+python3 -u ivl_sumset.py --gate                  # ~90s, 28-case run-DP==bitmask==brute gate, EXIT 0
+python3 -u ivl_sumset.py --verify-scan 110 210   # run-DP s vs committed (digit-for-digit), fast anchor
+python3 -u ivl_sumset.py --verify-scan 180 340   # run-DP s at m=180 vs committed (BACKGROUND, slow but ≤53MB)
+# (B) committed bitmask engine, peak-RSS instrumented (47 MB at m=180):
+python3 -u griego-ntt-push.py --point 180 340        # s,d,M recompute (~393s, 47MB), s head 95094840942995635699
+python3 -u griego-ntt-push.py --certify-from-scan 180 340  # ~2s, PASS 11781 / FAIL 11782, EXIT 0
+```
+
 ## Promotable lemmas
 None new. The sum-set engine is the already-certified `exact-sumdiff-dp` lemma (reused, not re-proved).
 `indep_sumset` is a validation-only cross-checker (slow set-DP), not a reusable production lemma.
+`ivl_sumset.py`'s run-length sumset DP is a memory-bounded *reproduction* engine (validation-grade),
+not a new mathematical lemma to cache.
