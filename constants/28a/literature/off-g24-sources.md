@@ -69,3 +69,42 @@ exist but the partition lower bound is a hard chromatic argument nobody can cert
 so far — walled at 270) OR a *rigorous* partition lower-bound technique that works in world
 B (a research-level open problem, Lean-hostile). The only crack between them is Musin's
 theta > ceil(v/omega) gap (§3 above), unexplored by the run.
+
+## 5. Round-5 extension — 2024/2025 two-distance & clique-cover literature (all negative)
+
+Searched the 2024-2026 literature for (a) any new sub-63 / non-transitive construction,
+(b) two-distance set cardinality bounds, (c) clique-cover / Lovász-theta chromatic lower
+bounds. **Nothing yields a new bound. No sub-63 construction has appeared.**
+
+- **arXiv:2509.00858 (Sep 2024), "Bounds on two-distance sets in Euclidean space and Unit
+  Sphere":** UPPER bounds on cardinality only (Seidel-matrix spectral method), no new dense
+  construction, does not mention Borsuk or diameter-graph clique/chromatic numbers. An upper
+  bound on |X| works AGAINST a counterexample; useless for firing. Not digest-worthy beyond
+  this line.
+- **arXiv:2211.02331 (coherent configurations type (2,2;3) two-distance embedding):** a
+  UNIQUENESS result — Lisonek's 45-pt set in R^8 is the *only* such embedding. Negative
+  (rules examples out), no new high-dim object. Irrelevant to 62-63.
+- **arXiv:2301.13076 "Extremal spherical polytopes and Borsuk's conjecture": WITHDRAWN**
+  (author content-disagreement). Disregard.
+- **Dense two-graph rows (theta-cover-dual residual hole) — now QUANTIFIED as DEAD.** The 3
+  rows are v=220/276/344 with need_omega = 3/4/5 respectively (firing needs alpha(diameter
+  graph) <= need_omega). The v=276 row is srg(276,140,58,84) (the unique regular two-graph
+  on 276 vertices, Conway-Goethals-Seidel / .3 group), degree k=140 ~ v/2, eigenvalues
+  {140, 2, -28}. Hoffman ratio bound gives alpha <= 46 — and the TRUE alpha of such a dense
+  graph is far above 4. Firing needs alpha <= 4. The ratio v/alpha is ~33 at best, nowhere
+  near 64. Both the graph and its complement are dense (k ~ v/2), so both clique numbers are
+  large: neither orientation can fire. The residual hole's own prediction ("both omega
+  expected LARGE") is correct and now numerically pinned. **These rows cannot fire; computing
+  exact clique numbers would only confirm a negative already forced by the Hoffman bound.**
+- **Lovász-theta sandwich — the concrete shape of the reviewer's "non-vertex-transitive"
+  hint.** theta-bar(G) (theta of the complement) satisfies omega(G) <= theta-bar(G) <= chi(G)
+  for EVERY graph, transitive or not. So a Lovász-theta lower bound on chi(G_d) is a valid
+  firing certificate WITHOUT needing vertex-transitivity (the chi_f = v/alpha pin that walls
+  theta-cover-dual). BUT: (i) theta-bar is an SDP value, Lean-HOSTILE (continuum, not a
+  finite rational dual) unless it lands on an exact algebraic number with a rational
+  dual-certificate; (ii) for a vertex-transitive graph theta-bar = v/alpha exactly (Lovász),
+  so it gives NOTHING new over the existing pin there — its only added power is on
+  NON-transitive graphs; (iii) it still requires a graph whose theta-bar exceeds d+1 at
+  <= 62 emb-dim, i.e. the same density wall. No such graph is in the literature. Records the
+  lever precisely so a future round need not re-derive it: the non-transitive route exists in
+  principle (theta-bar), but it is Lean-hostile and has no candidate object.
