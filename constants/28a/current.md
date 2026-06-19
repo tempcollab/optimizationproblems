@@ -18,3 +18,15 @@ verified no value below 63)
   big SRGs swept; eigenvalue-multiplicity formula matches table on all 4231 integer rows
   (0 mismatches); 0 rows certify a dim≤62 counterexample; 357 rows ruled out by sound
   conservative kills, 207 left honestly OPEN.
+- R3: No bound change (record stays 63; held 63). Two verified advances, both honest
+  negatives. (a) `mixed-construction`: hole `build_core` CLOSED — an exact 62-dim,
+  270-point two-distance G_2(4) section of C, independently re-derived (rank 62 over Q,
+  smaller-distance-graph ω=5 = α(diameter graph)=5; two-distance with norms²=90, inner
+  products {-6,18}, diam²=192). Also fixed a real `verify()` correctness bug (it had
+  checked ω of the diameter graph; the Borsuk part-cap is α(diameter graph)=ω(complement),
+  re-derived as 0 mismatches against the smaller-distance graph). Load-bearing
+  `engineer_perturbation` still OPEN (270<316; precise obstruction: the core fills its
+  diameter ball). (b) `musin-edge-edit` (new): the μ-raising lever (rook K5□K_m, emb=s+m−2,
+  ω=max(5,m)) exactly re-verified at integer root t=2, and a fast exact modular μ-evaluator
+  built; but no ω≤5 edit fires (structured optimum rook K5□K5 has fire margin θ+μ−n=−4,
+  independently confirmed). Edge-flip-on-balanced-skeleton strategy dead-ended.

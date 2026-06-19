@@ -43,26 +43,54 @@ partition IS that partition (so `θ = m`, `ω ≤ 5`): fire iff **`m ≥ 64` (�
 - Author's heuristic (from Bondarenko): almost all cliques the same size — use balanced `C0`.
 
 ## Holes
-1. **`build_balanced_skeleton`** (scaffold, trivial/certifiable) — `m` disjoint `K_5`'s.
-   Runs green; embedding dim of the disjoint-K5 skeleton verified `= n−1 = 319` (μ=0) by the
-   exact rational Cayley–Menger rank machinery, ω=5 confirmed.
-2. **`maximize_mu_over_edge_flips` (LOAD-BEARING, the one real hole)** — edit `C0` to reach
-   embedding dim `≤ 62` (`μ ≥ n−63`) with `θ = m ≥ 64`, keeping the minimal clique partition
-   fixed. Finite discrete optimization: a single-flip Δμ evaluator (recompute exact embedding
-   dim at the critical `t` after each candidate flip) + greedy/SA hill-climb + a guard that
-   each flip preserves `ω ≤ 5` (`g24.max_clique_le`) and the clique partition.
-   **Open question:** does the edge-flip landscape on a balanced cap-5 skeleton EVER reach
-   `μ = n−63`, or does it plateau below? Unknown — this is the genuine risk.
-3. **`verify`** (Lean-fit core, written) — `ω(G) ≤ 5` (exact bitset), partition validity
+1. **`build_balanced_skeleton`** (scaffold, CLOSED) — `m` disjoint `K_5`'s. Runs green;
+   embedding dim of the disjoint-K5 skeleton verified `= n−1 = 319` (μ=0) by the exact rational
+   Cayley–Menger rank machinery, ω=5 confirmed.
+2. **`maximize_mu_over_edge_flips` (LOAD-BEARING) — PARTIALLY CLOSED (round 3), still OPEN.**
+   The search step is now IMPLEMENTED and runs (was `raise NotImplementedError`): a bounded
+   stochastic local edge-flip search with a hard `max_iter` cap, a `wall_budget_s` wall-clock
+   budget, and stdout progress, using a new fast EXACT μ-evaluator (below). It returns the best
+   cap-5 graph reached plus a `fired` flag. **It does NOT fire.** Honest residual: no cap-5
+   (ω≤5) graph reaching embedding dim ≤62 (μ≥n−63) at n≥316 was found.
+3. **`verify`** (Lean-fit core, intact) — `ω(G) ≤ 5` (exact bitset), partition validity
    (`θ = m`), embedding dim `= n−μ−1 ≤ 62` (exact rational rank of the centered CM Gram),
-   and the fire condition `θ+μ > n`.
+   and the fire condition `θ+μ > n`. Confirmed on rook K5□K5: n=25, ω≤5, exact emb 8,
+   `is_counterexample=False` (5+16=21<25) — the core correctly does NOT false-fire.
 
-## Hard step
-`maximize_mu_over_edge_flips`. The mechanism is sound (Musin/Einhorn–Schoenberg), the
-certification is clean and Lean-fit (exact rank + bitset ω), but whether the finite edge-flip
-search actually lands `μ = n−63` is the open construction. The exact embedding-dim evaluator
-is already implemented and verified on the μ=0 skeleton, so the builder can measure Δμ per
-flip from day one.
+## What round 3 closed / established
+- **Fast EXACT μ-evaluator (`embedding_dim_fast`, NEW).** Integer modular Gaussian elimination
+  over GF(p) (vectorised numpy), two-prime agreement check. ~70× faster than the slow
+  exact-rational reference (`embedding_dim_two_distance`): ~0.5 s vs ~39 s at n=320.
+  Cross-checked to AGREE exactly with the exact-rational machinery on the disjoint-K5 skeleton
+  (emb 19) and the rook graph K5□K5 (emb 8) — a `_selftest_fast_evaluator()` guard runs every
+  invocation. This turns the abstract "search" hole into a concrete, fast, EXACT instrument.
+- **The μ-raising lever WORKS (proof of concept), exact at the integer root t=2.** The rook /
+  Cartesian-product coupling K5□K_m drops embedding dim from n−1 to s+m−2, i.e. raises μ in
+  bulk from 0 to (s−1)(m−1): at K5□K5, μ jumps 0→16. So Musin/Einhorn–Schoenberg fact (ii)
+  (inter-clique edits raise μ) is confirmed concretely, not just cited.
+- **Why it doesn't fire — the precise obstruction.** The rook coupling's "threads" (vertex x
+  across all m cliques) form a clique of size m, so ω = max(5, m); cap-5 forces m≤5, topping
+  out at **K5□K5: n=25, emb=8, μ=16, θ=5, fire margin θ+μ−n = −4**. A bounded local edge-flip
+  hill-climb on a balanced cap-5 skeleton does strictly worse (n=20: μ reaches only 5 vs the
+  rook's 12). Random/circulant Cayley edits with ω≤5 almost all give μ=0. The triangular graph
+  T(6)=J(6,2) (n=15, ω=5) gives emb 5, μ 9, margin −3 — best ratio seen, but it is an SRG
+  already covered by the (closed) srg-sweep. **Pattern: every ω≤5 edit that meaningfully raises
+  μ is either a swept SRG or has its embedding dim grow as fast as n.** This is exactly why
+  G2(4) (an exceptional SRG) is special and why the closed SRG line is so constraining.
+
+## Best embedding dim reached (this round, CONJECTURE — not a bound)
+The lowest embedding dim found under the ω≤5 + θ+μ>n constraints **does not beat 63**: the
+best firing-feasible structured object is K5□K5 with fire margin −4 (no fire). No counterexample
+in dim ≤62 was produced. **Claimed (upper) bound: still 63** — i.e. this round produced NO
+improvement, an honest negative-leaning partial result. Nothing is written into `current.md`.
+
+## Hard step (remaining)
+`maximize_mu_over_edge_flips` reaching the fire condition `θ+μ>n` at ω≤5, n≥316. The mechanism
+and the exact certification are sound and Lean-fit; the evaluator is fast and verified. The
+genuine open construction is **a new ω≤5 graph outside the swept SRG table** whose embedding
+dim grows slower than n — blind editing of a balanced skeleton provably (this round's evidence)
+does not reach it. This is now an outliner-level re-plan question (what ω≤5 family?), not a
+fill-the-blank for the builder.
 
 ## Certify
 Lean-fit (preferred path once a winning graph lands): clique partition (finite) ⇒ θ-cap;
