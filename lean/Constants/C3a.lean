@@ -541,4 +541,91 @@ theorem c3a_ge_53_45' (c3a : ℝ) (hbridge : GHR_lower c3a) :
   norm_num at h ⊢
   linarith
 
+/-! ## ROUND 29 — the d=180 beat cell (`C_3a ≥ 86/73 = 1.1780822…`).
+
+Same proven carry-free drop-1 base-21 GHR digit lever as R18/R19/R22/R23/R24/R25/R28,
+pushed one rung further (the seventh / capstone bound move): `A = {0,2,3,4,5,6,7,8,9,10}`,
+`B = 21`, `d = 180`, `T = 338` (density `≈ 1.8778`; carry-free since `B = 21 > 2·max(A) =
+20`). Reviewer-re-derivable numerical certificate at
+`constants/3a/certificate/beat_d180/beat_d180.json` (cell `d180_T338`; the diff/max are
+persisted in `d180_diffmax.json`, the sumset re-derivable by the progress-emitting copy
+`beat_d180/sumset_progress.py run 338`, validated bit-for-bit vs the engine `count_opset`
+on small cells). The cell's GHR value is `value_new ≈ 1.1781127097300`, strictly above the
+wedge `c = 86/73 = 1.1780822…`.
+
+The same monotone log-free chain gives `θ(U) ≥ 86/73 ⟺
+|U−U|^Q ≥ |U+U|^Q · (2·max(U)+1)^P` with `c − 1 = 13/73`, so `P = 13`, `Q = 73`. The
+exponents keep `decide` fast (`Q = 73 ≪ R22's Q = 2000` which decided in ~11.5 s; R21's
+Q=10000 was the kernel blowup — far below it). `86/73` is the largest-headline reduced
+rational with denominator `≤ 200` that the exact big-int test clears strictly above the
+held `53/45 = 1.1777778…` (margin `+3.04e-4`) and below `value_new` (the scan confirmed
+`87/73` fails the beat cell, so `86/73` is maximal at `Q = 73` and overall for `Q ≤ 200`).
+This re-selection was made against the MEASURED d=180 integers, not a float prediction; it
+improves on the outline's predicted candidate `139/118 = 1.1779661` (which also passes, but
+has a smaller headline margin `+1.88e-4` and a larger `Q = 118`).
+
+Provenance/trust split: exactly as R19/R22/R23/R24/R25/R28 — the three big integers are
+TRUSTED literals whose provenance is re-derived OUT of Lean by the progress-emitting sumset
+copy + the engine `count_opset` (the carry-free DP is an OOM hazard inside the kernel and is
+NOT recomputed here). All the load-bearing arithmetic (the power inequalities) lives inside
+the formalization as axiom-free `decide`. -/
+
+-- The d=180 decide lemmas use exponent Q₇ = 73; the file-wide
+-- `set_option exponentiation.threshold 6000` (set near the top) covers it.
+
+/-- `|U+U|` for the R29 d=180 beat cell (175 digits). Source: `beat_d180.json::d180_T338`. -/
+def Nplus180 : ℕ := 3354519071788885979023216141902954802944274850938508437397593428011708873731032411797776258937134213892620954939568363172249622899430649685508533874946658363906124116799209892
+
+/-- `|U−U|` for the R29 d=180 beat cell (217 digits). Source: `beat_d180.json::d180_T338`. -/
+def Nminus180 : ℕ := 8248240679967974277485699424754935580998771572631459094585545888625222374779568379760322876817313573352132768751600734164606953606850207393082450474878534216196830910154480951791069244106713758550183965483719866727003
+
+/-- `max(U)` for the R29 d=180 beat cell (238 digits). Source: `beat_d180.json::d180_T338`. -/
+def maxU180 : ℕ := 4993936967177463015264087179129271251122731313032668164185127052611728840178697130939323017816271893900650648306826367475234346919520016876351524059866629359594159086400180406387334867036006166959498404182549629144468377460786574280471498
+
+/-- The R29 wedge numerator `P₇` (with `c = 1 + P₇/Q₇ = 86/73`, so `P₇ = 13`). -/
+def P7 : ℕ := 13
+
+/-- The R29 wedge denominator `Q₇` (`Q₇ = 73`). -/
+def Q7 : ℕ := 73
+
+/-- **Load-bearing kernel check (the d=180 beat cell passes the wedge).**
+`|U+U|^Q₇ · (2·max(U)+1)^P₇ ≤ |U−U|^Q₇`, i.e. `θ(U) ≥ 1 + P₇/Q₇ = 86/73`. Log-free
+`Nat` powers via GMP, no `native_decide`. Axiom-free (`[propext]`). -/
+theorem newGE180 : Nplus180 ^ Q7 * (2 * maxU180 + 1) ^ P7 ≤ Nminus180 ^ Q7 := by decide
+
+/-- **Strictness witness (the d=80 record cell FAILS the R29 wedge).**
+`|U−U|^Q₇ < |U+U|^Q₇ · (2·max(U)+1)^P₇` for the d=80 record cell, i.e. the record value
+`1.1740744476935212 < 86/73`. With `newGE180` this certifies a STRICT improvement over the
+record (`value_record < 86/73 ≤ value_new`). Axiom-free `decide`. -/
+theorem recLT180 : recNminus ^ Q7 < recNplus ^ Q7 * (2 * recMaxU + 1) ^ P7 := by decide
+
+/-- `0 < |U+U|` for the R29 d=180 beat cell. -/
+theorem Nplus180_pos : 0 < Nplus180 := by decide
+
+/-- `|U+U| ≤ |U−U|` for the R29 d=180 beat cell. -/
+theorem Nplus180_le_Nminus180 : Nplus180 ≤ Nminus180 := by decide
+
+/-- `0 < Q₇`. -/
+theorem Q7_pos : 0 < Q7 := by decide
+
+/-- **R29 main theorem.** Under the named GHR bridge, the d=180 beat cell's verified counts
+give `C_3a ≥ 1 + 13/73 = 86/73`. Strictly beats the previously held & Lean-checked
+`53/45 ≈ 1.1777778` (R28), `179/152 ≈ 1.1776316` (R25/R26), `239/203 = 1.1773399` (R24),
+`1177/1000 = 1.1770` (R23), `2353/2000 = 1.1765` (R22), `5877/5000 = 1.1754` (R18/R19), and
+the true record `1.1740744476935212` (via `recLT180`). The discrete content (`newGE180`) is
+axiom-free; the only trust boundary is `GHR_lower`. -/
+theorem c3a_ge_86_73 (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 1 + (13 : ℝ) / 73 := by
+  have h := hbridge Nplus180 Nminus180 maxU180 P7 Q7 Nplus180_pos Q7_pos
+    Nplus180_le_Nminus180 newGE180
+  simpa [P7, Q7] using h
+
+/-- **R29 numeric form.** Under the bridge, `C_3a ≥ 86/73` (`≈ 1.1780822`), strictly above
+the held `53/45 ≈ 1.1777778`. -/
+theorem c3a_ge_86_73' (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 86 / 73 := by
+  have h := c3a_ge_86_73 c3a hbridge
+  norm_num at h ⊢
+  linarith
+
 end C3a

@@ -1,6 +1,6 @@
 {
   "alphabet-reshape-screen": {
-    "elo": 1444.5106053421016,
+    "elo": 1430.3355037327724,
     "expanded": 1,
     "last_note": "SCOUT, certifies no bound (correctly untouched constants/). Negative conclusion SOUND: no reshaped digit alphabet beats the drop-1 base-21 family's ~1.179 d->inf asymptote. Reviewer reproduced the headline asymptotes independently (RECORD drop-1=1.17897, max12 B=25=1.17317, full {0..10}=1.15506) confirming the ranking; reshape road CLOSED within the digit-set family. Only remaining bound-move lever = the d-push (push-d-130, verified this round).",
     "last_outcome": "partial",
@@ -11,7 +11,7 @@
     "summary": "Cheap small-d (d<=40) screen of digit-alphabet SHAPES (drop-1-and-2, drop-middle, gapped/AP, varied base) for a higher d->infty asymptote than the drop-1 family's ~1.1788 ceiling; non-treadmill scout, certifies no bound this round (winning shape becomes a later d-push target)."
   },
   "asymptotic-per-digit-ratio-optimization": {
-    "elo": 1361.8561585561868,
+    "elo": 1351.8427307193601,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
@@ -22,7 +22,7 @@
     "summary": "Optimize the per-digit limit (d\u2192\u221e, cap density c) via the log-spectral-radius of the cap-constrained transfer matrix; maximize R-(c)-R+(c) per log(B) toward the 1.25 ceiling, then instantiate a concrete finite U."
   },
   "beyond-digit-set-structured-U": {
-    "elo": 1266.028326972507,
+    "elo": 1252.6361724361814,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
@@ -33,23 +33,23 @@
     "summary": "Scout non-digit-set structured U (GAPs/Bohr-like, convex-body projections, Sidon/B_h) \u2014 the only family that can exceed the 1.25 digit-set ceiling; score 2-3 families' exact GHR bound, no promised beat."
   },
   "digit-dp-count-engine-and-record-baseline": {
-    "elo": 1556.4354752417703,
+    "elo": 1538.5295355612423,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 13,
+    "selected": 15,
     "slug": "digit-dp-count-engine-and-record-baseline",
     "stale": false,
     "summary": "Exact carry-free cap-coupled DP count engine for |U+U|,|U-U|,max(U); reproduce the record 1.174074447 (search-immune baseline, gap 0, machinery \u2014 analogous to 9a-367)."
   },
   "directed-param-sweep-exact-beat": {
-    "elo": 1681.7196812555464,
+    "elo": 1692.193364709916,
     "expanded": 2,
     "last_note": "R22 d-push continuation (approach doc push-d-130-exact-beat, NOT separately registered in sidecar \u2014 outline-reviewer never registered it before the early-ended R21; recording here against the ancestor it directly continues). VERIFIED NEW BOUND MOVE: held 5877/5000=1.1754 -> 2353/2000=1.1765 via d=130,T=244 drop-1 base-21 cell. Integers re-derived from scratch (engine --recompute matches; independent reviewer DP matches brute@d<=4 + engine@d 8..40); wedge re-derived in own big-int (d130 passes, d80 record fails); Lean lake build PASS 8574 jobs, newGE130/recLT130 [propext]-only, GHR_lower honest, R19 theorem intact; verify_beat.py exit 0. The digit-push lever remains live and productive.",
     "last_outcome": "verified-milestone",
     "last_round": 22,
-    "selected": 13,
+    "selected": 15,
     "slug": "directed-param-sweep-exact-beat",
     "stale": false,
     "summary": "Bounded exact-integer sweep over (alphabet A, base B, length d, cap T) around the hand-tuned record for a strict beat of 1.1740744 by a clean integer margin (Fraction + rational-power compare, never float)."
@@ -71,7 +71,7 @@
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 6,
+    "selected": 8,
     "slug": "push-d-130-exact-beat",
     "stale": false,
     "summary": "R22 VERIFIED BEAT (held 5877/5000=1.1754 -> 2353/2000=1.1765) via d=130/T=244 drop-1 base-21 cell, born Lean-machine-checked (c3a_ge_2353_2000, newGE130/recLT130 [propext]-only, GHR_lower bridge). R21-orphan registered late (early-ended round); the d-push continuation of directed-param-sweep-exact-beat."
@@ -93,13 +93,13 @@
     "last_note": "VERIFIED strict beat 1177/1000=1.1770 \u2192 239/203=1.1773399 (margin +3.40e-4 exact via Fraction). d=150,T=282 drop-1 base-21, carry-free B=21>2max(A)=20. Engine --recompute re-derived d=150 integers from scratch bit-for-bit; my own independent DP (fixed +/- windows) matched brute(d\u22644) + engine |U-U| d=20 + engine |U+U|/max d=20/30/40; wedge c=239/203 (P=36,Q=203) passes (d=150) / record-cell d=80 fails, both in own big-int; Lean lake build PASS 8574 jobs; newGE150/recLT150 [propext], c3a_ge_239_203 [propext,Classical.choice,Quot.sound], GHR_lower honest named hyp; prior theorems intact.",
     "last_outcome": "verified-milestone",
     "last_round": 24,
-    "selected": 4,
+    "selected": 6,
     "slug": "push-d-150-exact-beat",
     "stale": false,
     "summary": "Push the drop-1 base-21 GHR digit construction to d=150/T=282 (density ~1.880): one fresh count_opset DP cell (heavy sumset split into its own timeout>=900 call), smallest-Q wedge (~14/79=1.177215), Lean port reusing GHR_lower/newGE/recLT pattern. Targets ~1.17738 (+8.8e-4 over held 1.1770); true bound move, born machine-checkable."
   },
   "push-d-160-exact-beat": {
-    "elo": 1536.9844932790968,
+    "elo": 1531.1512575557463,
     "expanded": 1,
     "last_note": "VERIFIED (R25 recovery): strict beat 239/203\u2192179/152=1.1776316 (+2.917e-4 exact Fraction), born Lean-checked. d=160 T=300 drop-1 base-21 cell. lake build PASS 8571 jobs; newGE160/recLT160 [propext], assembled [propext,Classical.choice,Quot.sound]; all 4 prior theorems intact; GHR_lower honest. Lean literals bit-for-bit vs beat_d160.json+record_baseline.json; both wedge ineqs re-derived own big-int; counting method blessed (own DP vs brute d<=4, two engines agree d=20/30/40); max(U) reproduced full d=160; verify_beat.py exit 0.",
     "last_outcome": "verified-milestone",
@@ -110,14 +110,25 @@
     "summary": "Walk the drop-1 base-21 carry-free GHR digit lever to d=160, T=300 (density 1.875); split-DP (cheap diff/max + heavy sumset in own timeout call), persist exact integers to beat_d160.json, small-Q wedge c=1+19/107=1.1775701 (>held 239/203), Lean-port via R24 decide route. Predicted value_new ~1.17763, margin +2.3e-4 over held."
   },
   "push-d-170-exact-beat": {
-    "elo": 1555.388522201054,
+    "elo": 1573.4776797339912,
     "expanded": 1,
     "last_note": "d=170 cell (T=319) verified: C_3a lower bound 179/152=1.1776316 -> 53/45=1.1777778 (margin +1.46e-4). Lean c3a_ge_53_45 builds, newGE170/recLT170 [propext]-only; literals match beat_d170.json bit-for-bit; own DP matches brute(d<=4)+engine(d=20,30); own greedy max(U) reproduces 225-digit literal; wedge d=170 passes/d=80 record fails.",
     "last_outcome": "verified-milestone",
     "last_round": 28,
-    "selected": 0,
+    "selected": 2,
     "slug": "push-d-170-exact-beat",
-    "stale": true,
+    "stale": false,
     "summary": "d=170, T=319 drop-1 base-21 GHR cell; split-DP protocol, wedge c=53/45 (P=8,Q=45), Lean newGE170/recLT170 under GHR_lower; aims held->~1.17785 (+2.1e-4 over 179/152)."
+  },
+  "push-d-180-exact-beat": {
+    "elo": 1532.7570183990533,
+    "expanded": 1,
+    "last_note": "R29 SEVENTH/capstone verified beat: C_3a 53/45=1.1777778 -> 86/73=1.1780822 (d=180,T=338, wedge c-1=13/73). Independently verified: own Pareto-DP matches brute d<=4 + engine d=20,30 (both +/-); max(U) reproduced bit-for-bit at full d=180; both wedge ineqs re-derived own big-int (d=180 passes/d=80 fails); 87/73 fails so 86/73 maximal; lake build PASS 8571 jobs; newGE180/recLT180 [propext]-only; assembled standard R-trio; 7 prior theorems intact; GHR_lower honest. margin +3.044e-4 exact. Digit-set lever declared round-sized exhausted (d>=190 crosses force-kill edge).",
+    "last_outcome": "verified-milestone",
+    "last_round": 29,
+    "selected": 0,
+    "slug": "push-d-180-exact-beat",
+    "stale": true,
+    "summary": "Capstone rung: drop-1 base-21 GHR digit cell at d=180/T=338 (density ~1.876); split-DP (cheap diff/max own call + heavy sumset via progress-emitting sumset_progress.py in own timeout 2400 call, validated bit-for-bit on small cells, persist beat_d180.json before wedge/Lean), smallest-Q Fraction wedge vs MEASURED integers (predicted c=139/118, P=21 Q=118, margin +1.88e-4 over held 53/45), Lean port newGE180/recLT180 under GHR_lower. Predicted value ~1.1780902 (+3.1e-4 over held). LAST comfortable single-call rung (d=190+ crosses force-kill edge)."
   }
 }
