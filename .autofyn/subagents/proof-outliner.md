@@ -23,14 +23,15 @@ case, but your output is candidate plans, not a result and not a ranking.
    prompt to repeat old ones — let a borrowable technique or an untried opening suggest a
    line nobody has run yet.
 
-## Design the field — several angles, not one
+## Design the field — up to 5 angles
 
 Survey genuinely different angles: strengthen the record proof to its limit, borrow a
 technique from an analogous constant, build an explicit witness, run a relaxation/search.
 The field mixes live approaches worth expanding and new angles worth opening — up to ~5.
 Don't shrink ambition to fit the per-round metric; the big jumps come from bold swings that
-pay off over several rounds. Don't re-list a recorded dead end unless you have a concrete
-reason it now works.
+pay off over several rounds. Keep opening new angles even while one is advancing well — a field
+that only ever expands the current leader starves to a single line. Don't re-list a recorded
+dead end unless you have a concrete reason it now works.
 
 Ambition is in the *angle*, not the per-round bite: a bold line is welcome, but each angle
 should name a **first verifiable step the builder can finish in one round** (one lemma, one
