@@ -295,13 +295,18 @@ theorem setDiff_card_decompose
   rw [Finset.sum_congr rfl hc, Finset.sum_const, smul_eq_mul]
   ring
 
-/-- The base set `U` (Griego digit set) and carry-free base `Qbase` from the certified point. The
-    concrete numeric literals come from the scan row; left as documented witness-data holes (the
-    actual Griego digit set is large but explicit). The carry-free property is what the cached
-    tensor lemmas require. HOLE (carry-free witness data). -/
-def Ubase : Finset ℤ := sorry
-def Qbase : ℤ := sorry
-theorem Ubase_carryfree : CarryFree Qbase Ubase := sorry
+/-- The Griego per-column digit set `{0,2,3,4,5,6,7,8,9,10}` (drop digit `1`, max digit `10`). The
+    held Python cert uses this 10-element set with base `b = 21 = 2·max+1` for its single-column digit
+    injectivity. The cached Lean `CarryFree`/`tensor_pow_*` chain proves a STRONGER box-injectivity
+    that ALSO needs sums in-digit (`2·|a+b| < Q`), so the carry-free base here is `Qbase = 41 > 4·max`
+    (NOT 21): with max digit 10, max `|a+b| = 20`, and `2·20 = 40 < 41`. Every downstream structural
+    lemma is parametric in `Qbase`, so this base-`Q` choice changes nothing in the B1 scaffolding —
+    only the deferred B3 numeric tie-in of the tensor sumset/diffset to `theta` cares. -/
+def Ubase : Finset ℤ := {0, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+def Qbase : ℤ := 41
+theorem Ubase_carryfree : CarryFree Qbase Ubase := by
+  refine ⟨by decide, ?_⟩
+  decide
 
 /-- The closed-form element-range bound for the digit-tensor tower (parametric in the base bound
     `maxU`). `maxbk maxU Q 0 = maxU`, `maxbk maxU Q (k+1) = maxU + Q·(maxbk maxU Q k)`. -/
@@ -312,16 +317,20 @@ def maxbk (maxU Q : ℤ) : ℕ → ℤ
 /-- The element-range bound `maxUbase` of the base digit set: every `u ∈ Ubase` lies in
     `[0, maxUbase]`. The numeric literal comes from the scan row (the Griego digit set is
     nonnegative with explicit max digit). DOCUMENTED WITNESS DATA (numeric). HOLE. -/
-def maxUbase : ℤ := sorry
-/-- The base set is nonnegative and bounded by `maxUbase`. DOCUMENTED WITNESS DATA (numeric);
-    once `Ubase`/`maxUbase` are pinned to the explicit Griego digit set this is a finite check. HOLE. -/
-theorem Ubase_range : 0 ≤ maxUbase ∧ (∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxUbase) := sorry
+def maxUbase : ℤ := 10
+/-- The base set is nonnegative and bounded by `maxUbase = 10`: every `u ∈ {0,2,…,10}` satisfies
+    `0 ≤ u ≤ 10`. Finite check over the explicit 10-element set. -/
+theorem Ubase_range : 0 ≤ maxUbase ∧ (∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxUbase) := by
+  refine ⟨by decide, ?_⟩
+  decide
 
-/-- The dilution counts: `mₙ = ⌊qⁿ/sⁿ⌋` (number of separated shifts) and `negLoₙ` (the bottom of the
-    interval band, placed strictly below all translate windows). DOCUMENTED WITNESS DATA (numeric);
-    only the literal values are open — the SHAPE below is what makes `an_separated` provable. HOLE. -/
-def mnData : ℕ → ℕ := sorry
-def negLoData : ℕ → ℤ := sorry
+/-- Pinned to type-correct CLOSED forms consumed only by SHAPE downstream (`an_separated` /
+    `interval_union_disjoint_*` are proved parametrically). The NUMERIC dilution content
+    (`mₙ = ⌊qⁿ/sⁿ⌋`, the actual interval-band bottom) stays deferred to B2/B3 — this round pins only
+    the shape, NOT the numeric values. `mnData := fun _ => 1` (one separated translate) and
+    `negLoData n = -(2·maxbk n + 1)` (band bottom one spacing below the lowest translate window). -/
+def mnData : ℕ → ℕ := fun _ => 1
+def negLoData : ℕ → ℤ := fun n => -(2 * maxbk maxUbase Qbase n + 1)
 
 /-- The dilution data, now PINNED to the AP shape (only the counts `mnData`/`negLoData` stay open):
     `an_shift n i = i·(2·maxbk n + 1)` is an arithmetic progression with spacing strictly exceeding

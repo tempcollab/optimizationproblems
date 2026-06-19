@@ -16,6 +16,66 @@ commits multiple rounds to the real-analysis read-off.
 Borrows: `lean-native-decide-smallmt` (`theta`, `theta_gt` — the certified θ>1.1771), the cached
 `tensor-multiplicativity` lemmas (`sumset`/`diffset`, `tensor_pow_*_card`), `log-bridge`.
 
+## R19 — numeric witness-data holes CLOSED → the entire finite B1 layer is now sorryAx-FREE
+
+**Closed this round (7 witness-data holes at C3aDef.lean:302–324, all in the finite B1 layer):**
+- `Ubase : Finset ℤ := {0, 2, 3, 4, 5, 6, 7, 8, 9, 10}` — the Griego per-column 10-element digit set
+  (drop digit `1`, max digit 10), the verified-held base alphabet.
+- `Qbase : ℤ := 41` — **NOT 21.** This is the load-bearing finding (verified by the outliner AND the
+  outline-reviewer). The cached `CarryFree Q U := 0 < Q ∧ ∀ a b ∈ U, 2·|a+b| < Q ∧ 2·|a−b| < Q`
+  (TensorMultiplicativity.lean:95–96) requires BOTH conjuncts. For max digit 10, max `|a+b| = 20`, so
+  the sum conjunct needs `2·20 = 40 < Q` ⟹ Q ≥ 41. Q=21 FAILS at a=b=10 (`2·|10+10| = 40 ≮ 21`) — a
+  FALSE predicate that `decide` cannot discharge. The held Python cert's `b=21 = 2·max+1` is correct
+  for ITS single-column digit-packing injectivity (carries never cross columns, only `|a−b| < Q`
+  matters per column); the cached Lean chain proves a STRONGER box-injectivity that also needs sums
+  in-digit, hence `Q = 41`. Every downstream structural lemma is parametric in `Qbase`, so 21→41 breaks
+  nothing in the B1 scaffolding; only the deferred B3 numeric tie-in of the tensor sumset/diffset to
+  `theta` cares (B3 is multi-round real analysis, untouched).
+- `Ubase_carryfree : CarryFree Qbase Ubase` — discharged `⟨by decide, by decide⟩` over the 10-element
+  set (≤100 pairs, tiny integers). **`#print axioms` = `[propext, Quot.sound]` — fully axiom-clean, NO
+  sorryAx, NO native_decide.** (`decide`, not `native_decide` — operands tiny, kernel-checked.)
+- `maxUbase : ℤ := 10`; `Ubase_range : 0 ≤ maxUbase ∧ ∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxUbase` — discharged
+  `⟨by decide, by decide⟩`. **`#print axioms` = `[propext, Quot.sound]` — axiom-clean, NO sorryAx.**
+- `mnData : ℕ → ℕ := fun _ => 1` and `negLoData : ℕ → ℤ := fun n => -(2 * maxbk maxUbase Qbase n + 1)`
+  — type-correct CLOSED forms consumed only by SHAPE downstream (`an_separated`/`interval_union_disjoint_*`
+  are proved parametrically). The NUMERIC dilution content (`mₙ = ⌊qⁿ/sⁿ⌋`, real band bottom) stays
+  deferred to B2/B3 — pinned the shape ONLY, proved no inequality about these values (that is B2/B3).
+
+**Effect — last sorryAx source removed from the finite B1 layer.** With the witness data pinned, the
+B1-layer lemmas that previously traced their sorryAx ONLY to these witness sorries are now FULLY
+axiom-clean (verified via a throwaway `AxCheck.lean` `#print axioms`, deleted after):
+- `an_separated` — `[propext, Classical.choice, Quot.sound]` — **NO sorryAx.**
+- `griego_ak_disjoint` (B1a) — `[propext, Classical.choice, Quot.sound]` — **NO sorryAx.**
+- `griego_disjoint_union_count` (B1) — `[propext, Classical.choice, Quot.sound]` — **NO sorryAx.**
+
+The entire finite/discrete B1 layer (tensor-multiplicativity → tpow_elem_range → an_separated →
+griego_ak_disjoint → griego_disjoint_union_count) is now sorryAx-free. `lake build C3a` EXIT 0 (2970
+jobs). The 5 remaining `sorry` are exactly the multi-round real-analysis residue: `realizes_one` (140),
+`realizableSet_bddAbove` (151), B2 `griego_bounded_doubling` (717), B3 `griego_diff_lower_bound` (726),
+B4 `griego_card_tendsto` (733).
+
+**Held NOT affected.** This is a structural advance, not a held raise. Even fully wired the bridge
+certifies θ>1.1771 (the native_decide core's m=140 literal) < held 1.1781. The top-level
+`c3a_lower_bound_def : (11771:ℝ)/10000 < C3aRealDef` and `C3aRealDef`/the native_decide integer core
+are UNTOUCHED (git diff confirms only the witness-data block changed, 26 ins / 17 del in C3aDef.lean).
+
+**Parse fix:** removed two stale `/-- … -/` doc-comment blocks that were left orphaned above the
+witness defs (two stacked doc comments before a decl is a parse error in Lean 4.31).
+
+**Remaining holes / blockers** (all multi-round real analysis — do NOT gate a round on them):
+- B2 `griego_bounded_doubling` (717): ∃ fixed K, |A+B| ≤ K·|A| eventually — floor-dilution real
+  arithmetic over mₙ, Lₙ, sⁿ, qⁿ (where mnData/negLoData must BE the real Griego counts and satisfy an
+  inequality — genuine analysis, not a finite check).
+- B3 `griego_diff_lower_bound` (726): |A+B|^θ ≤ |A−B| eventually — chains cached `log_bridge`, but
+  needs the tensor-limit identification of θ with log(D/S)/log Q; this is where Ubase's sumset/diffset
+  ties to `theta`. Real analysis.
+- B4 `griego_card_tendsto` (733): |A|→∞, Filter.atTop packaging — hardest.
+- `realizes_one` (140), `realizableSet_bddAbove` (151): needs the GHR2007 4/3 upper-bound theorem.
+
+**Promotable lemmas:** none new this round. `Ubase_carryfree`/`Ubase_range` are axiom-clean but are
+SKETCH-SPECIFIC witness data (about the concrete Ubase/Qbase/maxUbase defs), not reusable general
+lemmas, so they are not cache candidates. (`box_elem_range`/`maxbk_nonneg` already promoted R18.)
+
 ## R18 — `an_separated` CLOSED (the residual construction obligation of B1a)
 
 **Closed this round (3 R18 holes, sorry-free on their own path):**
