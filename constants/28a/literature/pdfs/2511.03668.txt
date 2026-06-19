@@ -1,0 +1,499 @@
+5
+2
+0
+2
+
+v
+o
+N
+5
+1
+
+]
+
+O
+C
+.
+h
+t
+a
+m
+
+[
+
+2
+v
+8
+6
+6
+3
+0
+.
+1
+1
+5
+2
+:
+v
+i
+X
+r
+a
+
+Borsuk’s conjecture for two–distance sets and its
+equivalent formulation for graphs
+
+Oleg R. Musin
+
+Abstract
+
+Every graph G can be embedded in a Euclidean space as a two–distance set. This
+allows us to reformulate the analogue of Borsuk’s conjecture for two–distance sets in
+terms of graphs. This conjecture remains open for dimensions from 4 to 63. This short
+note also discusses an approach for finding counterexamples using graphs, as well as
+its generalization for s–distance sets.
+
+1
+
+Introduction
+
+Let S be a bounded subset of Rd and B(S) denote the smallest number of subsets with
+diameters smaller than the diameter of S that cover S. Karol Borsuk conjectured that B(S) ≤
+d + 1. It is true for d = 2, 3. In 1993 Jeff Kahn and Gil Kalai showed that if d ≥ 2015
+then the conjecture is not true. In subsequent years, the dimension d has been consistently
+reduced. In 2013 Andriy Bondarenko found a counterexample to Borsuk’s conjecture for
+d = 65 [3]. Soon after, Thomas Jenrich [5] discovered a 64-dimensional subset in Bondarenko’s
+counterexample that also fails to satisfy Borsuk’s conjecture.
+
+Bondarenko’s counterexamples were obtained for two–distance sets. A set S in Euclidean
+space Rd is called a two–distance set, if there are two distances a and b, and the distances
+between pairs of distinct points of S are either a or b. We checked the case d = 4 and
+found no counterexample to Borsuk’s conjectures for two–distance sets. This was later con-
+firmed in [10] by Ferenc Sz¨oll¨osi who enumerated all two–distance sets in four dimensions.
+Danylo Radchenko [9] informed the author that he had not found such counterexamples for
+dimensions d ≤ 7, his algorithm relies on [6].
+
+Let G = (V, E) be a simple graph, n = |V |,
+
+xij :=
+
+(cid:26) 1 if eij ∈ E
+t otherwise
+
+, AG(t) :=
+
+
+...
+1
+1
+0
+1
+... x1n
+x12
+0
+1
+
+
+1 x21
+... x2n
+0
+
+
+. . . . . . . . . . . . . . . . . . . .
+
+
+. . . . . . . . . . . . . . . . . . . .
+
+0
+1 xn1 xn2
+
+...
+
+
+
+
+
+
+
+
+
+
+
+1
+
+, CG(t) = det(AG(t)).
+
+(1)
+
+ 
+ 
+ 
+ 
+ 
+ 
+Suppose that there is a solution to the algebraic equation CG(t) = 0 for t > 1. Then we
+denote by µ(G) the multiplicity of the smallest zero t > 1 of this equation. If CG(t) has no
+zeros t > 1, then we assume that µ(G) = 0.
+
+Let θ(G) denote the clique covering number, i.e. the smallest number of cliques that
+
+together include every vertex of G.
+Theorem 1. Let G be a simple graph with n vertices. Then G can be embedded in Rd as a
+two–distance set S with d = n − µ(G) − 1 and B(S) = θ(G). In particular, if
+
+then S is a counterexample for Borsuk’s conjecture.
+
+θ(G) + µ(G) > n
+
+In Section 2, we go into more detail about representing graphs as two–distance sets and
+prove this theorem. Much more details and examples are contained in our paper [8]. Section
+3 discusses possible applications of Theorem 1 and its generalization for s–distance sets
+to finding counterexamples to Borsuk’s conjecture using discrete optimization and machine
+learning methods.
+
+2 Graphs and two–distance sets
+
+2.1 Two–distance sets.
+Let S = {p1, ..., pn} be a two–distance in Rd with a = 1 and b > 1. Let dij := dist(pi, pj).
+Consider the Cayley–Menger determinant
+
+CS :=
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+...
+1
+1
+1
+0
+... d2
+d2
+1
+0
+1n
+12
+... d2
+1 d2
+0
+2n
+21
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+1 d2
+0
+
+n1 d2
+n2
+
+...
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+Since for i ̸= j, dij = 1 or b, CS is a polynomial in t = b2. Here the connection between
+the two polynomials CG and CS is obvious. If G is a graph with vertices {pi} and edges eij,
+where dij = 1, then CG(t) = CS(t).
+
+Einhorn and Schoenberg [4] showed that d can be explicitly expressed in terms of the
+
+multiplicity µ(S) of the smallest root t > 1 of the equation CS(t) = 0:
+
+Equivalently, see [8, Sect. 2], for graphs we have
+
+d = n − µ(S) − 1.
+
+where dimE
+
+2 (G) denotes the smallest dimension of the embedding of G as a two–distance set.
+
+dimE
+
+2 (G) = n − µ(G) − 1,
+
+(2)
+
+2
+
+2.2 Proof of Theorem 1
+
+Proof. By (2) we can embed G into Rd, d = n − µ(G) − 1, as a two-distance set S. Since
+B(S) = θ(G), then B(S) > d + 1 if and only if θ(G) + µ(G) > n.
+
+2.3 Spherical two–distance sets.
+
+In [8] we consider representations of a graph G as spherical two–distance sets. Let f be a
+Euclidean representation of G in Rd with minimum distance a = 1. We say that f is spherical
+if the image f (G) lies on a (d − 1)–sphere in Rd. We denote by dimS
+2(G) the smallest d such
+that G is spherically representable in Rd.
+
+If d ≤ n − 2, then f is uniquely defined up to isometry [8, Sect. 2]. Therefore, if f is
+spherical, then the circumradius of f (G) is also uniquely defined. We denote it by R(G). If
+f is not spherical or µ(G) = 0, then we put R(G) = ∞. By Lemma 3.1 in [8] we have
+
+R(G) = (cid:112)FG(τ1),
+
+where
+
+FG(t) := −
+
+1
+2
+
+MG(t)
+CG(t)
+
+,
+
+MG(t) :=
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+x12
+0
+
+... x1n
+0
+x21
+... x2n
+. . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . .
+0
+xn1 xn2
+
+...
+
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+(cid:12)
+
+,
+
+xij are defined in (1), and τ1 is the smallest root t > 1 of CG(t) = 0.
+
+Theorem 3.1 in [8] yields the following theorem.
+
+Theorem 2. Let G be a simple graph with n vertices and R(G) < ∞. Then G can be
+embedded in Rd as a spherical two–distance set S with d = n − µ(G) − 1 and B(S) = θ(G).
+If
+
+then S is a spherical counterexample for Borsuk’s conjecture.
+
+θ(G) + µ(G) > n
+
+3 Remarks
+
+3.1 Bondarenko’s counterexamples for Borsuk’s conjecture.
+
+Bondarenko [3] found two spherical two–distance sets:
+S1 = {p1, ..., p416} in R65 with ⟨pi, pj⟩ = 1/5 or ⟨pi, pj⟩ = −1/15 for i ̸= j, B(S1) ≥ 84,
+and
+S2 = {p1, ..., p31671} in R782 with ⟨pi, pj⟩ = 1/10 or ⟨pi, pj⟩ = −1/80 for i ̸= j, B(S2) ≥ 1377.
+Jenrich’s counterexample in [5] is
+S3 = {p1, ..., p352} in R64 with B(S3) ≥ 71.
+
+3
+
+Let S, |S| = n, be a two–distance set in Rd. Then, see [1, 2], we have
+
+n ≤
+
+(d + 1)(d + 2)
+2
+
+.
+
+Bondarenko and Jenrich’s counterexamples are spherical and satisfy the assumption of The-
+orem 1 in [7]. That yields a better bound
+
+However,
+
+n ≤ c2(d) :=
+
+d(d + 1)
+2
+
+.
+
+|S1| = 416 < c2(65) = 2145, |S2| = 31671 < c2(782) = 306153, |S3| = 352 < c2(64) = 2080.
+
+Thus, the cardinalities of Sk are much less than the maximum possible in their dimensions.
+
+3.2 A possible strategy for finding counterexamples.
+
+Let G be a graph with n vertices. Then, see [4, 8],
+
+(i) dimE
+
+2 (G) = n − 1, i.e. µ(G) = 0, if and only if G is a disjoint union of cliques.
+
+(ii) If d = dimE
+set with fixed minimum distance a = 1 is uniquely defined up to isometry.
+
+2 (G) ≤ n − 2, then a Euclidean representation of G in Rd as a two–distance
+
+Let Clq(G) denote the minimal disjoint union of cliques in G. If C0 is a disjoint union of
+
+m cliques {c1, ..., cm} and Clq(G) = C0, then θ(G) = m. Therefore, if
+
+m + µ(G) > n
+
+then G is a counterexample for Borsuk’s conjecture.
+
+Let us fix C0 and consider G for which Clq(G) = C0. Our goal is to find G with largest
+possible µ. If G = C0 then by (i) µ(G) = 0. In this case, adding any edge between clicks
+increases µ. We can continue adding and removing edges between cliques, increasing µ as
+long as possible. If at some point we reach a local maximum of µ, we can try to consider
+other graphs and find graphs with larger µ for them by adding and removing edges. Here, C0
+play an important role. In Bondarenko’s counterexamples, almost all cliques have the same
+size. Perhaps such C0 should be used to find counterexamples.
+
+3.3 On the generalization of Theorem 1 for s–distance sets
+
+First consider an equivalent definition of graph representations. There are two Euclidean
+2 ( ¯G), where ¯G is the graph complement of G.
+representation numbers dimE
+These numbers can be different. Indeed, there is an obvious relation between polynomials
+CG(t) and C ¯G(t). Namely, C ¯G(t) is the reciprocal polynomial of CG(t). If G or ¯G is not the
+
+2 (G) and dimE
+
+4
+
+complete multipartite graph, then τ0(G) := 1/τ1( ¯G) is a zero of CG(t) and there are no more
+zeros in the interval I := [τ0(G), τ1(G)]. Moreover, a two–distance set S with distances 1 and
+√
+
+t is well–defined only if t ∈ I [4].
+Let G = (V (G), E(G)) be a graph on n vertices. We have E(Kn) = E(G) ∪ E( ¯G). Then
+
+it is can be considered as a coloring of E(Kn) in two colors.
+
+Let L(e) := i if e ∈ Ei. Then L : E(Kn) → {1, 2} is a coloring of E(Kn). A representation
+L as a two–distance set is an embedding f of V (Kn) into Rd such that dist(f (u), f (v))) = ai
+for [uv] ∈ Ei. For s–distance sets, it is convenient to swap G and ¯G when the maximum
+distance is equal to 1, i.e. a1 = 1 > a2 > 0.
+
+This definition can be extended to any number of colors. Let L : E(Kn) → {1, . . . , s} be
+
+a coloring of the set of edges of a complete graph Kn. Then
+
+E(Kn) = E(G1) ∪ . . . ∪ E(Gs), E(Gi) := {e ∈ E(Kn) : L(e) = i}.
+
+We say that an embedding f of the vertex set of Kn into Rd is a Euclidean representation of
+a coloring L in Rd as an s–distance set if there are s positive real numbers a1 = 1 > . . . > as
+such that dist(f (u), f (v))) = ai if and only if [uv] ∈ E(Gi).
+
+Let dimE
+
+2 (L) denotes the smallest dimension of the embedding of L as an s–distance set.
+
+Then a coloring L defines a counterexample for Borsuk’s conjecture only if
+
+θ( ¯G1) > dimE
+
+2 (L) + 1.
+
+It is easy to extend the definitions of AG(t) and CG(t) in (1) for s–distance sets. In this
+case we have a matrix AL(t2, . . . , ts) and a polynomial CL(t2, . . . , ts), where a1 = 1 and
+ti = a2
+i < 1 for i = 2, . . . , s. Similarly to s = 2, for the Euclidean representation L can be
+defined ML(t2, . . . , ts). Then this embedding is spherical only if HL(t2, . . . , ts) is well defined,
+where
+
+HL(t2, . . . , ts) :=
+
+ML(t2, . . . , ts)
+CL(t2, . . . , ts)
+
+.
+
+The main problem here is to develop an efficient algorithm that finds t2, ..., ts such that
+2 (L), is minimal. It is possible that a similar approach as in 3.2 can
+
+the rank of AL, i.e. dimE
+be used to find counterexamples among s–distance sets to Borsuk’s conjecture.
+
+References
+
+[1] Eiichi Bannai, Etsuko Bannai, and Dennis Stanton. An upper bound for the cardinality
+of an s-distance subset in real euclidean space, ii. Combinatorica, 3(2):147–152, 1983.
+
+[2] Aart Blokhuis. Few–Distance Sets, volume 7 of CWI Tracts. CWI, 1984.
+
+[3] Andriy Bondarenko, On Borsuk’s Conjecture for Two-Distance Sets, Discrete & Com-
+
+putational Geometry, 51 (3): 509–515, 2014
+
+5
+
+[4] S. J. Einhorn and I. J. Schoenberg. On Euclidean sets having only two distances between
+points. I, II. Nederl. Akad. Wetensch. Proc. Ser. A 69=Indag. Math., 28:479–488, 489–
+504, 1966.
+
+[5] Thomas Jenrich, A 64-dimensional two-distance counterexample to Borsuk’s conjecture,
+
+arXiv:1308.0206
+
+[6] Petr Lisonˇek. New maximal two–distance sets. J. Comb. Theory, Ser. A, 77(2):318–338,
+
+1997.
+
+[7] Oleg R. Musin. Spherical two–distance sets. J. Comb. Theory, Ser. A, 116(4): 988–995,
+
+2009.
+
+[8] Oleg R. Musin, Graphs and spherical two–distance sets, Euro. J. Comb., 80 (2019),
+
+311–325
+
+[9] Danylo Radchenko, private communication.
+
+[10] Ferenc Sz¨oll¨osi. The two–distance sets in dimension four, arXiv:1806.07861
+
+O. R. Musin, School of Mathematical and Statistical Sciences, University of Texas Rio
+
+Grande Valley, One West University Boulevard, Brownsville, TX, 78520.
+
+E-mail address: oleg.musin@utrgv.edu
+
+6
+
+

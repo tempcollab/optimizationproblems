@@ -1,46 +1,57 @@
 {
   "fresh-orthogonal-dir": {
-    "elo": 1531.193493386135,
+    "elo": 1537.3033080566952,
     "expanded": 1,
     "last_note": "Holes 1&2 (build_g24 + standard_partition) closed exact and independently reproduced (srg(416,100,36,20), Gram rank 65 over Q, omega=5, |B|=96/3x32, |C|=320). Hole 3 reshaped to exact eigenspace-intersection form and structured family refuted exactly: best dim-62 subset = 270 pts (exact rank 62, omega<=5, ceil=54<64). One honest open hole remains: search_codim4_vector_general (general |Q|<=100 with cap_dim>=3). No bound; record stays 63.",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 0,
+    "selected": 2,
     "slug": "fresh-orthogonal-dir",
-    "stale": true,
+    "stale": false,
     "summary": "Find a 4th codimension vector inside G_2(4) via a second isotropic point's partition, dropping a >=316-pt subset to 62 dims with omega<=5; most principled, extends the 65->64->63 machinery."
   },
   "gri-augment": {
-    "elo": 1484.8038088807596,
+    "elo": 1428.1760646099067,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 2,
     "slug": "gri-augment",
     "stale": false,
     "summary": "Augment Gri's 63-dim W-set with engineered points sharing a hyperplane to drop to 62 dims while capping omega<=5; inherits the no-spare-direction obstruction, hard cap-5 packing."
   },
   "mixed-construction": {
-    "elo": 1454.0764019087514,
+    "elo": 1465.1794787787132,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 2,
+    "slug": "mixed-construction",
+    "stale": false,
+    "summary": "A <=62-dim two-distance core plus non-two-distance perturbation points to reach 316 pts with diameter-clique <=5; downstream of srg-sweep, least-structured search."
+  },
+  "musin-edge-edit": {
+    "elo": 1544.4524580411198,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
     "selected": 0,
-    "slug": "mixed-construction",
+    "slug": "musin-edge-edit",
     "stale": false,
-    "summary": "A <=62-dim two-distance core plus non-two-distance perturbation points to reach 316 pts with diameter-clique <=5; downstream of srg-sweep, least-structured search."
+    "summary": "Build a balanced cap-5 clique skeleton (m=64, n=320) from scratch and edge-flip between cliques to maximize mu(G); fires when theta+mu>n with embedding dim n-mu-1<=62. Structurally evades all three G2(4)/SRG obstructions; Lean-fit exact CM-rank + bitset omega."
   },
   "srg-sweep": {
-    "elo": 1529.926295824354,
+    "elo": 1524.888690513565,
     "expanded": 1,
     "last_note": "Certifiable hole closed: full Brouwer table (4538 rows) + 17 big SRGs swept; eigenvalue-mult formula matches table r^f on all 4231 integer rows (0 mismatches, independently reproduced); G_2(4) f=65 sanity holds. 0 rows certify a dim<=62 counterexample. All 357 kills re-derived sound and conservative (structural-lb kills only need_omega<=2 where lambda>=1 forces omega>=3; named-family omega values correct and exceed need). 207 rows left honestly OPEN (need explicit graph's exact omega). Clean negative, no bound; record stays 63.",
     "last_outcome": "advanced",
     "last_round": 1,
-    "selected": 0,
+    "selected": 2,
     "slug": "srg-sweep",
-    "stale": true,
+    "stale": false,
     "summary": "Finite sweep of Brouwer's SRG/two-distance tables for a graph with embedding dim f<=62 and ceil(v/omega)>=64; cheapest to run, settles a branch even if empty."
   }
 }

@@ -43,12 +43,35 @@ _g24 = importlib.import_module("g24")
 
 def build_core():
     """
-    HOLE 1: instantiate a core two-distance configuration K in a 62-dim subspace
-    (from srg-sweep survivors, or a trimmed G_2(4) section). Returns X_core (m x f),
-    f <= 62, plus its diameter graph.
+    HOLE 1 (REVISED, round 2): instantiate a <=62-dim core configuration K.
+
+    R1 PLAN (DEAD): "from a srg-sweep survivor" -- srg-sweep is now a CLOSED
+    negative (0 of 564 feasible rows certify dim<=62), so the core can NOT come
+    from a smaller-SRG survivor.  Re-planned core sources, in priority order:
+
+      (a) A G_2(4) SECTION that already sits in <=62 dims by exact rank.  The C
+          orbit spans exactly 63 (Gri wall), but a *sub-orbit* / hyperplane
+          section of C (or of C u B1) of size m can have exact rank <=62 -- e.g.
+          intersect the 320 C-points with a 62-dim coordinate window so the
+          surviving K is genuinely two-distance in 62 dims (cap_dim ledger in
+          fresh-orthogonal-dir.py gives the exact surviving rank for a window).
+          This EVADES the wall differently from lines A/B: we do NOT need K to
+          reach 316 -- only to be a <=62-dim two-distance seed.  |K| may be ~200.
+
+      (b) A 3-DISTANCE core via Musin section 3.3 (s-distance theorem, digest
+          literature/musin2025.md): color E(K_n) with s colors, B(L) governed by
+          theta(Gbar_1) > dim_E2(L)+1.  Gri's record set is ALREADY 3-distance,
+          so a 3-distance K with a small clique-cover-1 color and a low-rank
+          realization is a legitimate <=62-dim core.  Returns the realization
+          plus the partition by the min-distance color.
+
+    Returns (X_core (m x f) with f<=62, diameter graph of K).  This hole only
+    needs a CORRECT <=62-dim seed; the count is line D's perturbation hole.
     """
     raise NotImplementedError(
-        "build_core: a <=62-dim two-distance core. Depends on srg-sweep output."
+        "build_core (revised): a <=62-dim core -- either a G_2(4) hyperplane "
+        "section of C/CuB1 with exact surviving rank <=62 (NOT a srg-sweep "
+        "survivor -- that line is closed), or a 3-distance Musin-3.3 core."
     )
 
 
