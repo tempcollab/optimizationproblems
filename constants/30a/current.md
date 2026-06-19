@@ -3,20 +3,48 @@
 ## Status
 none
 
-## Bounds   table: 10.271 · held: 10.125*
+## Bounds   table: 10.271 · held: 10.125
 
 (Bounds line above is the lower side — the run's verified advance; eval reads it.)
 Upper side — table: 13.5 · held: 13.5 (record reproduced, not beaten).
 The canonical rigorous record remains `10.271 ≤ gr(Av(1324)) ≤ 13.5` (BBEPP2017).
-`held: 10.125*` (= 81/8) on the lower side is minimally verified (`*`): the count and the
-exact symbolic growth limit `lim_k |P_k|^{1/36k²} = 81/8` are reproduced (symbolically and
-by hand), but the subclass containment `P_k ⊆ Av(1324)` and the `|B_n| ~ (27/4)^{2n}`
-asymptotic order rest on the **cited** BBEPP Thm 5.1 (peer-reviewed), not reproduced
-in-script. Still below the record 10.271 (BBEPP's own Thm 7.1 refinement). A fully verified
+`held: 10.125` (= 81/8) on the lower side is now FULLY VERIFIED (the `*` was removed in R4):
+the count and the exact symbolic growth limit `lim_k |P_k|^{1/36k²} = 81/8` are reproduced
+(symbolically and by hand), AND the subclass containment `P_k ⊆ Av(1324)` is now reproduced
+in-script (`staircase-containment-lift`, R4): a complete, window-robust order-constraint
+enumeration (REDUCTION — every 1324 in the descending (Av213,Av132) staircase grid is confined
+to two consecutive cells, independently corroborated on faithfully-overlapping staircases:
+~1.0×10⁵ real 1324 occurrences, all span ≤ 1) + finite-base+closure (CROSS-CELL — every
+consecutive between-components pair avoids 1324: both vertical sub-cases enumerated to ≤7 pts,
+horizontal by the 1324/213/132 self-inverse involution) + cached `domino_growth_constant` for the
+`|B_n|~(27/4)^{2n}` order. The one residual is a model-faithfulness judgment (the in-script grid
+family IS BBEPP's `P_k`) — the same accepted standard as `insertion_encoding_edge_rule_Av1324`.
+NOT a record-break: 81/8 is BBEPP Thm 5.1's own value, below the record 10.271 (its Thm 7.1
+refinement). A fully verified
 (non-cited) backstop this run is `gr(Av(1324)) ≥ 8887516/1428099 = 6.223319` from the sound
 bounded-state insertion automaton `A_10` with an exact-rational Collatz–Wielandt certificate.
 
 ## Progress log
+- R4: `staircase-containment-lift` — held LEVEL upgrade `10.125*` → `10.125` (fully verified).
+  The R3 trap is fixed: the REDUCTION is now a deterministic, complete order-constraint
+  enumeration on the real staircase grid order (col_block(m)=⌈m/2⌉, row_block(m)=⌈(m+1)/2⌉),
+  window-robust (maxspan=1 holds at window 12), proving every 1324 is confined to two consecutive
+  cells — NOT the R3 column-separated stress (which was retired). Independently re-derived by the
+  reviewer: a faithfully-overlapping staircase build (random within-block interleave, strict
+  between-block separation) yields ~1.0×10⁵ actual 1324 occurrences, every one of span ≤ 1.
+  CROSS-CELL reproduced: both vertical between-components sub-cases (conn lower/upper) avoid 1324
+  on the complete finite base (reviewer extended to ≤7 pts, 0 violations) + closure under induced
+  subperms; horizontal cases by the 1324/213/132 self-inverse involution (all three verified
+  self-inverse; 1324-containment verified preserved under inverse). LEMMA DOMINO + H-T (cached
+  gr(D)=27/4) unchanged. Containment now reproduced in-script (not a bare citation); the residual
+  is the model-faithfulness judgment, accepted at the `insertion_encoding_edge_rule_Av1324`
+  standard. Cache lemma `staircase_domino_containment_Av1324` ADMITTED (keyed to the in-script
+  abstract grid family; P_k an instance per the BBEPP digest). NOT a record-break: 10.125 < 10.271.
+  `tromino-catalan-cell-lower` — honest diagnostic, no bound claimed; sharpened the record hole H1.
+  Reproduced: exact-rational gap of the best certified-sound concrete block (2-cell domino 27/4) to
+  the target = 6876/1000 − 27/4 = 63/500 = 0.126 (+1.867%), pure Fraction; teeth verified (real-
+  overlap 3-cell window at n=6 both contains 1324 (207) and avoids it (513)). H-CNT (BBEPP's named
+  open tromino-enumeration problem) stays open; top-level raises NotImplementedError, no false record.
 - R3: `tromino-richer-cell-lower` — VERIFIED the general BBEPP Thm-5.1 staircase-product
   closed form `g(g_blk,d,e,f)=exp([2d·log g_blk + log H(2e-f,e) + 2 log H(d+f,d)]/(2d+e))`,
   re-derived from the construction's exponent bookkeeping (k dominoes ×2 cells ×d·k pts + k

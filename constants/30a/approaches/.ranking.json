@@ -1,11 +1,11 @@
 {
   "bona-forbidden-factor-upper": {
-    "elo": 1465.874425271712,
+    "elo": 1450.4830289619638,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 4,
+    "selected": 6,
     "slug": "bona-forbidden-factor-upper",
     "stale": false,
     "summary": "UPPER bound: add a new certified forbidden factor to Bona's (w,z) word-pair encoding, drive rational-GF root from ~13.7 below 13.5; known saturation wall."
@@ -22,18 +22,18 @@
     "summary": "UPPER bound: prove CJS Conjecture 13 (increasing inversion columns) via injection => unconditional 13.002; conjecture open since 2012."
   },
   "conjecture8-diagonal-lower": {
-    "elo": 1464.1566265612455,
+    "elo": 1439.381264638727,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 2,
+    "selected": 4,
     "slug": "conjecture8-diagonal-lower",
     "stale": false,
     "summary": "LOWER bound: prove the diagonal (n=k) of Walks2025 Conjecture 8 (W~_{n,n} <= W_{n,n}) to turn the paper's conditional 10.418 into an unconditional bound; H3 is the paper's stated open problem (high payoff, high risk)."
   },
   "decorated-domino-upper": {
-    "elo": 1471.7181125288982,
+    "elo": 1455.302002291084,
     "expanded": 1,
     "last_note": "H1 (gr(D)=27/4) + H4 (injection sound, pairs==Av count n<=9) verified CLOSED; refutation of planned H2 confirmed (no forbidden binary factor of length <=4, |W_n| ratios overshoot 2). Pure-word forbidden-factor mechanism is dead; H2 must re-point to joint (word,domino) counting. Script honestly refuses a false bound. RETHINK for outliner.",
     "last_outcome": "partial",
@@ -44,36 +44,47 @@
     "summary": "UPPER bound: refine BBEPP's rudimentary factor-2 interleave to a constrained decoration word (forbidden-factor), rational-GF growth m*27/4 < 13.5; widest slack."
   },
   "staircase-containment-lift": {
-    "elo": 1505.2038347527548,
-    "expanded": 1,
-    "last_note": "H-C NOT closed: LEMMA DOMINO (2-cell) sound+faithful, but LEMMA REDUCTION's stress models a column-separated SKEW SUM (|noise|<0.5 => adjacent cells never overlap), not the staircase interleave; in true adjacent-overlap geometry 1324 CAN span >=3 cells (~145k counterexamples), so REDUCTION+DOMINO does not compose to P_k. *->verified lift NOT earned; held stays 10.125*. H-T (theta sub-exp) is sound.",
-    "last_outcome": "partial",
-    "last_round": 3,
-    "selected": 0,
+    "elo": 1526.8479466975948,
+    "expanded": 2,
+    "last_note": "H-X CLOSED: containment P_k\u2286Av(1324) now reproduced in-script (faithful grid geometry, R3 column-separated trap fixed). REDUCTION is a window-robust order enumeration (maxspan=1 at window 12), independently corroborated by reviewer on overlapping staircases (~1e5 real 1324s, all span<=1). CROSS-CELL finite base re-checked to 7 pts (0 viol both conn sides) + involution facts verified. held lifted 10.125* -> 10.125 (FULLY VERIFIED, held-level upgrade, NOT a record-break: 10.125 < 10.271). Cache lemma staircase_domino_containment_Av1324 ADMITTED.",
+    "last_outcome": "verified-milestone",
+    "last_round": 4,
+    "selected": 2,
     "slug": "staircase-containment-lift",
     "stale": true,
     "summary": "Lift held 81/8=10.125 from *-minimal to fully verified: in-script structural proof P_k subset Av(1324) for all k (finite cell-pattern case analysis, H-C) + theta(n)^{1/n}->1 (H-T). Yields reusable cache lemma staircase_domino_containment_Av1324. Does not beat the record; upgrades the held axis."
   },
   "transfer-matrix-lower": {
-    "elo": 1642.272179585536,
+    "elo": 1673.2441570167978,
     "expanded": 2,
     "last_note": "H_BIG closed as a sound floor-raise: reshaped from the unsound min-weighted (n,r) quotient to an EXACT bounded-state insertion automaton A_K counting B_K \u2286 Av(1324); dominant-SCC exact-rational CW gives VERIFIED gr \u2265 6.223319 (K=10). Independently reconfirmed (edge rule, walks==|B_K,n|, walks\u2264|Av_n|, CW\u2264float-rho). Beats held 3.773326, below record 10.271. Record-reaching step re-framed as a NEW hole (GF-weighted Catalan-cell staircase) for the outliner \u2014 integer automata cap logarithmically. CHANGES REQUESTED.",
     "last_outcome": "advanced",
     "last_round": 2,
-    "selected": 4,
+    "selected": 6,
     "slug": "transfer-matrix-lower",
     "stale": false,
     "summary": "LOWER bound: Perron root of a verified-subclass transfer matrix (walk-graph/AERWZ) certified by Collatz-Wielandt; cleanest Lean-fit certificate."
   },
+  "tromino-catalan-cell-lower": {
+    "elo": 1494.4878621141443,
+    "expanded": 1,
+    "last_note": "Honest diagnostic, no bound claimed. CLOSED H-SOUND-TEETH (real-overlap 3-cell window non-vacuous: n=6 contain=207/avoid=513) and H-BRACKET (exact-rational gap of best certified-sound block to target = 6876/1000 - 27/4 = 63/500 = 0.126, reproduced in pure Fraction). Record-lever hole H-CNT (BBEPP's named open tromino enumeration) STILL OPEN, top-level raises NotImplementedError (no false record). H-GROW/H-DROP depend on H-CNT. CHANGES REQUESTED: keep building toward a GF-weighted 3-cell count >= 6.876.",
+    "last_outcome": "advanced",
+    "last_round": 4,
+    "selected": 0,
+    "slug": "tromino-catalan-cell-lower",
+    "stale": true,
+    "summary": "LOWER bound: concrete realization of the H1 record-lever \u2014 exact GF-weighted (Catalan-forest) 3-cell tromino block count (H-CNT, BBEPP's named open problem) dropped into the verified Thm-5.1 product; honest deliverable is the exact-rational gap to 6876/1000."
+  },
   "tromino-richer-cell-lower": {
-    "elo": 1565.3060895792937,
+    "elo": 1574.7850065591285,
     "expanded": 1,
     "last_note": "H2 closed+verified: product closed form re-derived from BBEPP Thm 5.1 bookkeeping (NOT re-scaled), reproduces 81/8 exactly at (27/4,14,8,7) as Fraction g^36==(81/8)^36. Threshold closed: exact-rational g_blk=6876/1000 clears 10.271 (g^36>record^36). Two-cell wall closed (all dominoes cap at 27/4). H1 (>=3-cell block with growth>=6.876) stays open, raises as designed -- BBEPP's open tromino route. No record break.",
     "last_outcome": "advanced",
     "last_round": 3,
-    "selected": 0,
+    "selected": 2,
     "slug": "tromino-richer-cell-lower",
-    "stale": true,
+    "stale": false,
     "summary": "LOWER bound: drop a RICHER sound staircase block (per-point growth > (27/4)^2, exact count or CW witness) into the verified BBEPP Thm-5.1 product + re-optimised ratios; only +1.44% over 81/8 needed to clear 10.271. Lowest-risk record lever, all load-bearing machinery already verified."
   },
   "tromino-subclass-lower": {
