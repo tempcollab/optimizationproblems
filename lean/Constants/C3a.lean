@@ -382,4 +382,81 @@ theorem c3a_ge_239_203' (c3a : ℝ) (hbridge : GHR_lower c3a) :
   norm_num at h ⊢
   linarith
 
+/-! ## ROUND 25 — the d=160 beat cell (`C_3a ≥ 179/152 = 1.1776316…`).
+
+Same proven carry-free drop-1 base-21 GHR digit lever as R18/R19/R22/R23/R24, pushed one
+rung further: `A = {0,2,3,4,5,6,7,8,9,10}`, `B = 21`, `d = 160`, `T = 300` (density `1.8750`;
+carry-free since `B = 21 > 2·max(A) = 20`). Reviewer-re-derivable numerical certificate at
+`constants/3a/certificate/beat_d160/beat_d160.json` (cell `d160_T300`,
+`verify_beat.py --recompute`). The cell's GHR value is `value_new ≈ 1.1776644803530`,
+strictly above the wedge `c = 179/152 = 1.1776316…`.
+
+The same monotone log-free chain gives `θ(U) ≥ 179/152 ⟺
+|U−U|^Q ≥ |U+U|^Q · (2·max(U)+1)^P` with `c − 1 = 27/152`, so `P = 27`, `Q = 152`. The
+exponents keep `decide` fast (`Q = 152 ≪ R22's Q = 2000` which decided in ~11.5 s; R21's
+Q=10000 was the kernel blowup — far below it).
+
+Provenance/trust split: exactly as R19/R22/R23/R24 — the three big integers are TRUSTED
+literals whose provenance is re-derived OUT of Lean by `verify_beat.py` / `digit_dp.py` (the
+carry-free DP is an OOM hazard inside the kernel and is NOT recomputed here). All the
+load-bearing arithmetic (the power inequalities) lives inside the formalization as
+axiom-free `decide`. -/
+
+-- The d=160 decide lemmas use exponent Q₅ = 152; the file-wide
+-- `set_option exponentiation.threshold 6000` (set near the top) covers it.
+
+/-- `|U+U|` for the R25 d=160 beat cell (155 digits). Source: `beat_d160.json::d160_T300`. -/
+def Nplus160 : ℕ := 78646093676684992357839454198427395941253475282776725671788683271635975502447804104609960484919930080510843724476614235271064273990685342357658840565190392
+
+/-- `|U−U|` for the R25 d=160 beat cell (193 digits). Source: `beat_d160.json::d160_T300`. -/
+def Nminus160 : ℕ := 3030412732912650477211975837493006993252975840035291439105177280933556263747512955701932049492949845980884616957392137925030622201783488851983963872810346145171547427112817869802447505630845519
+
+/-- `max(U)` for the R25 d=160 beat cell (212 digits). Source: `beat_d160.json::d160_T300`. -/
+def maxU160 : ℕ := 17949698649023776230552715563948561281947344173000351726903398034728261259256554760983917945067654285372290288373623831165621155833000073550257033163444074802729625048858439786084133449869949398013097758417507300
+
+/-- The R25 wedge numerator `P₅` (with `c = 1 + P₅/Q₅ = 179/152`, so `P₅ = 27`). -/
+def P5 : ℕ := 27
+
+/-- The R25 wedge denominator `Q₅` (`Q₅ = 152`). -/
+def Q5 : ℕ := 152
+
+/-- **Load-bearing kernel check (the d=160 beat cell passes the wedge).**
+`|U+U|^Q₅ · (2·max(U)+1)^P₅ ≤ |U−U|^Q₅`, i.e. `θ(U) ≥ 1 + P₅/Q₅ = 179/152`. Log-free
+`Nat` powers via GMP, no `native_decide`. Axiom-free (`[propext]`). -/
+theorem newGE160 : Nplus160 ^ Q5 * (2 * maxU160 + 1) ^ P5 ≤ Nminus160 ^ Q5 := by decide
+
+/-- **Strictness witness (the d=80 record cell FAILS the R25 wedge).**
+`|U−U|^Q₅ < |U+U|^Q₅ · (2·max(U)+1)^P₅` for the d=80 record cell, i.e. the record value
+`1.1740744476935212 < 179/152`. With `newGE160` this certifies a STRICT improvement over the
+record (`value_record < 179/152 ≤ value_new`). Axiom-free `decide`. -/
+theorem recLT160 : recNminus ^ Q5 < recNplus ^ Q5 * (2 * recMaxU + 1) ^ P5 := by decide
+
+/-- `0 < |U+U|` for the R25 d=160 beat cell. -/
+theorem Nplus160_pos : 0 < Nplus160 := by decide
+
+/-- `|U+U| ≤ |U−U|` for the R25 d=160 beat cell. -/
+theorem Nplus160_le_Nminus160 : Nplus160 ≤ Nminus160 := by decide
+
+/-- `0 < Q₅`. -/
+theorem Q5_pos : 0 < Q5 := by decide
+
+/-- **R25 main theorem.** Under the named GHR bridge, the d=160 beat cell's verified counts
+give `C_3a ≥ 1 + 27/152 = 179/152`. Strictly beats the previously held & Lean-checked
+`239/203 = 1.1773399` (R24), `1177/1000 = 1.1770` (R23), `2353/2000 = 1.1765` (R22),
+`5877/5000 = 1.1754` (R18/R19), and the true record `1.1740744476935212` (via `recLT160`).
+The discrete content (`newGE160`) is axiom-free; the only trust boundary is `GHR_lower`. -/
+theorem c3a_ge_179_152 (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 1 + (27 : ℝ) / 152 := by
+  have h := hbridge Nplus160 Nminus160 maxU160 P5 Q5 Nplus160_pos Q5_pos
+    Nplus160_le_Nminus160 newGE160
+  simpa [P5, Q5] using h
+
+/-- **R25 numeric form.** Under the bridge, `C_3a ≥ 179/152` (`≈ 1.1776316`), strictly above
+the held `239/203 ≈ 1.1773399`. -/
+theorem c3a_ge_179_152' (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 179 / 152 := by
+  have h := c3a_ge_179_152 c3a hbridge
+  norm_num at h ⊢
+  linarith
+
 end C3a
