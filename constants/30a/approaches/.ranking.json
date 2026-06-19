@@ -1,57 +1,68 @@
 {
   "bona-forbidden-factor-upper": {
-    "elo": 1483.4617309214807,
+    "elo": 1468.9511562621851,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 0,
+    "selected": 2,
     "slug": "bona-forbidden-factor-upper",
     "stale": false,
     "summary": "UPPER bound: add a new certified forbidden factor to Bona's (w,z) word-pair encoding, drive rational-GF root from ~13.7 below 13.5; known saturation wall."
   },
   "cjs-increasing-columns-upper": {
-    "elo": 1438.8436421434315,
+    "elo": 1398.9508026218252,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 2,
+    "slug": "cjs-increasing-columns-upper",
+    "stale": false,
+    "summary": "UPPER bound: prove CJS Conjecture 13 (increasing inversion columns) via injection => unconditional 13.002; conjecture open since 2012."
+  },
+  "conjecture8-diagonal-lower": {
+    "elo": 1501.3052646195486,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
     "selected": 0,
-    "slug": "cjs-increasing-columns-upper",
+    "slug": "conjecture8-diagonal-lower",
     "stale": false,
-    "summary": "UPPER bound: prove CJS Conjecture 13 (increasing inversion columns) via injection => unconditional 13.002; conjecture open since 2012."
+    "summary": "LOWER bound: prove the diagonal (n=k) of Walks2025 Conjecture 8 (W~_{n,n} <= W_{n,n}) to turn the paper's conditional 10.418 into an unconditional bound; H3 is the paper's stated open problem (high payoff, high risk)."
   },
   "decorated-domino-upper": {
-    "elo": 1530.0175716931049,
+    "elo": 1512.014177965767,
     "expanded": 1,
     "last_note": "H1 (gr(D)=27/4) + H4 (injection sound, pairs==Av count n<=9) verified CLOSED; refutation of planned H2 confirmed (no forbidden binary factor of length <=4, |W_n| ratios overshoot 2). Pure-word forbidden-factor mechanism is dead; H2 must re-point to joint (word,domino) counting. Script honestly refuses a false bound. RETHINK for outliner.",
     "last_outcome": "partial",
     "last_round": 1,
-    "selected": 0,
+    "selected": 2,
     "slug": "decorated-domino-upper",
-    "stale": true,
+    "stale": false,
     "summary": "UPPER bound: refine BBEPP's rudimentary factor-2 interleave to a constrained decoration word (forbidden-factor), rational-GF growth m*27/4 < 13.5; widest slack."
   },
   "transfer-matrix-lower": {
-    "elo": 1559.729526119354,
-    "expanded": 1,
-    "last_note": "Verified: H2 (skew-sum closure, S_8 subset Av(1324)) + H3 (exact-rational Collatz-Wielandt) CLOSED; reproduced lower bound 3.773326 independently. H_BIG (higher-growth sound matrix to clear 10.271) still open \u2014 skew-sum caps logarithmically. Two cache lemmas certified.",
+    "elo": 1609.3722915664807,
+    "expanded": 2,
+    "last_note": "H_BIG closed as a sound floor-raise: reshaped from the unsound min-weighted (n,r) quotient to an EXACT bounded-state insertion automaton A_K counting B_K \u2286 Av(1324); dominant-SCC exact-rational CW gives VERIFIED gr \u2265 6.223319 (K=10). Independently reconfirmed (edge rule, walks==|B_K,n|, walks\u2264|Av_n|, CW\u2264float-rho). Beats held 3.773326, below record 10.271. Record-reaching step re-framed as a NEW hole (GF-weighted Catalan-cell staircase) for the outliner \u2014 integer automata cap logarithmically. CHANGES REQUESTED.",
     "last_outcome": "advanced",
-    "last_round": 1,
-    "selected": 0,
+    "last_round": 2,
+    "selected": 2,
     "slug": "transfer-matrix-lower",
     "stale": true,
     "summary": "LOWER bound: Perron root of a verified-subclass transfer matrix (walk-graph/AERWZ) certified by Collatz-Wielandt; cleanest Lean-fit certificate."
   },
   "tromino-subclass-lower": {
-    "elo": 1487.9475291226292,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
-    "selected": 0,
+    "elo": 1509.4063069641936,
+    "expanded": 1,
+    "last_note": "S2 closed: reconstructed BBEPP Thm 5.1 domino-staircase product; exact symbolic growth limit lim_k |P_k|^{1/36k\u00b2} = 81/8 = 10.125 reproduced (sympy + by hand). MINIMALLY VERIFIED (*): containment P_k\u2286Av(1324) and |B_n|~(27/4)^{2n} cited to BBEPP Thm 5.1, not reproduced. Beats held, below record 10.271 (which IS the Thm 7.1 refinement of this very 81/8 line). Holes open: H1 (tromino g3 via CW sub-subclass), H2' (tromino product). CHANGES REQUESTED.",
+    "last_outcome": "advanced",
+    "last_round": 2,
+    "selected": 2,
     "slug": "tromino-subclass-lower",
-    "stale": false,
+    "stale": true,
     "summary": "LOWER bound: 3-cell tromino staircase subclass with transfer-matrix sub-bound for H1; BBEPP's named open route, borrows transfer-matrix-lower machinery."
   }
 }

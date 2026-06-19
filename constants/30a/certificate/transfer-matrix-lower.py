@@ -241,7 +241,367 @@ def collatz_wielandt_witness(M, b, L):
     return lam, v
 
 
-# ----------------------------------------------------------------------------- #
+# ============================================================================= #
+#  H_BIG re-pointed (R2): SOUND BOUNDED-STATE INSERTION-ENCODING AUTOMATON       #
+#  (exact quotient + dominant-SCC exact-rational Collatz-Wielandt)               #
+# ============================================================================= #
+#
+#  This round REPLACES the originally-planned "min-weighted (n,r) quotient" with a
+#  STRICTLY SOUND, EXACT (lossless) bounded-state automaton.  Reason recorded in the
+#  approach doc and below: the planned min-weighted (n,r) quotient was MEASURED to
+#  collapse to a near-triangular matrix whose rho is a cutoff-boundary artifact (~8,
+#  the boundary self-loop), NOT a genuine sound growth bound -- the per-group minimum
+#  out-degree on the coarse (n,r) grouping is dominated by worst-case vertices of
+#  out-degree 1.  That plan is a dead end (documented honestly).  The construction
+#  below is sounder: an EXACT subclass count via a finite automaton, certified by
+#  exact-rational CW on its dominant strongly-connected component.
+#
+#  THE SOUND MACHINE (all four facts verified in this file / by exhaustive check):
+#
+#  (E1) INSERT-NEW-MAXIMUM BIJECTION.  Every permutation of [n] is built by a UNIQUE
+#       sequence of "insert the new maximum at position pos" steps (pos in 0..len),
+#       inserting values 1,2,...,n in increasing order.  (verify_insert_max_bijection)
+#
+#  (E2) LOCAL EDGE RULE (exhaustively verified to length 8->9, prove_edge_rule):
+#       inserting the new maximum at position pos into a 1324-avoider p creates a 1324
+#       occurrence  <=>  the left-prefix p[:pos] CONTAINS the pattern 132.
+#       (The new max is the global max, so it can only be the '4' of a 1324; a 1324 is
+#       created iff a 132 sits entirely to its left.)  Hence the ALLOWED insertion
+#       positions of p are exactly pos in 0..t, where t = length of the longest prefix
+#       of p that avoids 132.
+#
+#  (E3) FINITE STATE.  The only data of p that governs future insertions is the
+#       standardisation of its longest 132-avoiding prefix:
+#             state(p) := standardize( p[: t+1] ),   t = max_avoid_prefix(p).
+#       Inserting a new max maps state(p) -> state(p') deterministically with integer
+#       edge multiplicity.  Restricting to states of length <= K gives a FINITE
+#       automaton A_K (states + integer edges).
+#
+#  (E4) SOUND EXACT SUBCLASS.  Walks of length n in A_K from the empty state are in
+#       BIJECTION with the subclass
+#             B_K := { p in Av(1324) : every value-prefix of p has state-length <= K },
+#       a genuine SUBSET of Av(1324) counted without repetition (verified
+#       |B_K,n| == #walks for n<=8, verify_subclass_count).  Therefore
+#             gr(B_K) = rho(A_K)  <=  gr(Av(1324))    -- UNCONDITIONALLY.
+#       This is an EXACT quotient (no averaging, no min-weighting, no Conjecture 8):
+#       distinct walks give distinct permutations, so A_K never OVER-counts avoiders
+#       (#walks <= |Av_n| verified to n=12).
+#
+#  CERTIFICATE.  rho(A_K) = max over strongly-connected components of rho(component).
+#  We isolate the DOMINANT SCC (its walks are a subset of A_K's, so a CW bound on it is
+#  still a valid lower bound on gr(Av(1324))), power-iterate in FLOAT only to obtain an
+#  approximate Perron vector, RATIONALISE it to a positive integer vector w, and emit
+#  the exact Collatz-Wielandt bound
+#             lam := min_i (M w)_i / w_i        (exact Fractions)
+#  which satisfies  M w >= lam * w  entrywise BY CONSTRUCTION, certifying
+#  rho(dominant SCC) >= lam, hence gr(Av(1324)) >= lam.  Pure rational arithmetic in the
+#  load-bearing check; float is used only to choose w.
+#
+#  MEASURED OUTCOME (the decisive computable question of the dispatch -- does a sound
+#  bounded machine clear 10.271?).  NO.  This sound automaton converges to the true
+#  gr(Av(1324)) ~ 11.6 only logarithmically in K:
+#       K = 6  ->  rho = 3.962871   (#states 352)
+#       K = 7  ->  rho = 4.683514   (#states 1276)
+#       K = 8  ->  rho = 5.286072   (#states 4708)
+#       K = 9  ->  rho = 5.792960   (#states 17578)
+#       K = 10 ->  rho ~ 6.223      (#states 66198)
+#  The increments shrink (0.72, 0.60, 0.51, 0.43, ...) -- clearing 10.271 needs K well
+#  beyond 20 (billions of states), INFEASIBLE.  So this round does NOT beat the record
+#  10.271.  But it STRICTLY IMPROVES the held sound floor 3.773326 -> 6.223319 (K=10,
+#  the largest cutoff certified with an exact-rational CW witness here; K=11 ~250k states
+#  is the next step, beyond a single-call budget), an unconditional sound lower bound with
+#  a fully reproducible rational certificate.  This confirms the
+#  R1+R2 finding (memory + explorer + Walks2025): no clean sound finite/integer machine
+#  reaches 10.271 at feasible size; the record needs the Catalan-cell staircase with
+#  GF-weighted entries (Angle C/D, the tromino sketch) or a proof of Conjecture 8
+#  (Angle B, conjecture8-diagonal-lower).
+
+CUTOFF_K_CERTIFIED = 10         # largest K certified with an exact-rational CW witness here
+#  K=10  ->  lam = 8887516/1428099 = 6.223319  (66198 states, dominant SCC 42484; ~9 min)
+#  K=9   ->  lam = 1804171/311442  = 5.792960  (17578 states, dominant SCC 10660; ~1 min)
+#  K=8   ->  lam = 19992608/3782129 = 5.286072 (4708 states; seconds) -- fast self-check
+
+
+def contains_132(p):
+    """True iff permutation p (0-indexed tuple) contains the pattern 132."""
+    n = len(p)
+    for a, b, c in combinations(range(n), 3):
+        if p[a] < p[c] < p[b]:
+            return True
+    return False
+
+
+def insert_max(p, pos):
+    """Insert the new global maximum (= len(p)) at position pos into p."""
+    return p[:pos] + (len(p),) + p[pos:]
+
+
+def max_avoid_prefix(p):
+    """t = length of the longest prefix p[:t] that AVOIDS 132 (so p[:t+1] is the first
+    prefix that contains a 132, or t = len(p) if no prefix contains 132)."""
+    for m in range(len(p) + 1):
+        if contains_132(p[:m]):
+            return m - 1
+    return len(p)
+
+
+def standardize(pre):
+    """Standardise a sequence to a permutation of {0,..,len-1} preserving relative order."""
+    order = sorted(range(len(pre)), key=lambda i: pre[i])
+    rank = [0] * len(pre)
+    for r, i in enumerate(order):
+        rank[i] = r
+    return tuple(rank)
+
+
+def state_of(q):
+    """state(q) = standardize(q[: t+1]) with t = max_avoid_prefix(q).  (E3)"""
+    return standardize(q[: max_avoid_prefix(q) + 1])
+
+
+# --- (E1) insert-new-maximum is a bijection with all permutations --------------- #
+def verify_insert_max_bijection(n=6):
+    """Every permutation of [n] is reachable by a unique insert-new-maximum sequence."""
+    got = set()
+
+    def build(p):
+        if len(p) == n:
+            got.add(p)
+            return
+        for pos in range(len(p) + 1):
+            build(insert_max(p, pos))
+    build(())
+    return got == set(permutations(range(n)))
+
+
+# --- (E2) local edge rule: creates 1324 <=> left-prefix contains 132 ------------ #
+def prove_edge_rule(max_len=8):
+    """Exhaustively verify, for every 1324-avoider p of length <= max_len and every
+    insertion position pos: contains_1324(insert_max(p,pos)) == contains_132(p[:pos])."""
+    for k in range(0, max_len + 1):
+        for p in permutations(range(k)):
+            if contains_1324(p):
+                continue
+            for pos in range(k + 1):
+                if contains_1324(insert_max(p, pos)) != contains_132(p[:pos]):
+                    return False
+    return True
+
+
+# --- (E3) build the finite bounded-state automaton A_K -------------------------- #
+def build_insertion_automaton(K):
+    """Return (states, edges) of the finite automaton A_K: states = reachable state_of()
+    values of length <= K, edges[(s,s')] = #{allowed insertions s -> s'} (integer).
+
+    By (E2) the allowed insertions of a state s (itself a 132-avoiding-prefix form, so
+    max_avoid_prefix(s) = len(s)-1) are pos in 0..len(s)-1; we drop transitions whose
+    target state exceeds length K (the sound cutoff -- it only removes walks)."""
+    from collections import defaultdict
+    seen = {()}
+    frontier = [()]
+    edges = defaultdict(int)
+    while frontier:
+        s = frontier.pop()
+        t = max_avoid_prefix(s)
+        for pos in range(t + 1):
+            sp = state_of(insert_max(s, pos))
+            if len(sp) <= K:
+                edges[(s, sp)] += 1
+                if sp not in seen:
+                    seen.add(sp)
+                    frontier.append(sp)
+    return sorted(seen, key=lambda x: (len(x), x)), dict(edges)
+
+
+# --- (E4) the automaton counts the sound subclass B_K exactly ------------------- #
+def value_prefix(p, i):
+    """Subsequence of p on values {0,..,i-1}, standardised (already a permutation of [i])."""
+    return tuple(x for x in p if x < i)
+
+
+def in_BK(p, K):
+    """p in B_K iff every value-prefix of p has state-length <= K."""
+    for i in range(1, len(p) + 1):
+        if len(state_of(value_prefix(p, i))) > K:
+            return False
+    return True
+
+
+def verify_subclass_count(K, upto=8):
+    """Confirm #walks of length n in A_K == |B_K,n| (a subset of Av(1324)) for n<=upto,
+    so rho(A_K) = gr(B_K) <= gr(Av(1324)) with no over-counting."""
+    from collections import defaultdict
+    states, edges = build_insertion_automaton(K)
+    trans = defaultdict(lambda: defaultdict(int))
+    for (s, sp), m in edges.items():
+        trans[s][sp] += m
+    cur = {(): 1}
+    walk = [1]
+    for _ in range(upto):
+        nxt = defaultdict(int)
+        for s, c in cur.items():
+            for sp, m in trans[s].items():
+                nxt[sp] += c * m
+        walk.append(sum(nxt.values()))
+        cur = nxt
+    for n in range(0, upto + 1):
+        bk = sum(1 for p in permutations(range(n))
+                 if (not contains_1324(p)) and in_BK(p, K))
+        if walk[n] != bk:
+            raise AssertionError(f"A_K walk count != |B_K,{n}|: {walk[n]} vs {bk}")
+    return True
+
+
+# --- dominant SCC + exact-rational Collatz-Wielandt ----------------------------- #
+def tarjan_sccs(n, adjset):
+    """Iterative Tarjan: return list of SCCs (each a list of vertex indices)."""
+    index = [None] * n
+    low = [0] * n
+    onstk = [False] * n
+    stk = []
+    cnt = [0]
+    comps = []
+    for root in range(n):
+        if index[root] is not None:
+            continue
+        work = [(root, 0)]
+        while work:
+            node, pi = work[-1]
+            if pi == 0:
+                index[node] = low[node] = cnt[0]
+                cnt[0] += 1
+                stk.append(node)
+                onstk[node] = True
+            recurse = False
+            nbrs = adjset[node]
+            for i in range(pi, len(nbrs)):
+                w = nbrs[i]
+                if index[w] is None:
+                    work[-1] = (node, i + 1)
+                    work.append((w, 0))
+                    recurse = True
+                    break
+                elif onstk[w]:
+                    low[node] = min(low[node], index[w])
+            if recurse:
+                continue
+            if low[node] == index[node]:
+                comp = []
+                while True:
+                    w = stk.pop()
+                    onstk[w] = False
+                    comp.append(w)
+                    if w == node:
+                        break
+                comps.append(comp)
+            work.pop()
+            if work:
+                parent = work[-1][0]
+                low[parent] = min(low[parent], low[node])
+    return comps
+
+
+def dominant_scc_cw_bound(K, D=10**7):
+    """HOLE H_BIG -- DISCHARGED.  Build A_K, find its dominant SCC, and return an exact
+    rational Collatz-Wielandt lower bound  lam  on rho(A_K) = gr(B_K) <= gr(Av(1324)).
+
+    The CW check  M w >= lam * w  (entrywise, exact Fractions) is the load-bearing,
+    reproducible step; numpy float power-iteration is used ONLY to choose the positive
+    integer witness vector w.  Returns (lam, n_states, scc_size)."""
+    import numpy as np
+    states, edges = build_insertion_automaton(K)
+    idx = {s: i for i, s in enumerate(states)}
+    n = len(states)
+    adj = [[] for _ in range(n)]          # adj[i] = list of (j, multiplicity)
+    adjset = [[] for _ in range(n)]
+    for (s, sp), m in edges.items():
+        adj[idx[s]].append((idx[sp], m))
+        adjset[idx[s]].append(idx[sp])
+
+    comps = tarjan_sccs(n, adjset)
+
+    def rho_of(comp):
+        cs = set(comp)
+        cidx = {v: i for i, v in enumerate(comp)}
+        m = len(comp)
+        if m == 1:
+            v = comp[0]
+            sl = sum(mm for (j, mm) in adj[v] if j == v)
+            return sl, {v: 1.0}
+        sub = [[] for _ in range(m)]
+        for v in comp:
+            for (j, mm) in adj[v]:
+                if j in cs:
+                    sub[cidx[v]].append((cidx[j], mm))
+        w = np.ones(m)
+        nrm = 0.0
+        for _ in range(6000):
+            nw = np.zeros(m)
+            for i in range(m):
+                acc = 0.0
+                for j, mm in sub[i]:
+                    acc += mm * w[j]
+                nw[i] = acc
+            nrm = nw.max()
+            if nrm == 0:
+                return 0.0, {}
+            nw /= nrm
+            if np.max(np.abs(nw - w)) < 1e-13:
+                w = nw
+                break
+            w = nw
+        return nrm, {comp[i]: w[i] for i in range(m)}
+
+    best_rho, best_comp, best_w = 0.0, None, None
+    for comp in comps:
+        r, wv = rho_of(comp)
+        if r > best_rho:
+            best_rho, best_comp, best_w = r, comp, wv
+
+    # exact-rational CW on the dominant SCC submatrix
+    comp = best_comp
+    cs = set(comp)
+    cidx = {v: i for i, v in enumerate(comp)}
+    m = len(comp)
+    sub = [[] for _ in range(m)]
+    for v in comp:
+        for (j, mm) in adj[v]:
+            if j in cs:
+                sub[cidx[v]].append((cidx[j], mm))
+    wi = [max(1, int(best_w[comp[i]] * D)) for i in range(m)]     # positive integer witness
+    Mw = [0] * m
+    for i in range(m):
+        acc = 0
+        for j, mm in sub[i]:
+            acc += mm * wi[j]
+        Mw[i] = acc
+    lam = min(Fraction(Mw[i], wi[i]) for i in range(m))           # CW lower bound, exact
+    # verify the entrywise inequality in exact rational arithmetic (load-bearing check)
+    assert all(Fraction(Mw[i]) >= lam * wi[i] for i in range(m)), "exact CW inequality fails"
+    assert all(x > 0 for x in wi), "witness must be strictly positive"
+    return lam, n, m
+
+
+def certify_insertion_automaton(K=CUTOFF_K_CERTIFIED):
+    """Assemble the SOUND bounded-state route and return the certified rational lower
+    bound  gr(Av(1324)) >= lam = rho(A_K dominant SCC).  Beats 3.773326, below 10.271."""
+    assert verify_insert_max_bijection(n=6), "(E1) insert-max bijection failed"
+    assert prove_edge_rule(max_len=8), "(E2) local edge rule failed"
+    assert verify_subclass_count(min(K, 6), upto=8), "(E4) A_K mis-counts subclass B_K"
+    lam, nstates, sccsz = dominant_scc_cw_bound(K)
+    print(f"SOUND bounded-state insertion automaton A_K (K={K}): {nstates} states, "
+          f"dominant SCC {sccsz} states")
+    print(f"CERTIFIED (exact rational Collatz-Wielandt on dominant SCC):")
+    print(f"   gr(Av(1324)) >= gr(B_{K}) = rho(A_{K}) >= {lam} = {float(lam):.6f}")
+    beats_floor = lam > Fraction(1886663, 500000)   # R1 held 3.773326
+    beats_record = lam > RECORD_LOWER
+    print(f"   beats R1 floor 3.773326: {beats_floor}   beats record 10.271: {beats_record}")
+    if not beats_record:
+        print("   HONEST: no feasible K clears 10.271 (logarithmic convergence to ~11.6);")
+        print("   this is a strict SOUND improvement of the floor, not a record break.")
+    return lam
+
+
 def certify(L=8):
     # Obligation 1 -- soundness (analytic finite proof + brute re-check).
     assert prove_skew_sum_closure(), "skew-sum closure proof failed"
@@ -272,4 +632,15 @@ def certify(L=8):
 
 
 if __name__ == "__main__":
+    import sys
+    # R1 floor (skew-sum subclass) -- fast, always runs.
+    print("=" * 72)
+    print("R1 skew-sum floor (verified):")
     certify(L=8)
+    print("=" * 72)
+    # R2 SOUND bounded-state insertion automaton -- the new, higher sound bound.
+    # Default K=10 (the certified headline value 6.223319; ~9 min).  Pass an integer
+    # argument to choose K (e.g. `python transfer-matrix-lower.py 8` for a fast check).
+    K = int(sys.argv[1]) if len(sys.argv) > 1 else CUTOFF_K_CERTIFIED
+    print(f"R2 SOUND bounded-state insertion-encoding automaton (K={K}):")
+    certify_insertion_automaton(K)
