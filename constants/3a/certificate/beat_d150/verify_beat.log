@@ -1,0 +1,26 @@
+[1] RECORD cell  d=80 T=150
+    record integers match record_baseline.json (PR #71) bit-for-bit: OK
+    value_record (float, display only) = 1.1740744476935
+[2] independent Pareto-engine cross-check on small cells:
+     d=20 T=37: two engines agree = True
+     d=30 T=56: two engines agree = True
+     d=40 T=75: two engines agree = True
+[3] NEW cell  d=150 T=282 (density 1.8800)
+    d=150 integers loaded from persisted beat_d150.json (re-derivable with --recompute)
+    |U+U|=146d  |U-U|=181d  max(U)=199d
+    value_new (float, display only) = 1.1774136588225
+[4] EXACT integer-power wedge  c = 239/203 = 1.177339901477833
+    (c-1) = 36/203
+    (a) value_new   >= c   [Nm^q >= Np^q*(2M+1)^p] : True
+    (b) value_record <  c  [RNm^q <  RNp^q*(2RM+1)^p] : True
+[5] EXACT comparison of the wedge against all bars (rational, no float):
+    c > held 1177/1000 = 1.1770 (exact Fraction)  : True   (c - held = 3.399e-04)
+    c > 2353/2000 = 1.1765 (exact Fraction)       : True
+    c > 5877/5000 = 1.1754 (exact Fraction)       : True
+    c > record 1.1740744476935212 (via rec_lt)    : True
+
+CERTIFICATE OK: C_3a >= 239/203 = 1.177339901478
+  > held 1177/1000 = 1.1770           (strict beat of OUR R23 held bound)
+  > 2353/2000 = 1.1765                (strict beat of the R22 held bound)
+  > 5877/5000 = 1.1754                (strict beat of the R18/R19 held bound)
+  > 1.1740744476935212                (strict beat of the G2026 record)
