@@ -34,13 +34,13 @@
   },
   "lean-c3a-def": {
     "elo": 1633.5177427253927,
-    "expanded": 4,
-    "last_note": "R18: closed an_separated hole (B1a's residual construction obligation) sorry-free. box_elem_range + maxbk_nonneg fully axiom-clean (no sorryAx); tpow_elem_range/an_separated/griego_ak_disjoint sorryAx traces ONLY to documented numeric witness sorries (Ubase/Qbase/maxUbase/mnData/negLoData) \u2014 confirmed by re-proving tpow induction with concrete base data (axiom-clean). Both diameter window and strict AP shift gap load-bearing. Top-level c3a_lower_bound_def UNTOUCHED. No held raise (structural, bridge still certifies \u03b8>1.1771<held 1.1781). Remaining holes: B2 griego_bounded_doubling, B3 griego_diff_lower_bound, B4 griego_card_tendsto (multi-round real analysis) + numeric witness data + realizes_one/bddAbove.",
+    "expanded": 5,
+    "last_note": "Witness-data holes (Ubase/Qbase=41/Ubase_carryfree/maxUbase/Ubase_range/mnData/negLoData) CLOSED \u2014 verified axiom-clean. The 6 witness-consuming B1-layer lemmas now have NO sorryAx; finite B1 layer fully sorryAx-free. CarryFree 41 Ubase re-derived TRUE+tight. mnData/negLoData shape-only, no over-claim. Held untouched 1.1781. Remaining holes: realizes_one, realizableSet_bddAbove, B2/B3/B4 (multi-round real analysis).",
     "last_outcome": "advanced",
-    "last_round": 18,
+    "last_round": 20,
     "selected": 7,
     "slug": "lean-c3a-def",
-    "stale": false,
+    "stale": true,
     "summary": "Scoped definition-only Lean sketch: concrete C3aRealDef := sSup {c | Realizes c} replacing the opaque C_3a, isolating the sole uncached bridge blocker (the sup-realization read-off) for a cheap faithfulness in/out ruling. CHANGES REQUESTED R12: predicate drops the |A+B|<<|A| doubling clause and collapses A=B, so as written it risks defining an inflated (non-faithful) constant; the approach is right and the fix is nameable."
   },
   "lean-native-decide-smallmt": {
