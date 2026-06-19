@@ -459,4 +459,86 @@ theorem c3a_ge_179_152' (c3a : ℝ) (hbridge : GHR_lower c3a) :
   norm_num at h ⊢
   linarith
 
+/-! ## ROUND 28 — the d=170 beat cell (`C_3a ≥ 53/45 = 1.1777778…`).
+
+Same proven carry-free drop-1 base-21 GHR digit lever as R18/R19/R22/R23/R24/R25, pushed
+one rung further: `A = {0,2,3,4,5,6,7,8,9,10}`, `B = 21`, `d = 170`, `T = 319` (density
+`≈ 1.8765`; carry-free since `B = 21 > 2·max(A) = 20`). Reviewer-re-derivable numerical
+certificate at `constants/3a/certificate/beat_d170/beat_d170.json` (cell `d170_T319`;
+the diff/max are persisted in `d170_diffmax.json`, the sumset re-derivable by the
+progress-emitting copy `beat_d170/sumset_progress.py run 319`, validated bit-for-bit vs the
+engine `count_opset` on small cells). The cell's GHR value is `value_new ≈ 1.1779005456618`,
+strictly above the wedge `c = 53/45 = 1.1777778…`.
+
+The same monotone log-free chain gives `θ(U) ≥ 53/45 ⟺
+|U−U|^Q ≥ |U+U|^Q · (2·max(U)+1)^P` with `c − 1 = 8/45`, so `P = 8`, `Q = 45`. The
+exponents keep `decide` very fast (`Q = 45 ≪ R22's Q = 2000` which decided in ~11.5 s; R21's
+Q=10000 was the kernel blowup — far below it). `53/45` is the largest-headline reduced
+rational with denominator `≤ 200` that the exact big-int test clears strictly above the
+held `179/152 = 1.1776316…` (margin `+1.46e-4`) and below `value_new`.
+
+Provenance/trust split: exactly as R19/R22/R23/R24/R25 — the three big integers are TRUSTED
+literals whose provenance is re-derived OUT of Lean by the progress-emitting sumset copy +
+the engine `count_opset` (the carry-free DP is an OOM hazard inside the kernel and is NOT
+recomputed here). All the load-bearing arithmetic (the power inequalities) lives inside the
+formalization as axiom-free `decide`. -/
+
+-- The d=170 decide lemmas use exponent Q₆ = 45; the file-wide
+-- `set_option exponentiation.threshold 6000` (set near the top) covers it.
+
+/-- `|U+U|` for the R28 d=170 beat cell (165 digits). Source: `beat_d170.json::d170_T319`. -/
+def Nplus170 : ℕ := 513222055250665661394338313705407386457456580655766655930102292845881854933518655954344329233884867695013532628053408993598659267350650105130742431796186868452334120
+
+/-- `|U−U|` for the R28 d=170 beat cell (205 digits). Source: `beat_d170.json::d170_T319`. -/
+def Nminus170 : ℕ := 4992362295221039611121556163893502372319130925449625515891744661865797232947649279078264180800823784565863430731550245729316947847032451907231871700445672382863363013642632938480192584038711293667086477149
+
+/-- `max(U)` for the R28 d=170 beat cell (225 digits). Source: `beat_d170.json::d170_T319`. -/
+def maxU170 : ℕ := 299398837060291872846178561783691245725638539367824891926295758712030449358393381946081603894218858818230445127935822610937150211287378101456059961075084581703727271441429271685816421703303030896004530512337722816011981326759
+
+/-- The R28 wedge numerator `P₆` (with `c = 1 + P₆/Q₆ = 53/45`, so `P₆ = 8`). -/
+def P6 : ℕ := 8
+
+/-- The R28 wedge denominator `Q₆` (`Q₆ = 45`). -/
+def Q6 : ℕ := 45
+
+/-- **Load-bearing kernel check (the d=170 beat cell passes the wedge).**
+`|U+U|^Q₆ · (2·max(U)+1)^P₆ ≤ |U−U|^Q₆`, i.e. `θ(U) ≥ 1 + P₆/Q₆ = 53/45`. Log-free
+`Nat` powers via GMP, no `native_decide`. Axiom-free (`[propext]`). -/
+theorem newGE170 : Nplus170 ^ Q6 * (2 * maxU170 + 1) ^ P6 ≤ Nminus170 ^ Q6 := by decide
+
+/-- **Strictness witness (the d=80 record cell FAILS the R28 wedge).**
+`|U−U|^Q₆ < |U+U|^Q₆ · (2·max(U)+1)^P₆` for the d=80 record cell, i.e. the record value
+`1.1740744476935212 < 53/45`. With `newGE170` this certifies a STRICT improvement over the
+record (`value_record < 53/45 ≤ value_new`). Axiom-free `decide`. -/
+theorem recLT170 : recNminus ^ Q6 < recNplus ^ Q6 * (2 * recMaxU + 1) ^ P6 := by decide
+
+/-- `0 < |U+U|` for the R28 d=170 beat cell. -/
+theorem Nplus170_pos : 0 < Nplus170 := by decide
+
+/-- `|U+U| ≤ |U−U|` for the R28 d=170 beat cell. -/
+theorem Nplus170_le_Nminus170 : Nplus170 ≤ Nminus170 := by decide
+
+/-- `0 < Q₆`. -/
+theorem Q6_pos : 0 < Q6 := by decide
+
+/-- **R28 main theorem.** Under the named GHR bridge, the d=170 beat cell's verified counts
+give `C_3a ≥ 1 + 8/45 = 53/45`. Strictly beats the previously held & Lean-checked
+`179/152 ≈ 1.1776316` (R25/R26), `239/203 = 1.1773399` (R24), `1177/1000 = 1.1770` (R23),
+`2353/2000 = 1.1765` (R22), `5877/5000 = 1.1754` (R18/R19), and the true record
+`1.1740744476935212` (via `recLT170`). The discrete content (`newGE170`) is axiom-free; the
+only trust boundary is `GHR_lower`. -/
+theorem c3a_ge_53_45 (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 1 + (8 : ℝ) / 45 := by
+  have h := hbridge Nplus170 Nminus170 maxU170 P6 Q6 Nplus170_pos Q6_pos
+    Nplus170_le_Nminus170 newGE170
+  simpa [P6, Q6] using h
+
+/-- **R28 numeric form.** Under the bridge, `C_3a ≥ 53/45` (`≈ 1.1777778`), strictly above
+the held `179/152 ≈ 1.1776316`. -/
+theorem c3a_ge_53_45' (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 53 / 45 := by
+  have h := c3a_ge_53_45 c3a hbridge
+  norm_num at h ⊢
+  linarith
+
 end C3a

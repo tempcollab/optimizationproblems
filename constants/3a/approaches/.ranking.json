@@ -111,13 +111,13 @@
   },
   "push-d-170-exact-beat": {
     "elo": 1555.388522201054,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "d=170 cell (T=319) verified: C_3a lower bound 179/152=1.1776316 -> 53/45=1.1777778 (margin +1.46e-4). Lean c3a_ge_53_45 builds, newGE170/recLT170 [propext]-only; literals match beat_d170.json bit-for-bit; own DP matches brute(d<=4)+engine(d=20,30); own greedy max(U) reproduces 225-digit literal; wedge d=170 passes/d=80 record fails.",
+    "last_outcome": "verified-milestone",
+    "last_round": 28,
     "selected": 0,
     "slug": "push-d-170-exact-beat",
-    "stale": false,
+    "stale": true,
     "summary": "d=170, T=319 drop-1 base-21 GHR cell; split-DP protocol, wedge c=53/45 (P=8,Q=45), Lean newGE170/recLT170 under GHR_lower; aims held->~1.17785 (+2.1e-4 over 179/152)."
   }
 }
