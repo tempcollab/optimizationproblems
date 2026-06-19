@@ -1,20 +1,34 @@
 # Check — griego-ntt-push (C_3a LOWER bound, R5 push to m=140)
 
-## Reproduce
+## Reproduce — each command is a SEPARATE short PRINTING step (watchdog-safe; R6-re-run)
+
+CHEAP REVIEWER CHECK (the certificate itself, ~2 s, no DP recompute):
 ```
-# the mandatory oracle gate (3-way + 2-way exact agreement, ~4 min):
-python3 constants/3a/certificate/griego-ntt-push.py --gate
-
-# one exact point (cached to /tmp/ntt_cache), ~110 s for m=140:
-python3 constants/3a/certificate/griego-ntt-push.py --point 140 265
-
-# the tight integer-inequality certificate at the best point:
-python3 constants/3a/certificate/griego-ntt-push.py --certify 140 265
-
-# everything (gate + registered best point m=140,T=265 + tight cert), ~6 min:
-python3 constants/3a/certificate/griego-ntt-push.py
+# tight integer-inequality cert from the committed exact counts (PASS 11771 / FAIL 11772):
+python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 140 265   # ~2s, EXIT 0
+# fallback point (PASS 11768 / FAIL 11769):
+python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 130 247   # ~2s, EXIT 0
 ```
-All print per-quantity incrementally (no single silent >5-min run); EXIT 0.
+
+FULL INDEPENDENT VERIFICATION (each its own short call, all print incrementally):
+```
+# the mandatory oracle gate (3-way + 2-way exact agreement), ~2 min, streamed per case:
+python3 -u constants/3a/certificate/griego-ntt-push.py --gate                  # EXIT 0
+
+# independent from-scratch recompute of s,d,M (checkpointed per quantity), ~95 s for m=140:
+python3 -u constants/3a/certificate/griego-ntt-push.py --point 140 265         # EXIT 0
+```
+NEVER run bare `main()` / a single `--gate`+`--point`+`--certify` block silently — that ~4-min
+silent stretch is what cost R5. Run the steps separately as above. All print per-quantity
+incrementally (no single silent >~3-min run); every step EXIT 0.
+
+### R6 re-verification (this round)
+- `--gate`: 20-case agreement PASS, EXIT 0.
+- `--point 140 265`: s=136d (64s), d=169d (29s), θ=1.1771373652; the recomputed s, d, AND M
+  match the committed `scan-mT-results.txt` row **byte-for-byte** (digit-for-digit big-int
+  comparison). Third independent reproduction of the m=140 counts.
+- `--certify-from-scan 140 265`: k=11771 PASS, k=11772 FAIL (tight), EXIT 0, ~2 s.
+- `--certify-from-scan 130 247`: k=11768 PASS, k=11769 FAIL, EXIT 0, ~2 s.
 
 ## What the run proves (R5 — push m=110 → m=140; held 1.176 → 1.1771)
 

@@ -79,6 +79,25 @@ def certify_finite(A, r):
     raise NotImplementedError("HOLE: finite certification at predicted-optimal (A,r)")
 
 
+# HOLE 4 (R6 REVISE — concrete scoping probe, CERTIFIABLE, not the analytic rate):
+# instead of trusting the (uncertified) rate function, directly compute EXACT theta(A,m)
+# at moderate m (e.g. m=40..70) via the certified column-DP for a handful of MULTI-GAP /
+# larger alphabets the small-m sweep (noncontig-alphabet-sweep, settled at m<=30) could not
+# distinguish, and compare each alphabet's extrapolated m->inf limit Lambda_A to base-21's
+# Lambda~1.1785. The rate function (HOLEs 1-2) only PICKS which alphabets to probe; the
+# verdict is the exact DP value. PURPOSE: decide whether any alphabet beats Lambda~1.1785
+# and so whether a NEW-construction sketch is worth opening. This probe certifies a bound
+# only if some (A,m) exact theta clears the held 1.176 — otherwise it is an honest negative.
+def empirical_multigap_probe():
+    """HOLE (R6): for ~5 candidate multi-gap/larger alphabets (b > 2*max(A)), compute EXACT
+    theta(A,m) at m=40,55,70 via the certified DP (import from griego-family-larger-mT), fit
+    the geometric tail, and report the extrapolated Lambda_A vs base-21's ~1.1785. Print each
+    (A,m,theta) INCREMENTALLY (watchdog: each exact point is a short, separate op). Output is
+    a ranked table of Lambda_A; a single alphabet with Lambda_A > 1.1785 justifies a new
+    construction sketch, else this line is a verified negative and stays dormant."""
+    raise NotImplementedError("HOLE (R6): empirical exact-theta multi-gap alphabet probe")
+
+
 def main():
     print("L3 large-deviation rate optimization — bar: C_3a > 1.1740744\n")
     A = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10]

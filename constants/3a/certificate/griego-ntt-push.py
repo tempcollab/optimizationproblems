@@ -44,7 +44,8 @@ The registered best (m=140, T=265) raises held 1.176 -> 1.1771, a +0.0011 advanc
 Run:
   python3 griego-ntt-push.py --gate            # the mandatory oracle gate (fast)
   python3 griego-ntt-push.py --point M T       # one exact point, checkpointed
-  python3 griego-ntt-push.py --certify M T     # tight k/10000 certificate at (M,T)
+  python3 griego-ntt-push.py --certify M T     # tight k/10000 certificate at (M,T)  (recomputes point)
+  python3 griego-ntt-push.py --certify-from-scan M T  # ~2s tight cert from committed scan (no DP recompute)
   python3 griego-ntt-push.py --scan LO HI STEP # incremental m-scan (background-friendly)
   python3 griego-ntt-push.py                   # gate + the registered best point + cert
 """
@@ -281,6 +282,46 @@ def certifies_target_int_raw(s, d, q, num, den):
     return d ** den > s ** den * q ** (num - den)
 
 
+def _parse_scan_point(m, T, path=None):
+    """Read the EXACT committed s,d,M for (m,T) from scan-mT-results.txt.  Lets the tight
+       certificate be re-checked as a ~2s pure big-int comparison WITHOUT re-running the
+       ~127s DP -- so the reviewer can verify the certificate arithmetic as its own short,
+       watchdog-safe step, separately from an independent recompute via --point."""
+    if path is None:
+        path = os.path.join(os.path.dirname(__file__) or ".", "scan-mT-results.txt")
+    want = f"m={m} T={T} "
+    s = d = M = None
+    with open(path) as f:
+        for line in f:
+            if not line.startswith(want):
+                continue
+            toks = line.split()
+            kv = {}
+            for tok in toks:
+                if tok.startswith("s="):
+                    kv["s"] = int(tok[2:])
+                elif tok.startswith("d="):
+                    kv["d"] = int(tok[2:])
+                elif tok.startswith("M="):
+                    kv["M"] = int(tok[2:])
+            if "s" in kv and "d" in kv and "M" in kv:
+                s, d, M = kv["s"], kv["d"], kv["M"]   # keep last (latest committed) match
+    if s is None:
+        raise ValueError(f"no committed scan row for m={m} T={T} in {path}")
+    return s, d, M
+
+
+def certify_from_scan(m, T, den=10000):
+    """WATCHDOG-SAFE certificate re-check: load committed s,d,M for (m,T) and run ONLY the
+       tight k/10000 big-int comparison (~2s).  No DP recompute.  This is the step the
+       reviewer runs to confirm the certificate arithmetic instantly; the INDEPENDENT
+       recompute of s,d,M is a SEPARATE short step (--point M T, ~127s at m=140)."""
+    s, d, M = _parse_scan_point(m, T)
+    print(f"[certify-from-scan] m={m} T={T}: loaded committed "
+          f"s({len(str(s))}d) d({len(str(d))}d) M({len(str(M))}d)", flush=True)
+    return certify_best(m, T, den=den, s=s, d=d, M=M)
+
+
 # ----------------------------------------------------------------- the registered R5 point
 # Best exact point located by the R5 incremental scan (see scan-mT-results.txt + the build
 # report).  theta CLIMBS along the optimal ray; m=130 at its peak T registers held > 1.176.
@@ -319,6 +360,8 @@ if __name__ == "__main__":
         one_point(int(sys.argv[2]), int(sys.argv[3]), cache_dir="/tmp/ntt_cache")
     elif len(sys.argv) > 1 and sys.argv[1] == "--certify":
         certify_best(int(sys.argv[2]), int(sys.argv[3]))
+    elif len(sys.argv) > 1 and sys.argv[1] == "--certify-from-scan":
+        certify_from_scan(int(sys.argv[2]), int(sys.argv[3]))
     elif len(sys.argv) > 1 and sys.argv[1] == "--scan":
         scan_large_m(int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]),
                      cache_dir="/tmp/ntt_cache",

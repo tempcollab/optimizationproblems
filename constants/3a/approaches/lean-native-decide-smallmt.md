@@ -32,15 +32,18 @@ FORMALIZES (A) in Lean**; only (B) remains assumed.
    load-bearing integer step. `#print axioms` → `[propext,
    griego_100_190_int_cert._native.native_decide.ax_1_1]` (native_decide trust axiom; NO sorryAx).
    Operands ~4800 digits.
-2. **LOG-ALGEBRA HALF (A) — CLOSED THIS ROUND (R5), hole-free.** New lemma
-   `log_bridge (s d q : ℕ) (hs : 0<s) (hq : 1<q) (hint : s^40*q^7 < d^40) :`
-   `(47:ℝ)/40 < 1 + Real.log((d:ℝ)/s)/Real.log q`. Pure real arithmetic via Mathlib
-   (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`, `div_pow`, `positivity`, `nlinarith`).
-   `#print axioms log_bridge` → `[propext, Classical.choice, Quot.sound]` (Mathlib standard axioms
-   only; NO sorryAx). Specialised to the certified literals as `theta_gt : (47:ℝ)/40 < theta`,
-   where `theta := 1 + log(D/S)/log Q`. **To enable this the project now requires Mathlib**, pinned
+2. **LOG-ALGEBRA HALF (A) — CLOSED in R5, GENERALISED in R6, hole-free.** Lemma (R6 general form)
+   `log_bridge (s d q A B : ℕ) (hs : 0<s) (hq : 1<q) (hB : 0<B) (hint : s^B*q^A < d^B) :`
+   `1 + (A:ℝ)/(B:ℝ) < 1 + Real.log((d:ℝ)/s)/Real.log q`. Pure real arithmetic via Mathlib
+   (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`, `div_lt_div_iff₀`, `div_pow`, `positivity`,
+   `nlinarith`). `#print axioms log_bridge` → `[propext, Classical.choice, Quot.sound]` (Mathlib
+   standard axioms only; NO sorryAx, NO native_decide). **R6 change:** the exponents 40/7 are no
+   longer baked into the lemma — it is now general in `(A,B)`, so the integer cert `d^B > s^B·q^A`
+   certifies `θ > 1 + A/B` for ANY rational target. The 7/40 numerals live only in the
+   specialisation `theta_gt : (47:ℝ)/40 < theta` (which instantiates `(A,B)=(7,40)` and uses
+   `1 + 7/40 = 47/40`), where `theta := 1 + log(D/S)/log Q`. **The project requires Mathlib**, pinned
    to the v4.31.0 tag (rev `fabf563a…`) in `lake-manifest.json` — `lake build C3a` EXIT 0 (~2968
-   jobs, oleans from the Azure cache).
+   jobs, oleans from the Azure cache). Re-confirmed R6: EXIT 0, axioms clean.
 3. **Top theorem `c3a_lower_bound` — CLOSED (hole-free given the ONE remaining cited step).**
    `c3a_lower_bound (ghr : theta ≤ C3aReal) : (47:ℝ)/40 < C3aReal := lt_of_lt_of_le theta_gt ghr`.
    `C3aReal` is the opaque real C_3a; `(47:ℝ)/40 < C3aReal` is "C_3a > 1.175 > 1.1740744".
@@ -83,6 +86,12 @@ ALL match). The Lean literals were string-matched against this recomputation:
   `theta_gt`). `lake build C3a` EXIT 0 (~2968 jobs; Mathlib oleans from the Azure cache). The
   remaining assumed step is narrowed to exactly the GHR2007 limit read-off `ghr : theta ≤ C3aReal`.
   This is the ONLY Lean sketch, so the Mathlib dep affects no sibling.
+- **R6: re-confirmed R5 build is sound (EXIT 0, `#print axioms` shows NO sorryAx) and GENERALISED
+  `log_bridge` over the exponents** (`s^B·q^A < d^B ⟹ θ > 1+A/B`, params `(s,d,q,A,B)`), making it
+  a clean promotable cache lemma with no sketch-specific numerals. `theta_gt` re-derived as the
+  `(A,B)=(7,40)` specialisation. `lake build C3a` EXIT 0, axioms re-checked clean. The `ghr` hole is
+  UNTOUCHED (open-ended GHR2007 tensor-power limit + Lean definition of C_3a — deliberately deferred
+  per scope). Does NOT raise held (still targets 1.175 < held 1.176).
 - Borrows: `griego-family-larger-mT` (the (s,d,M) values and the integer-inequality certificate
   form), `exact-sumdiff-dp` lemma (the certified counts).
 - The bound this Lean cert proves (1.175) is BELOW the held 1.176 — it does not raise `held`; its
@@ -91,16 +100,18 @@ ALL match). The Lean literals were string-matched against this recomputation:
   `native_decide` reach for now.
 
 ## Promotable lemmas
-- **`log_bridge`** (proved green R5, hole-free, axioms `[propext, Classical.choice, Quot.sound]`).
-  Statement:
-  `theorem log_bridge (s d q : ℕ) (hs : 0 < s) (hq : 1 < q) (hint : s^40 * q^7 < d^40) :`
-  `(47:ℝ)/40 < 1 + Real.log ((d:ℝ)/(s:ℝ)) / Real.log (q:ℝ)`.
-  Proved in `lean/Sketches/NativeDecideSmallMT.lean` (`namespace C3a`). REUSABLE: this is the
-  cleared-denominator-integer-inequality ⟹ real-θ-bound step for the SPECIFIC rational 47/40 at
-  this point. A fully general cache lemma would parametrise the exponents/target
-  (`d^B > s^B · q^A ⟹ θ > 1 + A/B`); the reviewer may prefer to promote that generalised form
-  rather than the 47/40-specialised one. Flagging the green proof so the reviewer can certify
-  whichever shape it wants into `lemmas/`. (The 47/40 numerals are the only sketch-specific part;
-  the proof skeleton — `Real.log_lt_log` ∘ `Real.log_pow` ∘ `lt_div_iff₀` ∘ `div_pow` ∘ `nlinarith`
-  — generalises verbatim.)
+- **`log_bridge`** (proved green R5, GENERALISED R6, hole-free, axioms
+  `[propext, Classical.choice, Quot.sound]`). **Exact R6 statement (the form to certify):**
+  `theorem log_bridge (s d q A B : ℕ) (hs : 0 < s) (hq : 1 < q) (hB : 0 < B)`
+  `    (hint : s ^ B * q ^ A < d ^ B) :`
+  `    1 + (A : ℝ) / (B : ℝ) < 1 + Real.log ((d : ℝ) / (s : ℝ)) / Real.log (q : ℝ)`.
+  Proved in `lean/Sketches/NativeDecideSmallMT.lean` (`namespace C3a`, lines ~104–148). This is now
+  the FULLY GENERAL cleared-denominator-integer-inequality ⟹ real-θ-bound step: from any integer
+  cert `d^B > s^B·q^A` (`0<s`, `1<q`, `0<B`) it yields `θ = 1 + log(d/s)/log q > 1 + A/B`. No
+  sketch-specific numerals remain — the 7/40 of this sketch are supplied only at the `theta_gt`
+  call site. REUSABLE by any C_3a (or analogous GHR) sketch that produces an integer θ-certificate.
+  **Recommend promoting this generalised form to `constants/3a/lemmas/log-bridge.md`** — it clears
+  the cache bar (sorry-free, axiom-clean, statement correct and no stronger than proved: the
+  conclusion is a strict `<` exactly matching the strict integer hypothesis). Suggested cached name:
+  `C3a.log_bridge` (or a neutral `theta_lower_of_int_cert`).
 - (`exact-sumdiff-dp`, the DP-counts lemma, is already cached.)

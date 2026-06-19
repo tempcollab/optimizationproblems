@@ -5,31 +5,38 @@
   in `lake-manifest.json`). Mathlib is used only for the real-arithmetic log bridge; the
   load-bearing integer step is still pure Lean-core `Nat` via `native_decide`.
 - **Build target:** `lake build C3a` (default target `C3a`, which imports
-  `Sketches.NativeDecideSmallMT`). Build is EXIT 0 (~6s incremental; Mathlib oleans come from the
-  Azure cache via `lake exe cache get`/`lake update`, ~2968 jobs).
+  `Sketches.NativeDecideSmallMT`). Build is EXIT 0 (~10s incremental; Mathlib oleans come from the
+  Azure cache via `lake exe cache get`/`lake update`, ~2968 jobs). **Re-confirmed R6:**
+  `Build completed successfully (2968 jobs).` EXIT 0.
 - **Load-bearing theorem (HOLE-FREE, machine-checked):**
   `C3a.griego_100_190_int_cert : D ^ 40 > S ^ 40 * Q ^ 7`, discharged by `native_decide`.
   Operands ~4800 digits. This is the cleared-denominator form of θ > 47/40 = 1.175.
-- **Log-algebra HALF of the bridge (FORMALIZED R5, HOLE-FREE):**
-  `C3a.log_bridge (s d q : ℕ) (hs : 0 < s) (hq : 1 < q) (hint : s^40 * q^7 < d^40) :`
-  `(47:ℝ)/40 < 1 + Real.log ((d:ℝ)/(s:ℝ)) / Real.log (q:ℝ)`.
-  Proved with Mathlib (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`, `div_pow`, `positivity`,
-  `nlinarith`). This is step (A) of the GHR bridge — `(int ineq) ⟹ θ > 1.175` — now a Lean theorem,
-  no longer an assumption. Specialised to the certified literals as `C3a.theta_gt : (47:ℝ)/40 < theta`.
+- **Log-algebra HALF of the bridge (FORMALIZED R5, GENERALISED R6, HOLE-FREE):**
+  `C3a.log_bridge (s d q A B : ℕ) (hs : 0 < s) (hq : 1 < q) (hB : 0 < B) (hint : s^B * q^A < d^B) :`
+  `1 + (A:ℝ)/(B:ℝ) < 1 + Real.log ((d:ℝ)/(s:ℝ)) / Real.log (q:ℝ)`.
+  Proved with Mathlib (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`, `div_lt_div_iff₀`,
+  `div_pow`, `positivity`, `nlinarith`). This is step (A) of the GHR bridge — `(int ineq) ⟹
+  θ > 1 + A/B` — now a Lean theorem, no longer an assumption, and **fully general in the exponents**
+  (R6): the integer cert `d^B > s^B·q^A` is exactly the cleared-denominator form of `θ > 1 + A/B`
+  for any `A,B` with `0 < B`. The 7/40 numerals live only in the `theta_gt` specialisation, which
+  instantiates `(A,B)=(7,40)`: `C3a.theta_gt : (47:ℝ)/40 < theta` (since `1 + 7/40 = 47/40`).
+  PROMOTABLE to `constants/3a/lemmas/` (axiom-clean, general, no sketch-specific numerals).
 - **Faithful top theorem (HOLE-FREE given ONE explicit, visible hypothesis):**
   `C3a.c3a_lower_bound (ghr : theta ≤ C3aReal) : (47:ℝ)/40 < C3aReal`
   — proved `:= lt_of_lt_of_le theta_gt ghr` (no `sorry`, no added custom axiom).
   `theta := 1 + log(D/S)/log Q`, `C3aReal` is the opaque real C_3a. So `(47:ℝ)/40 < C3aReal` is
   "C_3a > 1.175 > 1.1740744". The ONE remaining cited step is the named hypothesis `ghr`: the
   [GHR2007] tensor-power LIMIT read-off `θ ≤ C_3a` — NOT a `sorry`, NOT an `axiom`.
-- **`#print axioms` lines (recorded R5):**
+- **`#print axioms` lines (re-confirmed R6 — verbatim tool output):**
   - `#print axioms C3a.griego_100_190_int_cert`
     → `[propext, griego_100_190_int_cert._native.native_decide.ax_1_1]` (native_decide trust axiom; NO sorryAx).
   - `#print axioms C3a.log_bridge`
-    → `[propext, Classical.choice, Quot.sound]` (Mathlib's standard axioms only; NO sorryAx).
+    → `[propext, Classical.choice, Quot.sound]` (Mathlib's standard axioms only; NO sorryAx, NO
+      native_decide axiom — the generalised log bridge is pure real arithmetic).
   - `#print axioms C3a.theta_gt`
-    → `[propext, Classical.choice, Quot.sound, Q_gt_one._native…, S_pos._native…,`
-      `griego_100_190_int_cert._native…]` (standard + native_decide; NO sorryAx).
+    → `[propext, Classical.choice, Quot.sound, Q_gt_one._native.native_decide.ax_1_1,`
+      `S_pos._native.native_decide.ax_1_1, griego_100_190_int_cert._native.native_decide.ax_1_1]`
+      (standard + native_decide; NO sorryAx).
   - `#print axioms C3a.c3a_lower_bound`
     → same set as `theta_gt` (standard Mathlib axioms + the three native_decide trust axioms; NO
       sorryAx, NO smuggled custom axiom). The only assumption is the explicit `ghr` parameter.

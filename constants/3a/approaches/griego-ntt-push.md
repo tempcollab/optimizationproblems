@@ -141,6 +141,63 @@ held 1.176 by +0.0011 and the external record 1.1740744 by +0.0031.
   has ~1.4M-digit operands — out of `native_decide` reach, so this raises held as a Python big-int
   cert, not a Lean theorem (an operand-size issue, not a step-shape one).
 
+## R6 BUILD — certificate finalized, watchdog-safe, hole-free on the path to held 1.1771
+
+The R5 holes are all CLOSED; R6 made the certificate a clean, trivially-reproducible artifact and
+independently re-verified the load-bearing counts, splitting every op into a short PRINTING step so
+the watchdog is never tripped (the R5 round was lost to ONE ~4-min silent block — see the hard
+constraint). All four checks below were re-run this round and are green:
+
+1. **Oracle gate (`--gate`, ~2 min, streamed per case).** 3-way `brute == indep == oracle` on **15**
+   cases (Griego non-contiguous {0,2,…,10} with T-clamp binding + contiguous control {0,…,5}) and
+   2-way `indep == oracle` on **5** larger cases (m up to 9). All 20 match exactly. The big-int
+   bitmask DP (`oracle_sumset`) and the genuinely-different set-Minkowski DP (`indep_sumset`) never
+   disagree, so a fast-DP miscount that would fabricate the held is ruled out. EXIT 0.
+
+2. **Independent from-scratch recompute (`--point 140 265`, ~95s, checkpointed per quantity).**
+   Recomputed s,d,M with the DP engine (no cached/committed values used): s=136 digits (t=64s),
+   d=169 digits (t=29s), M done, θ=1.1771373652. A byte-for-byte big-int comparison against the
+   committed `scan-mT-results.txt` row confirms **s, d, AND M all match exactly** (digit-for-digit).
+   This is the THIRD independent reproduction (R5 build, R6 explorer, R6 build) of the m=140 counts.
+
+3. **Tight certificate (`--certify-from-scan 140 265`, ~2s, EXIT 0).** Loads the committed s,d,M and
+   runs ONLY the pure big-int comparison `d^10000 > s^10000·(2M+1)^(k−10000)`:
+   - **k=11771: PASS** (`d^10000 > s^10000·q^1771`)  ⟹  θ > 11771/10000 = **1.1771**.
+   - **k=11772 (negative control): FAIL** — so 1.1771 is the *tight* largest k/10000. TIGHT.
+   `certify_best` also asserts `Fraction(11771,10000) >= TARGET` (the external record floor 1.1740744),
+   which holds. No float on the load-bearing step — pure big-int comparison.
+
+4. **Fallback (`--certify-from-scan 130 247`, ~2s, EXIT 0).** PASS k=11768, FAIL k=11769 ⟹ tight
+   C_3a > **1.1768** at (130,247). Consistent monotone climb below the m=140 point.
+
+**Exact best point.** (m,T) = **(140, 265)** on A={0,2,…,10}, b=21, U={Σ x_i·21^i : x∈A^m, Σx_i ≤ T}.
+b=21 > 2·max(A)=20 makes the digit map injective + carry-free, so the digit-vector counts equal
+|U±U| exactly; GHR2007 gives C_3a ≥ θ = 1 + log(|U−U|/|U+U|)/log(2·max U + 1). Exact integers:
+s=|U+U| (136 digits, head `88785247661758800689`), d=|U−U| (169 digits, head `54747299867053367517`),
+M=max U (185 digits, head `64516569533889487833`). Tight rational **11771/10000**.
+
+**Why it's tight.** At den=10000 the certified θ-interval is [11771/10000, 11772/10000): the k=11771
+power inequality holds and the k=11772 power fails. To register a higher held needs a NEW exact point
+(m>140), not a finer rational — exactly as the held 1.176 was tight at (110,210) for k=11760.
+
+**Held value claimed (unverified until reviewer re-runs): C_3a > 11771/10000 = 1.1771**, beating the
+prior verified held 1.176 by +0.0011 and the external record 1.1740744 by +0.0031. Hole-free on the
+path to this held: the only load-bearing step is a big-int comparison from committed-and-thrice-
+reproduced exact counts; no Lean (operands ~1.4M digits at den=10000, out of native_decide reach —
+an operand-size issue, not a step-shape one).
+
+**Exact reproduction commands (each its own short, printing, watchdog-safe step):**
+```
+cd constants/3a/certificate
+python3 -u griego-ntt-push.py --gate                  # ~2min, 20-case oracle gate, EXIT 0
+python3 -u griego-ntt-push.py --point 140 265         # ~95s, independent s,d,M recompute, EXIT 0
+python3 -u griego-ntt-push.py --certify-from-scan 140 265   # ~2s, PASS 11771 / FAIL 11772, EXIT 0
+python3 -u griego-ntt-push.py --certify-from-scan 130 247   # ~2s, PASS 11768 / FAIL 11769, EXIT 0  (fallback)
+```
+The `--certify-from-scan` path is the cheap reviewer check: it reproduces the tight cert in seconds
+from the committed counts with no DP recompute. The `--point` step is the independent recompute the
+reviewer can run separately to confirm the committed counts.
+
 ## Promotable lemmas
 None new. The sum-set engine is the already-certified `exact-sumdiff-dp` lemma (reused, not re-proved).
 `indep_sumset` is a validation-only cross-checker (slow set-DP), not a reusable production lemma.

@@ -23,11 +23,13 @@
   The GHR bridge from the machine-checked integer inequality to `C_3a ≥ θ > 1.175` splits into
   two independent steps:
 
-    (A)  LOG-ALGEBRA HALF — `(D^40 > S^40·Q^7) ⟹ θ > 47/40`, where θ = 1 + log(D/S)/log Q.
+    (A)  LOG-ALGEBRA HALF — `(d^B > s^B·q^A) ⟹ θ > 1 + A/B`, where θ = 1 + log(d/s)/log q.
          This is pure real-arithmetic / strict monotonicity of `Real.log` and `(·)^n` over ℝ₊.
-         **FORMALIZED THIS ROUND (R5), hole-free**, as `log_bridge` below — proved with Mathlib
-         (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`, `div_pow`). `#print axioms log_bridge`
-         shows only `[propext, Classical.choice, Quot.sound]` (Mathlib's standard axioms) and NO
+         **FORMALIZED in R5, GENERALISED over the exponents in R6, hole-free**, as `log_bridge`
+         below — proved with Mathlib (`Real.log_lt_log`, `Real.log_pow`, `lt_div_iff₀`/
+         `div_lt_div_iff₀`, `div_pow`). The lemma is now fully general in `(s,d,q,A,B)` (the 7/40
+         numerals live only in the `theta_gt` specialisation). `#print axioms log_bridge` shows
+         only `[propext, Classical.choice, Quot.sound]` (Mathlib's standard axioms) and NO
          `sorryAx`. So the step that turns the verified integer fact into the real θ-inequality is
          now a Lean theorem, not an assumption.
 
@@ -102,48 +104,62 @@ theorem Q_gt_one : 1 < Q := by native_decide
 noncomputable def theta : ℝ := 1 + Real.log ((D : ℝ) / (S : ℝ)) / Real.log (Q : ℝ)
 
 /-- ============================================================================================
-    LOG-ALGEBRA HALF OF THE BRIDGE (step (A)) — FORMALIZED, HOLE-FREE.
+    LOG-ALGEBRA HALF OF THE BRIDGE (step (A)) — FORMALIZED, HOLE-FREE, GENERALISED.
 
-    Abstract over the integers: from the cleared-denominator integer inequality
-    `S^40 · Q^7 < D^40` (with `0 < S`, `1 < Q`) conclude the real θ-bound
-    `47/40 < 1 + log(D/S)/log Q`  (i.e. θ > 1.175).
+    Abstract over BOTH the integers AND the exponents: from the cleared-denominator integer
+    inequality `s^B · q^A < d^B` (with `0 < s`, `1 < q`, `0 < B`) conclude the real θ-bound
+
+        `1 + (A:ℝ)/B  <  1 + log(d/s)/log q`,   i.e.   `θ > 1 + A/B`,
+
+    where `θ := 1 + log(d/s)/log q`. This is the GENERAL log-algebra bridge: the integer
+    inequality `d^B > s^B·q^A` is exactly the cleared-denominator form of `log(d/s)/log q > A/B`,
+    so it certifies any rational target `1 + A/B`. The sketch uses (A,B)=(7,40) → 1 + 7/40 = 47/40
+    = 1.175, but the proof is valid for every `A : ℕ`, `B : ℕ` with `0 < B`.
 
     Pure real arithmetic: strict monotonicity of `Real.log` and of `(·)^n` on ℝ₊.
-    `#print axioms log_bridge` → `[propext, Classical.choice, Quot.sound]` only (no sorryAx). -/
-theorem log_bridge (s d q : ℕ)
-    (hs : 0 < s) (hq : 1 < q)
-    (hint : s ^ 40 * q ^ 7 < d ^ 40) :
-    (47 : ℝ) / 40 < 1 + Real.log ((d : ℝ) / (s : ℝ)) / Real.log (q : ℝ) := by
+    `#print axioms log_bridge` → `[propext, Classical.choice, Quot.sound]` only (no sorryAx).
+
+    PROMOTABLE: reviewer may certify this directly into `constants/3a/lemmas/` — it is fully
+    general (no sketch-specific numerals), axiom-clean, and reusable by any sketch that has a
+    cleared-denominator integer cert `d^B > s^B·q^A` and wants the real θ-bound `θ > 1 + A/B`. -/
+theorem log_bridge (s d q A B : ℕ)
+    (hs : 0 < s) (hq : 1 < q) (hB : 0 < B)
+    (hint : s ^ B * q ^ A < d ^ B) :
+    1 + (A : ℝ) / (B : ℝ) < 1 + Real.log ((d : ℝ) / (s : ℝ)) / Real.log (q : ℝ) := by
   -- real positivity facts
   have hsr : (0 : ℝ) < (s : ℝ) := by exact_mod_cast hs
   have hqr : (1 : ℝ) < (q : ℝ) := by exact_mod_cast hq
+  have hBr : (0 : ℝ) < (B : ℝ) := by exact_mod_cast hB
   have hlogQ : 0 < Real.log (q : ℝ) := Real.log_pos hqr
   -- the cast integer inequality over ℝ
-  have hintR : (s : ℝ) ^ 40 * (q : ℝ) ^ 7 < (d : ℝ) ^ 40 := by exact_mod_cast hint
-  -- s^40 > 0
-  have hs40 : (0 : ℝ) < (s : ℝ) ^ 40 := by positivity
-  -- q^7 < d^40 / s^40
-  have hdiv : (q : ℝ) ^ 7 < (d : ℝ) ^ 40 / (s : ℝ) ^ 40 := by
-    rw [lt_div_iff₀ hs40]; linarith [hintR]
-  -- d^40/s^40 = (d/s)^40
-  have hpow : (d : ℝ) ^ 40 / (s : ℝ) ^ 40 = ((d : ℝ) / (s : ℝ)) ^ 40 := by
+  have hintR : (s : ℝ) ^ B * (q : ℝ) ^ A < (d : ℝ) ^ B := by exact_mod_cast hint
+  -- s^B > 0
+  have hsB : (0 : ℝ) < (s : ℝ) ^ B := by positivity
+  -- q^A < d^B / s^B
+  have hdiv : (q : ℝ) ^ A < (d : ℝ) ^ B / (s : ℝ) ^ B := by
+    rw [lt_div_iff₀ hsB]; linarith [hintR]
+  -- d^B/s^B = (d/s)^B
+  have hpow : (d : ℝ) ^ B / (s : ℝ) ^ B = ((d : ℝ) / (s : ℝ)) ^ B := by
     rw [div_pow]
-  -- log(q^7) < log((d/s)^40)
-  have hQ7pos : (0 : ℝ) < (q : ℝ) ^ 7 := by positivity
-  have hloglt : Real.log ((q : ℝ) ^ 7) < Real.log (((d : ℝ) / (s : ℝ)) ^ 40) := by
-    apply Real.log_lt_log hQ7pos
+  -- log(q^A) < log((d/s)^B)
+  have hQApos : (0 : ℝ) < (q : ℝ) ^ A := by positivity
+  have hloglt : Real.log ((q : ℝ) ^ A) < Real.log (((d : ℝ) / (s : ℝ)) ^ B) := by
+    apply Real.log_lt_log hQApos
     rw [← hpow]; exact hdiv
-  -- expand logs of powers:  7 * log q < 40 * log (d/s)
+  -- expand logs of powers:  A * log q < B * log (d/s)
   rw [Real.log_pow, Real.log_pow] at hloglt
-  -- 7/40 < log(d/s)/log q
-  have key : (7 : ℝ) / 40 < Real.log ((d : ℝ) / (s : ℝ)) / Real.log (q : ℝ) := by
-    rw [lt_div_iff₀ hlogQ]
+  -- A/B < log(d/s)/log q
+  have key : (A : ℝ) / (B : ℝ) < Real.log ((d : ℝ) / (s : ℝ)) / Real.log (q : ℝ) := by
+    rw [div_lt_div_iff₀ hBr hlogQ]
     nlinarith [hloglt]
   linarith [key]
 
-/-- Specialised to the certified (100,190) literals (still hole-free): θ > 47/40 = 1.175. -/
+/-- Specialised to the certified (100,190) literals with (A,B)=(7,40) (still hole-free):
+    θ > 1 + 7/40 = 47/40 = 1.175. -/
 theorem theta_gt : (47 : ℝ) / 40 < theta := by
-  have h := log_bridge S D Q S_pos Q_gt_one griego_100_190_int_cert
+  have h := log_bridge S D Q 7 40 S_pos Q_gt_one (by norm_num) griego_100_190_int_cert
+  have e : 1 + ((7 : ℕ) : ℝ) / ((40 : ℕ) : ℝ) = (47 : ℝ) / 40 := by push_cast; norm_num
+  rw [e] at h
   simpa [theta] using h
 
 /-- C_3a rendered as a real number. Its full Lean DEFINITION (the sup-over-constructions of the
