@@ -1,57 +1,68 @@
 {
-  "asymptotic-per-digit-ratio-optimization": {
-    "elo": 1452.5311236625787,
+  "alphabet-reshape-screen": {
+    "elo": 1499.0997855811563,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 4,
+    "selected": 0,
+    "slug": "alphabet-reshape-screen",
+    "stale": false,
+    "summary": "Cheap small-d (d<=40) screen of digit-alphabet SHAPES (drop-1-and-2, drop-middle, gapped/AP, varied base) for a higher d->infty asymptote than the drop-1 family's ~1.1788 ceiling; non-treadmill scout, certifies no bound this round (winning shape becomes a later d-push target)."
+  },
+  "asymptotic-per-digit-ratio-optimization": {
+    "elo": 1418.247047928791,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 6,
     "slug": "asymptotic-per-digit-ratio-optimization",
     "stale": false,
     "summary": "Optimize the per-digit limit (d\u2192\u221e, cap density c) via the log-spectral-radius of the cap-constrained transfer matrix; maximize R-(c)-R+(c) per log(B) toward the 1.25 ceiling, then instantiate a concrete finite U."
   },
   "beyond-digit-set-structured-U": {
-    "elo": 1361.9653406231357,
+    "elo": 1346.1550877131813,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 4,
+    "selected": 6,
     "slug": "beyond-digit-set-structured-U",
     "stale": false,
     "summary": "Scout non-digit-set structured U (GAPs/Bohr-like, convex-body projections, Sidon/B_h) \u2014 the only family that can exceed the 1.25 digit-set ceiling; score 2-3 families' exact GHR bound, no promised beat."
   },
   "digit-dp-count-engine-and-record-baseline": {
-    "elo": 1543.9337423089087,
+    "elo": 1555.533430978304,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 4,
+    "selected": 6,
     "slug": "digit-dp-count-engine-and-record-baseline",
     "stale": false,
     "summary": "Exact carry-free cap-coupled DP count engine for |U+U|,|U-U|,max(U); reproduce the record 1.174074447 (search-immune baseline, gap 0, machinery \u2014 analogous to 9a-367)."
   },
   "directed-param-sweep-exact-beat": {
-    "elo": 1596.3645487805525,
+    "elo": 1635.6023618022014,
     "expanded": 1,
     "last_note": "VERIFIED RECORD BEAT: d=100,T=187 base-21 digit set certifies C_3a >= 5877/5000 = 1.1754 > record 1.1740744476935212 (margin ~1.35e-3). All three exact integers (|U+U| 97d, |U-U| 120d, max 132d) re-derived bit-for-bit by independent reviewer DP validated vs brute force; strict beat decided by pure big-int power inequalities, no float. verify_beat.py exit 0.",
     "last_outcome": "verified-milestone",
     "last_round": 18,
-    "selected": 4,
+    "selected": 6,
     "slug": "directed-param-sweep-exact-beat",
     "stale": false,
     "summary": "Bounded exact-integer sweep over (alphabet A, base B, length d, cap T) around the hand-tuned record for a strict beat of 1.1740744 by a clean integer margin (Fraction + rational-power compare, never float)."
   },
   "lean-cert-rational-power": {
-    "elo": 1545.2052446248242,
+    "elo": 1545.3622859963657,
     "expanded": 1,
     "last_note": "R18 numerical beat (C_3a>=5877/5000) upgraded to gold-standard lake-build Lean theorem. lean/Constants/C3a.lean: c3a_ge_5877_5000(') under named GHR_lower bridge; load-bearing newGE/recLT axiom-free kernel decide ([propext] only), assembled theorems standard R trio, no sorryAx/native_decide. Reviewer verified: whole-tree build PASS (8574 jobs, Mathlib v4.31.0), all 6 literals bit-for-bit vs JSON/txt, both power inequalities re-derived in own big-int, strictness vs TRUE record 1.1740744476935212 confirmed, GHR_lower honest (no smuggled arithmetic). Held number unchanged; certification strength numerical->machine-checked.",
     "last_outcome": "verified-milestone",
     "last_round": 19,
-    "selected": 4,
+    "selected": 6,
     "slug": "lean-cert-rational-power",
-    "stale": true,
+    "stale": false,
     "summary": "Port the R18 verified numerical beat (held 5877/5000=1.1754) to a machine-checked Lean theorem: three exact Nat literals from beat_d100.json, load-bearing newGE: Np^5000*(2M+1)^877 <= Nm^5000 by axiom-free kernel decide (explorer probe: 2s, no axioms), companion recLT strictness on the d=80 record-cell integers, log-free rational rearrangement (route A), and the named GHR_lower analytic bridge (9a ThetaGeFromIndep analogue). Converts the run's only verified bound move to gold-standard lake-build form."
   }
 }
