@@ -100,13 +100,13 @@
   },
   "push-d-160-exact-beat": {
     "elo": 1539.2567520277714,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "VERIFIED (R25 recovery): strict beat 239/203\u2192179/152=1.1776316 (+2.917e-4 exact Fraction), born Lean-checked. d=160 T=300 drop-1 base-21 cell. lake build PASS 8571 jobs; newGE160/recLT160 [propext], assembled [propext,Classical.choice,Quot.sound]; all 4 prior theorems intact; GHR_lower honest. Lean literals bit-for-bit vs beat_d160.json+record_baseline.json; both wedge ineqs re-derived own big-int; counting method blessed (own DP vs brute d<=4, two engines agree d=20/30/40); max(U) reproduced full d=160; verify_beat.py exit 0.",
+    "last_outcome": "verified-milestone",
+    "last_round": 26,
     "selected": 0,
     "slug": "push-d-160-exact-beat",
-    "stale": false,
+    "stale": true,
     "summary": "Walk the drop-1 base-21 carry-free GHR digit lever to d=160, T=300 (density 1.875); split-DP (cheap diff/max + heavy sumset in own timeout call), persist exact integers to beat_d160.json, small-Q wedge c=1+19/107=1.1775701 (>held 239/203), Lean-port via R24 decide route. Predicted value_new ~1.17763, margin +2.3e-4 over held."
   }
 }
