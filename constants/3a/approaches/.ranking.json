@@ -1,13 +1,13 @@
 {
   "alphabet-reshape-screen": {
     "elo": 1499.0997855811563,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "SCOUT, certifies no bound (correctly untouched constants/). Negative conclusion SOUND: no reshaped digit alphabet beats the drop-1 base-21 family's ~1.179 d->inf asymptote. Reviewer reproduced the headline asymptotes independently (RECORD drop-1=1.17897, max12 B=25=1.17317, full {0..10}=1.15506) confirming the ranking; reshape road CLOSED within the digit-set family. Only remaining bound-move lever = the d-push (push-d-130, verified this round).",
+    "last_outcome": "partial",
+    "last_round": 22,
     "selected": 0,
     "slug": "alphabet-reshape-screen",
-    "stale": false,
+    "stale": true,
     "summary": "Cheap small-d (d<=40) screen of digit-alphabet SHAPES (drop-1-and-2, drop-middle, gapped/AP, varied base) for a higher d->infty asymptote than the drop-1 family's ~1.1788 ceiling; non-treadmill scout, certifies no bound this round (winning shape becomes a later d-push target)."
   },
   "asymptotic-per-digit-ratio-optimization": {
@@ -45,13 +45,13 @@
   },
   "directed-param-sweep-exact-beat": {
     "elo": 1635.6023618022014,
-    "expanded": 1,
-    "last_note": "VERIFIED RECORD BEAT: d=100,T=187 base-21 digit set certifies C_3a >= 5877/5000 = 1.1754 > record 1.1740744476935212 (margin ~1.35e-3). All three exact integers (|U+U| 97d, |U-U| 120d, max 132d) re-derived bit-for-bit by independent reviewer DP validated vs brute force; strict beat decided by pure big-int power inequalities, no float. verify_beat.py exit 0.",
+    "expanded": 2,
+    "last_note": "R22 d-push continuation (approach doc push-d-130-exact-beat, NOT separately registered in sidecar \u2014 outline-reviewer never registered it before the early-ended R21; recording here against the ancestor it directly continues). VERIFIED NEW BOUND MOVE: held 5877/5000=1.1754 -> 2353/2000=1.1765 via d=130,T=244 drop-1 base-21 cell. Integers re-derived from scratch (engine --recompute matches; independent reviewer DP matches brute@d<=4 + engine@d 8..40); wedge re-derived in own big-int (d130 passes, d80 record fails); Lean lake build PASS 8574 jobs, newGE130/recLT130 [propext]-only, GHR_lower honest, R19 theorem intact; verify_beat.py exit 0. The digit-push lever remains live and productive.",
     "last_outcome": "verified-milestone",
-    "last_round": 18,
+    "last_round": 22,
     "selected": 6,
     "slug": "directed-param-sweep-exact-beat",
-    "stale": false,
+    "stale": true,
     "summary": "Bounded exact-integer sweep over (alphabet A, base B, length d, cap T) around the hand-tuned record for a strict beat of 1.1740744 by a clean integer margin (Fraction + rational-power compare, never float)."
   },
   "lean-cert-rational-power": {

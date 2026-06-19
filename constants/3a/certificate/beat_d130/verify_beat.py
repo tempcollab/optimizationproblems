@@ -1,7 +1,8 @@
 """
 Re-runnable STRICT-BEAT certificate for C_3a (Round 21):
 
-    CLAIM:  C_3a  >=  20/17  =  1.176470588235...
+    CLAIM:  C_3a  >=  2353/2000  =  1.1765   (matches the R22 Lean theorem
+            C3a.c3a_ge_2353_2000', wedge Q=2000, P=353)
             >  5877/5000 = 1.1754  (our previously HELD value, verified R18 / Lean R19)
             >  1.1740744476935212  (the historical [G2026] PR #71 record).
 
@@ -24,7 +25,7 @@ ALL load-bearing arithmetic is EXACT big-int -- no float decides anything:
   Step 4  pick wedge c = 20/17.  Verify by exact integer-power inequalities:
             (a) value_new    >= c :  Nm_new^q  >= Np_new^q  * (2*M_new+1)^p
             (b) value_record <  c :  RNm^q     <  RNp^q     * (2*RM+1)^p
-          where (c-1) = p/q in lowest terms (p=3, q=17 -- tiny, instant powers).
+          where (c-1) = p/q in lowest terms (p=353, q=2000 -- ~11.5s kernel decide).
           (a) & (b)  =>  value_new >= c > value_record.
   Step 5  EXACT rational re-assertion that c strictly exceeds BOTH bars:
             c > Fraction(5877,5000)  (our HELD value) AND c > the record value.
@@ -59,7 +60,7 @@ B = 21
 assert B > 2 * max(A), "carry-free regime requires B > 2*max(A)"
 
 HELD = Fraction(5877, 5000)          # our previously held (verified) value, 1.1754
-WEDGE = Fraction(20, 17)             # the new claimed bound, 1.176470588...
+WEDGE = Fraction(2353, 2000)         # the new claimed bound, 1.1765 (matches the R22 Lean cert)
 
 # ---- RECORD cell ----------------------------------------------------------
 d_rec, T_rec = 80, 150
