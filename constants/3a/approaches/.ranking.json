@@ -12,13 +12,13 @@
   },
   "griego-ntt-push": {
     "elo": 1646.0632431236043,
-    "expanded": 2,
-    "last_note": "Held raised 1.1771\u21921.1774 at new point (150,285). Reviewer independently re-derived s/d/M (146/182/199 digits) via distinct slack-mask DP, matched committed row digit-for-digit; gate vs brute on 18 cases incl clamp; load-bearing d^10000>s^10000*q^1774 PASS (margin +125.1), q^1775 FAIL (tight). All 4 R8 holes closed. Next held needs new point m>150.",
+    "expanded": 3,
+    "last_note": "held 1.1774\u21921.1776: new point (160,304), s/d/M independently re-derived from scratch (byte-exact to committed row, brute-validated 11 cases incl clamp/non-contig), tight cert d^10000>s^10000*(2M+1)^1776 PASS (margin +408.4) / ^1777 FAIL (-78.7). Cert leg (big-int comparison) hole-free; only future-point hole open (m>160).",
     "last_outcome": "verified-milestone",
-    "last_round": 8,
+    "last_round": 11,
     "selected": 7,
     "slug": "griego-ntt-push",
-    "stale": false,
+    "stale": true,
     "summary": "NTT/exact-FFT fast convolution + repeated-squaring sum-set DP to break the m=110 compute wall and climb toward Lambda~1.185; mandatory validation vs the R3 clamped-DP oracle before any large-m count is trusted."
   },
   "largedev-rate-optimization": {
@@ -45,13 +45,13 @@
   },
   "lean-tensor-multiplicativity": {
     "elo": 1514.278634535851,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "All 7 holes CLOSED, sorry-free, axiom-clean ([propext,Classical.choice,Quot.sound], no sorryAx); lake build C3a EXIT 0. Formalizes the FINITE half of the GHR bridge (carry-free tensor-power multiplicativity |U^\u2297(k+1)\u00b1U^\u2297(k+1)|=|U\u00b1U|^(k+1)); 2 lemmas promoted to lemmas/. Does NOT raise held \u2014 sup-realization k\u2192\u221e limit + C_3a definition remain the open hole.",
+    "last_outcome": "advanced",
+    "last_round": 11,
     "selected": 0,
     "slug": "lean-tensor-multiplicativity",
-    "stale": false,
+    "stale": true,
     "summary": "Formalize carry-free tensor-power multiplicativity |U^\u2297k \u00b1 U^\u2297k| = |U\u00b1U|^(k+1) as Lean Finset counting lemmas; chips the finite/discrete half off the GHR bridge hole (Lean-fit, 7 sorrys, builds green)."
   },
   "noncontig-alphabet-sweep": {
