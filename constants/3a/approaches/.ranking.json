@@ -12,13 +12,13 @@
   },
   "griego-ntt-push": {
     "elo": 1677.393193595292,
-    "expanded": 3,
-    "last_note": "held 1.1774\u21921.1776: new point (160,304), s/d/M independently re-derived from scratch (byte-exact to committed row, brute-validated 11 cases incl clamp/non-contig), tight cert d^10000>s^10000*(2M+1)^1776 PASS (margin +408.4) / ^1777 FAIL (-78.7). Cert leg (big-int comparison) hole-free; only future-point hole open (m>160).",
+    "expanded": 4,
+    "last_note": "VERIFIED held 1.1776->1.1779 at new point (170,321). Reviewer independently re-derived s(166d)/d(206d)/M(225d) byte-exact to committed row via 3 distinct DPs (slack-mask sumset, minimal-pair diffset with coordinatewise-min lemma verified, knapsack maxU), brute-validated incl clamp+non-contig+contiguous. Load-bearing d^10000>s^10000*(2M+1)^1779 PASS (log-margin +73.03), ^1780 FAIL (-444.54, tight). Carry-free b=21>2max(A)=20. Hole-free at this point. To push further needs m>=180 (sumset DP ~175-217s, must background).",
     "last_outcome": "verified-milestone",
-    "last_round": 11,
+    "last_round": 13,
     "selected": 9,
     "slug": "griego-ntt-push",
-    "stale": false,
+    "stale": true,
     "summary": "NTT/exact-FFT fast convolution + repeated-squaring sum-set DP to break the m=110 compute wall and climb toward Lambda~1.185; mandatory validation vs the R3 clamped-DP oracle before any large-m count is trusted."
   },
   "largedev-rate-optimization": {
@@ -34,13 +34,13 @@
   },
   "lean-c3a-def": {
     "elo": 1523.3521899630443,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "Definition-only reshape: replaced opaque C3aRealDef with concrete sSup{c|Realizes c}; restored the dropped bounded-doubling clause (i) |A+B|<=K|A| flagged in R11. Reviewer ruled the def a FAITHFUL under-estimate (C3aRealDef <= registry C_3a, safe direction for a lower bound) \u2014 every Realizes-witness is a registry witness with c(K)=1. lake build C3a EXIT 0, exactly 3 documented sorry (lines 139/150/169: realizes_one, realizableSet_bddAbove, griego_realizes), no smuggled axiom; sorryAx traces only to those holes. NO held raise (3 holes remain). CHANGES REQUESTED. The load-bearing remaining hole is griego_realizes (HOLE B): the GHR composite dilution witness.",
+    "last_outcome": "advanced",
+    "last_round": 13,
     "selected": 0,
     "slug": "lean-c3a-def",
-    "stale": false,
+    "stale": true,
     "summary": "Scoped definition-only Lean sketch: concrete C3aRealDef := sSup {c | Realizes c} replacing the opaque C_3a, isolating the sole uncached bridge blocker (the sup-realization read-off) for a cheap faithfulness in/out ruling. CHANGES REQUESTED R12: predicate drops the |A+B|<<|A| doubling clause and collapses A=B, so as written it risks defining an inflated (non-faithful) constant; the approach is right and the fix is nameable."
   },
   "lean-native-decide-smallmt": {
