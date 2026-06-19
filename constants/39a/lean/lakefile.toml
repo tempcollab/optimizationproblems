@@ -1,0 +1,20 @@
+name = "h3"
+defaultTargets = ["H3"]
+
+# Sketches are valid population members while they still contain `sorry` holes
+# (CLAUDE.md): a `sorry` is a warning, not a build-breaking error. Do not escalate
+# warnings to errors so a sketch with explicit open holes still `lake build`s green.
+[leanOptions]
+warningAsError = false
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.31.0"
+
+[[lean_lib]]
+name = "H3"
+
+[[lean_lib]]
+name = "Sketches"
+globs = ["Sketches.+"]

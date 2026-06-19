@@ -1,0 +1,2025 @@
+2
+2
+0
+2
+
+p
+e
+S
+0
+2
+
+]
+
+G
+M
+.
+h
+t
+a
+m
+
+[
+
+2
+v
+8
+9
+6
+0
+1
+.
+2
+1
+1
+2
+:
+v
+i
+X
+r
+a
+
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+A. PRYMAK
+
+Abstract. We show that every 3-dimensional convex body can be covered by 14 smaller
+
+homothetic copies. The previous result was 16 established by Papadoperakis in 1999, while a
+
+conjecture by Hadwiger is 8. We develop a discretization technique showing that it suﬃces to
+
+verify feasibility of a number of linear programs with rational coeﬃcients, which is done with
+
+computer assistance using exact arithmetic.
+
+A convex body in the n-dimensional Euclidean space En is a convex compact set having
+
+1. Introduction
+
+non-empty interior. Let C(A, B) be the smallest number of translates of B
+
+En required to
+
+⊂
+
+En, and let int(A) denote the interior of A. Hadwiger [6] asked what is the value
+cover A
+Hn = min C(K, int(K)), where the minimum is taken over all convex bodies K in En. In other
+
+⊂
+
+words, what is the least number of smaller homothetic copies of an arbitrary convex body K
+
+in En needed to cover K? It was shown by Boltyanski [2] that this question is equivalent to
+
+ﬁnding the smallest number of external light sources required to illuminate the boundary of
+
+every convex body. It is immediate that Hn
+
+2n by taking K as an n-dimensional cube. A
+
+≥
+well-known conjecture, which is commonly referred to as the (Levi-)Hadwiger conjecture or as
+the Gohberg-Markus covering conjecture, is that Hn = 2n, but this is known (see Levi [10]) only
+
+for n = 2. Below we give a brief overview of the known results about Hn. For a detailed history
+
+of the question and the survey including many partial results for special classes of convex bodies
+
+see, e.g., [1].
+
+The best known explicit upper bound on Hn in high dimensions is a combination of Rogers’s
+result [14] on the covering density of En by translates of arbitrary convex body with the Rogers-
+
+Shephard inequality [15] bounding the volume of the diﬀerence body. An interested reader is
+
+2010 Mathematics Subject Classiﬁcation. Primary 52A15; Secondary 52A37, 52A40, 52C17, 90C05.
+Key words and phrases. Illumination problem, illumination number, covering number, covering by smaller
+
+homothetic copies, convex body, linear programming.
+
+Corresponding author: Andriy Prymak; email: prymak@gmail.com
+
+The author was supported by NSERC of Canada Discovery Grant RGPIN-2020-05357.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+2
+
+A. PRYMAK
+
+referred to [1, Section 2.2] for further details and related results. Here we only state the actual
+
+bound, which is
+
+(1)
+
+Hn
+
+≤ (cid:18)
+
+2n
+n (cid:19)
+
+n(ln n + ln ln n + 5),
+
+where 5 can be replaced by 4 for suﬃciently large n.
+
+(Note that the asymptotic behavior
+
+is
+
+of
+
+2n
+n
+
+4n
+√2πn .) This was the best asymptotic estimate on Hn for a long time until Huang,
+Slomka, Tkocz and Vritsiou [7] recently obtained a remarkable asymptotic improvement of (1)
+
+(cid:0)
+
+(cid:1)
+
+by showing Hn
+
+exp(
+
+≤
+
+c√n)4n using “thin-shell” volume estimates, here and below c > 0
+
+−
+
+is an implicit universal constant. With the aid of the recent results on the Bourgain slicing
+
+problem, this was further improved by Campos, van Hintum, Morris and Tiba [4] leading to
+
+the currently best known asymptotic bound on Hn:
+
+For low dimensions, Lassak [8] showed that
+
+Hn
+
+≤
+
+exp
+
+cn
+−
+ln8 n(cid:17)
+
+(cid:16)
+
+4n.
+
+(2)
+
+Hn
+
+(n + 1)nn
+
+−
+
+1
+
+(n
+
+1)(n
+
+2)n
+
+1,
+
+−
+
+−
+
+≤
+−
+5. For n = 3 (2) is H3 ≤
+16 by Papadoperakis [11]. Generalizing the technique of [11]
+
+−
+34, which was improved to H3 ≤
+
+which is better than (1) for n
+≤
+by Lassak [9], and then to H3 ≤
+to the higher dimensions, in the joint work with Shepelska [13], we showed that H4 ≤
+H5 ≤
+last two inequalities down to H5 ≤
+
+15373 improving both (1) and (2) for n = 4, 5, 6. Diao [5] brought the
+
+1091 and H6 ≤
+
+1002 and H6 ≤
+
+14140.
+
+96,
+
+20
+
+The main result of this work is that H3 ≤
+
+14.
+
+Theorem 1.1. For any convex body K
+
+E3, C(K, int(K))
+
+14.
+
+≤
+
+⊂
+
+Use of computer for the covering conjecture has been suggested in [16], although that ap-
+
+proach does not appear to be feasible with current computational power. Recently computer
+
+assistance was used in [3] in a diﬀerent way to conﬁrm the covering conjecture for the class of
+
+convex bodies of constant width in dimensions 6
+
+n
+
+≤
+
+≤
+
+15.
+
+The discretization method we oﬀer here is new and may be of independent interest for
+
+other aﬃne-invariant problems involving three-dimensional convex bodies. More precisely, we
+
+construct a ﬁnite family of convex polytopes with relatively simple structure and the property
+
+that any three-dimensional convex body contains an aﬃne copy of one of these polytopes as
+
+well as is contained in a certain related parallelepiped.
+
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+3
+
+In Section 2, we begin with the description of the approach from [11] which is the starting
+
+point of our proof. Next we introduce a certain family of polytopes which are larger than the
+
+boxes considered in [11] allowing more eﬃcient covering (Lemma 2.2). We proceed with a certain
+
+geometric argument (Lemma 2.4) to transition from covering by open sets to covering by closed
+
+sets. This transition is one of the ingredients needed to enable the use of linear programming
+
+to verify the existence of the translates necessary for covering, the other one being the one-
+
+dimensional structure of the edges of the related parallelepiped. We conclude with Section 3,
+
+where various techniques making the required computations feasible are described.
+
+2. Discretization and reduction to linear programming
+
+For a set A
+
+⊂
+
+En and a family
+
+B
+
+of subsets of En, we let C(A,
+
+) be the smallest number of
+
+B
+
+translates of elements of
+
+required to cover A.
+
+B
+
+Everywhere below “the cube” is the unit cube [0, 1]3, the faces of the cube are the 2-
+
+dimensional faces Fij =
+
+(x1, x2, x3)
+
+{
+
+∈
+
+[0, 1]3 : xi = j
+
+}
+
+, i = 1, 2, 3, j = 0, 1. Let E denote
+
+the 1-skeleton of the cube, which is the union of all edges and can also be viewed as the union
+
+of all relative boundaries of the faces Fij.
+
+A very important role in the proof will be played by certain conﬁgurations of points from
+
+the faces of the cube. Namely, we select a point on each face so that the segment joining the
+
+points in each pair of the opposite faces is always perpendicular to these faces. It is convenient
+
+to introduce a notation to describe such conﬁgurations. For p
+
+[0, 1]6, deﬁne
+
+∈
+
+0
+
+1
+
+p3 p3 p5 p5
+
+Ap =
+
+
+
+p1 p1
+
+0
+
+1
+
+p6 p6
+
+
+
+
+
+p2 p2 p4 p4
+
+0
+
+1
+
+.
+
+
+
+
+
+
+
+Now if ei denotes the i-the basic unit vector, then the conﬁgurations mentioned above are
+
+). We also need to work with closed convex hulls of these conﬁgurations,
+
+Vp := Ap(
+
+e1, . . . , e6}
+so we set Op := Ap(S), where S =
+
+{
+
+{
+
+(λ1, . . . , λ6) : λi
+
+0,
+
+λi = 1
+
+.
+
+≥
+
+P
+
+}
+
+Now let us describe the technique of [11]. For arbitrary convex body K in E3, consider the
+
+parallelotope C of minimal volume containing K. Without loss of generality (using an aﬃne
+
+transform), we can assume that C = [0, 1]3. Clearly, each Fij
+
+K is non-empty, moreover,
+
+∩
+
+by [11, Lemma 3(a)] we can choose qij
+
+Fij
+
+∩
+
+∈
+
+K so that qi0+ei = qi1 for every i. In our notations,
+
+this means that the six points
+
+qij, i = 1, 2, 3, j = 0, 1
+
+{
+
+}
+
+form a conﬁguration described above, i.e.,
+
+4
+
+A. PRYMAK
+
+are exactly the column vectors of Ap for some p
+
+[0, 1]6. Let Q =
+
+qij, i = 1, 2, 3, j = 0, 1
+
+= Vp,
+
+∈
+
+{
+
+}
+
+be the family of rectangular parallelotops in E3 whose edges
+
+then Op = conv(Q)
+
+K. Let
+
+⊂
+
+P
+
+are parallel to coordinate axes and the sum of the three dimensions (lengths of edges adjacent
+
+to a vertex) is strictly less than one. By [11, Lemma 3(b)], for any P
+
+∈ P
+of P which is a subset of int(K) (in fact, a subset of int(Op) for any p
+
+there is a translate
+
+[0, 1]6). The key
+
+∈
+
+argument of [11] is the following lemma. Recall that E is the 1-skeleton of the cube.
+
+Lemma 2.1 ([11, Lemma 4]). For any convex body K in E3
+
+C(K, int(K))
+
+max
+{
+
+≤
+
+C(E
+
+∪
+
+Vp,
+
+P
+
+) : p
+
+∈
+
+[0, 1]6
+
+.
+
+}
+
+The family of covering problems C(E
+
+) is 6-parametric which is more tangible than
+
+Vp,
+
+P
+
+∪
+
+C(K, int(K)) involving a general convex body in E3.
+
+The proof of [11, Lemma 4] actually shows that
+
+C(K, int(K))
+
+max
+
+C(E
+
+Vp, int(K)) : p
+
+∪
+[0, 1]6, we immediately obtain the following stronger lemma.
+
+≤
+
+∈
+
+}
+
+{
+
+[0, 1]6
+
+,
+
+so by Op
+
+K, p
+
+∈
+
+⊂
+
+Lemma 2.2. For any convex body K in E3
+
+C(K, int(K))
+
+max
+
+{
+
+≤
+
+C(E
+
+∪
+
+Vp, int(Op)) : p
+
+[0, 1]6
+
+.
+
+}
+
+∈
+
+Observe that (by the proof of [11, Lemma 3(b)]) any polytope Op, p
+
+[0, 1]6, contains a
+
+∈
+
+translate of any parallelotope P
+
+∈ P
+
+. Thus, Lemma 2.2 uses larger sets for covering, and this is
+
+precisely what allows to obtain the main result of this work and an improvement over [11]. On
+
+the other hand, the polytopes Op, p
+
+[0, 1]6, depend on speciﬁc p and have more complicated
+
+∈
+structure than the universal (independent of p) family of the parallelotopes
+
+, so we will employ
+
+P
+
+computer assistance to estimate max
+
+C(E
+
+{
+
+∪
+
+Vp, int(Op)) : p
+
+[0, 1]6
+
+.
+
+}
+
+∈
+
+Remark 2.3. It is not hard to see that 14 is the best one can do with the suggested approach.
+
+Indeed, max
+
+2).
+} ≥
+Consider the 14-element set consisting of the 8 vertices of the cube and the points Vp. No
+
+Vp, int(Op)), where p = ( 1
+
+Vp, int(Op)) : p
+
+2, . . . , 1
+
+[0, 1]6
+
+C(E
+
+C(E
+
+∈
+
+∪
+
+∪
+
+{
+
+translate of int(Op) can cover two points in this set. Therefore, C(E
+
+Vp, int(Op))
+
+14.
+
+≥
+
+∪
+
+To bound max
+
+C(E
+
+Vp, int(Op)) : p
+
+}
+[0, 1]6 into smaller parallelepipeds P of the form P =
+
+∪
+
+∈
+
+{
+
+[0, 1]6
+
+1
+
+i
+
+≤
+
+≤
+
+6. For each P , we ﬁnd an independent of p
+
+Q
+∈
+
+, we will partition the conﬁguration space
+
+i[ai, ai + δi], where 0
+
+ai < ai + δi
+
+1,
+
+≤
+P polytope QP that can be used for
+
+≤
+
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+5
+
+covering. Namely, we deﬁne QP =
+
+UP Ov where UP is the set of all 64 vertices of P . We
+∈
+
+v
+∩
+
+need the following properties relating QP and Op for p
+
+P .
+
+∈
+
+Lemma 2.4. For any p
+
+P :
+
+∈
+
+(i) QP
+
+Op;
+
+⊂
+
+(ii) there is a translate of QP which is a subset of the interior of Op.
+
+Proof. (i) We need the following fact. Suppose [q, r] is a segment parallel to one of the coordinate
+
+[q, r]
+
+axes such that p
+we can assume that q = (q1, p2, . . . , p6), r = (r1, p2, . . . , p6) and q1 ≤
+x
+
+P for some point p. Then Oq
+
+Or there exist λ, µ
+
+Or
+
+Oq
+
+⊂
+
+⊂
+
+∩
+
+∈
+
+S such that x = Aqλ = Arµ. Deﬁne f (t) := Ap(tλ + (1
+
+p1 ≤
+
+r1. For a point
+
+Op. Without loss of generality,
+
+t)µ),
+
+−
+
+∈
+
+∩
+
+[0, 1], clearly f (t)
+
+t
+
+∈
+
+∈
+
+∈
+Op for any t
+
+[0, 1]. Moreover, it is immediate that the ﬁrst and the
+
+∈
+
+third coordinates of f (t) are equal to x1 and x3, respectively. Now the second coordinate of
+
+f (t) equals
+
+g(t) := t((λ1 + λ2)p1 + λ4 + (λ5 + λ6)p6) + (1
+
+t)((µ1 + µ2)p1 + µ4 + (µ5 + µ6)p6).
+
+−
+
+Observe that by x = Aqλ = Arµ we have
+
+(g(0)
+
+−
+
+x2)(g(1)
+
+x2) = (µ1 + µ2)(p1 −
+
+r1)(λ1 + λ2)(p1 −
+
+−
+
+q1)
+
+≤
+
+0,
+
+so, by continuity, x = f (t) for some t
+
+[0, 1] proving the desired fact.
+
+∈
+
+The proof of (i) is completed by iterative application of the established fact. Namely, for
+
+arbitrary p
+
+∈
+
+P , the ﬁrst step is
+
+(3)
+
+O(a1,p2,...,p6) ∩
+
+O(a1+δ1,p2,...,p6) ⊂
+
+Op.
+
+The second step is application of the fact along the second coordinate for each of the points in
+
+the left hand side of (3):
+
+O(a1,a2,p3,...,p6) ∩
+
+O(a1,a2+δ2,p3,...,p6) ⊂
+O(a1+δ1,a2+δ2,p3,...,p6) ⊂
+
+O(a1,p2,...,p6),
+
+O(a1+δ1,p2,...,p6),
+
+O(a1+δ1,a2,p3,...,p6) ∩
+which, in combination with (3), gives
+
+O(a1,a2,p3,...,p6) ∩
+
+O(a1,a2+δ2,p3,...,p6) ∩
+Continuing in this manner, we arrive at QP
+
+O(a1+δ1,a2,p3,...,p6) ∩
+
+O(a1+δ1,a2+δ2,p3,...,p6) ⊂
+
+Op.
+
+Op after the sixth step.
+
+⊂
+
+6
+
+A. PRYMAK
+
+(ii) First we remark that QP has no common points with the boundary of the cube. Indeed,
+
+points of the set Vq (recall that Vq = Aq(
+
+observe that if none of qi is zero or one, then Oq intersects the boundary of the cube only at the
+e1, . . . , e6}
+of the cube, since all δi > 0, it is easy to choose q
+∈
+
+)). For any given point x on the boundary
+
+Vq, which proves the
+
+int(P ) so that x
+
+6∈
+
+{
+
+remark.
+
+Without loss of generality, we can assume that p
+
+∈
+
+QP there exists ε > 0 (possibly depending on x) such that x
+
+x
+
+∈
+
+the case (x2, x3)
+
+= (p1, p2). We have r = p + (0, 0, δ, 0, δ, 0)
+
+∈
+
+i[ai, ai+δi/2]. Next we show that for any
+Op. First consider
+
+(ε, 0, 0)
+
+Q
+
+−
+P for any ﬁxed 0 < δ < δi/2,
+
+∈
+
+i = 3, 5, so by (i), we can ﬁnd λ
+
+∈
+
+S such that x = Arλ. Observe that Arλ
+
+Apλ = (δλ′, 0, 0)
+
+−
+) is the segment joining (0, p1, p2)
+
+where λ′ := λ3 +
+
++ λ6. The set Ar(
+
+µ
+
+{
+
+∈
+
+S : µ1 + µ2 = 1
+
+}
+
+· · ·
+
+with (1, p1, p2) which does not contain x by (x2, x3)
+
+= (p1, p2). Therefore, we can assume that
+
+λ1 + λ2 < 1, i.e. λ′ > 0. We have Op
+
+Apλ = x
+
+−
+
+∋
+
+(δλ′, 0, 0) as required. Now consider the
+
+case (x2, x3) = (p1, p2). Since x
+
+∈
+
+QP which has no common points with the boundary of the
+
+cube, we have x1 > 0. In addition, x
+
+QP
+
+Op and (0, p1, p2) = Ape1 ∈
+
+⊂
+
+∈
+
+Op, so the segment
+
+(t, p1, p2) : 0
+
+{
+
+t
+
+x1}
+
+≤
+
+≤
+
+is a subset of Op which yields the required since x1 > 0.
+
+Now it remains to show that the selection of ε > 0 as above can be made independent of x
+
+∈
+QP . Note that QP is a closed convex polytope as an intersection of ﬁnitely many closed convex
+
+polytopes Ov, v
+
+∈
+
+We need to show that inf x
+
+UP . Deﬁne h : QP
+
+(0,
+
+) by h(x) := max
+
+ε > 0 : x
+
+(ε, 0, 0)
+
+}
+QP h(x) > 0. It is easy to observe that the convexity of Op and QP
+∈
+
+→
+
+∞
+
+−
+
+∈
+
+{
+
+Op
+
+.
+
+implies the concavity of h: if x, y
+
+QP and t
+
+so Op
+
+t(x
+
+(h(x), 0, 0)) + (1
+
+−
+∋
+and h(tx + (1
+
+t)y)
+
+−
+
+≥
+
+th(x) + (1
+
+−
+
+∈
+t)(y
+
+−
+
+[0, 1], then x
+
+−
+
+∈
+
+(h(x), 0, 0), y
+
+−
+
+(h(y), 0, 0)
+
+Op,
+
+∈
+t)h(y), 0, 0)
+
+(h(y), 0, 0)) = (tx + (1
+
+t)y)
+
+(th(x) + (1
+
+−
+t)h(y). Since QP is a closed convex polytope, any point
+
+−
+
+−
+
+−
+
+QP can be written as a convex combination of the (ﬁnitely many) vertices of QP . By the
+
+x
+
+∈
+
+concavity of h this implies h(x)
+
+QP .
+
+minw
+
+≥
+
+WP h(w) > 0, where WP is the set of the vertices of
+∈
+(cid:3)
+
+Let RP =
+
+p
+∪
+
+P Vp, i.e. the union of six rectangles on the facets of [0, 1]3 where the points Vp
+∈
+
+vary as p varies over P . The following is immediate by Lemma 2.4.
+
+Corollary 2.5. We have
+
+max
+
+{
+
+C(E
+
+∪
+
+Vp, int(Op)) : p
+
+P
+
+∈
+
+} ≤
+
+C(E
+
+∪
+
+RP , QP ).
+
+6
+6
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+7
+
+With the goal of obtaining C(E
+
+RP , QP )
+
+14, we need to introduce certain structure of
+
+≤
+such covers and describe 14 translates of QP that will be used. For each vertex of the cube, there
+
+∪
+
+will be a translate of QP covering that vertex and certain parts of each of the three adjacent
+
+edges. Each of the remaining 14
+
+−
+
+8 = 6 translates covers one of the rectanlges RP
+
+Fij together
+
+∩
+
+with a “middle” portion of one of the edges. Observe that with this covering structure each edge
+
+from some 6 edges would be covered by the two translates of QP corresponding to the vertices
+
+which are the endpoints of the edge, while each edge from the other 6 edges would be covered
+
+by three translates of QP : two corresponding to the vertices, and one covering the uncovered
+
+“middle” portion of the edge which also covers one of the rectangles RP
+
+Fij. Since QP is
+
+∩
+
+a closed convex polytope and edges are one-dimensional, once the structure of the covering is
+
+ﬁxed, it is possible to decide if such a cover exists by verifying feasibility of the corresponding
+
+system of linear inequalities which will be described below.
+
+Let Ei =
+
+{
+
+(vi1, vi2, vi3) + tui : t
+
+[0, 1]
+
+}
+
+∈
+
+, i = 1, . . . , 12, be the 12 edges of the cube, where
+
+(vi1, vi2, vi3) is a vertex of the cube and ui
+
+e1, e2, e3}
+
+∈ {
+
+. Consider any injective mapping
+
+1, 2, 3
+
+τ :
+
+{
+
+} × {
+
+0, 1
+
+} → {
+
+0, . . . , 11
+
+}
+
+which indicates for each face Fij middle portion of which
+
+edge will be covered together with RP
+
+Fij. Let
+
+= τ (
+
+1, 2, 3
+
+} × {
+
+0, 1
+
+).
+
+}
+
+{
+
+E
+
+∩
+
+For each vertex v of the cube, introduce a translate vector a(v). Using the half-space repre-
+
+sentation of the convex polytope QP , the condition v
+
+a(v) + QP can be written as a system
+
+∈
+
+of linear inequalities containing the components of the vector a. Combining these over the ver-
+
+tices, we have a system of 8q linear inequalities on 24 = 8
+
+3 variables (three per each vertex),
+
+·
+
+where q is the number of facets of QP . Next, for each face Fij, we introduce a translate bij and
+
+require that RP
+
+Fij
+
+∩
+
+⊂
+
+bij + QP . Since RP
+
+∩
+
+Fij is a rectangle and QP is convex, it suﬃces to
+
+verify that each vertex of RP
+
+∩
+
+Fij belongs to bij + QP . We now have 24 + 6
+
+3 = 42 variables
+
+·
+
+and a number of linear constraints ensuring that v
+
+a(v) + QP for each vertex v and that
+
+∈
+bij + QP for each face Fij. It remains to cover the interiors of the edges Ek. Let
+
+RP
+
+Fij
+
+∩
+
+⊂
+
+T be the image of τ ; it consists of 6 elements. First we consider the easier case k
+
+T . We
+
+6∈
+
+will cover Ek = [vk, vk + uk] using the translates covering the endpoints of Ek. We introduce
+
+a variable tk and require that vk + tkuk
+
+a(vk) + QP and vk + tkuk
+
+a(vk + uk) + QP at
+
+∈
+
+∈
+
+the same time for some value of tk. In this case, the point vk + tkuk belongs to both convex
+
+polytopes a(vk) + QP and a(vk + uk) + QP which contain vk and vk + uk, respectively, thus
+
+Ek = [vk, vk + uk] is completely covered. For the case k
+
+T , we proceed similarly with the
+
+∈
+
+diﬀerence that two intermediary points are needed instead of one. Namely, when k
+
+T , we
+
+∈
+
+∈
+6 + 2
+
+8
+
+A. PRYMAK
+
+introduce two variables tk, sk and require vk + tkuk
+
+a(vk) + QP , vk + skuk
+
+a(vk + uk) + QP
+
+∈
+
+∈
+
+and vk + tkuk, vk + skuk
+
+bij + QP , where k = τ (i, j). Altogether, we have 42 + 6 + 6
+
+2 = 60
+
+·
+
+variables and (8 + 4
+
+·
+
+6 + 4
+
+·
+
+·
+
+6)q = 68q constraints. Let us denote this system of linear
+
+inequalities as
+
+L
+
+(P, τ ) (observe that QP depends on P ). We have just proved the following.
+
+Proposition 2.6. If there exists an injective mapping τ :
+
+1, 2, 3
+
+{
+
+} × {
+
+0, 1
+
+} → {
+
+1, . . . , 12
+
+such
+
+}
+
+that
+
+L
+
+(P, τ ) has a solution, then C(E
+
+RP , QP )
+
+14.
+
+≤
+
+∪
+
+3. Computer verification
+
+With Lemma 2.2, Corollary 2.5, and Proposition 2.6 at hand, it is clear how the task of
+
+proving C(K, int(K))
+
+≤
+
+14 can be discretized and performed on a computer in a ﬁnite number
+
+of steps, provided the described covering structure works. Indeed, for a large positive integer
+
+M, consider the partition
+
+M of [0, 1]6 into M 6 congruent cubes with side length M −
+
+U
+
+1, and ﬁnd
+
+a suitable τ (there are ﬁnitely many possibilities) for each cube P
+
+M so that
+
+∈ U
+
+L
+
+(P, τ ) has a
+
+solution. Since all the coordinates of the vertices of P are rational, it is easily seen that all the
+
+coeﬃcients of the system
+
+L
+
+(P, τ ) are rational. So, the required veriﬁcation can be performed
+
+using exact computations. Such a straightforward approach will not be feasible in practice, and
+
+we will apply a number of ideas to shorten the required computation time. We remark that in
+
+our discretization all the inequalities in the systems
+
+(P, τ ) are non-strict, which is crucial for
+
+L
+
+applicability of linear programming techniques. Although Lemma 2.2 calls for covers using the
+
+interiors of certain polytopes, the transition from open sets to the closed sets was achieved in
+
+Lemma 2.4 (ii).
+
+First let us utilize the available symmetries. The collection of 6-tuples of points
+
+∈
+from E3 (in fact, from the boundary of the cube) is invariant under symmetries of the
+
+Vp : p
+
+{
+
+[0, 1]6
+
+}
+
+cube. These symmetries can be obtained as compositions of the following two transformations:
+
+interchange of any two coordinates xi
+the latter, we can assume p1, p2, p3 ∈
+of the rows in the matrix Ap to assume that p2 + p4 ≤
+[0, 1
+
+←→
+[0, 1
+
+2]3
+
+[0, 1]3 : p2 + p4 ≤
+
+×
+
+p1 + p6 ≤
+
+p3 + p5}
+
+xj and mappings of the type xi
+
+←→
+
+1
+
+−
+
+xi. Using
+
+2]. Then using the former, we interchange the order
+
+∈
+. Due to the symmetries described above, we have
+
+{
+
+p3 + p5. Denote D :=
+
+p
+
+p1 + p6 ≤
+
+(4)
+
+max
+
+{
+
+C(E
+
+∪
+
+Vp, int(Op)) : p
+
+[0, 1]6
+
+∈
+
+= max
+
+C(E
+
+{
+
+∪
+
+}
+
+Vp, int(Op)) : p
+
+D
+
+.
+
+}
+
+∈
+
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+9
+
+Next we cover D with certain cubes from
+
+U2M . With h := 1
+
+2M , deﬁne
+
+D
+2M :=
+
+U
+
+[n
+
+6
+
+[kih, (ki + 1)h] : 0
+
+Yi=1
+
+k1, k2, k3 ≤
+
+≤
+
+M
+
+−
+
+1, 0
+
+k4, k5, k6 ≤
+
+≤
+
+2M
+
+1,
+
+−
+
+2 for i = 1, 2, 3,
+1.
+
+−
+
+We claim that D
+
+D
+2M . Indeed, given p
+
+⊂ U
+
+D, deﬁne ki :=
+
+∈
+
+k2 + k4 ≤
+
+k1 + k6 + 1
+
+≤
+
+k3 + k5 + 2
+
+.
+o
+. If pi = 1
+pi/h
+⌋
+⌊
+
+−
+
+modify ki by setting ki := M
+
+1, and if pi = 1 for i = 4, 5, 6, modify ki by setting ki := 2M
+
+≤
+
+≤
+
+Then kih
+pi
+pi = (ki + 1)h only if pi = 1
+k2 +k4 ≤
+k6 = 2M
+
+k1 +k6 +1, the inequality k1 +k6 ≤
+1, then clearly k2 + k4 ≤
+−
+
+(M
+
+−
+
+(ki + 1)h (in particular, p belongs to the cube
+
+6
+i=1[kih, (ki + 1)h]), while
+2 for i = 1, 2, 3 or pi = 1 for i = 4, 5, 6. Let us now establish that
+1 and
+
+k3 +k5 +1 is completely similar. If k1 = M
+
+Q
+
+1) + (2M
+
+1) = k1 + k6. Otherwise, we have the strict
+
+−
+
+−
+
+inequality p1 + p6 < (k1 + 1)h + (k6 + 1)h, which, combined with k2h + k4h
+proves the desired k2 + k4 ≤
+
+k1 + k6 + 1.
+
+p2 + p4 ≤
+
+≤
+
+p1 + p6,
+
+We use computer assistance to prove the following proposition which implies Theorem 1.1
+
+due to (4) and D
+
+D
+20.
+
+⊂ U
+
+Proposition 3.1. There exists a collection
+
+is a rectangular parallelepiped and τj :
+
+{
+1, 2, 3
+
+{
+
+} × {
+
+}
+0, 1
+
+(Pj, τj)
+
+4660035
+j=1
+
+of pairs (Pj, τj) where Pj
+
+[0, 1]6
+
+⊂
+
+} → {
+
+1, . . . , 12
+
+}
+
+is an injective mapping
+
+such that
+
+jPj =
+
+∪
+
+D
+20 and
+
+U
+
+L
+
+(Pj, τj) has a solution for every j.
+
+Proof. We begin with 1882010 boxes from
+
+D
+20 and attempt to ﬁnd an appropriate τj for each
+box. There are 1496 possible choices for each mapping τj if we restrict ourselves to selecting
+
+U
+
+τj(F ) as one of the four edges contained in a face F (keeping in mind that the resulting mapping
+
+should be injective, i.e. no edge should be selected twice). By working with randomly chosen
+
+boxes, we have selected a set of 16 possible choices for τj one of which worked often. Let us
+
+call these 16 possibilities a short list.
+
+The algorithm constructing the required collection of boxes and mappings proceeds as follows.
+
+First we split the box [0, 1
+
+2]3
+
+×
+
+[0, 1]3 containing D into 512 smaller boxes
+
+6
+
+Yi=1
+
+[ ji
+4 , ji
+
+4 + 1
+4],
+
+j1, j2, j3 ∈ {
+
+0, 1
+
+,
+
+}
+
+j4, j5, j6 ∈ {
+
+0, 1, 2, 3
+
+,
+
+}
+
+which we will refer to as regions. Now ﬁx a region. For each starting box Pj from
+
+D
+20 in
+D
+20), test if one of the mappings
+U
+(Pj, τj) has a solution. More precisely, we generate QP using
+
+U
+
+the region (some regions may not contain any boxes Pj from
+
+in the short list works, i.e.
+
+L
+
+10
+
+A. PRYMAK
+
+rational numbers (all the vertices of QP are from Q3) and exact arithmetic implying that all
+
+the coeﬃcients in the problem
+
+L
+
+(Pj, τj) are rational. However, we ﬁrst check the feasibility
+
+using a solver working with ﬂoating point numbers, which is faster than using exact arithmetic
+
+with rational numbers. In case the solver returns the “not feasible” result, we assume so, but
+
+if the solver returns “feasible” with ﬂoating point arithmetic, we double check the result using
+
+exact computations with rational numbers. Returning to the algorithm, if
+
+(Pj, τj) is feasible
+
+L
+
+for some τj from the short list, we are done. Otherwise, we consecutively check feasibility of
+
+(Pj, τj) picking τj from the (“long”) list of all 1496 possibilities for the mapping τj.
+
+L
+successful τj is found, we move it to the beginning of the long list. This approach maintains
+
+If a
+
+more useful mappings in the start of the list. As before, if we found a mapping τj such that
+
+L
+the largest dimensions (e.g. [0, 1
+20 ]
+
+(Pj, τj) is feasible, we are done. Otherwise, we divide Pj into two smaller boxes along one of
+40, 1
+20]5)
+20]
+D
+20 is always true, and if the
+(Pj, τj) has a solution.
+
+U
+algorithm terminates, then all obtained pairs (Pj, τj) are such that
+
+20 ]5 could be split as [0, 1
+40 ]
+jPj =
+
+and invoke the algorithm recursively. Thus the relation
+
+20 ]5 and [ 1
+
+[0, 1
+
+[0, 1
+
+[0, 1
+
+×
+
+×
+
+×
+
+∪
+
+L
+
+We supplied the SageMath scripts used and the results at [12]. We have listed the resulting
+(cid:3)
+
+boxes and the mappings for each region in the “output” folder.
+
+be used were obtained after 7 subdivisions, i.e. have the dimensions 1
+
+We ﬁnish with a few remarks about the computations. The smallest boxes that needed to
+( 1
+40)5. As the pairs
+(Pj, τj) are already found by the above algorithm, it suﬃces to run the veriﬁcation of feasibility
+
+80 ×
+
+of the corresponding linear programs to check the result. Each box requires approximately
+
+two seconds running time, but due to independence from other boxes, this veriﬁcation can be
+
+eﬃciently parallelized. It is possible to complete the veriﬁcation using 10 threads on a modern
+
+personal computer (i7) in about two weeks.
+
+Acknowledgment. The author is grateful to the anonymous referees for the useful com-
+
+ments.
+
+References
+
+[1] K´aroly Bezdek and Muhammad A. Khan, The geometry of homothetic covering and illumination, Discrete
+
+geometry and symmetry, Springer Proc. Math. Stat., vol. 234, Springer, Cham, 2018, pp. 1–30.
+
+[2] V. Boltyanski, The problem of illuminating the boundary of a convex body, Izv. Mold. Fil. AN SSSR 76
+
+(1960), 77–84.
+
+A NEW BOUND FOR HADWIGER’S COVERING PROBLEM IN E3
+
+11
+
+[3] A. V. Bondarenko, A. Prymak, and D. Radchenko, Spherical coverings and X-raying convex bodies of
+
+constant width, Canad. Math. Bull., DOI 10.4153/S0008439521001016. Accepted on Dec. 6, 2021.
+
+[4] Marcelo Campos, Peter van Hintum, Robert Morris, and Marius Tiba, Towards Hadwiger’s conjecture via
+
+Bourgain slicing, available at https://arxiv.org/abs/2206.11227.
+
+[5] Mingyang Diao, On Hadwiger covering problem in ﬁve- and six-dimensional Euclidean spaces, M.Sc. thesis,
+
+University of Manitoba (2022), available at http://hdl.handle.net/1993/36378.
+[6] H. Hadwiger, Ungel¨ostes Probleme Nr. 20, Elem. Math. 12 (1957), 121 (German).
+
+[7] H. Huang, B. A. Slomka, T. Tkocz, and B.-H. Vritsiou, Improved bounds for Hadwiger’s covering problem
+
+via thin-shell estimates, J. Eur. Math. Soc., posted on August 11, 2021, DOI 10.4171/JEMS/1132, available
+
+at http://arxiv.org/abs/1811.12548.
+
+[8] Marek Lassak, Covering the boundary of a convex set by tiles, Proc. Amer. Math. Soc. 104 (1988), no. 1,
+
+269–272.
+
+[9]
+
+, Covering a three-dimensional convex body by smaller homothetic copies, Beitr¨age Algebra Geom.
+
+39 (1998), no. 2, 259–262.
+
+[10] F. W. Levi, ¨Uberdeckung eines Eibereiches durch Parallelverschiebung seines oﬀenen Kerns, Arch. Math.
+
+(Basel) 6 (1955), 369–370 (German).
+
+[11] Ioannis Papadoperakis, An estimate for the problem of illumination of the boundary of a convex body in
+
+E3, Geom. Dedicata 75 (1999), no. 3, 275–285.
+
+[12] A.
+
+Prymak,
+
+Data
+
+and
+
+scripts
+
+for
+
+the
+
+proof
+
+of H3
+
+https://github.com/andriyprm/h3atmost14/releases/tag/v1.
+
+14,
+
+available
+
+at
+
+≤
+
+[13] A. Prymak and V. Shepelska, On the Hadwiger covering problem in low dimensions, J. Geom. 111 (2020),
+
+no. 3, Paper No.42, 11.
+
+[14] C. A. Rogers, A note on coverings, Mathematika 4 (1957), 1–6.
+[15] C. A. Rogers and G. C. Shephard, The diﬀerence body of a convex body, Arch. Math. (Basel) 8 (1957),
+
+220–233.
+
+[16] Chuanming Zong, A quantitative program for Hadwiger’s covering conjecture, Sci. China Math. 53 (2010),
+
+no. 9, 2551–2560.
+
+Department of Mathematics, University of Manitoba, Winnipeg, MB, R3T 2N2, Canada
+
+Email address: prymak@gmail.com
+
+

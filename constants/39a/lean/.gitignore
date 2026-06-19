@@ -1,0 +1,8 @@
+# Lake build artifacts and fetched dependencies — never committed.
+# Reproduce with: lake exe cache get && lake build  (toolchain + manifest are pinned).
+/.lake/
+/lake-packages/
+/build/
+*.olean
+*.ilean
+*.c

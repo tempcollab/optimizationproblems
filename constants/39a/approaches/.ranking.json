@@ -1,0 +1,57 @@
+{
+  "certify-fourteen": {
+    "elo": 1501.4027859836967,
+    "expanded": 1,
+    "last_note": "Lean/Lake bootstrapped (pinned v4.31.0). 4 holes closed: genuine sorry-free axiom-clean H3 registry def (no bound smuggling, verified faithful to ABP2024-def-Hn) + IsCoveredBy.mono_left/.union, coveringNumber_mono_left, icc_covered_by_two \u2014 all #print-axioms clean (reviewer-reproduced), promoted to lemmas/. Holes D1-D5 (reduction, discretization, per-box Farkas, atlas, assemble) remain on path to H3_le_14 (lone sorryAx). No bound (D can't beat 14).",
+    "last_outcome": "advanced",
+    "last_round": 1,
+    "selected": 0,
+    "slug": "certify-fourteen",
+    "stale": true,
+    "summary": "Machine-checked Lean proof of the EXISTING H_3 \u2264 14 (not a record-break): compress Prymak's 4.66M-box rational-LP/Farkas certificate to a lake-build-checkable theorem. De-risks the Lean LP core reused by A and C."
+  },
+  "circumscribed-frame": {
+    "elo": 1439.354410127479,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "circumscribed-frame",
+    "stale": false,
+    "summary": "Replace the minimal-volume parallelotope normalization with a frame chosen to minimize worst-case per-cell count (or a two-frame split) so p=1/2 is never forced; requires re-deriving Prymak's reduction. Lean-hostile, high variance."
+  },
+  "larger-covering-piece": {
+    "elo": 1530.013706443008,
+    "expanded": 1,
+    "last_note": "Reshaped C1 to an impossibility theorem but its load-bearing step is FALSE: claims cube is the octahedron's minimal-volume circumscribing parallelotope (it is not \u2014 min box vol=2<8, refuted by A's F2 and reviewer re-derivation). guaranteed_inscribed_set=Op is hard-coded, not verified. C1 hole NOT genuinely closed; uniform line unfillable as set up. C0/F1 distances are true. No bound.",
+    "last_outcome": "dead-end",
+    "last_round": 1,
+    "selected": 0,
+    "slug": "larger-covering-piece",
+    "stale": true,
+    "summary": "Find a uniform enlargement O_p \u2286 W_p \u2286 int(K) for all p whose difference body covers one marked-pair difference, dropping the per-cell count to 13; contact-only admissibility is the crux."
+  },
+  "octahedral-direct": {
+    "elo": 1469.4995713264623,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "octahedral-direct",
+    "stale": false,
+    "summary": "Bypass the skeleton reduction at p=1/2: characterize the near-symmetric body family forcing p\u22481/2 and cover each directly by \u226413 translates (Lassak core + bounded asymmetry correction). Continuum-heavy."
+  },
+  "special-case-p-half": {
+    "elo": 1559.729526119354,
+    "expanded": 1,
+    "last_note": "Closed F0/F1/F2 sub-facts (exact, reviewer-reproduced+re-derived); F2 (octahedron min-vol box=2<8) is CORRECT. Holes A1' (uniform rational corner-slack W \u2014 Lean-hostile, can't close in contact-only frame), A2 (edge-aware 13-piece rational LP \u2014 naive merge edge-infeasible), A3 (atlas) remain open on path to 13. No bound (still 14).",
+    "last_outcome": "advanced",
+    "last_round": 1,
+    "selected": 0,
+    "slug": "special-case-p-half",
+    "stale": true,
+    "summary": "Split p-space: generic boxes get a 13-piece rational LP; a neighborhood of p=1/2 gets a larger admissible covering piece W enlarging O_p toward two adjacent cube vertices to defeat Remark 2.3 locally."
+  }
+}

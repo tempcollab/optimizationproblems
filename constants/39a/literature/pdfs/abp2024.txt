@@ -1,0 +1,2591 @@
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+Abstract. Let Hn be the minimal number such that any n-dimensional convex body can be
+covered by Hn translates of interior of that body. Similarly H s
+n is the corresponding quantity
+for symmetric bodies. It is possible to deﬁne Hn and H s
+n in terms of illumination of the bound-
+ary of the body using external light sources, and the famous Hadwiger’s covering conjecture
+(illumination conjecture) states that Hn = H s
+
+n = 2n.
+
+In this note we obtain new upper bounds on Hn and H s
+
+n for small dimensions n. Our main
+idea is to cover the body by translates of John’s ellipsoid (the inscribed ellipsoid of the largest
+volume). Using speciﬁc lattice coverings, estimates of quermassintegrals for convex bodies in
+John’s position, and calculations of mean widths of regular simplexes, we prove the following
+new upper bounds on Hn and H s
+72,
+H s
+5
+≤
+For larger n, we describe how the general asymptotic bounds Hn
+
+n(ln n + ln ln n + 5)
+2nn(ln n + ln ln n + 5) due to Rogers and Shephard can be improved for speciﬁc
+
+305, and H s
+6
+
+284096, H s
+4
+
+41377, H8
+
+6137, H7
+
+933, H6
+
+n: H5
+
+1292.
+
+2n
+n
+
+≤
+
+≤
+
+≤
+
+≤
+
+≤
+
+≤
+
+≤
+
+(cid:0)
+
+(cid:1)
+
+and H s
+n
+≤
+values of n.
+
+1. Introduction
+
+Let
+
+Kn be the family of all convex bodies in En, i.e., all convex compact sets K
+⊂
+
+En, we denote by
+
+). For A, B
+
+nonempty interior (int(K)
+
+=
+
+∅
+
+N
+
+C(A, B) := min
+
+N :
+
+(
+
+t1, . . . , tN ∈
+∃
+
+En satisfying A
+
+⊂
+
+the minimal number of translates of B needed to cover A.
+
+Hadwiger [17] raised the question of determining the value of
+
+(tj + B)
+
+j=1
+[
+
+,
+
+)
+
+En with a
+
+⊂
+
+4
+2
+0
+2
+
+r
+a
+
+M
+1
+3
+
+]
+
+G
+M
+.
+h
+t
+a
+m
+
+[
+
+1
+v
+7
+4
+5
+0
+0
+.
+4
+0
+4
+2
+:
+v
+i
+X
+r
+a
+
+Hn = min
+
+{
+
+C(K, int(K)) : K
+
+∈ Kn}
+
+3.
+
+for all n
+
+≥
+
+Considering an n-cube, one immediately sees that Hn ≥
+
+covering conjecture states that Hn = 2n for n
+
+2n, and the well-known Hadwiger’s
+3 with equality only for parallelepipeds. It
+
+≥
+
+2010 Mathematics Subject Classiﬁcation. Primary 52A20; Secondary 52A39, 52A40, 52C07, 52C17.
+Key words and phrases. Illumination problem, illumination number, covering by smaller homothetic copies,
+
+John’s position, quermassintegrals.
+
+The ﬁrst author was supported by the University of Manitoba Research Grant Program project “Covering
+
+problems with applications in Euclidean Ramsey theory and convex geometry” and PIMS PDF.
+
+The second author was supported in part by Grant 275113 of the Research Council of Norway.
+Corresponding author: Andriy Prymak; email: prymak@gmail.com
+The third author was supported by NSERC of Canada Discovery Grant RGPIN-2020-05357.
+
+1
+
+ 
+ 
+ 
+ 
+ 
+ 
+6
+2
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+was shown that H2 = 4 by Levi [23]. Aside from Levi and Hadwiger, the conjecture may be
+associated with the names of Boltyanski, who in [8] has established an equivalent formulation in
+terms of illumination of the boundary of the body by external light sources, and with Gohberg-
+Markus [15] who asked the question in terms of the minimal number of smaller homothetic
+copies of K required to cover K. As of today, the conjecture, which is also known as the
+illumination conjecture, is wide open. For details about the history and partial results for
+special classes of convex bodies see, e.g., [6].
+
+In what follows we will outline the current approaches in obtaining the upper bounds on Hn
+
+and our modiﬁcations allowing to obtain new bounds.
+
+To this end, let
+
+and deﬁne
+
+s
+n is the subfamily of
+
+K
+
+Kn consisting of centrally symmetric convex bodies,
+
+The best known explicit upper bound on Hn in high dimensions follows from the results of
+
+H s
+
+n = min
+
+{
+
+C(K, int(K)) : K
+
+.
+
+s
+n}
+
+∈ K
+
+Rogers and Zong [29]:
+
+(1)
+
+n(ln n + ln ln n + 5).
+
+Hn ≤
+is
+
+2n
+n
+(cid:18)
+4n
+√2πn
+
+(cid:19)
+, so this upper bound is (4 + o(1))n while the con-
+The asymptotic behavior of
+jecture states Hn = 2n. Remarkable sub-exponential improvements of (1) have been obtained
+only recently by Huang, Slomka, Tkocz and Vritsiou [18]. Namely, using “thin-shell” volume
+estimates they obtained
+
+2n
+n
+
+(cid:1)
+
+(cid:0)
+
+(2)
+
+Hn ≤
+
+exp(
+
+c√n)4n.
+
+−
+
+This was later improved, using the new breakthrough bound on isotropic constant, by Campos,
+van Hintum, Morris and Tiba [10] to
+
+(3)
+
+Hn ≤
+
+exp
+
+cn
+−
+ln8 n
+
+4n.
+
+(cid:16)
+Both constants c in (2) and (3) are independent of n but not given explicitly. For centrally
+symmetric bodies, one has
+
+(cid:17)
+
+(4)
+
+H s
+
+n ≤
+
+2nn(ln n + ln ln n + 5),
+
+which is asymptotically close to the conjectured 2n (see [29]).
+
+The ﬁrst step in obtaining any of the inequalities (1)–(4) is the result of Rogers [27] on
+
+covering density of En by translates of a body L. Namely, let
+
+θ(L) = lim
+→∞
+
+R
+
+inf
+Λ (
+
+L
+#Λ
+(2R)n : [
+|
+|
+
+−
+
+R, R]n
+
+⊂
+
+(xλ + L)
+
+)
+
+Λ
+[λ
+∈
+denote the covering density of space by translates of L, where
+|
+is the cardinality of Λ. Rogers [27] showed that for any body L
+
+is the volume of L, and #Λ
+
+L
+|
+∈ Kn,
+
+(5)
+
+θ(L)
+
+≤
+
+n(ln n + ln ln n + 5).
+
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+3
+
+The second step is the use of the inequality
+
+(6)
+
+C(K, L)
+
+≤
+
+K
+
+|
+
+L
+|
+
+θ(L),
+
+−
+L
+|
+
+|
+
+which is valid for any K, L
+
+n and was proved by Rogers and Zong [29].
+
+∈ K
+
+|
+(cid:1)
+L
+
+(cid:0)
+/
+
+K
+and using the fact that
+from (6) by applying the Rogers-Shephard (see [28]) inequality
+
+For symmetric bodies, one obtains (4) from (6) by choosing L = (1
+2K
+
+0+
+s
+n. For general bodies, (1) follows
+2n
+∈ Kn.
+n
+The improvements (2) and (3) are both based on choosing L to be the largest (by volume)
+
+ε)K with ε
+
+for K
+
+for K
+
+= 2n
+
+∈ K
+
+| ≤
+
+→
+
+K
+
+K
+
+K
+
+K
+
+K
+
+−
+
+−
+
+−
+
+=
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+|
+
+centrally symmetric subset of K. With such choice, we have
+2n∆KB(K)−
+
+1, where
+
+K
+
+|
+
+L
+|
+
+−
+
+|
+
+| ≤ |
+
+2K
+
+/
+
+|
+
+|
+
+L
+
+| ≤
+
+∆KB(K) := max
+En |
+
+x
+
+∈
+
+K
+
+∩
+
+K)
+
+|
+
+(x
+K
+
+|
+
+−
+|
+
+2−
+∈ Kn, while [18] and [10] obtain the corresponding sub-exponential improvements to
+
+is the K¨ovner-Besicovitch measure of symmetry of K. Simple averaging gives ∆KB(K)
+for any K
+the lower bound on ∆KB(K), yielding (2) and (3).
+For low dimensions, Lassak [21] showed that
+
+≥
+
+n
+
+(7)
+
+Hn ≤
+
+(n + 1)nn
+
+−
+
+1
+
+(n
+
+−
+
+−
+
+1)(n
+
+−
+
+2)n
+
+1,
+
+−
+
+≤
+
+5. For n = 3 this gives H3 ≤
+
+20 by Lassak [22], then to H3 ≤
+
+16 by Papadoperakis [24], and then to H3 ≤
+
+34, which was improved to
+14 by
+96, H5 ≤
+1091 and
+15373 improving both (1) and (7) for n = 4, 5, 6. Then Diao [12] obtained H5 ≤
+1002 and
+14140. All of these results in low dimensions were based on comparing the body with a
+3 = 8,
+4 no estimate better than (4) or than the corresponding bound on Hn (obviously,
+
+which outperforms (1) for n
+H3 ≤
+Prymak [25]. For slightly larger dimensions, it was shown in [26] that H4 ≤
+H6 ≤
+H6 ≤
+suitable parallelepiped. For the symmetric case, Lassak [20] obtained the sharp result H s
+but for n
+H s
+
+Hn) was known.
+
+≥
+
+n ≤
+Our main result is the following new bounds.
+
+933, H6 ≤
+
+6137, H7 ≤
+
+41377, H8 ≤
+
+Theorem 1. H5 ≤
+H s
+1292.
+6 ≤
+The main idea of the proof is to utilize (6) with L being the maximal (by volume) inscribed
+ellipsoid into K (such ellipsoids were characterized by John [19]). After an appropriate aﬃne
+2 in En, while K is in the so-called John’s
+transform, we can assume that L is the unit ball Bn
+position, so applying (6) we get
+
+305, and
+
+284096, H s
+
+72, H s
+
+5 ≤
+
+4 ≤
+
+(8)
+
+C(K, intK)
+
+|
+Next we make use of several geometric results which allow us to obtain an upper bound on
+. One ingredient in such estimates is the fact that the mean width and the volume of a
+
+K + Bn
+2 |
+
+|
+
+|
+
+K + Bn
+2 |
+Bn
+2 |
+
+≤
+
+θ(Bn
+
+2 ).
+
+4
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+body in John’s position are largest for the regular simplex (general case) or for the cube (sym-
+metric case), the results due to Ball [3], Barthe [5], Schechtman and Schmuckenschl¨ager [31].
+Another ingredient in our estimates is a Bonnnesen-type inequality by Bokowski and Heil [7]
+on quermassintegrals of K. Finally, we use upper bounds on θ(Bn
+2 ) for speciﬁc small n which
+arise from known lattice coverings.
+
+Theorem 1 is proved in Sections 2–4. Of possibly independent interest are estimates of the
+
+mean width of regular simplex in dimensions 5
+
+n
+
+8 given in Section 3.
+
+≤
+In Section 5 we show how one can improve (5) for each ﬁxed n by optimizing choices of
+certain parameters in the original proof of Rogers [27] (the original proof provides a succinct
+bound valid for all n). Consequently, (1) and (4) can be somewhat improved for n larger than
+those covered by Theorem 1.
+
+≤
+
+To ﬁnalize, in Tables 1 and 2 we provide the best known upper bounds on Hn and H s
+
+n for
+
+n
+
+3
+
+≤
+
+≤
+
+14.
+
+reference
+
+n
+
+n Hn ≤
+14
+3
+96
+4
+933
+5
+6
+6 137
+7
+41 377
+8 284 096
+
+[25]
+[26]
+Th. 1
+Th. 1
+Th. 1
+Th. 1
+
+reference
+
+Hn ≤
+2 064 332
+8 950 599
+38 482 394
+164 319 569
+697 656 132
+
+Prop. 7
+9
+Prop. 7
+10
+Prop. 7
+11
+Prop. 7
+12
+13
+Prop. 7
+14 2 947 865 482 Prop. 7
+n
+
+Table 1. Best known upper bounds on Hn for 3
+
+14.
+
+≤
+
+≤
+
+n H s
+
+reference
+
+n
+
+H s
+
+reference
+
+n ≤
+[20]
+8
+Th. 1
+72
+Th. 1
+305
+Th. 1
+1 292
+3 954 Prop. 7
+9 370 Prop. 7
+
+3
+4
+5
+6
+7
+8
+
+n ≤
+21 738
+49 608
+111 721
+248 895
+549 506
+
+Prop. 7
+9
+Prop. 7
+10
+Prop. 7
+11
+Prop. 7
+12
+13
+Prop. 7
+14 1 203 936 Prop. 7
+
+Table 2. Best known upper bounds on H s
+
+n for 3
+
+n
+
+≤
+
+≤
+
+14.
+
+2. Preliminaries
+
+In what follows, Bn
+
+2 =
+
+n-dimensional volume is denoted by
+clear from the context.
+
+En
+
+x
+
+{
+
+∈
+
+, and Sn
+
+1 =
+
+1
+
+k
+
+x
+
+x
+. The
+:
+{
+| · |n, and subscript is usually dropped if the value of n is
+
+x
+k
+
+k ≤
+
+= 1
+
+∈
+
+}
+
+}
+
+k
+
+−
+
+:
+
+En
+
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+5
+
+2.1. John’s position. Let
+position, i.e. Bn
+s
+n to be the family of centrally symmetric convex bodies K
+deﬁne
+s
+n) there exists an aﬃne image of K in
+position. For any K
+
+∈ Kn which are in John’s
+2 is the maximal volume ellipsoid of K (see, e.g., [9, Sect. 1.5.1]). Similarly,
+s
+n which are in John’s
+
+Jn be the family of convex bodies K
+
+∈ K
+
+J
+
+∈ Kn (or K
+
+∈ K
+
+Jn (or in
+
+J
+
+s
+n ).
+
+John’s theorem (see e.g. [2, Thm. 2.1.3, Remark 2.1.17]) implies that
+
+(9)
+
+K
+
+⊂
+
+nBn
+2
+
+for any K
+
+∈ Jn,
+
+and K
+
+√nBn
+2
+
+⊂
+
+for any K
+
+s
+n .
+
+∈ J
+
+2.2. Quermassintegrals. In order to bound Hn and H s
+we start by discussing upper bounds on
+By the Steiner’s formula, for any K
+
+K + Bn
+2 |
+
+|
+∈ Kn
+
+(10)
+
+where
+
+K + tBn
+2 |
+
+|
+
+=
+
+n
+
+j=0 (cid:18)
+X
+
+n
+j
+
+(cid:19)
+
+Wj(K)tj,
+
+n we will use the inequality (8), and so
+
+, where K is in John’s position.
+
+Wj(K) = V (K, . . . , K
+
+, Bn
+
+2 , . . . , Bn
+2
+j times
+
+)
+
+j times
+
+n
+is the j-th quermassintegral of K and V (
+|
+or [9, Sect. 1.4.2]. Additionally, W0(K) =
+Bn
+area of K, and Wn(K) =
+2 |
+mixed volumes we have Wi(K)
+
+Wj(K) for i
+
+|
+
+−
+) is the mixed volume, see, e.g., [2, Sect. 1.1.5]
+{z
+·
+, W1(K) = ∂(K)/n, where ∂(K) is the surface
+K
+|
+. Also note that if Bn
+K, then due to the monotonicity of
+
+{z
+
+}
+
+}
+
+|
+
+|
+
+2 is the inscribed ball, then ∆n =
+
+Next, we will discuss upper bounds on Wi(K) for K
+Let T n be a regular simplex in En of unit edge length, and let ∆n be a dilation of T n for
+1, 1]n be a cube
+which Bn
+n. Ball [3] proved that among all convex bodies in En simplexes have
+circumscribed about B2
+maximal volume ratio (volume ratio measures how much of the volume of the whole body can
+be contained in the largest inscribed ellipsoid) while for the symmetric ones such a maximizer
+is the cube [4]. These results can be stated in our terms as follows:
+
+2(n + 1)n T n. Also, let C n := [
+
+∈ Jn and K
+
+s
+n respectively.
+
+∈ J
+
+p
+
+−
+
+2 ⊂
+
+j.
+
+≤
+
+≥
+
+(11)
+
+W0(K)
+
+W0(∆n),
+W0(C n),
+
+≤ 
+
+
+if K
+
+if K
+
+∈ Jn,
+s
+n .
+∈ J
+
+For K
+K
+
+∈ Kn and a direction u
+−
+. Let σ be the rotationally invariant probability measure on Sn
+
+1, the support function is deﬁned as hK(u) = sup
+
+:
+i
+1, then the mean width
+
+x, y
+
+{h
+
+
+
+∈
+
+−
+
+Sn
+
+y
+of K is deﬁned by
+
+∈
+
+}
+
+w(K) =
+
+hK(u) dσ(u).1
+
+Sn−1
+
+Z
+
+We have Wn
+
+1(K) =
+
+−
+
+Bn
+2 |
+
+|
+
+Barthe [5, Thm. 3] proved 2 that among the bodies from
+
+w(K), which is a partial case of the Kubota’s formula [2, eq (1.1.1)].
+Jn, the mean width is maximized for
+
+1Note that sometimes the mean width is deﬁned as
+2The result of Barthe is stated in terms of ℓ-norm, and can be translated in the language of mean width
+R
+
+Sn−1 hK(u) + hK(
+
+u) dσ(u).
+
+−
+
+using the formula [5, p. 685] for the ℓ-norm of the dual body.
+
+6
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+∆n, while Schechtman and Schmuckenschl¨ager [31] (the proof is also included in [5, Thm. 2])
+remarked that C n maximizes the mean width among the bodies from
+
+s
+n , i.e.,
+
+J
+
+(12)
+
+Wn
+
+−
+
+1(K)
+
+Wn
+
+Wn
+
+−
+
+−
+
+1(∆n),
+1(C n),
+
+≤ 
+
+
+if K
+
+if K
+
+∈ Jn,
+s
+n .
+∈ J
+
+
+We estimate w(∆n) for the required values of n in the next section.
+Sec. 13.2.3] (or can be obtained by a straightforward computation) that w(C n) = 2 |
+n
+
+It is known [14], [16,
+n−1
+B
+2
+for
+Bn
+2
+
+2, and so Wn
+
+1(C n) = 2
+
+n−1
+
+−
+
+|
+|
+
+.
+
+1
+
+n
+
+|
+
+≥
+
+−
+
+Bn
+2
+
+|
+
+|
+
+Remark 2. The results [3, Thm. 1, Thm. 1′] imply that W1(K)
+∈ Jn
+(recall that W1(K) = ∂(K)/n, where ∂(K) is the surface area of K). This would not lead to
+any improvements in our context as W1(∆n) = W0(∆n) and we get the same upper bound on
+W1(C n)
+W1(K) as from W1(K)
+s
+also holds for K
+n , and follows from [3, Thm. 2], [4, Thm. 3].
+
+W0(K). A similar remark regarding the inequality W1(K)
+
+W1(∆n) for any K
+
+≤
+
+≤
+
+≤
+
+∈ J
+
+Remark 3. It is natural to conjecture that Wj(K)
+j
+any K
+and is valid for j
+
+∈ Jn (respectively, K
+−
+∈ {
+
+∈ J
+1
+}
+
+0, 1, n
+
+s
+n ) and all 0
+as described above ((11), Remark 2, (12)).
+
+≤
+
+Wj(∆n) (and that Wj(K)
+Wj(C n)) for
+n. This is an obvious equality for j = n
+
+≤
+
+≤
+≤
+
+Finally, we need a Bonnesen-style inequality by Bokowski and Heil [7]. If K
+n
+
+i < j < k
+
+2 , then for all 0
+
+RBn
+
+K
+
+∈ Kn satisﬁes
+
+⊂
+
+≤
+
+≤
+
+(13) Wj(K)
+
+(k
+
+−
+
+≤
+
+j)(i + 1)RiWi(K) + (j
+(k
+
+i)(j + 1)Rj
+
+−
+
+i)(k + 1)RkWk(K)
+
+−
+
+=: BR,i,j,k(Wi(K), Wk(K)).
+
+Recall that in our settings we can choose R according to (9).
+
+2.3. Density of coverings by balls. One of the approaches to construct speciﬁc eﬃcient
+coverings of the space by balls is to use lattices, see [11, Ch. 2]. Considering the A∗n lattice
+yields the following estimate (valid for all n):
+
+(14)
+
+θ(Bn
+2 )
+
+Bn
+2 |
+
+≤ |
+
+√n + 1
+
+n(n + 2)
+12(n + 1)
+
+n/2
+
+.
+
+(cid:19)
+
+(cid:18)
+
+It turns out that the above is optimal (smallest possible lattice covering density) for 2
+n
+5
+and provides the best known upper bound on θ(Bn
+n
+21. Better
+lattices were found by Sch¨urmann and Vallentin [32] for 6
+8, which is important for our
+applications. To the best of our knowledge, there have been no improvements after the work [32],
+where an interested reader can ﬁnd a brief survey of the topic. We list the corresponding lattice
+covering densities of En by balls in Table 3.
+
+2 ) in most dimensions 10
+
+≤
+
+≤
+
+≤
+
+≤
+
+≤
+
+≤
+
+n
+
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+7
+
+n least known lattice covering density
+
+n least known lattice covering density
+
+2
+3
+4
+5
+6
+7
+
+1.209199
+1.463505
+1.765529
+2.124286
+2.464801
+2.900024
+
+8
+9
+10
+11
+12
+13
+
+3.142202
+4.340185
+5.251713
+5.598338
+7.510113
+7.864060
+
+Table 3. Least known lattice covering densities, as in [32].
+
+3. Estimates on mean width of regular simplex
+
+n
+
+≤
+
+≤
+
+The values of 2w(T n) for 2
+
+6 expressed as certain integrals and numerically evaluated
+with high precision can be found in [14]. We remark that in [14] expected values of widths of
+simplexes are considered, while the mean width as we deﬁned here (and as commonly deﬁned
+in the literature on geometry, see [2, 9]) is the expected value of the support function, this
+discrepancy results in the mean width of T n from [14] (and [33]) being equal to 2w(T n). We
+need upper estimates of w(T n) for n = 7, 8, which we were unable to ﬁnd in the literature. We
+present a simple computational technique to obtain upper and lower estimates on w(T n) which
+will suﬃce for our purposes.
+
+The starting point is the following representation that follows the work [14] by Finch and
+
+references therein, in particular, Sun [33].
+x
+
+Let F (x) = 1
+√2π
+
+distribution, then F (x) = 1
+0 let
+
+For n
+
+−∞
+R
+
+≥
+
+gn+1(x) := 1
+
+F (x)n+1
+
+(1
+
+−
+
+−
+
+−
+
+F (x))n+1 = 1
+
+e−
+
+t2/2 dt be the comulative distribution function of the standard normal
+2 + 1
+
+), where erf(z) = 2
+√π
+
+dt is the error function.
+
+z
+0 e−
+
+2erf( x
+√2
+
+t2
+
+R
+
+1 + erf( x
+√2
+2
+
+)
+
+−  
+
+n+1
+
+!
+
+−  
+
+1
+
+−
+
+)
+
+erf( x
+√2
+2
+
+!
+
+n+1
+
+.
+
+The following formula for mean width follows from [33] and was derived in [14]:
+
+(15)
+
+w(T n) =
+
+Γ( n
+2 )
+2Γ( n+1
+2 )
+
+0
+
+Z
+
+∞
+
+gn+1(x) dx.
+
+Next, we estimate the integral in the formula.
+
+Proposition 4. For any a > 2 and any positive integers n, N, the following estimates hold:
+
+(16)
+
+a
+N
+
+N
+
+Xk=1
+
+gn+1
+
+ak
+N
+
+(cid:0)
+
+(cid:1)
+
+∞
+
+gn+1(x) dx
+
+≤
+
+0
+Z
+
+a
+N
+
+≤
+
+N
+
+1
+
+−
+
+Xk=0
+
+gn+1
+
+ak
+N
+
++
+
+n + 1
+√2π
+
+exp (
+
+a) .
+
+−
+
+(cid:0)
+
+(cid:1)
+
+Proof. We directly estimate the “tail” of the integral and use simple endpoint Riemann sums
+for the “main” part of the integral in (15).
+
+8
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+Recalling that d
+
+dx F (x) = 1
+√2π
+
+e−
+strictly decreasing function on [0,
+sums for
+
+∞
+
+x2/2 it is straightforward to verify that gn+1 is a positive
+). Hence, considering the upper and the lower Riemann
+
+a
+0 gn+1(x) dx and the uniform partition of [0, a] into N subintervals, we obtain
+
+R
+
+(17)
+
+For any x > a
+
+2
+
+≥
+
+a
+N
+
+N
+
+Xk=1
+
+gn+1
+
+a
+k
+·
+N
+
+(cid:0)
+
+(cid:1)
+
+a
+
+≤
+
+0
+Z
+
+gn+1(x) dx
+
+a
+N
+
+≤
+
+N
+
+1
+
+−
+
+Xk=0
+
+gn+1
+
+a
+k
+·
+N
+
+.
+
+(cid:0)
+
+(cid:1)
+
+gn+1(x)
+
+≤
+
+≤
+
+so
+
+1
+
+F (x)n+1 = 1
+
+x))n+1 = 1
+
+−
+n + 1
+√2π
+
+∞
+
+e−
+
+x
+Z
+
+−
+t2/2 dt
+
+−
+
+(1
+
+≤
+
+F (
+
+−
+n + 1
+√2π
+
+∞
+
+e−
+
+t dt =
+
+x
+Z
+
+−
+
+1
+
+−
+(cid:18)
+n + 1
+√2π
+
+1
+√2π
+
+x
+
+Z
+x) ,
+
+exp (
+
+−
+
+n+1
+
+∞
+
+t2/2 dt
+
+e−
+
+(cid:19)
+
+∞
+
+gn+1(x) dx
+
+n + 1
+√2π
+
+≤
+
+exp (
+
+a) .
+
+−
+
+a
+
+Z
+
+Taking this inequality and the evident
+and (17).
+
+a gn+1(x) dx
+∞
+
+R
+
+≥
+
+0 into account, we deduce (16) from (15)
+(cid:3)
+
+Since the error function can be computed numerically with any given precision, employing a
+
+simple SageMath ([30]) computation [1], we obtain the following corollary.
+
+Corollary 5. The following inequalities hold:
+
+0.4208
+
+0.4067
+
+0.39425
+
+0.383
+
+w(T 5)
+w(T 6)
+
+w(T 7)
+w(T 8)
+
+≤
+
+≤
+
+≤
+
+≤
+
+0.4215,
+
+0.407,
+
+0.39427,
+
+0.38301.
+
+≤
+
+≤
+
+≤
+
+≤
+
+These estimates for n = 5, 6 are consistent with the values obtained in [14]; we include them
+here for completeness. While our computational method allows to obtain a tighter gap in the
+estimates, we only derived what was necessary for our application of estimating Hn from above
+ensuring that no further improvement is possible (even if the value of the lower bound on w(T n)
+is used, the upper bound on the integer value Hn does not improve). The computations take
+less than two hours on a modern personal computer.
+
+4. Proof of Theorem 1
+
+Let us begin with the general (not necessarily symmetric) case. Since C(K, int(K)) is invari-
+K, compactness
+
+ant under aﬃne transforms, we can assume that K
+
+n. Then using Bn
+
+∈ J
+
+2 ⊂
+
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+9
+
+and (6), we have
+
+C(K, int(K))
+
+≤
+
+≤
+
+Hence, applying (10),
+
+C(K, int(Bn
+
+2 ))
+
+lim
+1− |
+r
+→
+
+K
+
+|
+
+rBn
+2 |
+
+−
+rBn
+2 |
+
+≤
+
+1− C(K, rBn
+2 )
+lim
+r
+→
+K + Bn
+2 |
+θ(Bn
+Bn
+2 |
+
+2 ) = |
+
+|
+
+θ(Bn
+
+2 ).
+
+(18)
+
+C(K, int(K))
+
+θ(Bn
+2 )
+Bn
+2 |
+
+|
+
+≤
+
+n
+
+n
+j
+
+j=0 (cid:18)
+X
+
+(cid:19)
+
+Wj(K).
+
+The upper bounds for θ(Bn
+2n(n + 1)T n, by (11),
+
+2 ) come from Table 3, so it remains to estimate Wi(K). As ∆n =
+
+p
+(19)
+
+Wi(K)
+
+≤
+
+W0(K)
+
+≤
+
+W0(∆n) = (2n(n + 1))n/2
+
+T n
+
+|
+
+|
+
+=
+
+nn/2(n + 1)(n+1)/2
+n!
+
+for any 0
+
+i
+
+≤
+
+≤
+
+n. Using (12),
+
+(20)
+
+−
+Trivially, Wn(K) =
+
+Bn
+2 |
+
+|
+
+Wn
+
+1(K)
+
+Wn
+
+−
+
+≤
+
+1(∆n) =
+
+w(∆n) =
+
+Bn
+2 |
+
+|
+
+Bn
+2 |
+
+|
+
+2n(n + 1)w(T n).
+
+.
+
+p
+
+Next we combine the above, and use (13) (valid with R = n due to (9)) for appropriate
+
+parameters. The calculations were performed in the script [1].
+
+Bound on H5. We apply (18) and estimate the quermassintegrals as follows. For 0
+
+2,
+B5,2,3,4(W0(∆5), W4(∆5)); recall
+. Combining the above, using Corollary 5 and calculating the actual value
+
+W4(∆5) and W3(K)
+
+≤
+
+≤
+
+≤
+
+≤
+
+i
+
+use (19); (20) and (13) give W4(K)
+B5
+that W5(K) =
+2|
+of the bound yields H5 ≤
+
+933.
+
+|
+
+Bound on H6. The arguments are similar to the previous case. The required application of
+
+(13) is W4(K)
+
+B6,3,4,5(W0(∆6), W5(∆6)). The result is H6 ≤
+
+≤
+
+6137.
+
+Bounds on Hn for n = 7, 8. We proceed similarly with the only diﬀerence that Wj(K)
+
+4,j,n
+
+Bn,n
+−
+284096.
+
+−
+
+1(W0(∆n), Wn
+
+−
+
+1(∆n)) is used for j
+
+n
+
+−
+
+∈ {
+
+3, n
+
+2
+
+}
+
+yielding H7 ≤
+
+−
+
+≤
+41377 and H8 ≤
+
+When the body is centrally symmetric, we follow a similar route, with the following diﬀer-
+
+ences. In place of (19) we have
+
+(21)
+
+for any 0
+
+i
+
+≤
+
+≤
+
+(22)
+
+Wi(K)
+
+≤
+
+W0(K)
+
+≤
+
+W0(C n) = 2n
+
+n. Using (12) we get
+
+Wn
+
+−
+
+1(K)
+
+Wn
+
+−
+
+≤
+
+1(C n) = 2
+
+1
+
+Bn
+2
+
+−
+
+.
+
+|
+
+|
+
+Finally, by (9), the inequality (13) can be used with R = √n.
+
+Bound on H s
+
+4. Apply (18) and bound the quermassintegrals as follows. For i = 0, 1
+; we have W4(K) = W4(C 4) =
+
+use (21); use (22) to get W3(K)
+≤
+B2,1,2,3(W1(C 4), W3(C 4)). Combining the above and calculating the value of the bound yields
+H s
+
+; by (13) W2(K)
+
+B4
+2|
+
+B3
+2|
+
+72.
+
+≤
+
+2
+
+|
+
+|
+
+4 ≤
+
+10
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+Bounds on H s
+; (22) for i = n
+
+n for n = 5, 6. We use similar arguments: (21) for i = 0, 1, 2; Wn = Wn(C n) =
+1(W0(C n), Wn
+2, which
+
+1; and Wj(K)
+
+1(C n)) for 3
+
+B√n,2,j,n
+
+n
+
+j
+
+≤
+
+−
+
+−
+
+≤
+
+≤
+
+−
+
+Bn
+2 |
+|
+imply H s
+
+−
+
+305 and H s
+
+1292.
+
+6 ≤
+
+5 ≤
+
+Remark 6. In the above computations, we used the exact value for the density arising from
+A∗n lattice from the estimate (14) for n = 4, 5. For n = 6, 7, 8 we used the values of covering
+6 as they were given to 6 decimal
+densities from [32] presented in Table 3 increased by 5
+places, while we require an upper bound. Even if such an increase is not performed, the resulting
+integer valued upper bounds in Theorem 1 would not change, so the accuracy given in [32] is
+more than suﬃcient for our needs.
+
+10−
+
+·
+
+5. Estimates via optimized Rogers bound
+
+Proposition 7. Suppose n
+
+3. If
+
+≥
+
+(23)
+
+then
+
+(24)
+
+rn = min
+x
+
+(0,1/n)
+
+∈
+
+fn(x), where
+
+fn(x) = (1 + x)n(1
+
+n ln(x)),
+
+−
+
+θ(K)
+
+≤
+
+rn
+
+for any K
+
+∈ Kn, Hn ≤
+
+2n
+n
+
+(cid:18)
+
+(cid:19)
+
+rn,
+
+and H s
+
+n ≤
+
+2nrn.
+
+Proof. The ﬁrst inequality in (24) is established in [27, p. 5]. (The bound (5) was obtained
+in [27] by taking x = 1
+n ln n in (23).) The other two inequalities in (24) follow from (6) in the
+(cid:3)
+same way as (1) and (4) do.
+
+For our purposes, it suﬃces to use the straightforward rn ≤
+
+with N = 1000. The resulting bounds on rn for 3
+values of min
+≤
+{
+actual upper bounds), and the estimates on Hn and H s
+θ(K), K
+computations, see [1]. We remark that max
+
+N n ) : 1
+
+fn( j
+
+N
+
+−
+
+≤
+
+}
+
+1
+
+j
+
+fn( j
+
+j
+
+n
+
+≤
+
+≤
+
+min
+{
+
+1
+N n ) : 1
+}
+14 are given in Table 4 (the computed
+are rounded up in the sixth digit, so they represent
+n can be found in Tables 1 and 2. For the
+2 was established by F´ary [13].
+∈ K2}
+
+= 3
+
+−
+
+≤
+
+≤
+
+N
+
+{
+
+{
+
+n max
+
+3
+4
+5
+6
+7
+8
+
+θ(K), K
+
+∈ Kn} ≤
+
+10.064123
+14.916986
+20.024359
+25.362768
+30.898293
+36.603890
+
+n max
+{
+
+9
+10
+11
+12
+13
+14
+θ(K), K
+
+θ(K), K
+
+∈ Kn} ≤
+
+42.458503
+48.445515
+54.551530
+60.765566
+67.078451
+73.482436
+
+∈ Kn}
+
+, for 3
+
+n
+
+≤
+
+≤
+
+14.
+
+Table 4. Upper bounds on max
+{
+
+ON HADWIGER’S COVERING PROBLEM IN SMALL DIMENSIONS
+
+11
+
+References
+
+[1] A.
+
+Arman,
+on
+
+A.
+Hadwiger’s
+
+covering
+tations
+https://github.com/andriyprm/illum-small-dims/releases/tag/v1.
+
+small
+
+in
+
+A.
+problem
+
+Bondarenko,
+
+and
+
+Prymak,
+
+Sagemath
+
+script
+
+for
+
+dimensions,
+
+available
+
+compu-
+at
+
+[2] Shiri Artstein-Avidan, Apostolos Giannopoulos, and Vitali D. Milman, Asymptotic geometric analysis. Part
+I, Mathematical Surveys and Monographs, vol. 202, American Mathematical Society, Providence, RI, 2015.
+[3] Keith Ball, Volume ratios and a reverse isoperimetric inequality, J. London Math. Soc. (2) 44 (1991), no. 2,
+
+351–359.
+
+[4]
+
+, Volumes of sections of cubes and related problems, Geometric aspects of functional analysis (1987–
+88), Lecture Notes in Math., vol. 1376, Springer, Berlin, 1989, pp. 251–260, DOI 10.1007/BFb0090058.
+MR1008726
+
+[5] Franck Barthe, An extremal property of the mean width of the simplex, Math. Ann. 310 (1998), no. 4,
+
+685–693.
+
+[6] K´aroly Bezdek and Muhammad A. Khan, The geometry of homothetic covering and illumination, Discrete
+
+geometry and symmetry, Springer Proc. Math. Stat., vol. 234, Springer, Cham, 2018, pp. 1–30.
+
+[7] J¨urgen Bokowski and Erhard Heil, Integral representations of quermassintegrals and Bonnesen-style in-
+
+equalities, Arch. Math. (Basel) 47 (1986), no. 1, 79–89.
+
+[8] V. Boltyanski, The problem of illuminating the boundary of a convex body, Izv. Mold. Fil. AN SSSR 76
+
+(1960), 77–84.
+
+[9] Silouanos Brazitikos, Apostolos Giannopoulos, Petros Valettas, and Beatrice-Helen Vritsiou, Geometry of
+isotropic convex bodies, Mathematical Surveys and Monographs, vol. 196, American Mathematical Society,
+Providence, RI, 2014.
+
+[10] Marcelo Campos, Peter van Hintum, Robert Morris, and Marius Tiba, Towards Hadwiger’s conjecture
+via Bourgain slicing, International Mathematics Research Notices, posted on 9 September 2023, DOI
+10.1093/imrn/rnad198.
+
+[11] J. H. Conway and N. J. A. Sloane, Sphere packings, lattices and groups, 3rd ed., Grundlehren der Math-
+ematischen Wissenschaften [Fundamental Principles of Mathematical Sciences], vol. 290, Springer-Verlag,
+New York, 1999. With additional contributions by E. Bannai, R. E. Borcherds, J. Leech, S. P. Norton, A.
+M. Odlyzko, R. A. Parker, L. Queen and B. B. Venkov.
+
+[12] Mingyang Diao, On Hadwiger covering problem in ﬁve- and six-dimensional Euclidean spaces, M.Sc. thesis,
+
+University of Manitoba (2022), available at http://hdl.handle.net/1993/36378.
+
+[13] Istv´an F´ary, Sur la densit´e des r´eseaux de domaines convexes, Bull. Soc. Math. France 78 (1950), 152–161
+
+(French).
+
+[14] Steven R. Finch, Mean Width of a Regular Simplex, available at https://arxiv.org/abs/1111.4976v2.
+[15] I. C. Gohberg and A. S. Markus, A certain problem about the covering of convex sets with homothetic ones,
+
+Izvestiya Moldavskogo Filiala Akademii Nauk SSSR 10/76 (1960), 87–90 (Russian).
+
+[16] Jacob E. Goodman and Joseph O’Rourke (eds.), Handbook of discrete and computational geometry, CRC
+Press Series on Discrete Mathematics and its Applications, CRC Press, Boca Raton, FL, 1997. Edited by
+Jacob E. Goodman and Joseph O’Rourke. MR1730156
+
+[17] H. Hadwiger, Ungel¨ostes Probleme Nr. 20, Elem. Math. 12 (1957), 121 (German).
+[18] Han Huang, Boaz A. Slomka, Tomasz Tkocz, and Beatrice-Helen Vritsiou, Improved bounds for Hadwiger’s
+
+covering problem via thin-shell estimates, J. Eur. Math. Soc. (JEMS) 24 (2022), no. 4, 1431–1448.
+
+[19] Fritz John, Extremum problems with inequalities as subsidiary conditions, Studies and Essays Presented to
+R. Courant on his 60th Birthday, January 8, 1948, Interscience Publishers, Inc., New York, N. Y., 1948,
+pp. 187–204.
+
+12
+
+A. ARMAN, A. BONDARENKO, AND A. PRYMAK
+
+[20] Marek Lassak, Solution of Hadwiger’s covering problem for centrally symmetric convex bodies in E3, J.
+
+London Math. Soc. (2) 30 (1984), no. 3, 501–511.
+
+[21]
+[22]
+
+, Covering the boundary of a convex set by tiles, Proc. Amer. Math. Soc. 104 (1988), no. 1, 269–272.
+, Covering a three-dimensional convex body by smaller homothetic copies, Beitr¨age Algebra Geom.
+
+39 (1998), no. 2, 259–262.
+
+[23] F. W. Levi, ¨Uberdeckung eines Eibereiches durch Parallelverschiebung seines oﬀenen Kerns, Arch. Math.
+
+(Basel) 6 (1955), 369–370 (German).
+
+[24] Ioannis Papadoperakis, An estimate for the problem of illumination of the boundary of a convex body in
+
+E3, Geom. Dedicata 75 (1999), no. 3, 275–285.
+
+[25] Andriy Prymak, A new bound for Hadwiger’s covering problem in E3, SIAM J. Discrete Math. 37 (2023),
+
+no. 1, 17–24.
+
+[26] A. Prymak and V. Shepelska, On the Hadwiger covering problem in low dimensions, J. Geom. 111 (2020),
+
+no. 3, Paper No.42, 11.
+
+[27] C. A. Rogers, A note on coverings, Mathematika 4 (1957), 1–6.
+[28] C. A. Rogers and G. C. Shephard, The diﬀerence body of a convex body, Arch. Math. (Basel) 8 (1957),
+
+220–233.
+
+[29] C. A. Rogers and C. Zong, Covering convex bodies by translates of convex bodies, Mathematika 44 (1997),
+
+no. 1, 215–218.
+
+[30] The Sage Developers, Sagemath,
+https://www.sagemath.org.
+
+the Sage Mathematics Software System (Version 9.2), 2020.
+
+[31] G. Schechtman and M. Schmuckenschl¨ager, A concentration inequality for harmonic measures on the sphere,
+Geometric aspects of functional analysis (Israel, 1992), Oper. Theory Adv. Appl., vol. 77, Birkh¨auser, Basel,
+1995, pp. 255–273.
+
+[32] A. Sch¨urmann and F. Vallentin, Computational approaches to lattice packing and covering problems, Dis-
+
+crete Comput. Geom. 35 (2006), no. 1, 73–116.
+
+[33] Yi Sun, Stochastic iterative algorithms for signal set design for Gaussian channels and optimality of the L2
+
+signal set, IEEE Trans. Inform. Theory 43 (1997), no. 5, 1574–1587.
+
+Department of Mathematics, University of Manitoba, Winnipeg, MB, R3T 2N2, Canada
+Email address: andrew0arman@gmail.com
+
+Department of Mathematical Sciences, Norwegian University of Science and Technology,
+
+NO-7491 Trondheim, Norway
+
+Email address: andriybond@gmail.com
+
+Department of Mathematics, University of Manitoba, Winnipeg, MB, R3T 2N2, Canada
+Email address: prymak@gmail.com
+
+
