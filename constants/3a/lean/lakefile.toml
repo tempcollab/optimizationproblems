@@ -1,12 +1,17 @@
 name = "c3a"
 defaultTargets = ["C3a"]
 
-# Minimal standalone Lake project (no Mathlib): the load-bearing C_3a lower-bound
-# certificate is a single big-integer inequality discharged by `native_decide`,
-# which needs only Lean core `Nat` arithmetic — no Mathlib dependency, so this
-# project builds in seconds and pins cleanly. The GHR2007 read-off (C_3a >= theta)
-# is the only non-decidable step; it is recorded as a documented hypothesis in the
-# sketch, not re-proved here (it is the cited GHR2007 lemma).
+# Project now depends on Mathlib (pinned to the v4.31.0 tag, matching lean-toolchain)
+# so the log-algebra HALF of the GHR bridge can be formalized over ℝ (Real.log/rpow
+# monotonicity). The load-bearing integer inequality is still discharged by
+# `native_decide` over Lean-core `Nat`; Mathlib is only used for the real-arithmetic
+# bridge lemma. The remaining GHR2007 tensor-power LIMIT read-off (C_3a ≥ θ) stays a
+# single documented hypothesis (not re-proved here).
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f"
 
 [[lean_lib]]
 name = "C3a"
