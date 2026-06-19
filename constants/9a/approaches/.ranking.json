@@ -1,0 +1,46 @@
+{
+  "c7-4-improvement-113": {
+    "elo": 1502.0800589284768,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "c7-4-improvement-113",
+    "stale": false,
+    "summary": "Exact/near-exact MIS on C_7^\u22a04 (2401 vertices) targeting \u03b1\u2265113 \u2192 3.26039 beat; feasibility of the +5 jump uncertain, consolation = a hard upper bound on the n=4 route."
+  },
+  "lean-cert-engine-and-367-baseline": {
+    "elo": 1545.8278203282016,
+    "expanded": 1,
+    "last_note": "Lean cert engine + 367-set verified axiom-clean: S367_indep by pure kernel decide (NO axioms, no native_decide), C7/strong-power graph faithful, confusable_iff_C7conf + isNIndepSet_of_cert sound, 367^(1/5)>3.2578 proven, ThetaGeFromIndep honest named boundary (carries only the trivial sup-ge-member step). Independently re-derived 0/67161 confusable pairs from the Lean source. Reproduces record, no beat; foundation for any future C_7^n beat.",
+    "last_outcome": "verified-milestone",
+    "last_round": 13,
+    "selected": 0,
+    "slug": "lean-cert-engine-and-367-baseline",
+    "stale": true,
+    "summary": "Build the C_7^\u22a0n decidable independent-set cert engine + \u0398-bridge soundness lemma; Lean-verify the PS2018 367-set as a search-immune baseline (reproduces 3.2578, no beat)."
+  },
+  "orbit-reduced-decide-witness": {
+    "elo": 1498.6197124082198,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "orbit-reduced-decide-witness",
+    "stale": false,
+    "summary": "Cyclic-orbit reduction: prove translation-invariance of cyclic distance so the C(N,2) pairwise check collapses to ~N difference checks, making large-N decide certs tractable."
+  },
+  "symmetry-guided-search-c7-5-368": {
+    "elo": 1453.4724083351018,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "symmetry-guided-search-c7-5-368",
+    "stale": false,
+    "summary": "Symmetry-restricted (multi-orbit / local-search) hunt for a 368+ independent set in C_7^\u22a05 \u2192 3.25964 beat; the genuine bound-move, historically static since 2018, uncertain payoff."
+  }
+}
