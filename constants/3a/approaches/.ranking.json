@@ -1,28 +1,28 @@
 {
   "griego-family-larger-mT": {
-    "elo": 1542.4277166585139,
+    "elo": 1530.590624527379,
     "expanded": 2,
     "last_note": "Certificate-rational hole closed: held raised 1.1741 to 1.176. Independently reproduced s,d,M at (110,210) via from-scratch bitmask DP (validated vs brute on 10 cases); d^10000>s^10000*q^1760 holds, ^1761 fails (1.176 tight at den 10000). Beats record 1.1740744.",
     "last_outcome": "verified-milestone",
     "last_round": 4,
-    "selected": 14,
+    "selected": 16,
     "slug": "griego-family-larger-mT",
     "stale": false,
     "summary": "Push Griego's fixed alphabet/base-21 family to (m,T)>(80,150) via exact column-DP; cheapest probe, may saturate at the record."
   },
   "griego-ntt-push": {
-    "elo": 1696.561901163844,
+    "elo": 1714.9588924008938,
     "expanded": 4,
     "last_note": "VERIFIED held 1.1776->1.1779 at new point (170,321). Reviewer independently re-derived s(166d)/d(206d)/M(225d) byte-exact to committed row via 3 distinct DPs (slack-mask sumset, minimal-pair diffset with coordinatewise-min lemma verified, knapsack maxU), brute-validated incl clamp+non-contig+contiguous. Load-bearing d^10000>s^10000*(2M+1)^1779 PASS (log-margin +73.03), ^1780 FAIL (-444.54, tight). Carry-free b=21>2max(A)=20. Hole-free at this point. To push further needs m>=180 (sumset DP ~175-217s, must background).",
     "last_outcome": "verified-milestone",
     "last_round": 13,
-    "selected": 11,
+    "selected": 13,
     "slug": "griego-ntt-push",
     "stale": false,
     "summary": "NTT/exact-FFT fast convolution + repeated-squaring sum-set DP to break the m=110 compute wall and climb toward Lambda~1.185; mandatory validation vs the R3 clamped-DP oracle before any large-m count is trusted."
   },
   "largedev-rate-optimization": {
-    "elo": 1289.9142741173018,
+    "elo": 1279.7310835706548,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
@@ -33,18 +33,18 @@
     "summary": "Large-deviation rate guide to predict the optimal (A,r), certified by L1's finite integer check; highest ceiling, slowest first-green."
   },
   "lean-c3a-def": {
-    "elo": 1559.8320380837085,
-    "expanded": 2,
-    "last_note": "B1 griego_disjoint_union_count CLOSED sorry-free (verified: lake build EXIT 0, #print axioms clean on 10 new counting lemmas, B1 sorryAx traces only to documented holes). Promoted setSum/Diff_card_decompose to lemmas/. New hole B1a (griego_ak_disjoint, disjointness) exposed; B2/B3/B4 + witness data still open. No held raise (structural). CHANGES REQUESTED.",
+    "elo": 1589.9476005372842,
+    "expanded": 3,
+    "last_note": "Closed B1a's two spacing lemmas setSum/setDiff_tr_pair_disjoint sorry-free + axiom-clean (verified #print axioms = [propext,Classical.choice,Quot.sound]); griego_ak_disjoint now reassembled sorry-free, sorryAx traces only to documented an_separated hole + witness data. Next hole: an_separated (AP shift-spacing, needs maxbk tpow element-range bound). No held raise (structural; target \u03b8>1.1771 < held 1.1779).",
     "last_outcome": "advanced",
-    "last_round": 14,
-    "selected": 2,
+    "last_round": 15,
+    "selected": 4,
     "slug": "lean-c3a-def",
     "stale": true,
     "summary": "Scoped definition-only Lean sketch: concrete C3aRealDef := sSup {c | Realizes c} replacing the opaque C_3a, isolating the sole uncached bridge blocker (the sup-realization read-off) for a cheap faithfulness in/out ruling. CHANGES REQUESTED R12: predicate drops the |A+B|<<|A| doubling clause and collapses A=B, so as written it risks defining an inflated (non-faithful) constant; the approach is right and the fix is nameable."
   },
   "lean-native-decide-smallmt": {
-    "elo": 1474.2004459746179,
+    "elo": 1448.0906009130072,
     "expanded": 3,
     "last_note": "native_decide integer core bumped from \u03b8>1.175 to den=10000 tight \u03b8>1.1771 at (140,265): D^10000>S^10000*Q^1771 + tightness control \u00ac(^1772), lake build EXIT 0, #print axioms clean (no sorryAx), literals match committed row. ghr:\u03b8\u2264C3aReal bridge still an explicit assumed hypothesis (C3aReal opaque) \u2192 minimally-verified (*), does NOT raise held. Open hole: formalize GHR bridge.",
     "last_outcome": "advanced",
@@ -55,23 +55,23 @@
     "summary": "Machine-checked (lake build) C_3a>1.175 via native_decide on D^40>S^40\u00b7Q^7 at Griego (100,190); load-bearing int cert already green/hole-free, only theta-translation + GHR read-off remain as sorry holes."
   },
   "lean-tensor-multiplicativity": {
-    "elo": 1502.576466906483,
+    "elo": 1516.9623031132296,
     "expanded": 1,
     "last_note": "All 7 holes CLOSED, sorry-free, axiom-clean ([propext,Classical.choice,Quot.sound], no sorryAx); lake build C3a EXIT 0. Formalizes the FINITE half of the GHR bridge (carry-free tensor-power multiplicativity |U^\u2297(k+1)\u00b1U^\u2297(k+1)|=|U\u00b1U|^(k+1)); 2 lemmas promoted to lemmas/. Does NOT raise held \u2014 sup-realization k\u2192\u221e limit + C_3a definition remain the open hole.",
     "last_outcome": "advanced",
     "last_round": 11,
-    "selected": 4,
+    "selected": 6,
     "slug": "lean-tensor-multiplicativity",
     "stale": false,
     "summary": "Formalize carry-free tensor-power multiplicativity |U^\u2297k \u00b1 U^\u2297k| = |U\u00b1U|^(k+1) as Lean Finset counting lemmas; chips the finite/discrete half off the GHR bridge hole (Lean-fit, 7 sorrys, builds green)."
   },
   "noncontig-alphabet-sweep": {
-    "elo": 1434.4871570955308,
+    "elo": 1419.718894937551,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 14,
+    "selected": 16,
     "slug": "noncontig-alphabet-sweep",
     "stale": false,
     "summary": "Sweep non-contiguous digit alphabets A (generalize Griego's {0,2..10}) feeding the GHR lemma; finite integer-inequality certificate, Lean-fit."

@@ -320,13 +320,105 @@ def bk (n : ℕ) : Finset ℤ := tpow Qbase Ubase n
 def ak (n : ℕ) : Finset ℤ :=
   an_interval n ∪ (an_index n).biUnion (fun i => tr (an_shift n i) (bk n))
 
-/-- **SUB-HOLE B1a — the disjointness of the GHR pieces (NEW documented sub-hole, the genuine
-    UNCACHED combinatorial content).** The `mₙ` translate images and the interval piece are
-    pairwise disjoint in BOTH sums and diffs, because the shifts are chosen separated
-    (`aᵢ − aⱼ ∉ Bₙ − Bₙ`, and the interval placed past the translates). This is exactly the
-    separation argument GHR establish for the composite; it depends on the explicit shift choice
-    `an_shift`, so it is left documented `sorry`. (Once an explicit `an_shift` is pinned, this is a
-    finite pigeonhole/range argument — but it is NOT supplied by any cached lemma.) -/
+/- ============================================================================================
+    R15 OUTLINER (B1a RE-PLAN) — the GHR separation, factored into a CHEAP general spacing lemma
+    + a small residual construction obligation.
+
+    The R15 scout's load-bearing finding: B1a as a single `sorry` is NOT closable, because it
+    quantifies over `an_shift`/`an_index`/`an_interval` which are themselves `sorry` defs — there
+    is nothing to compute disjointness FROM. So B1a is REALLY two pieces, and this re-plan splits
+    them so the GENERIC half closes this round and the construction-pinning is isolated:
+
+      (1) `setSum_tr_pair_disjoint` / `setDiff_tr_pair_disjoint` — GENERAL, sorry-free target:
+          if the shift gap `|c − c'|` strictly exceeds the DIAMETER of the sum/diffset `B±B`
+          (every element of `B±B` lies in `[lo, lo + diam]`), the two translate images
+          `c+(B±B)`, `c'+(B±B)` are disjoint. Pure ℤ interval arithmetic via `setSum_tr`
+          (`= image (c+·) (B±B)`) + `Finset.disjoint_left` + a `<`/`≤` value bound. This is the
+          cached-lemma-shaped reusable content — no construction needed.
+      (2) `an_separated` — the RESIDUAL construction obligation (the genuinely uncached, harder
+          half): the explicit shifts `an_shift n i` are placed on an arithmetic progression with
+          spacing exceeding `diam (bk n ± bk n)`, and the interval `an_interval n` is placed
+          below all translates. The load-bearing idea (GHR's own `aᵢ−aⱼ ∉ Bₙ−Bₙ`, made concrete):
+          `an_shift n i = i · (spacing n)` with `spacing n = 2·maxbk n + 1 > diam`. Closing it
+          needs an element-range bound `maxbk` on `bk n = tpow Qbase Ubase n` (NOT yet a lemma —
+          the natural next sub-target; provable by induction on the `box`/`emb` structure, the
+          carry-free digit base bounds each coordinate). Left documented `sorry`.
+
+    `griego_ak_disjoint` is then REASSEMBLED sorry-free from (1) + (2): given the spacing bound,
+    each pair of translates is disjoint by (1); the interval-vs-union by the same interval bound
+    pushed through `disjoint_biUnion_right`. This mirrors the R14 B1 move (split a monolith, keep
+    the parent sorry-free). Closing (1) — the cheap generic half — is THIS round's deliverable;
+    (2) `an_separated` is the smaller residual hole.
+    ============================================================================================ -/
+
+/-- A finite set of integers `S` has all elements within `diam` of a low point `lo`. The witness
+    `lo = min, diam = max − min` always exists for nonempty `S`; we carry it abstractly so the
+    spacing lemma is stated cleanly. -/
+def WithinDiam (S : Finset ℤ) (lo diam : ℤ) : Prop := ∀ z ∈ S, lo ≤ z ∧ z ≤ lo + diam
+
+/-- **GENERAL SPACING LEMMA, SUM side (sorry-free target — the cheap half of B1a).** If every
+    element of the sumset `setSum B B` lies in `[lo, lo + diam]` and the shift gap `|c − c'|`
+    strictly exceeds `diam`, the two translate sumsets are disjoint. Proof path: `setSum_tr`
+    rewrites each to `image (·+·) (setSum B B)`; `Finset.disjoint_left`; an element common to both
+    gives `c + w = c' + w'` with `w, w' ∈ [lo, lo+diam]`, so `|c − c'| = |w' − w| ≤ diam`,
+    contradicting `diam < |c − c'|`. -/
+theorem setSum_tr_pair_disjoint (c c' : ℤ) (B : Finset ℤ) (lo diam : ℤ)
+    (hwd : WithinDiam (setSum B B) lo diam) (hgap : diam < |c - c'|) :
+    Disjoint (setSum (tr c B) B) (setSum (tr c' B) B) := by
+  rw [setSum_tr, setSum_tr, Finset.disjoint_left]
+  rintro z hz hz'
+  rw [mem_image] at hz hz'
+  obtain ⟨w, hw, rfl⟩ := hz
+  obtain ⟨w', hw', heq⟩ := hz'
+  have hwb := hwd w hw
+  have hwb' := hwd w' hw'
+  have hle : |c - c'| ≤ diam := by
+    rw [abs_le]
+    constructor <;> omega
+  linarith
+
+/-- **GENERAL SPACING LEMMA, DIFF side (sorry-free target).** Same statement for `setDiff`. -/
+theorem setDiff_tr_pair_disjoint (c c' : ℤ) (B : Finset ℤ) (lo diam : ℤ)
+    (hwd : WithinDiam (setDiff B B) lo diam) (hgap : diam < |c - c'|) :
+    Disjoint (setDiff (tr c B) B) (setDiff (tr c' B) B) := by
+  rw [setDiff_tr, setDiff_tr, Finset.disjoint_left]
+  rintro z hz hz'
+  rw [mem_image] at hz hz'
+  obtain ⟨w, hw, rfl⟩ := hz
+  obtain ⟨w', hw', heq⟩ := hz'
+  have hwb := hwd w hw
+  have hwb' := hwd w' hw'
+  have hle : |c - c'| ≤ diam := by
+    rw [abs_le]
+    constructor <;> omega
+  linarith
+
+/-- **RESIDUAL CONSTRUCTION OBLIGATION (the harder, uncached half of B1a).** The explicit shifts
+    and interval realise the separation: there is a low point/diameter `lo diam` for `bk n ± bk n`,
+    the shifts are spaced wider than `diam` (`i ≠ j ⟹ diam < |aᵢ − aⱼ|`), and the interval sits
+    below all translate images. The concrete realisation is the AP `an_shift n i = i·(2·maxbk n+1)`
+    plus `an_interval n` placed below; closing it needs an element-range bound on
+    `bk n = tpow Qbase Ubase n`. Left documented `sorry` (the natural next sub-target after this
+    round). The shape is what the reassembly below consumes. -/
+theorem an_separated (n : ℕ) :
+    ∃ loS diamS loD diamD : ℤ,
+      WithinDiam (setSum (bk n) (bk n)) loS diamS ∧
+      WithinDiam (setDiff (bk n) (bk n)) loD diamD ∧
+      (∀ i ∈ an_index n, ∀ j ∈ an_index n, i ≠ j →
+          diamS < |an_shift n i - an_shift n j| ∧
+          diamD < |an_shift n i - an_shift n j|) ∧
+      Disjoint (setSum (an_interval n) (bk n))
+               ((an_index n).biUnion (fun i => setSum (tr (an_shift n i) (bk n)) (bk n))) ∧
+      Disjoint (setDiff (an_interval n) (bk n))
+               ((an_index n).biUnion (fun i => setDiff (tr (an_shift n i) (bk n)) (bk n))) := by
+  sorry
+
+/-- **SUB-HOLE B1a — REASSEMBLED sorry-free from the general spacing lemmas + the residual
+    `an_separated` obligation.** The `mₙ` translate images and the interval piece are pairwise
+    disjoint in BOTH sums and diffs. The pairwise translate disjointness comes from
+    `setSum/Diff_tr_pair_disjoint` applied with the diameters and spacing from `an_separated`; the
+    interval-vs-union pieces are carried directly by `an_separated`. (When the two spacing lemmas
+    close, B1a's only residual `sorry` is `an_separated` — the construction-pinning.) -/
 theorem griego_ak_disjoint (n : ℕ) :
     (∀ i ∈ an_index n, ∀ j ∈ an_index n, i ≠ j →
         Disjoint (setSum (tr (an_shift n i) (bk n)) (bk n))
@@ -338,7 +430,12 @@ theorem griego_ak_disjoint (n : ℕ) :
                  (setDiff (tr (an_shift n j) (bk n)) (bk n))) ∧
     Disjoint (setDiff (an_interval n) (bk n))
              ((an_index n).biUnion (fun i => setDiff (tr (an_shift n i) (bk n)) (bk n))) := by
-  sorry
+  obtain ⟨loS, diamS, loD, diamD, hwdS, hwdD, hsp, hintS, hintD⟩ := an_separated n
+  refine ⟨?_, hintS, ?_, hintD⟩
+  · intro i hi j hj hij
+    exact setSum_tr_pair_disjoint _ _ (bk n) loS diamS hwdS (hsp i hi j hj hij).1
+  · intro i hi j hj hij
+    exact setDiff_tr_pair_disjoint _ _ (bk n) loD diamD hwdD (hsp i hi j hj hij).2
 
 /-- **SUB-HOLE B1 — the finite/combinatorial disjoint-union count (LOAD-BEARING, CLOSED R14).**
     The GHR additive identity, now PROVED sorry-free: from the disjointness B1a + the general

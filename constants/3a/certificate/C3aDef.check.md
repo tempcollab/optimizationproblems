@@ -3,9 +3,39 @@
 - **Lake project:** `constants/3a/lean/` (Lean v4.31.0; Mathlib pinned to the `v4.31.0` tag, rev
   `fabf563a7c95a166b8d7b6efca11c8b4dc9d911f`). Sketch file
   `constants/3a/lean/Sketches/C3aDef.lean`, imported via the C3a lib glob and the root `C3a.lean`.
-- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R14: EXIT 0, 2970 jobs.**
-  `Build completed successfully (2970 jobs).` 12 `declaration uses 'sorry'` warnings (see the R14
-  hole inventory below) — all documented; no smuggled `sorry`.
+- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R15: EXIT 0, 2970 jobs.**
+  `Build completed successfully (2970 jobs).` 12 `declaration uses 'sorry'` warnings at
+  C3aDef.lean:139,150,302,303,304,309,310,311,403,489,498,506 — all documented; no smuggled `sorry`.
+  (Lines 365/380, the two B1a spacing lemmas, are NO LONGER in the list — closed this round.)
+
+## R15 — sub-hole B1a spacing lemmas CLOSED
+`setSum_tr_pair_disjoint` / `setDiff_tr_pair_disjoint` (the cheap general half of B1a, the
+shift-gap > sumset/diffset-diameter ⟹ disjoint translate-images spacing lemmas) are now proved
+**sorry-free and axiom-clean**, and `griego_ak_disjoint` (B1a) is reassembled with a sorry-free proof
+term modulo the residual `an_separated`. `#print axioms` (R15, verbatim, from a temporary
+`AxCheck.lean`, since removed):
+- `C3a.setSum_tr_pair_disjoint`  → `[propext, Classical.choice, Quot.sound]` (NO sorryAx)
+- `C3a.setDiff_tr_pair_disjoint` → `[propext, Classical.choice, Quot.sound]` (NO sorryAx)
+- `C3a.griego_ak_disjoint`       → `[propext, sorryAx, Classical.choice, Quot.sound]`. Proof TERM
+  sorry-free; sorryAx enters ONLY via the `an_separated` obligation it `obtain`s.
+
+Proof: `setSum_tr`/`setDiff_tr` rewrite each translate-image to `image (c+·) (B±B)`;
+`Finset.disjoint_left` extracts a common `c+w = c'+w'` with `w,w' ∈ [lo,lo+diam]`; `abs_le` + `omega`
+(using that equality + the two `WithinDiam` bounds) give `|c−c'| ≤ diam`, contradicting
+`diam < |c−c'|` via `linarith`. (Note: `abs_lt` does NOT match `diam < |w'−w|` — abs on the RHS — so
+the `|c−c'| ≤ diam` route via `abs_le` is used instead.)
+
+### R15 hole inventory (12 sorry-warnings = 13 holes counting the witness defs separately)
+`realizes_one` (139), `realizableSet_bddAbove` (150); witness data `Ubase`/`Qbase`/`Ubase_carryfree`
+(302–304), `an_interval`/`an_index`/`an_shift` (309–311); **`an_separated` (403) — now the
+load-bearing residual of B1a** (needs the witness-data pinning + a `maxbk` element-range bound on
+`tpow Qbase Ubase n`); B2 `griego_bounded_doubling` (489), B3 `griego_diff_lower_bound` (498), B4
+`griego_card_tendsto` (506).
+
+### R15 promotable (flagged for reviewer)
+`setSum_tr_pair_disjoint` / `setDiff_tr_pair_disjoint` — general spacing lemmas (shift gap exceeding
+the sumset/diffset diameter ⟹ disjoint translate images), sorry-free, axiom-clean, proved in
+`Sketches/C3aDef.lean` (lines ~365/380). Reusable for any composite-dilution disjointness argument.
 
 ## R14 — sub-hole B1 CLOSED (finite disjoint-union count)
 `griego_disjoint_union_count` (B1, the load-bearing finite combinatorics) is now proved

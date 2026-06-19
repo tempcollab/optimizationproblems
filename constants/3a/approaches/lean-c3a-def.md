@@ -214,18 +214,80 @@ load-bearing finite combinatorial sub-hole B1 is now a real sorry-free Lean deri
 on the documented B1a + witness-data holes), and that two general axiom-clean counting lemmas are
 available for reuse.
 
+## R15 — B1a SPACING LEMMAS CLOSED (`setSum_tr_pair_disjoint` / `setDiff_tr_pair_disjoint`)
+
+This round's deliverable: **the two general spacing lemmas the outliner factored out of B1a are now
+proved sorry-free and axiom-clean**, and `griego_ak_disjoint` (B1a) is consequently reassembled with
+its proof TERM sorry-free (the only `sorryAx` it now carries traces solely to the residual
+`an_separated` hole it legitimately consumes). `lake build C3a` EXIT 0 (2969 jobs).
+
+### What I closed (sorry-free, `#print axioms = [propext, Classical.choice, Quot.sound]`, NO sorryAx)
+- **`setSum_tr_pair_disjoint`** (line ~365): if every element of `setSum B B` lies in `[lo, lo+diam]`
+  and the shift gap `diam < |c − c'|`, then `setSum (tr c B) B` and `setSum (tr c' B) B` are disjoint.
+  Proof: `setSum_tr` rewrites both to `image (c+·) (setSum B B)`; `Finset.disjoint_left` gives a common
+  `c+w = c'+w'` with `w,w' ∈ [lo,lo+diam]`; `abs_le` + `omega` derive `|c−c'| ≤ diam`, contradicting
+  `hgap` via `linarith`. Pure ℤ interval arithmetic — no construction needed.
+- **`setDiff_tr_pair_disjoint`** (line ~380): the `setDiff` analogue, identical proof via `setDiff_tr`.
+
+`#print axioms` (recorded via a throwaway `Sketches/AxCheck.lean`, since deleted):
+```
+'C3a.setSum_tr_pair_disjoint'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'C3a.setDiff_tr_pair_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'C3a.griego_ak_disjoint'       depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+```
+The `griego_ak_disjoint` `sorryAx` is honest: the reassembly proof term is sorry-free; the `sorryAx`
+enters ONLY through the named `an_separated` obligation it `obtain`s. (R14-style: a discharged proof
+that consumes a documented sub-hole shows `sorryAx` tracing only to that hole.)
+
+### Intermediate-statement note (NOT required this round)
+The two spacing lemmas as planned (`WithinDiam (B±B) lo diam ∧ diam < |c−c'| ⟹ Disjoint …`) are
+exactly true and provable as stated — no reshape needed. The one small Lean adjustment vs the plan's
+suggested tactic path: `abs_lt` does NOT fire on `diam < |w'−w|` (it matches `|·| < ·`, abs on the
+LHS), so I instead prove `|c−c'| ≤ diam` via `rw [abs_le]; constructor <;> omega` (omega uses the
+membership equality `c+w = c'+w'` plus the two `WithinDiam` bounds) and close with `linarith`.
+
+### Holes remaining after R15 (13 documented `sorry`, all build GREEN)
+- **`an_separated` (line ~414) — the residual construction obligation** (the harder, uncached half of
+  B1a). NOT closed this round, by plan. BLOCKER: it asserts the existence of the diameters AND the
+  shift-spacing `diam < |aᵢ−aⱼ|` AND the interval-vs-union disjointness for the *concrete* witness data
+  `an_shift`/`an_index`/`an_interval` — but those are themselves `sorry` defs (lines 309–311). There is
+  nothing to compute the spacing from until the witness data is pinned. Closing it needs (a) pinning
+  `an_shift n i = i·(2·maxbk n + 1)` (an AP) and `an_interval n` below all translates, and (b) a new
+  `maxbk` element-range bound on `bk n = tpow Qbase Ubase n` (provable by induction on the box/emb
+  carry-free digit structure). That `maxbk` lemma + the witness-data pinning is the natural next
+  sub-target. NOT attempted this round (it is the larger, construction-bearing half, and depends on the
+  Ubase/Qbase witness data which is also still a hole).
+- **Witness data:** `Ubase`/`Qbase`/`Ubase_carryfree` (302–304), `an_interval`/`an_index`/`an_shift`
+  (309–311) — the explicit Griego digit set + base + carry-free property + dilution data.
+- **B2/B3/B4** (`griego_bounded_doubling`, `griego_diff_lower_bound`, `griego_card_tendsto`) — the
+  three real-analysis sub-holes. Multi-round; not scoped.
+- **Pre-existing:** `realizes_one` (140), `realizableSet_bddAbove` (151).
+
+`griego_ak_disjoint` (B1a) and `griego_disjoint_union_count` (B1) are unchanged in statement and still
+green; B1a is now a sorry-free reassembly modulo `an_separated`.
+
 ## Status
-R14: B1 (`griego_disjoint_union_count`) CLOSED sorry-free; new axiom-clean general lemmas
-`setSum_card_decompose`/`setDiff_card_decompose` (+ translate/distributivity helpers). `lake build C3a`
-EXIT 0 (2970 jobs). 12 documented `sorry` (B1a `griego_ak_disjoint` newly exposed; witness data;
-B2/B3/B4; realizes_one; bddAbove). No smuggled axiom. No `held` raise — structural only.
+R15: B1a spacing lemmas `setSum_tr_pair_disjoint`/`setDiff_tr_pair_disjoint` CLOSED sorry-free
+(`[propext, Classical.choice, Quot.sound]`); `griego_ak_disjoint` reassembled sorry-free modulo the
+residual `an_separated` hole. `lake build C3a` EXIT 0 (2969 jobs). 13 documented `sorry`
+(`an_separated` is now the load-bearing residual of B1a; witness data; B2/B3/B4; realizes_one;
+bddAbove). No smuggled axiom. No `held` raise — structural only; even fully wired the bridge certifies
+θ>1.1771, below the held 1.1779.
 File: `lean/Sketches/C3aDef.lean`.
 
-(Superseded: the R12 "3 documented sorry" status above — that predates the R14 B1 split/close.)
+(Superseded: the R14 "12 documented sorry" status — B1a's spacing lemmas now closed, `an_separated`
+named as the residual.)
 
 ## Promotable lemmas
-**Flag for certification** (proved sorry-free this round in `lean/Sketches/C3aDef.lean`, all
+**R15 — flag for certification** (proved sorry-free this round in `lean/Sketches/C3aDef.lean`,
 `#print axioms = [propext, Classical.choice, Quot.sound]`, general — not sketch glue):
+- `setSum_tr_pair_disjoint` (line ~365): `WithinDiam (setSum B B) lo diam → diam < |c − c'| →
+  Disjoint (setSum (tr c B) B) (setSum (tr c' B) B)`.
+- `setDiff_tr_pair_disjoint` (line ~380): the `setDiff` analogue.
+  Both: a shift gap strictly exceeding the diameter of the sum/diffset ⟹ the two translate images are
+  disjoint. Reusable for any composite/AP-dilution disjointness argument.
+
+**R14 — flag for certification** (still pending, all `[propext, Classical.choice, Quot.sound]`):
 - `setSum_card_decompose` / `setDiff_card_decompose` (lines ~271/285) — the disjoint-union GHR
   additive count `|(I ∪ ⋃ᵢ(aᵢ+B)) ± B| = |shifts|·|B±B| + |I±B|` under pairwise + interval
   disjointness. The reusable heart of any composite-dilution count.
