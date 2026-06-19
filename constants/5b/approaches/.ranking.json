@@ -5,7 +5,7 @@
     "last_note": "VERIFIED: Lean tight branching B&B transversal cert (noTransLe + noTransLe_sound + hLe_of_branchCert) closes the R3 fractional integrality gap, reaching integral tau=6 on A_base => tight h<=8 (vs fractional <=9). lake build PASS, clean axioms (decide facts axiom-free, no sorry/native_decide). Independently re-derived: 12 APs = full family, exact tau=6, bridge arith. Machinery only, does NOT beat 4/7; removes the prerequisite blocker for a tight N~30 cert.",
     "last_outcome": "verified-milestone",
     "last_round": 4,
-    "selected": 10,
+    "selected": 11,
     "slug": "branching-transversal-cert",
     "stale": false,
     "summary": "Depth-bounded branch-and-bound transversal certificate in Lean: structurally-recursive certifyTau (remaining, budget) Bool returning true iff no transversal of size <= budget exists; soundness induction gives tau > budget => h(A) <= N - budget - 1. Closes the fractional integrality gap (tight h(A_base)=8, tau>=6). Load-bearing prerequisite for any sub-4/7 Lean cert. A_base validation tree 364 nodes / 3^5=243 worst-case leaves, decide-tractable, zero sorry."
@@ -71,7 +71,7 @@
     "last_note": "VERIFIED: engine re-keyed to correct (4,5)-set difference condition (is45setB); MTThm15 + c5b_le_four_sevenths now sound. Clean rebuild, axioms clean, separating set {0,2,5,8,14,21,28} correctly rejected. Closes R2 soundness gap. No bound move (held 4/7).",
     "last_outcome": "verified-milestone",
     "last_round": 3,
-    "selected": 14,
+    "selected": 15,
     "slug": "engine-is45set-difference-fix",
     "stale": false,
     "summary": "Re-key the Lean engine from weakSidonB (sums) to a decidable is45setB difference predicate (every 4-sublist >=5 distinct |x-y|, C(N,4) decide); re-verify A_base certifies 4/7 zero-axiom. No bound move, but a hard correctness prerequisite \u2014 the current MTThm15 would falsely certify a weak-Sidon non-(4,5) gadget."
@@ -126,7 +126,7 @@
     "last_note": "Sound interleaved (fix-then-branch) Lean lemma hLe_of_interleaved built: disjoint H\u2229P / H\\P partition (no double-count, verified structurally + clean axioms propext/Classical.choice/Quot.sound, no sorry/native_decide). Budget-shrink mechanism (a=2 frac + g=1 branch => tau=4) demonstrated end-to-end on synthetic A_syn \u2014 the shrink R4 max-hybrid could not do. Honest finding (independently reproduced over all 2^14 supports): A_base is fully half-integral, max(a+tau_res)=6 only at P=empty, so g=1-on-A_base is genuinely impossible and the cert degenerates to full budget there. Machinery advance, does NOT beat 4/7. Bound-mover prerequisite still needs a non-half-integral N~30 candidate to fire.",
     "last_outcome": "advanced",
     "last_round": 5,
-    "selected": 4,
+    "selected": 5,
     "slug": "interleaved-residual-cert",
     "stale": false,
     "summary": "Branch-only-over-the-LP-residual transversal lemma hLe_of_branchOnResidual: refactor hLe_of_fracMatching to expose its dual support, contract the residual family, branch with budget g=tau-a (1-2 units so 3^g tiny at N=30). The named scaling prerequisite the R4 plain-min hybrid is NOT; validate on A_base with g=1 -> tight h<=8. Soundness backed by Nemhauser-Trotter / d-Hitting-Set LP half-integrality (fix LP value >=1/2, branch residual)."
@@ -137,7 +137,7 @@
     "last_note": "Lean cap lemma m_le_n_sub_2 over faithful Is45 predicate: lake build PASS, axioms clean (propext/Classical.choice/Quot.sound, no sorryAx/native_decide). FACT1 (double-midpoint forces 4-subset with <=4 distinct |diffs|) re-derived independently; Is45 verified permutation-faithful to is45setB, non-vacuous. Missing decidable bridge is_45setB->Is45 is a legit next increment, not fatal.",
     "last_outcome": "verified-milestone",
     "last_round": 8,
-    "selected": 4,
+    "selected": 5,
     "slug": "lean-cap-lemma-m-le-n-minus-2",
     "stale": false,
     "summary": "Formalize Lemma 2.4 in Lean: for any is45setB list, m(A)=#midpoint-distinct 3-APs <= n-2, via FACT1 (a vertex midpoint of two 3-APs forces a 4-subset with exactly 4 distinct |diffs|, contradicting >=5) giving an injective midpoint map into the n-2 interior. New lean/Constants/C5bCap.lean, lake-build-checked, clean axioms, no search/anneal \u2014 immune to the force-kill failure mode. Replaces the trusted external Lemma 2.4 the whole cap/tau analysis rests on."
@@ -148,7 +148,7 @@
     "last_note": "lake build passes; finite facts Abase_weakSidon & Abase_hLe8 decide with ZERO axioms (kernel only, no sorry/native_decide); combos enumerates all 2002 size-9 subsets (verified via #eval); h(A_base)=8 re-derived independently in Python. Reproduces record 4/7 (no beat). Reusable engine: future gadget = list swap + re-decide. Bridge (Thm 1.5) is explicit hypothesis MTThm15, not smuggled.",
     "last_outcome": "verified-milestone",
     "last_round": 1,
-    "selected": 18,
+    "selected": 19,
     "slug": "lean-scaffold-and-warmup",
     "stale": false,
     "summary": "Build reusable Lean decidable predicates is45set + hLe (Sidon=no-3-AP) and certify the record 14-pt gadget at c*<=4/7; foundation every later beat reuses."
