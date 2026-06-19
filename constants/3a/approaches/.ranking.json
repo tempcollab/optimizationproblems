@@ -12,13 +12,13 @@
   },
   "griego-ntt-push": {
     "elo": 1714.9588924008938,
-    "expanded": 4,
-    "last_note": "VERIFIED held 1.1776->1.1779 at new point (170,321). Reviewer independently re-derived s(166d)/d(206d)/M(225d) byte-exact to committed row via 3 distinct DPs (slack-mask sumset, minimal-pair diffset with coordinatewise-min lemma verified, knapsack maxU), brute-validated incl clamp+non-contig+contiguous. Load-bearing d^10000>s^10000*(2M+1)^1779 PASS (log-margin +73.03), ^1780 FAIL (-444.54, tight). Carry-free b=21>2max(A)=20. Hole-free at this point. To push further needs m>=180 (sumset DP ~175-217s, must background).",
-    "last_outcome": "verified-milestone",
-    "last_round": 13,
+    "expanded": 5,
+    "last_note": "m=180 (180,340): d(218d) and M(238d) reproduced byte-exact with distinct DPs; cert k=11781 PASS / k=11782 FAIL re-derived from committed ints (log10-margin +54.6/-183.4). BUT load-bearing s=|U+U| (175d) NOT reproducible \u2014 the (Sv,mask) sumset DP OOMs at m>=130 in this 8GB box for BOTH my slack engine AND the builder's own count_sumset (my slack DP byte-matched s at m=100, validating the algorithm). Held stays 1.1779; the s count is the still-stuck reproduction hole at m=180 (environmental memory wall, not a refutation).",
+    "last_outcome": "partial",
+    "last_round": 16,
     "selected": 13,
     "slug": "griego-ntt-push",
-    "stale": false,
+    "stale": true,
     "summary": "NTT/exact-FFT fast convolution + repeated-squaring sum-set DP to break the m=110 compute wall and climb toward Lambda~1.185; mandatory validation vs the R3 clamped-DP oracle before any large-m count is trusted."
   },
   "largedev-rate-optimization": {
