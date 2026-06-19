@@ -42,8 +42,8 @@ Read `/tmp/round-{ROUND_NUMBER}/proof-outliner.md` (the field), the sketch files
    sketch is never registered — junk stays out of the pool. (A *revised* or *advance*-nominated
    sketch keeps its existing slug — already registered, nothing to add.)
 2. **Rank the field** with `update_ranking` (below).
-3. **Pick the build set: the few strongest** to build in parallel. Name them. One is fine;
-   pick more only when they're independent sketches worth advancing at once (each builder
+3. **Pick the build set: the few strongest (normally 1–3)** to build in parallel. Name them. One
+   is fine; pick more only when they're independent sketches worth advancing at once (each builder
    owns its own sketch file, so parallel builds never collide).
 
 ## Rank

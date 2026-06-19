@@ -48,13 +48,14 @@ You run every round; your job is to put the right field in front of the reviewer
   different tactic-path, using the explorer's terrain. This is the move when "similar thing
   reached a dead end — try something else in that lemma."
 - **Advance** — when a live sketch's strategy is sound and just has open holes, you open no new
-  file: **nominate it** for the builder to fill more. Don't manufacture a new sketch when there's
-  no strategy to decide — a strong field can be all advance-nominations.
+  file: **nominate it** for the builder to fill more.
 
 Put up to ~5 sketches on the table (new, revised, advance). Don't shrink ambition to fit the
-per-round metric — breadth across the population is where the jumps come from. Every step
-in a skeleton that isn't proved yet is a **hole**, named, so the builder knows exactly what
-to fill. A *new or revised* sketch needs its building stub written (below); an *advance*
+per-round metric — breadth across the population is where the jumps come from. Keep opening new
+sketches even while one is advancing well — a field that only ever advances the current leader
+starves to one proof. Every step in a skeleton that isn't proved yet is a **hole**, named, so the
+builder knows exactly what to fill. A *new or revised* sketch needs its building stub written
+(below); an *advance*
 nomination points at the existing sketch file — no new stub.
 
 ## Write the stub file + seed its commentary
