@@ -12,13 +12,13 @@
   },
   "griego-ntt-push": {
     "elo": 1555.8500885564695,
-    "expanded": 0,
-    "last_note": null,
-    "last_outcome": null,
-    "last_round": null,
+    "expanded": 1,
+    "last_note": "HELD-RAISE VERIFIED 1.176 \u2192 1.1771 at (m,T)=(140,265). Reviewer independently re-derived s/d/M from scratch (slack-based bitmask sumset DP + 2D diffset DP, distinct from builder code) \u2014 all 3 match committed counts digit-for-digit; validated vs brute on 13 cases + builder DP at m=20-50. Cert d^10000>s^10000\u00b7q^1771 HOLDS (log-margin 159.3), ^1772 FAILS (tight). All holes closed; target hole-free.",
+    "last_outcome": "verified-milestone",
+    "last_round": 7,
     "selected": 3,
     "slug": "griego-ntt-push",
-    "stale": false,
+    "stale": true,
     "summary": "NTT/exact-FFT fast convolution + repeated-squaring sum-set DP to break the m=110 compute wall and climb toward Lambda~1.185; mandatory validation vs the R3 clamped-DP oracle before any large-m count is trusted."
   },
   "largedev-rate-optimization": {
@@ -34,13 +34,13 @@
   },
   "lean-native-decide-smallmt": {
     "elo": 1512.0234406786226,
-    "expanded": 1,
-    "last_note": "Both sorry holes closed: file is sorry-free, axioms = only native_decide (no sorryAx/smuggled axiom). Integer core D^40>S^40*Q^7 (theta>1.175) machine-checked; S,D,Q literals match independent recompute exactly. Remaining hole: GHR bridge to C_3a is an assumed visible hypothesis + opaque Cnum, not formalized -> minimal(*), not self-contained end-to-end Lean proof of C_3a>1.175.",
+    "expanded": 2,
+    "last_note": "log_bridge generalised over exponents (s,d,q,A,B), verified sorry-free + axiom-clean ([propext,Classical.choice,Quot.sound] only, no sorryAx/native ax) \u2014 PROMOTED to lemmas/log-bridge.md. lake build EXIT 0, literals match (100,190) scan, D^40>S^40\u00b7Q^7 confirmed. Open hole remains: ghr (GHR2007 \u03b8\u2264C_3a read-off) is still an assumed hypothesis with opaque C3aReal \u2192 minimally-verified (*), does NOT raise held (targets 1.175 < held 1.1771).",
     "last_outcome": "advanced",
-    "last_round": 4,
+    "last_round": 7,
     "selected": 3,
     "slug": "lean-native-decide-smallmt",
-    "stale": false,
+    "stale": true,
     "summary": "Machine-checked (lake build) C_3a>1.175 via native_decide on D^40>S^40\u00b7Q^7 at Griego (100,190); load-bearing int cert already green/hole-free, only theta-translation + GHR read-off remain as sorry holes."
   },
   "noncontig-alphabet-sweep": {
