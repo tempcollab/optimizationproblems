@@ -1,0 +1,4 @@
+T=150: val=1.174074447693521  beats_1.1740744(exact)=True  (2128.8s)
+T=154: val=1.174171353998482  beats_1.1740744(exact)=True  (1961.3s)
+T=158: val=1.174022890068404  beats_1.1740744(exact)=False  (1984.7s)
+CHUNK DONE
