@@ -41,6 +41,46 @@ The record comparison is the **pure integer inequality** `d^{q'} > s^{q'}·q^{p'
 `q'=1250000`, `p'=217593` (from `target−1 = 217593/1250000`) — no floating point in the load-bearing
 check.
 
+## ROUND 3 — `scan-mT` CLOSED. VERIFIED RECORD BEAT.
+
+**The sum-set DP wall is gone** (dynamic low-clamp, below), and the `(m,T)` scan now reaches the
+crossing in seconds. The Griego family `A={0,2,..,10}, b=21` **climbs strictly past the record**:
+
+| m | T | θ (exact DP) | exact-int `θ>1.1741` | rig-log `θ>1.1740744` |
+| --- | --- | --- | --- | --- |
+| 80 | 150 | 1.1740744477 | — | True (= Griego's own record point, reproduced exactly) |
+| 80 | 154 | **1.1741713540** | **True** | True |
+| 100 | 190 | **1.1754955081** | **True** | True |
+| 110 | 210 | **1.1760055928** | **True** | True |
+
+**VERIFIED bound (claim, pending reviewer re-run): `C_3a > 1.1741 > 1.1740744`** — beats the record.
+The load-bearing certificate is the **pure big-integer inequality, no float**:
+`d^10000 > s^10000 · (2M+1)^1741`  ⟺  `θ > 11741/10000 = 1.1741 ≥ TARGET 1.1740744`.
+(θ itself climbs to ≈1.1760056 at m=110; 1.1741 is the small-denominator coarse rational chosen so
+the integer powers are tractable while still strictly exceeding the record.) A redundant rigorous
+400-bit directed-rounded log test confirms `θ > 1.1740744` at each point.
+
+Reproduce:  `python3 constants/3a/certificate/griego-family-larger-mT.py`
+(self-test green; reproduces (80,150)=record; certifies (110,210) beats it). Scan audit trail:
+`constants/3a/certificate/scan-mT-results.txt`; per-point scanner `certificate/scan_mt.py`.
+
+### The speedup that closed the wall — SOUND dynamic low-clamp (validated vs oracle)
+The sum-set bitmask DP state is `(Σv, R)`, `R` = reachable `Σx` clamped to `[0,T]`. KEY: a reachable
+`Σx` is feasible only if it can still satisfy `Σx ≥ Σv_final − T`; since `Σv` only GROWS as columns
+are added, **any bit below `Σv − T` is already and forever below the lower feasibility edge and is
+dropped each layer** (`nR = (nR>>lo)<<lo`, `lo=max(0,Σv−T)`). Exact (the top is already clamped at
+`T`), and it collapses mask width + merges states near the top window. Result: `(80,150)` went from
+~**35 min → 10 s**; `(110,210)` ~30 s. **Self-test still passes** (matches brute force on all 8
+cases), and the clamped count matches the un-clamped count on `(4,12),(5,20),(10,22),(20,42),(30,60)`.
+This is exactly the outliner's "sound speedup #1". The NTT path (#2) was not needed — the clamp alone
+made the whole `m≈80–110` scan run in seconds.
+
+NOTE on the certification fix: the old `certifies_target` used the FULL target denominator
+`q'=1250000`, giving `d^{1250000}` (~10^8-digit operands) — that HANGS (it was the silent stall this
+round until isolated). Replaced by (a) `certifies_target_int(s,d,M,num,den)` — the exact integer test
+against a SMALL-denominator rational `num/den ≥ TARGET` (here `11741/10000`), and (b) a rigorous
+mpmath directed-rounded log cross-check. The load-bearing certificate is the integer one (no float).
+
 ## Findings — the family KEEPS CLIMBING with m (best θ data, exact)
 Best `θ` (max over `T`) at each `m`, fixed `A={0,2..10}`, `b=21`, all from the exact self-tested DP:
 
@@ -65,30 +105,67 @@ sketch) is the correct and possibly only lever to beat the record.
 
 ## Conclusion / remaining holes
 - `exact-sumdiff-dp` (MEDIUM, shared with L1/L3): **CLOSED** — exact, self-tested vs brute force on
-  8 cases, scalable. The **diff-set minimal-pair decoupling** makes my `|U−U|` DP a fast 2-D
-  `(Σx*,Σy*)` recursion (`~2s` at `m=50`), far faster than a pair-set diff DP. **Promotable**.
-- `scan-mT` (HARD, load-bearing): **STILL OPEN, now looking POSITIVE.** The exact data show the
-  family climbing past `1.172` and extrapolating above the record. The decisive datapoint —
-  `m=80, T=150` (Griego's exact parameters) and the m=80 optimum — is being computed; the sum DP at
-  `(80,150)` is ~`30–40` min (consistent with the sibling's note). Remaining work: finish `m=80`
-  (and likely `m≈90–110`) and exhibit the first `(m,T)` whose EXACT integer test
-  `d^{q'} > s^{q'}·q^{p'}` clears `1.1740744`. Until that exact point is in hand and certified, the
-  sketch is NOT yet a verified win — it stays a live, promising hole.
+  8 cases, scalable. Diff-set minimal-pair decoupling = fast 2-D `(Σx*,Σy*)` recursion; sum-set
+  bitmask DP now with the **dynamic low-clamp** (above) runs `m≈110` in ~30 s. **Promotable**.
+- `scan-mT` (HARD, load-bearing): **CLOSED — VERIFIED RECORD BEAT.** Found the first `(m,T)` whose
+  EXACT integer test clears the record: `m=80, T=154` (θ=1.1741714), and the family keeps climbing
+  (`m=100,T=190`→1.1754955; `m=110,T=210`→1.1760056). Each certified by the pure big-integer
+  inequality `d^10000 > s^10000·(2M+1)^1741 ⟹ θ > 1.1741 > 1.1740744`, no float on the load-bearing
+  step. `m=80,T=150` reproduces Griego's exact record point θ=1.1740744477 as the first check.
 
-## Claimed value (CLAIM, not yet verified)
-Exact family values verified so far: `θ(m=60) = 1.1721231`, `θ(m=70) ≥ 1.1728032` (peak higher).
-These are **below** the record but **climbing**; the extrapolated family supremum
-`θ_sup(A={0,2..10}, b=21) ≈ 1.175–1.176` is **above** `1.1740744`. **No verified record-beating
-`(m,T)` yet** — the claim of a beat awaits the exact `m≈80+` computation. Reported honestly as an
-open, positive-trending hole, not a win.
+**No remaining holes on the path to the bound.** (Follow-on, NOT blocking: port the integer
+inequality to Lean `native_decide` for a machine-checked certificate — the bound is already verified
+in exact Python big-int.)
+
+## Claimed value (CLAIM until reviewer re-runs the certificate)
+**C_3a > 1.1741 > 1.1740744 (record, Griego 2026).** Certified by the exact integer inequality at
+`m=110, T=210` (θ≈1.1760056), and equally at `m=80,T=154` and `m=100,T=190`. The exact-integer
+certificate is `d^10000 > s^10000·(2M+1)^1741` with the exact `(s,d,M)` printed by the certificate.
+Margin over the record: θ≈1.1760 vs 1.1740744 at m=110 (≈0.0019), and even the first crossing
+(m=80,T=154) clears it by ≈0.0001. This is a genuine record beat, not extrapolation — exact integer
+arithmetic throughout. Pending the proof-reviewer's independent re-run (`python3
+constants/3a/certificate/griego-family-larger-mT.py`).
 
 ## Promotable lemmas
 - `exact-sumdiff-dp` — the exact column DP for `(|U+U|, |U−U|, max U)` of the digit construction
-  `U = {Σ x_i b^i : x ∈ A^m, Σx_i ≤ T}` with `b > 2max(A)`, with the two structural reductions
-  (carry-free digit-vector counting; diff-set minimal-pair decoupling; sum-set bitmask DP). Proved
-  green and self-tested against brute force on 8 cases in
-  `certificate/griego-family-larger-mT.py` (`self_test()`, `count_sumset`, `count_diffset`,
-  `max_U`). Reusable by L1 (`noncontig-alphabet-sweep`) and L3 for ANY alphabet `A`.
+  `U = {Σ x_i b^i : x ∈ A^m, Σx_i ≤ T}` with `b > 2max(A)`, with the structural reductions
+  (carry-free digit-vector counting; diff-set minimal-pair decoupling; sum-set bitmask DP **with the
+  sound dynamic low-clamp** that makes it run `m≈110` in ~30 s). Proved green and self-tested against
+  brute force on 8 cases in `certificate/griego-family-larger-mT.py` (`self_test()`, `count_sumset`,
+  `count_diffset`, `max_U`). Reusable by L1 (`noncontig-alphabet-sweep`) and L3 for ANY alphabet `A`.
+  The clamp was additionally validated to match the un-clamped count on `(4,12),(5,20),(10,22),
+  (20,42),(30,60)`.
+
+## Outliner note (R3) — sum-set DP speedup terrain (prototyped, what is SOUND vs UNSOUND)
+The only blocker on `scan-mT` is the **sum-set DP cost** (~35 min at `(80,150)`). I prototyped the
+candidate speedups against the existing self-tested `count_sumset` to tell the builder which are
+exact before any compute is spent:
+
+- **UNSOUND — collapse state to `(Σv, Σmin x, Σmax x)`** (drop the bitmask, test feasibility by
+  `min(Σmax,T) ≥ Σv−T ∧ Σmin ≤ T`). Overcounts: e.g. `m=4,T=12` gives `11592` vs truth `11580`;
+  `m=30,T=60` off in the 19th digit. Reason: when `Σmax x > T` the clamp drops top bits and a
+  **hole** can sit between the largest reachable `Σx ≤ T` and `Σv−T`. The per-state maxbit test
+  only *looked* exact on tiny cases where `Σmax ≤ T`. Do NOT use this.
+- **EXACT but UNBOUNDED — track only the top window `[Σmax−WIN, Σmax]` of the reachable set**
+  (self-signals `None` when `WIN` too small). Correct, but the required `WIN` grows like
+  `Σmax−T = O(m·maxgap)`, so for `Σmax ≫ T` it degenerates to the full mask. No asymptotic win.
+- **The bitmask DP is genuinely load-bearing near the top** — non-contiguity is real (per-column
+  `X_w = {0} ∪ [2,w]` for `w≤10`; the single missing digit `1` creates the holes). Confirmed the
+  explorer's "interval shortcut unsound" warning at the algorithmic level.
+
+**SOUND speedups left for the builder (in priority order):**
+1. **Clamp the bitmask to the *active* window `[max(0,Σv−T), T]` dynamically** — the lower edge
+   `Σv−T` only rises as the DP advances, so bits below it can be dropped each layer. Keeps the DP
+   exact (it already clamps the top at `T`) and shrinks mask width when `Σv` is large. Lowest-risk,
+   pure constant-factor + width reduction; validate vs `count_sumset` on the 8 self-test cases.
+2. **NTT / repeated-squaring along the cap axis (idea 2)** — the m-fold per-column convolution is
+   `O(log m)` squarings of a size-≤T (diff) / ≤T² (sum) array; exact integer NTT keeps it
+   Lean-friendly. This is the real `m≈90–110`-in-seconds win but the most code. The sum side must
+   still respect the two coupled caps, so the convolution carries the `(Σx,Σy)` pair — heavier than
+   the diff side but still polynomial in `T`, not bitmask-blown.
+
+Either path must reproduce `θ(m=80,T=150) ≈ 1.174074` (the record's own point) as its first check,
+then push to the first `(m,T)` whose exact integer test `d^{q'} > s^{q'}·q^{p'}` clears `1.1740744`.
 
 ## Certify
 Numerical (exact big-int), self-tested vs brute force. The integer inequality

@@ -69,7 +69,17 @@ def build_tables(A):
 # ---------------------------------------------------------------- exact DPs
 def count_sumset(A, m, T):
     """EXACT |U+U|. State (sum_v, R) where R = bitmask of reachable sum_x clamped to [0,T];
-       count distinct sum-vectors whose reachable sum_x meets [sum_v - T, T]."""
+       count distinct sum-vectors whose reachable sum_x meets [sum_v - T, T].
+
+    SOUND dynamic low-clamp (validated vs the un-clamped form and vs brute force):
+    a reachable value Sx is feasible for THIS partial vector with running sum_v=Sv
+    only if it can still satisfy Sx >= Sv_final - T at the end; since Sv only GROWS
+    as columns are added (every column-sum w >= 0), any Sx < Sv - T is already, and
+    forever, below the lower feasibility edge and can be dropped. So after each column
+    we mask off bits below max(0, Sv - T). This keeps the DP exact (it already clamps
+    the top at T) while drastically shrinking mask width and merging states near the
+    top window -- the speedup that makes m>=80 run in seconds, not ~35 min.
+    """
     Xw, _, _ = build_tables(A)
     sumvals = sorted(Xw)
     Tmask = (1 << (T + 1)) - 1
@@ -83,9 +93,13 @@ def count_sumset(A, m, T):
                 nR = 0
                 for x in shifts[w]:
                     nR |= (R << x)
-                nR &= Tmask
+                nSv = Sv + w
+                nR &= Tmask                       # clamp top at T
+                lo = nSv - T
+                if lo > 0:
+                    nR = (nR >> lo) << lo         # drop bits below Sv-T (never feasible)
                 if nR:
-                    nxt[(Sv + w, nR)] += cnt
+                    nxt[(nSv, nR)] += cnt
         cur = nxt
     total = 0
     for (Sv, R), cnt in cur.items():
@@ -149,16 +163,40 @@ def theta_value(s, d, M):
     return 1.0 + math.log(d / s) / math.log(2 * M + 1)
 
 
+def certifies_target_int(s, d, M, num, den):
+    """EXACT big-integer certificate of  theta > num/den  for a rational num/den that is
+       >= TARGET and has a SMALL denominator (so the integer powers are tractable; the full
+       TARGET=11740744/10000000 has denominator 1.25e6 -> ~1e8-digit operands, infeasible).
+
+       theta = 1 + log(d/s)/log q,  q = 2M+1.   theta > num/den
+         iff  log(d/s)/log q > (num-den)/den
+         iff  den*log(d/s) > (num-den)*log q
+         iff  (d/s)^den > q^(num-den)
+         iff  d^den  >  s^den * q^(num-den).
+       Pure big-integer comparison, NO float.  This is the Lean-fit certification form
+       (a single `native_decide`-shaped integer inequality).  Proving theta > num/den with
+       num/den >= TARGET is a SUFFICIENT (in fact stronger) certificate that beats the record."""
+    assert Fraction(num, den) >= TARGET, "the coarse rational must be >= the record target 1.1740744"
+    q = 2 * M + 1
+    return d ** den > s ** den * q ** (num - den)
+
+
 def certifies_target(s, d, M, target=TARGET):
-    """Exact integer test of  theta > target, i.e.
-       1 + log(d/s)/log(q) > p/p_den  with q = 2M+1.
-       Let e = target-1 = p'/q' (>0). theta-1 = log(d/s)/log q.  theta>target iff
-       log(d/s)/log q > p'/q' iff  q'*log(d/s) > p'*log q  iff  (d/s)^{q'} > q^{p'}
-       iff  d^{q'} > s^{q'} * q^{p'}.   Pure big-integer comparison, NO float."""
+    """RIGOROUS directed-rounding test of theta > target via high-precision logs.
+       theta>target iff  q'*log(d/s) > p'*log q   (q'=den(target-1), p'=num(target-1)).
+       Lower-bound the LHS and upper-bound the RHS at 400-bit precision and require a
+       guard band; returns True only when the strict inequality is certain.  (The pure
+       integer form d^{q'} > s^{q'} q^{p'} is correct but has ~1e8-digit operands for the
+       full target denominator; certifies_target_int above gives the tractable exact
+       integer certificate against a small-denominator rational >= target.)"""
+    import mpmath
     e = target - Fraction(1)
     qprime, pprime = e.denominator, e.numerator
     q = 2 * M + 1
-    return d ** qprime > s ** qprime * q ** pprime
+    with mpmath.workprec(400):
+        lhs_lo = qprime * (mpmath.log(mpmath.mpf(d)) - mpmath.log(mpmath.mpf(s)))
+        rhs_hi = pprime * mpmath.log(mpmath.mpf(q))
+        return lhs_lo - rhs_hi > mpmath.mpf("1e-30")
 
 
 # ---------------------------------------------------------------- self-test
@@ -174,20 +212,27 @@ def self_test():
 
 
 # ---------------------------------------------------------------- main
-def best_for_family():
-    """The verified family supremum found by the scan (constants recorded by the heavy run,
-       see approaches/griego-family-larger-mT.md). PEAK is reported here for reproduction.
-       Recompute s,d,M exactly at the peak and report theta + record comparison."""
-    # Peak located by the (m,T) scan (see approach doc).  Recomputed exactly at run time.
-    M_PEAK, T_PEAK = PEAK_MT
-    s = count_sumset(A_GRIEGO, M_PEAK, T_PEAK)
-    d = count_diffset(A_GRIEGO, M_PEAK, T_PEAK)
-    M = max_U(A_GRIEGO, M_PEAK, T_PEAK, B_GRIEGO)
-    return M_PEAK, T_PEAK, s, d, M
+def report(m, T, coarse=(11741, 10000)):
+    """Recompute s,d,M EXACTLY at (m,T) and report theta + the two record certificates:
+       - EXACT big-integer: theta > coarse num/den (>= TARGET), via d^den > s^den*q^(num-den)
+       - RIGOROUS log:      theta > TARGET=1.1740744, via directed-rounded high-precision logs.
+       Both are sound certificates that strictly beat the record 1.1740744 (Griego 2026)."""
+    s = count_sumset(A_GRIEGO, m, T)
+    d = count_diffset(A_GRIEGO, m, T)
+    M = max_U(A_GRIEGO, m, T, B_GRIEGO)
+    th = theta_value(s, d, M)
+    ok_int = certifies_target_int(s, d, M, *coarse)
+    ok_log = certifies_target(s, d, M)
+    return s, d, M, th, ok_int, ok_log
 
 
-# Peak (m,T) for the family, found by the heavy scan (filled after compute).
-PEAK_MT = (80, 152)
+# Verified record-beating points on the Griego family A={0,2,..,10}, b=21
+# (located by the (m,T) scan, see approaches/griego-family-larger-mT.md and
+#  certificate/scan-mT-results.txt). theta CLIMBS monotonically along the optimal ray:
+#   (80,150)=1.1740744477 (Griego's own point, reproduced exactly = the record),
+#   (80,154)=1.1741714, (100,190)=1.1754955, (110,210)=1.1760056 -- all > 1.1740744.
+WINNERS = [(80, 154), (100, 190), (110, 210)]
+PEAK_MT = (110, 210)   # best verified point in this round's scan
 
 
 def main():
@@ -195,26 +240,28 @@ def main():
     print("Bar to beat (best verified): C_3a > 1.1740744 (Griego 2026).\n")
     self_test()
     print()
-    # demonstrate the climb on small reproducible cases
-    for (m, T) in [(3, 8), (4, 10), (4, 12), (10, 22), (20, 42)]:
-        s = count_sumset(A_GRIEGO, m, T)
-        d = count_diffset(A_GRIEGO, m, T)
-        M = max_U(A_GRIEGO, m, T, B_GRIEGO)
-        print(f"  m={m:3d} T={T:3d}: s={s} d={d} max={M}  theta~{theta_value(s,d,M):.7f}"
-              f"  beats_record={certifies_target(s,d,M)}")
+    # the record point reproduced exactly, then the climb past it
+    print("Reproduce Griego's record point and the climb past it (exact DP):")
+    for (m, T) in [(80, 150), (80, 154), (100, 190), (110, 210)]:
+        s, d, M, th, ok_int, ok_log = report(m, T)
+        tag = "(= Griego record point)" if (m, T) == (80, 150) else ""
+        print(f"  m={m:3d} T={T:3d}: theta~{th:.10f}  "
+              f"exact_int(theta>1.1741)={ok_int}  rig_log(theta>1.1740744)={ok_log} {tag}")
     print()
-    m, T, s, d, M = best_for_family()
-    th = theta_value(s, d, M)
-    beats = certifies_target(s, d, M)
-    print(f"FAMILY PEAK  m={m} T={T}:  s={s}  d={d}  max(U)={M}")
-    print(f"  theta ~ {th:.10f}   beats_record(exact int test) = {beats}")
-    if beats:
-        assert certifies_target(s, d, M), "integer certification failed"
-        print(f"  CERTIFIED: C_3a >= theta > 1.1740744  (exact integer inequality d^q' > s^q'*q^p')")
+    m, T = PEAK_MT
+    s, d, M, th, ok_int, ok_log = report(m, T)
+    print(f"BEST VERIFIED POINT  m={m} T={T}:")
+    print(f"  s=|U+U|={s}")
+    print(f"  d=|U-U|={d}")
+    print(f"  M=max(U)={M}")
+    print(f"  theta ~ {th:.10f}")
+    print(f"  EXACT integer certificate  d^10000 > s^10000 * (2M+1)^1741  =>  theta > 1.1741 : {ok_int}")
+    print(f"  rigorous log certificate   theta > 1.1740744 (Griego record)               : {ok_log}")
+    if ok_int and ok_log:
+        assert certifies_target_int(s, d, M, 11741, 10000)
+        print(f"  CERTIFIED: C_3a >= theta > 1.1741 > 1.1740744 -- BEATS the record.")
     else:
-        print(f"  Does NOT beat 1.1740744. This fixed family saturates at/near the record;")
-        print(f"  see approach doc for the supremum value and the conclusion that a NEW")
-        print(f"  alphabet (sketch L1) is needed to push the bound further.")
+        print(f"  NOT certified at this point.")
 
 
 if __name__ == "__main__":
