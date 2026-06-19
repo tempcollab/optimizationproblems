@@ -131,24 +131,115 @@ def RealizableSet : Set ℝ := { c | Realizes c }
     (replacing the `opaque C3aRealDef` of `lean-native-decide-smallmt`). -/
 noncomputable def C3aRealDef : ℝ := sSup RealizableSet
 
-/-- The realizable set is nonempty: `c = 1` is realizable. Witness (GHR baseline, [GHR2007]
-    `θ₀ > 1.14465 ≥ 1` so `1` is realizable): the family realizing the elementary exponent has
-    bounded doubling and `|A−B| ≥ |A+B|^1`. HOLE: needs a concrete witness family `(A n, B n)`
-    with all three conditions (the GHR composite at the trivial exponent, or any explicit
-    bounded-doubling family with `|A−B| ≥ |A+B|`). Documented `sorry`. -/
+/- ============================================================================================
+    `realizes_one` — DECOMPOSED (R21, per R21 math-explorer §"Fallback / second cheap slug").
+
+    The base case `Realizes 1` is closed by the GROWING INTERVAL family
+        A n := B n := Finset.Icc (0:ℤ) n.
+    For this family the three `Realizes` clauses are all FINITE/ALGEBRAIC:
+        * sumset:  setSum (Icc 0 n)(Icc 0 n) = Icc 0 (2n),   card = 2n+1
+        * diffset: setDiff (Icc 0 n)(Icc 0 n) = Icc (-n) n,  card = 2n+1
+        * |A n| = |Icc 0 n| = n+1
+      so clause (i) `2n+1 ≤ K·(n+1)` holds with K = 3 (for n ≥ 0: 2n+1 ≤ 3n+3),
+         clause (ii) `(2n+1)^1 = 2n+1 ≤ 2n+1` holds (equality),
+         and `|A n| = n+1 → ∞`.
+
+    The load-bearing finite content is the two SUMSET/DIFFSET interval identities `icc_setSum_card`
+    / `icc_setDiff_card` (the only `sorry` sub-holes); everything else is `Nat.card_Icc` + filter
+    plumbing. This is the genuinely Lean-fit, plausibly-one-round closure the explorer flagged.
+    ============================================================================================ -/
+
+/-- **R1a helper (CLOSED R21).** The sumset of `[0,n]` with itself is exactly the interval `[0,2n]`.
+    The `⊇` half writes any `z ∈ [0,2n]` as `min z n + (z − min z n)` with both summands in `[0,n]`. -/
+theorem icc_setSum_eq (n : ℤ) (hn : 0 ≤ n) :
+    setSum (Finset.Icc (0:ℤ) n) (Finset.Icc (0:ℤ) n) = Finset.Icc 0 (2 * n) := by
+  ext z
+  simp only [setSum, mem_image₂, mem_Icc]
+  constructor
+  · rintro ⟨a, ⟨ha0, han⟩, b, ⟨hb0, hbn⟩, rfl⟩
+    exact ⟨by omega, by omega⟩
+  · rintro ⟨hz0, hz2n⟩
+    refine ⟨min z n, ⟨by omega, by omega⟩, z - min z n, ⟨by omega, by omega⟩, by omega⟩
+
+/-- **SUB-HOLE R1a — CLOSED R21.** `|Icc 0 n + Icc 0 n| = 2n+1` for `0 ≤ n`, via `icc_setSum_eq`
+    (`= [0,2n]`) + `Int.card_Icc`. THE LOAD-BEARING finite step. -/
+theorem icc_setSum_card (n : ℤ) (hn : 0 ≤ n) :
+    (setSum (Finset.Icc (0:ℤ) n) (Finset.Icc (0:ℤ) n)).card = (2 * n + 1).toNat := by
+  rw [icc_setSum_eq n hn, Int.card_Icc]
+  congr 1
+  omega
+
+/-- **R1b helper (CLOSED R21).** The diffset of `[0,n]` with itself is exactly the symmetric
+    interval `[-n,n]`. The `⊇` half writes any `z ∈ [-n,n]` as `max z 0 − max (-z) 0`, both in `[0,n]`. -/
+theorem icc_setDiff_eq (n : ℤ) (hn : 0 ≤ n) :
+    setDiff (Finset.Icc (0:ℤ) n) (Finset.Icc (0:ℤ) n) = Finset.Icc (-n) n := by
+  ext z
+  simp only [setDiff, mem_image₂, mem_Icc]
+  constructor
+  · rintro ⟨a, ⟨ha0, han⟩, b, ⟨hb0, hbn⟩, rfl⟩
+    exact ⟨by omega, by omega⟩
+  · rintro ⟨hzlo, hzhi⟩
+    refine ⟨max z 0, ⟨by omega, by omega⟩, max (-z) 0, ⟨by omega, by omega⟩, by omega⟩
+
+/-- **SUB-HOLE R1b — CLOSED R21.** `|Icc 0 n − Icc 0 n| = 2n+1` for `0 ≤ n`, via `icc_setDiff_eq`
+    (`= [-n,n]`) + `Int.card_Icc`. -/
+theorem icc_setDiff_card (n : ℤ) (hn : 0 ≤ n) :
+    (setDiff (Finset.Icc (0:ℤ) n) (Finset.Icc (0:ℤ) n)).card = (2 * n + 1).toNat := by
+  rw [icc_setDiff_eq n hn, Int.card_Icc]
+  congr 1
+  omega
+
+/-- The integer interval `[0,n]` has `n+1` points (`n : ℕ`). -/
+theorem icc_card (n : ℕ) : (Finset.Icc (0:ℤ) (n:ℤ)).card = (n + 1) := by
+  rw [Int.card_Icc]
+  omega
+
+/-- The realizable set is nonempty: `c = 1` is realizable, via the growing interval family
+    `A n = B n = Icc 0 n`. REASSEMBLED `sorry`-free from the two interval-cardinality sub-holes
+    `icc_setSum_card` / `icc_setDiff_card` (and `Nat.card_Icc`); the three `Realizes` clauses are
+    finite/algebraic for this family (K = 3 doubling; equality in clause (ii); `n+1 → ∞`). -/
 theorem realizes_one : Realizes 1 := by
-  sorry
+  refine ⟨fun n => Finset.Icc (0:ℤ) (n : ℤ), fun n => Finset.Icc (0:ℤ) (n : ℤ), 3, ?_, ?_, ?_⟩
+  · -- |A n| = n+1 → ∞
+    have hc : (fun n : ℕ => ((Finset.Icc (0:ℤ) (n:ℤ)).card : ℝ)) = (fun n : ℕ => (n : ℝ) + 1) := by
+      funext n
+      rw [icc_card n]
+      push_cast
+      ring
+    rw [hc]
+    apply Filter.tendsto_atTop_add_const_right
+    exact tendsto_natCast_atTop_atTop
+  · -- clause (i): |A n + B n| = 2n+1 ≤ 3·(n+1) = 3·|A n|
+    filter_upwards with n
+    rw [icc_setSum_card (n:ℤ) (by positivity), icc_card n]
+    have h2n : (2 * (n:ℤ) + 1).toNat = 2 * n + 1 := by omega
+    rw [h2n]
+    push_cast
+    have hn0 : (0:ℝ) ≤ (n:ℝ) := Nat.cast_nonneg n
+    nlinarith [hn0]
+  · -- clause (ii): (2n+1)^1 = 2n+1 ≤ 2n+1 = |A n − B n|
+    filter_upwards with n
+    rw [icc_setSum_card (n:ℤ) (by positivity), icc_setDiff_card (n:ℤ) (by positivity)]
+    rw [Real.rpow_one]
 
 theorem realizableSet_nonempty : RealizableSet.Nonempty :=
   ⟨1, realizes_one⟩
 
-/-- The realizable set is bounded above by the structural [GHR2007, Theorem 2] cap `4/3` (the
-    proven upper bound on C_3a, now applicable HONESTLY because the doubling clause is restored —
-    the 4/3 bound is proved for the CONSTRAINED constant). This makes `sSup RealizableSet` a
-    genuine real (not `sSup ∅ = 0` and not an unbounded junk sup). HOLE: needs the GHR2007
-    upper-bound theorem `|A−B| ≤ |A+B|^{4/3+o(1)}` under bounded doubling. Documented `sorry`. -/
-theorem realizableSet_bddAbove : BddAbove RealizableSet := by
+/-- **SUB-HOLE (alternative angle, R21) — the GHR 4/3 upper bound, ISOLATED.**
+    Every realizable exponent is `≤ 4/3`. This is the [GHR2007, Theorem 2] structural upper bound
+    `|A−B| ≤ |A+B|^{4/3+o(1)}` under bounded doubling — the IRREDUCIBLE hard analytic content of
+    `realizableSet_bddAbove` (Mathlib has Plünnecke–Ruzsa but NOT this specific GHR bound; it is a
+    substantial formalization left as ONE clearly-named documented `sorry`). All of the
+    `BddAbove`-plumbing hardness collapses into this single lemma. DOCUMENTED `sorry`. -/
+theorem ghr_upper {c : ℝ} (hc : Realizes c) : c ≤ 4 / 3 := by
   sorry
+
+/-- The realizable set is bounded above by the structural [GHR2007, Theorem 2] cap `4/3`. This
+    makes `sSup RealizableSet` a genuine real (not `sSup ∅ = 0` and not an unbounded junk sup).
+    REASSEMBLED `sorry`-free from the isolated hard lemma `ghr_upper` — the `BddAbove` witness is
+    just `⟨4/3, …⟩` with the upper-bound condition discharged by `ghr_upper`. -/
+theorem realizableSet_bddAbove : BddAbove RealizableSet :=
+  ⟨4 / 3, fun _ hc => ghr_upper hc⟩
 
 /- ============================================================================================
     HOLE B — THE READ-OFF — now SPLIT into four named sub-holes (R14 revision, per R14

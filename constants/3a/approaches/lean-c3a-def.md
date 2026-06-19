@@ -16,6 +16,112 @@ commits multiple rounds to the real-analysis read-off.
 Borrows: `lean-native-decide-smallmt` (`theta`, `theta_gt` — the certified θ>1.1771), the cached
 `tensor-multiplicativity` lemmas (`sumset`/`diffset`, `tensor_pow_*_card`), `log-bridge`.
 
+## R21 BUILDER — `realizes_one` CLOSED sorry-free (the MAIN angle, fully discharged)
+
+This round CLOSED the entire MAIN angle: the two load-bearing interval-cardinality lemmas
+R1a/R1b AND all three `realizes_one` clause sub-goals, so `realizes_one : Realizes 1` and
+`realizableSet_nonempty` are now sorry-FREE and axiom-clean. `lake build C3a` EXIT 0 (2970 jobs).
+
+### Closed this round (6 lemmas, all `#print axioms = [propext, Classical.choice, Quot.sound]`, NO sorryAx)
+- **`icc_setSum_eq`** (helper) — `setSum (Icc 0 n)(Icc 0 n) = Icc 0 (2n)` for `0 ≤ n`. The `⊇`
+  half writes `z ∈ [0,2n]` as `min z n + (z − min z n)`, both summands in `[0,n]`; `Finset.ext` +
+  `mem_image₂` + `mem_Icc` + `omega` on each membership. Pure finite ℤ-interval combinatorics.
+- **`icc_setSum_card` (SUB-HOLE R1a)** — `|Icc 0 n + Icc 0 n| = (2n+1).toNat`. `rw [icc_setSum_eq,
+  Int.card_Icc]; congr 1; omega` (`Int.card_Icc : #(Icc a b) = (b+1−a).toNat`, here `(2n+1−0).toNat`).
+- **`icc_setDiff_eq`** (helper) — `setDiff (Icc 0 n)(Icc 0 n) = Icc (-n) n`. The `⊇` half writes
+  `z ∈ [-n,n]` as `max z 0 − max (-z) 0`, both in `[0,n]`; same `Finset.ext`+`omega` shape.
+- **`icc_setDiff_card` (SUB-HOLE R1b)** — `|Icc 0 n − Icc 0 n| = (2n+1).toNat`. Via `icc_setDiff_eq`
+  + `Int.card_Icc` (`(n+1−(−n)).toNat = (2n+1).toNat`).
+- **`icc_card`** (helper) — `|Icc 0 (n:ℤ)| = n+1` for `n : ℕ`, via `Int.card_Icc` + `omega`.
+- **`realizes_one : Realizes 1`** (three clause sub-goals, all discharged) — witness
+  `A n = B n = Finset.Icc 0 (n:ℤ)`, `K = 3`:
+  * card→∞: rewrote `|A n| = (n:ℝ)+1` (via `icc_card` + `push_cast`), then
+    `Filter.tendsto_atTop_add_const_right` ∘ `tendsto_natCast_atTop_atTop`.
+  * clause (i): `filter_upwards`; `icc_setSum_card`+`icc_card` give `(2n+1).toNat ≤ 3·(n+1)`;
+    `(2*(n:ℤ)+1).toNat = 2n+1` by `omega`, then `push_cast` + `nlinarith [Nat.cast_nonneg n]`
+    (`2n+1 ≤ 3n+3` for `n ≥ 0`).
+  * clause (ii): `filter_upwards`; `icc_setSum_card`/`icc_setDiff_card` give both cards `= (2n+1).toNat`;
+    `Real.rpow_one` reduces `(·)^(1:ℝ)` and the goal closes by reflexivity (equality, not strict).
+- **`realizableSet_nonempty`** — now sorry-free (it was already `⟨1, realizes_one⟩`; closes with
+  `realizes_one`).
+
+`#print axioms` confirmed all six are `[propext, Classical.choice, Quot.sound]` — NO `sorryAx`,
+no `native_decide`, no `admit`/`axiom`. The two general interval helpers (`icc_setSum_eq`,
+`icc_setDiff_eq`) are reusable (see Promotable below).
+
+### Remaining holes (4 `sorry`, all multi-round real analysis — NOT gated this round)
+- `ghr_upper` (line ~234) — the GHR2007 Thm-2 `4/3` structural cap (`realizableSet_bddAbove` is
+  already reassembled sorry-free AROUND it: `⟨4/3, fun _ hc => ghr_upper hc⟩`). Mathlib lacks this
+  specific bound; multi-round, deferred.
+- B2 `griego_bounded_doubling` (~805), B3 `griego_diff_lower_bound` (~814), B4
+  `griego_card_tendsto` (~822) — the floor-dilution doubling / θ-reconciliation / atTop packaging
+  real-analysis residue. Untouched, as dispatched.
+
+### Note on the claim (unchanged)
+This is the CERT-PATH structural advance the outliner/reviewer described, NOT a held raise. Even
+fully wired the bridge certifies θ>1.1771 < held 1.1781. `realizes_one` closing means `C3aRealDef`
+is now provably NON-VACUOUS (`RealizableSet ≠ ∅`, so `sSup` is over a nonempty bounded-once-`ghr_upper`-
+closes set) with the nonemptiness no longer a hole — a genuine structural step toward the
+self-contained machine-checked C_3a bound, but the held NUMBER stays 1.1781.
+
+### Promotable lemmas (R21, for reviewer to certify into `lemmas/`)
+- `icc_setSum_eq` (C3aDef.lean ~L157) — `0 ≤ n → setSum (Icc 0 n)(Icc 0 n) = Icc 0 (2n)`. General
+  ℤ-interval sumset identity. Axiom-clean `[propext, Classical.choice, Quot.sound]`, NO sorryAx.
+- `icc_setDiff_eq` (C3aDef.lean ~L181) — `0 ≤ n → setDiff (Icc 0 n)(Icc 0 n) = Icc (-n) n`. General
+  ℤ-interval diffset identity. Axiom-clean, NO sorryAx.
+  Both are reusable (independent of all witness data) for any growing-interval realizability witness.
+
+## R21 — DECOMPOSITION PLAN for `realizes_one` (main) + `realizableSet_bddAbove` (isolated)
+
+The finite/discrete B1 layer is DONE+verified sorryAx-free (R20). The 5 remaining holes are all
+hard real analysis. R21 attacks the two MOST SELF-CONTAINED of them, decomposed into named
+sub-holes (the proven B1/an_separated playbook), keeping `lake build C3a` EXIT 0 (verified: 2970
+jobs, no errors). Sub-hole line numbers are post-edit and current.
+
+### Main angle — `realizes_one` (line 173) via the GROWING INTERVAL family (most likely actual closure)
+Witness: `A n := B n := Finset.Icc (0:ℤ) n`. For this family all three `Realizes` clauses are
+finite/algebraic:
+  * `setSum (Icc 0 n)(Icc 0 n) = Icc 0 (2n)`,  card `= 2n+1`;
+  * `setDiff (Icc 0 n)(Icc 0 n) = Icc (-n) n`,  card `= 2n+1`;
+  * `|A n| = |Icc 0 n| = n+1`.
+So clause (i) `2n+1 ≤ 3·(n+1)` holds with `K = 3`; clause (ii) `(2n+1)^1 = 2n+1 ≤ 2n+1` is
+equality; `|A n| = n+1 → ∞`. This is the explorer's "fully Lean-fit, plausibly fully closable in
+one round" candidate.
+
+**Named sub-holes (the only `sorry` content of this angle):**
+- **R1a `icc_setSum_card` (line 157)** — `|Icc 0 n + Icc 0 n| = 2n+1` for `0 ≤ n`. THE LOAD-BEARING
+  finite step. Prove `setSum (Icc 0 n)(Icc 0 n) = Icc 0 (2n)` by `Finset.ext` + `mem_image₂` +
+  `mem_Icc` (the `⊇` direction writes `z ∈ [0,2n]` as `min z n + (z − min z n)`, both parts in
+  `[0,n]`), then `Nat.card_Icc` for the count. Stated returning `(2*n+1).toNat` to keep the card a
+  `ℕ`.
+- **R1b `icc_setDiff_card` (line 165)** — `|Icc 0 n − Icc 0 n| = 2n+1` for `0 ≤ n`. Same shape:
+  `setDiff (Icc 0 n)(Icc 0 n) = Icc (-n) n` (`z ∈ [-n,n]` is `a − b`, `a = max z 0`, `b = max (-z) 0`).
+- **`realizes_one` body (line 173)** — three small `sorry` sub-goals (card→∞ via `Nat.card_Icc` +
+  `tendsto_atTop`; clause (i) `2n+1 ≤ 3(n+1)` via the two card lemmas + `omega`/`push_cast`; clause
+  (ii) `rpow_one` + the card equality). These wire R1a/R1b into the predicate; once R1a/R1b close
+  they are pure plumbing. (Builder may collapse `realizes_one` to one assembly once R1a/R1b land.)
+
+**Hard step:** R1a `icc_setSum_card` — the interval-sumset identity `setSum (Icc 0 n)(Icc 0 n) =
+Icc 0 (2n)`. Pure finite ℤ-interval combinatorics, no continuum, no construction — Lean-fit. The
+`⊇` direction (every point of `[0,2n]` is a representable sum) is the only non-trivial half.
+
+### Alternative angle (same file, also green) — `realizableSet_bddAbove` (line 198), `ghr_upper` ISOLATED
+`realizableSet_bddAbove` is now REASSEMBLED `sorry`-free as `⟨4/3, fun _ hc => ghr_upper hc⟩`. ALL
+the hardness is isolated into the single documented sub-hole:
+- **`ghr_upper` (line 191)** — `Realizes c → c ≤ 4/3`, the [GHR2007, Theorem 2] structural upper
+  bound `|A−B| ≤ |A+B|^{4/3+o(1)}` under bounded doubling. Mathlib has Plünnecke–Ruzsa
+  (`Mathlib.Combinatorics.Additive.PluenneckeRuzsa`) but NOT this specific GHR bound — a substantial
+  multi-round formalization. Left as ONE clearly-named `sorry`; the structural `BddAbove` plumbing is
+  closed around it. This angle is a structural advance (Elo lift, plumbing closed) even though
+  `ghr_upper` itself is hard real analysis — it isolates the irreducible core, matching Route A of
+  the explorer's decomposition.
+
+**Recommendation to the builder:** attack R1a/R1b/`realizes_one` first (the genuinely closable
+interval angle) — a HOLE actually closed this round. `ghr_upper`/`realizableSet_bddAbove` is already
+structurally advanced (plumbing closed, hard core isolated) by this edit; it needs no further work
+unless `ghr_upper` is attempted. Per R19/R20 lesson: STOP and report the moment R1a/R1b + `realizes_one`
+are green — do NOT run trailing rebuild/verification passes.
+
 ## R19 — numeric witness-data holes CLOSED → the entire finite B1 layer is now sorryAx-FREE
 
 **Closed this round (7 witness-data holes at C3aDef.lean:302–324, all in the finite B1 layer):**
