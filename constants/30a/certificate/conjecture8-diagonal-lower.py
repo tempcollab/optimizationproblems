@@ -29,22 +29,70 @@ Strategy (explorer Angle B -- prove Walks2025 Conjecture 8, even just the diagon
   domination argument has a concrete finite base. Higher payoff (named 10.418), higher
   risk than Angle A's min-weighted quotient.
 
+R3 REVISION (re-plan of the load-bearing hole H3, + a new soundness-audit hole H0).
+====================================================================================
+The R3 explorer flagged a SOUNDNESS SUBTLETY that must be pinned before the
+"diagonal n=k ALONE => unconditional 10.418" reduction can be claimed:
+
+  The number 10.418 is the spectral radius of the weighted quotient graph computed
+  at a FINITE CUTOFF n=220 (Walks2025 Cor 9). That finite-cutoff CW value is a sound
+  lower bound only if the weighted walk counts it consumes are <= the true counts --
+  i.e. one needs W~_{N,k} <= W_{N,k} for exactly the (N,k) pairs the n=220 witness
+  ranges over, NOT merely the limiting diagonal n=k. Walks2025's wording "the
+  corollary only needs the case n=k" is about the LIMIT; the finite computation that
+  produces the number is what must be audited.  => NEW HOLE H0.
+
+CONCRETE H3 MECHANISM (the explorer asked the outliner to supply one, not restate the
+conjecture).  Per-walk WEIGHT-DECONSTRUCTION injection on the diagonal:
+  A weighted diagonal walk's contribution is prod_e (E(e)/|A(source(e))|), where E(e)
+  = #ungrouped edges from the source GROUP to the target GROUP. Expand the product over
+  the walk: numerator = prod_e E(e) = the number of ways to choose, at each step, an
+  ungrouped edge realising the group-to-group transition; denominator = prod_e
+  |A(source(e))|. A true diagonal walk of weight W_{n,n} is a sequence of ungrouped
+  vertices. Plan: build an injection from the numerator's "edge-choice sequences"
+  (telescoping the denominators against the next group's size via the diagonal
+  constraint n=k that ties |A(source)| to the realised vertex multiplicity) into true
+  ungrouped walks, so the averaged product is dominated term-by-term. The diagonal
+  constraint is load-bearing: it is what makes the telescoping cancel (off-diagonal it
+  does not, which is why the full conjecture is harder).  This is a SPECIFIC injection
+  to verify/refute at small n, not a flavour.
+
 HOLES:
+  H0 (NEW, soundness gate) audit_finite_cutoff_window(): enumerate EXACTLY which (N,k)
+      weighted-vs-true inequalities the n=220 CW witness consumes. If they are all on
+      the diagonal N=k, the diagonal proof (H3) suffices; if not, either H3 must be
+      strengthened to cover them or the cutoff must be re-chosen. THIS GATES the whole
+      reduction -- without it "diagonal => 10.418" is itself a hole.
   H1  weighted_walk_sum(n, k):  W~_{n,k}, the rational weighted walk-sum over the A(n,r)
       quotient graph (exact -- reproduce Walks2025's average-weight construction).
   H2  true_walk_count(n, k):    W_{n,k}, the TRUE integer count of length-n insertion
       walks with k short values (= 1324-avoiders with that statistic; brute/transfer).
   H3  prove_diagonal_domination(): the LOAD-BEARING hole. Prove W~_{n,n} <= W_{n,n} for
-      ALL n (the diagonal case of Conjecture 8) by a structural argument -- e.g. exhibit
-      a per-walk injection or a term-by-term out-degree domination -- NOT just a finite
-      check. A finite check (n <= some bound) is a SANITY test, not the proof.
-  H4  assemble_unconditional_10418(): given H3, restate Walks2025 Cor 9's n=220 rational
-      CW value as an UNCONDITIONAL lower bound 10.418 and re-verify that rational witness.
+      ALL n (the diagonal case of Conjecture 8) via the weight-deconstruction injection
+      above (term-by-term out-degree domination with diagonal telescoping) -- NOT just a
+      finite check. Validate the injection at small n first (H3-base), then generalise.
+  H4  assemble_unconditional_10418(): given H0 + H3, restate Walks2025 Cor 9's n=220
+      rational CW value as an UNCONDITIONAL bound 10.418 and re-verify that witness.
 """
 from fractions import Fraction
 
 RECORD_LOWER = Fraction(10271, 1000)   # BBEPP2017 verified lower bound to strictly beat
 TARGET = Fraction(10418, 1000)         # Walks2025 Cor 9 value, currently conditional
+
+
+def audit_finite_cutoff_window():
+    """HOLE H0 (NEW, soundness gate): enumerate EXACTLY which (N,k) weighted-vs-true
+    inequalities W~_{N,k} <= W_{N,k} the Walks2025 n=220 CW witness actually consumes.
+
+    The CW criterion Sum_{e: g->h} Q[g,h] w_h >= rho w_g is checked over the quotient
+    graph truncated at size 220; the consumed inequalities are those edges' average
+    weights. Determine whether they all lie on the diagonal N=k (so H3 suffices) or
+    spill off-diagonal (so H3 must be extended / the cutoff re-chosen). MUST be settled
+    before claiming 'diagonal => unconditional 10.418'."""
+    raise NotImplementedError(
+        "H0: audit which (N,k) inequalities the n=220 CW witness consumes "
+        "(diagonal-only? off-diagonal spill?). Soundness gate for the reduction."
+    )
 
 
 def weighted_walk_sum(n, k):
@@ -60,12 +108,19 @@ def true_walk_count(n, k):
 def prove_diagonal_domination():
     """HOLE H3 (LOAD-BEARING): prove W~_{n,n} <= W_{n,n} for ALL n (diagonal Conjecture 8).
 
-    Structural argument required (not a finite check): a per-walk injection or a
-    term-by-term domination showing the product of average out-degrees along any diagonal
-    walk never exceeds the true diagonal walk count. Walks2025 verified n<=50; that is the
-    base/sanity range, not the proof.
+    MECHANISM (R3 -- weight-deconstruction injection, see module docstring):
+    expand the weighted diagonal walk's product prod_e E(e)/|A(source(e))|; the
+    numerator counts ungrouped edge-choice sequences realising the group transitions,
+    the denominator is prod_e |A(source(e))|. On the DIAGONAL n=k the group sizes
+    telescope against the next step's edge multiplicity, giving a term-by-term
+    domination -> an injection of weighted edge-choice sequences into true ungrouped
+    walks. Validate the injection at small n (H3-base) before generalising.
+    Walks2025 verified n<=50 numerically -- that is the sanity base, not the proof.
     """
-    raise NotImplementedError("H3: structural proof of diagonal W~_{n,n} <= W_{n,n}")
+    raise NotImplementedError(
+        "H3: structural proof of diagonal W~_{n,n} <= W_{n,n} via weight-deconstruction "
+        "injection with diagonal telescoping (validate at small n, then generalise)."
+    )
 
 
 def assemble_unconditional_10418():
@@ -75,7 +130,7 @@ def assemble_unconditional_10418():
 
 
 def lower_bound():
-    # H1/H2: the two walk-count quantities whose ordering is the conjecture.
+    audit_finite_cutoff_window()        # H0 -- soundness gate (must precede the rest)
     _ = weighted_walk_sum(1, 1)         # H1
     _ = true_walk_count(1, 1)           # H2
     assert prove_diagonal_domination()  # H3 -- the load-bearing soundness step
@@ -87,4 +142,11 @@ def lower_bound():
 
 
 if __name__ == "__main__":
-    lower_bound()
+    print("conjecture8-diagonal-lower -- skeleton (holes raise as designed)")
+    print(f"  target {float(TARGET):.6f} > record {float(RECORD_LOWER):.6f}")
+    print("  H0 (soundness gate): audit which (N,k) the n=220 CW witness consumes")
+    print("  H3 (load-bearing): diagonal W~ <= W via weight-deconstruction injection")
+    try:
+        lower_bound()
+    except NotImplementedError as e:
+        print(f"\n[load-bearing hole raises, as expected]  {e}")
