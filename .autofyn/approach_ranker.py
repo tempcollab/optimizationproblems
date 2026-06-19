@@ -47,7 +47,7 @@ ELO_INITIAL = 1500.0
 ELO_K_FACTOR = 32.0
 ELO_FLOOR = 1000.0  # soft floor — rating cannot drop below this, never removed
 
-# P-UCB: exploit(elo, scaled) + C * sqrt(ln(total_selected + 1) / (1 + expanded))
+# P-UCB: exploit(elo, scaled) + C * sqrt(ln(total_expanded + 1) / (1 + expanded))
 PUCB_EXPLORATION_C = 0.5
 PUCB_ELO_SCALE = 400.0  # divides Elo deviation from initial into the exploit term
 
@@ -144,11 +144,19 @@ def _apply_pair(records: dict[str, dict], winner: str, loser: str) -> None:
     records[loser]["elo"] = max(ELO_FLOOR, rl + ELO_K_FACTOR * (0.0 - el))
 
 
-def _pucb_score(record: dict, total_selected: int) -> float:
-    """P-UCB selection score: exploit current Elo + explore under-expanded angles."""
+def _pucb_score(record: dict, total_expanded: int) -> float:
+    """P-UCB selection score: exploit current Elo + explore under-expanded angles.
+
+    The exploration term uses `expanded` (builder rounds spent on this angle) for
+    BOTH the per-arm count and the global clock `total_expanded` — one counter, as
+    in standard P-UCB. `selected` (sampling exposure) is deliberately NOT in the
+    score: sampling is cheap (the explorer surveys the whole field every round) and
+    carries no verdict, so it must not decay an angle's exploration bonus. The bonus
+    decays only when a builder actually spends a round on the angle.
+    """
     exploit = (record["elo"] - ELO_INITIAL) / PUCB_ELO_SCALE
     explore = PUCB_EXPLORATION_C * math.sqrt(
-        math.log(total_selected + 1.0) / (1.0 + record["expanded"])
+        math.log(total_expanded + 1.0) / (1.0 + record["expanded"])
     )
     return exploit + explore
 
@@ -162,7 +170,9 @@ def sample_approaches(constant_id: str, k: int) -> dict:
 
     Reads only metadata — never approach bodies — so context stays flat regardless
     of how many approaches the constant has accumulated. Ranks by P-UCB (exploit
-    high-Elo + explore under-expanded), increments `selected` on the chosen ones.
+    high-Elo + explore under-expanded, both keyed on `expanded`), increments
+    `selected` on the chosen ones as telemetry (sampling exposure is tracked but
+    does not feed the score).
 
     Returns each chosen approach as {slug, path, elo, expanded, stale,
     last_outcome, reviewer_note, last_round}, best-first. Read the `path` for the
@@ -173,15 +183,15 @@ def sample_approaches(constant_id: str, k: int) -> dict:
     records = _load(constant_id)
     if not records:
         return {"constant_id": constant_id, "chosen": [], "total_approaches": 0}
-    total_selected = sum(r["selected"] for r in records.values())
+    total_expanded = sum(r["expanded"] for r in records.values())
     ranked = sorted(
         records.values(),
-        key=lambda r: _pucb_score(r, total_selected),
+        key=lambda r: _pucb_score(r, total_expanded),
         reverse=True,
     )
     chosen = ranked[: max(k, 1)]
     for record in chosen:
-        records[record["slug"]]["selected"] += 1
+        records[record["slug"]]["selected"] += 1  # telemetry only — not in the score
     _save(constant_id, records)
     return {
         "constant_id": constant_id,
