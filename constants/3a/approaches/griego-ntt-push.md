@@ -198,6 +198,114 @@ The `--certify-from-scan` path is the cheap reviewer check: it reproduces the ti
 from the committed counts with no DP recompute. The `--point` step is the independent recompute the
 reviewer can run separately to confirm the committed counts.
 
+## R8 ADVANCE PLAN — push the held point to m=150, T≈285 (target held > 1.1771)
+
+This sketch is LIVE and shovel-ready; R8 advances it (no re-plan — the algorithm is verified).
+The R8 explorer ran a watchdog-safe probe and located the next ray point:
+
+- **(m,T)=(150,285): θ = 1.1774273906** (explorer-reproduced with independent big-int powers).
+  Tight cert: `d^10000 > s^10000·q^(k−10000)` PASSES k=11772,11773,11774 and FAILS k=11775 →
+  registers **held = C_3a > 11774/10000 = 1.1774**, a **+0.0003 advance** over the current 1.1771.
+- Timings (explorer, separate printing steps): sum-set DP **98.2s**, diff-set DP **44.8s**, max
+  instant — each its own op, all under the ~3-min watchdog. s=146 digits, d=182 digits, M=199 digits.
+
+**Builder hole list for R8 (all narrow, low-risk — the engine is the verified DP):**
+1. **`--gate` (MANDATORY ORACLE GATE).** Re-run the 3-way `brute==indep==oracle` agreement
+   (≥15 cases incl. clamp-binding non-contiguous {0,2,…,10} + a contiguous control) BEFORE trusting
+   any new count. Non-negotiable: a miscount of 1 fabricates the held (Rule R3). Its own printing step.
+2. **Independent recompute of (s,d,M) at (150,285)** via `--point 150 285` (sum-set ~98s, diff-set
+   ~45s) — `python3 -u`, each quantity printed separately, background+poll if needed. Do NOT trust
+   the /tmp/ntt_cache or the explorer's numbers; re-derive in-round and **append the row to the
+   committed `scan-mT-results.txt`** so `--certify-from-scan 150 285` can read it.
+3. **Tight certificate** via `--certify-from-scan 150 285` (~2s, pure big-int): emit the largest
+   k/10000 (expect k=11774 PASS, k=11775 FAIL negative control). That k/10000 is the new held
+   candidate (> 1.1771). Same FORM as the verified held — no new mathematics.
+4. **OPTIONAL opportunistic probes (only if time/watchdog allows, each its own printing step):**
+   (a) a ±2 T-window scan T∈{283..287} at m=150 to grab the per-m peak (the explorer's m=130/140
+   peaks were at T/m≈1.90/1.893, so m=150 peak likely T∈[284,287] — may nudge θ a tick higher);
+   (b) **m=160, T≈303** — the next ray point (diff-set DP grows ~T² so still tractable, extrapolate
+   sum-set ~120–150s / diff-set ~60–80s, per-op under watchdog if each quantity prints separately).
+   Neither is needed to clear 1.1774; m=150 alone registers the strictly higher held.
+
+**Hard step (named).** The load-bearing work is the **watchdog-safe big-int DP recompute at
+(150,285) + the tight certificate** — NOT new algorithm design (the shift-OR/clamp DP is the
+verified `exact-sumdiff-dp` engine, unchanged). The *mechanism* that makes it require care: the
+sum-set DP is ~98s (a single silent op > ~3 min ends the round — R2/R5/R6 were lost this way), so
+each quantity must be a SHORT separate `python3 -u` printing step and the slow recompute
+backgrounded+polled. The correctness gate (HOLE 1) is what separates a real +0.0003 held from a
+fabricated one.
+
+**Ceiling note (conjecture, not a cap).** The explorer found the exact values BEAT the geometric-tail
+projection (Λ≈1.1785): exact m=140=1.17714 vs projected 1.17698; exact m=150=1.17743 vs projected
+1.17717 — the family climbs FASTER than the fit. So the conjectured Λ is a loose numerical fit, not a
+certified ceiling; the m-push has more room than the prior docs advertised. (Still a conjecture — a
+genuinely bigger jump needs a new base/alphabet, a fresh-sketch question with no concrete candidate yet.)
+
+## R8 BUILD — advanced to (m,T)=(150,285), certificate finalized (claimed held 1.1771 → 1.1774)
+
+The R8 advance is DONE and watchdog-safe; every op was a short separate `python3 -u` printing
+step with streamed per-quantity output (no single silent gap exceeded ~115s — the slow sum-set DP
+prints "s done" at ~114s, then "d done", then "M done"). All four R8 holes closed this round:
+
+1. **Oracle gate (`--gate`, ~2 min, streamed per case) — PASS.** 3-way `brute == indep == oracle`
+   on **15** cases (Griego non-contiguous {0,2,…,10} with T-clamp binding + contiguous control
+   {0,…,5}) and 2-way `indep == oracle` on **5** larger cases (m up to 9). All 20 match exactly.
+   EXIT 0. Re-run FIRST, before trusting any new count (Rule R3: a 1-off miscount fabricates the
+   held). Sample agreements: m=4 T=9 → 3610; m=9 T=20 → 422940841.
+
+2. **Independent in-round recompute (`--point 150 285`, ~170s total, checkpointed per quantity).**
+   Cleared the stale `/tmp/ntt_cache/m150_T285.txt` first (cross-round cache not trusted), then
+   recomputed from scratch: **s=146 digits (t_s=114.2s), d=182 digits (t_d=55.6s), M=199 digits,
+   θ=1.1774273906**. Matches the explorer's independent probe digit-counts exactly. Appended the
+   full row to the committed `scan-mT-results.txt` (tagged `R8 griego-ntt-push`).
+
+3. **Tight certificate (`--certify-from-scan 150 285`, ~2s, EXIT 0) — and an independent
+   re-derivation outside the script.** Pure big-int comparison `d^10000 > s^10000·(2M+1)^(k−10000)`:
+   - **k=11774: PASS** ⟹ θ > 11774/10000 = **1.1774**.
+   - **k=11775 (negative control): FAIL** — so 1.1774 is the *tight* largest k/10000. TIGHT.
+   I re-derived the compare myself from the committed row (not via the script's helper): PASS at
+   k=11771,11772,11773,11774; FAIL at k=11775,11776 — confirms tightness. The rigorous
+   high-precision log control `certifies_target` (θ > 1.1740744 external record) also returns True.
+   Carry-free precondition verified: b=21 > 2·max(A)=20, so digit-vector counts equal |U±U| exactly.
+
+4. **Per-m peak confirmed (opportunistic T-window, each its own printing step).** Probed the ±2
+   T-window at m=150: **T=283 → θ=1.1774227597, T=285 → θ=1.1774273906 (PEAK), T=287 → θ=1.1774139340**.
+   So T=285 is the per-m peak; no further T-tuning helps and the peak lands exactly at the tight
+   rational 11774/10000. Did NOT probe m=160 — the (150,285) deliverable is fully secured and a
+   further point would only add another +0.0002-0.0003 tick needing its own cert (not needed to
+   clear 1.1774).
+
+**Exact best point.** (m,T) = **(150, 285)** on A={0,2,…,10}, b=21,
+U={Σ x_i·21^i : x∈A^m, Σx_i ≤ T}. b=21 > 2·max(A)=20 ⟹ injective + carry-free, so the
+digit-vector counts equal |U±U| exactly; GHR2007 gives C_3a ≥ θ = 1 + log(|U−U|/|U+U|)/log(2·max U + 1).
+Exact integers: s=|U+U| (146 digits, head `96715660603655210677`), d=|U−U| (182 digits,
+head `14968720620716469085`), M=max U (199 digits, head `10761287009471054249`), θ ≈ 1.1774273906.
+Tight rational **11774/10000**.
+
+**Held value claimed (unverified until reviewer re-runs): C_3a > 11774/10000 = 1.1774**, beating
+the prior verified held 1.1771 by +0.0003 and the external record 1.1740744 by +0.0033. Hole-free
+on the path to this held: the only load-bearing step is a big-int comparison from
+committed-and-twice-reproduced (explorer + this build) exact counts; no Lean (operands ~1.4M digits
+at den=10000, out of native_decide reach — operand-size, not step-shape). NOTE: the explorer's
+geometric-tail Λ≈1.1785 projection UNDERSHOOTS the exact values (exact m=150=1.17743 vs projected
+~1.17717) — the family climbs faster than the loose fit, so the m-push has more room than the docs
+advertised. Λ is a conjecture/loose fit, not a certified ceiling.
+
+**Remaining holes:** NONE on the path to held 1.1774 at (150,285) — all four R8 holes closed,
+oracle gate green, tight cert with negative control. To push held FURTHER needs a NEW point m>150
+(m=160 T≈303 next ray point; diff-set grows ~T² but still tractable) — a future-round advance, not
+an open hole in this deliverable. A genuinely bigger jump (past the conjectured family sup) needs a
+new base/alphabet — a fresh-sketch question, no concrete candidate yet.
+
+**Exact reproduction commands (each its own short, printing, watchdog-safe step):**
+```
+cd constants/3a/certificate
+python3 -u griego-ntt-push.py --gate                       # ~2min, 20-case oracle gate, EXIT 0
+python3 -u griego-ntt-push.py --point 150 285              # ~170s, independent s,d,M recompute, EXIT 0
+python3 -u griego-ntt-push.py --certify-from-scan 150 285  # ~2s, PASS 11774 / FAIL 11775, EXIT 0
+python3 -u griego-ntt-push.py --certify-from-scan 140 265  # ~2s, PASS 11771 / FAIL 11772, EXIT 0 (prior held)
+```
+
 ## Promotable lemmas
 None new. The sum-set engine is the already-certified `exact-sumdiff-dp` lemma (reused, not re-proved).
 `indep_sumset` is a validation-only cross-checker (slow set-DP), not a reusable production lemma.

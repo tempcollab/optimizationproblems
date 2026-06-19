@@ -1,10 +1,33 @@
-# Check — griego-ntt-push (C_3a LOWER bound, R5 push to m=140)
+# Check — griego-ntt-push (C_3a LOWER bound; R8 push to m=150, held candidate 1.1774)
 
-## Reproduce — each command is a SEPARATE short PRINTING step (watchdog-safe; R6-re-run)
+## R8 HELD CANDIDATE — (m,T)=(150,285), tight cert C_3a > 11774/10000 = 1.1774
 
 CHEAP REVIEWER CHECK (the certificate itself, ~2 s, no DP recompute):
 ```
-# tight integer-inequality cert from the committed exact counts (PASS 11771 / FAIL 11772):
+# tight integer-inequality cert from the committed exact counts (PASS 11774 / FAIL 11775):
+python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 150 285   # ~2s, EXIT 0
+```
+FULL INDEPENDENT VERIFICATION of the R8 point (each its own short printing step):
+```
+python3 -u constants/3a/certificate/griego-ntt-push.py --gate                 # ~2min, 20-case gate, EXIT 0
+python3 -u constants/3a/certificate/griego-ntt-push.py --point 150 285        # ~170s, indep s,d,M recompute, EXIT 0
+```
+R8 re-run results (this round):
+- `--gate`: 3-way `brute==indep==oracle` on 15 cases + 2-way `indep==oracle` on 5 cases — all OK, EXIT 0.
+- `--point 150 285`: s=146d (t_s=114.2s), d=182d (t_d=55.6s), M=199d, θ=1.1774273906 (stale
+  `/tmp/ntt_cache` cleared first; row appended to committed `scan-mT-results.txt`).
+- `--certify-from-scan 150 285`: k=11774 PASS, k=11775 FAIL (tight), EXIT 0, ~2s. Independently
+  re-derived outside the script: PASS k=11771..11774, FAIL k=11775,11776.
+- per-m peak confirmed: T=283 → θ=1.1774227597, T=285 → θ=1.1774273906 (PEAK), T=287 → θ=1.1774139340.
+- carry-free precondition: b=21 > 2·max(A)=20 (injective digit map).
+- exact integers (150,285): s head `96715660603655210677`, d head `14968720620716469085`,
+  M head `10761287009471054249`.
+
+## Reproduce — R5/R6 prior held 1.1771 (still valid, kept for the trail)
+
+CHEAP REVIEWER CHECK (the certificate itself, ~2 s, no DP recompute):
+```
+# prior held cert (PASS 11771 / FAIL 11772):
 python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 140 265   # ~2s, EXIT 0
 # fallback point (PASS 11768 / FAIL 11769):
 python3 -u constants/3a/certificate/griego-ntt-push.py --certify-from-scan 130 247   # ~2s, EXIT 0
