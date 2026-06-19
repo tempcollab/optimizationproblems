@@ -1,0 +1,57 @@
+{
+  "bona-forbidden-factor-upper": {
+    "elo": 1483.4617309214807,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "bona-forbidden-factor-upper",
+    "stale": false,
+    "summary": "UPPER bound: add a new certified forbidden factor to Bona's (w,z) word-pair encoding, drive rational-GF root from ~13.7 below 13.5; known saturation wall."
+  },
+  "cjs-increasing-columns-upper": {
+    "elo": 1438.8436421434315,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "cjs-increasing-columns-upper",
+    "stale": false,
+    "summary": "UPPER bound: prove CJS Conjecture 13 (increasing inversion columns) via injection => unconditional 13.002; conjecture open since 2012."
+  },
+  "decorated-domino-upper": {
+    "elo": 1530.0175716931049,
+    "expanded": 1,
+    "last_note": "H1 (gr(D)=27/4) + H4 (injection sound, pairs==Av count n<=9) verified CLOSED; refutation of planned H2 confirmed (no forbidden binary factor of length <=4, |W_n| ratios overshoot 2). Pure-word forbidden-factor mechanism is dead; H2 must re-point to joint (word,domino) counting. Script honestly refuses a false bound. RETHINK for outliner.",
+    "last_outcome": "partial",
+    "last_round": 1,
+    "selected": 0,
+    "slug": "decorated-domino-upper",
+    "stale": true,
+    "summary": "UPPER bound: refine BBEPP's rudimentary factor-2 interleave to a constrained decoration word (forbidden-factor), rational-GF growth m*27/4 < 13.5; widest slack."
+  },
+  "transfer-matrix-lower": {
+    "elo": 1559.729526119354,
+    "expanded": 1,
+    "last_note": "Verified: H2 (skew-sum closure, S_8 subset Av(1324)) + H3 (exact-rational Collatz-Wielandt) CLOSED; reproduced lower bound 3.773326 independently. H_BIG (higher-growth sound matrix to clear 10.271) still open \u2014 skew-sum caps logarithmically. Two cache lemmas certified.",
+    "last_outcome": "advanced",
+    "last_round": 1,
+    "selected": 0,
+    "slug": "transfer-matrix-lower",
+    "stale": true,
+    "summary": "LOWER bound: Perron root of a verified-subclass transfer matrix (walk-graph/AERWZ) certified by Collatz-Wielandt; cleanest Lean-fit certificate."
+  },
+  "tromino-subclass-lower": {
+    "elo": 1487.9475291226292,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "tromino-subclass-lower",
+    "stale": false,
+    "summary": "LOWER bound: 3-cell tromino staircase subclass with transfer-matrix sub-bound for H1; BBEPP's named open route, borrows transfer-matrix-lower machinery."
+  }
+}
