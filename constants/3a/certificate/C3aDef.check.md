@@ -3,12 +3,49 @@
 - **Lake project:** `constants/3a/lean/` (Lean v4.31.0; Mathlib pinned to the `v4.31.0` tag, rev
   `fabf563a7c95a166b8d7b6efca11c8b4dc9d911f`). Sketch file
   `constants/3a/lean/Sketches/C3aDef.lean`, imported via the C3a lib glob and the root `C3a.lean`.
-- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R15: EXIT 0, 2970 jobs.**
-  `Build completed successfully (2970 jobs).` 12 `declaration uses 'sorry'` warnings at
-  C3aDef.lean:139,150,302,303,304,309,310,311,403,489,498,506 — all documented; no smuggled `sorry`.
-  (Lines 365/380, the two B1a spacing lemmas, are NO LONGER in the list — closed this round.)
+- **Build target:** `lake build C3a` (run with `~/.elan/bin/lake`). **R18: EXIT 0, 2970 jobs.**
+  `Build completed successfully (2970 jobs).` Remaining `declaration uses 'sorry'` warnings at
+  C3aDef.lean:139,150,302,303,304,315,318,323,324,705,714,722 — all documented witness-data / B2-B4
+  holes; no smuggled `sorry`. (Lines for `box_elem_range`/`tpow_elem_range`/`an_separated` are NO
+  LONGER in the list — closed this round R18.)
 
-## R15 — sub-hole B1a spacing lemmas CLOSED
+## R18 — `an_separated` CLOSED (the residual construction obligation of B1a)
+The three R18 sub-holes are all closed sorry-free on their own path:
+- `box_elem_range` (the `box`/`emb` step range bound) — `[propext, Classical.choice, Quot.sound]`
+  (**NO sorryAx — fully axiom-clean, general, PROMOTABLE**).
+- `maxbk_nonneg` (closed-form tower bound nonneg) — `[propext, Classical.choice, Quot.sound]`
+  (**NO sorryAx — PROMOTABLE**).
+- `tpow_elem_range` (the induction on `tpow`), `setSum_bk_within`/`setDiff_bk_within`,
+  `an_shift_spacing`, `an_shift_nonneg`, `interval_union_disjoint_sum`/`_diff`, and `an_separated`
+  itself — each `[propext, sorryAx, Classical.choice, Quot.sound]`. Proof TERMS are sorry-free; the
+  `sorryAx` enters ONLY via the documented numeric witness-data holes they consume (`Ubase`/`Qbase`/
+  `Ubase_carryfree`/`maxUbase`/`Ubase_range`/`mnData`/`negLoData`). This is the R14/R15 honest
+  pattern. `griego_ak_disjoint` (B1a) is now fully reassembled from `an_separated` + the cached
+  spacing lemmas, so B1a→B1 is a sorry-free chain modulo the witness data.
+
+Mechanism (all in `Sketches/C3aDef.lean`, lines ~468–636):
+- `box_elem_range`: `z ∈ box Q U V ⟹ z = u+Q·v`, `mem_image`/`mem_product` + `mul_le_mul_of_nonneg_left`.
+- `tpow_elem_range`: `induction n`; base = `hbase` (`Ubase ⊆ [0,maxU]`); step = `box_elem_range` with
+  the IH range of the tower as second factor, `0 ≤ Qbase` from `Ubase_carryfree.1`. `maxbk` closed
+  form `maxbk maxU Q (k+1) = maxU + Q·(maxbk maxU Q k)`.
+- WithinDiam: `setSum (bk n)(bk n) ⊆ [0,2·maxbk n]`, `setDiff ⊆ [−maxbk n, maxbk n]` (diam `2·maxbk n`).
+- Witness shape PINNED: `an_shift n i = i·(2·maxbk n+1)` (AP), `an_index n = range (mnData n)`,
+  `an_interval n = Icc (negLoData n) (−(2·maxbk n+1))` (band strictly below all translate windows).
+  Only the numeric counts `maxUbase`/`mnData`/`negLoData` and `Ubase`/`Qbase` stay documented `sorry`.
+- Spacing: `|an_shift n i − an_shift n j| = |i−j|·(2·maxbk n+1) ≥ 2·maxbk n+1 > 2·maxbk n = diam`.
+- Interval-vs-union: `disjoint_biUnion_right` + `disjoint_left`; sum side — interval-sum `< 0` ≤
+  translate-sum (shift ≥ 0, window ≥ 0); diff side — interval-diff `< −maxbk n` ≤ translate-diff
+  (shift ≥ 0, window ≥ −maxbk n). Pure ℤ interval `omega`.
+
+### R18 promotable (flagged for reviewer)
+`box_elem_range` and `maxbk_nonneg` — fully general, sorry-free, axiom-clean
+(`[propext, Classical.choice, Quot.sound]`), proved in `Sketches/C3aDef.lean`. Reusable element-range
+bound for any digit-tensor `box`/`emb` tower.
+
+---
+## R15 (superseded by R18 for the build-target/hole lines)
+
+### R15 — sub-hole B1a spacing lemmas CLOSED
 `setSum_tr_pair_disjoint` / `setDiff_tr_pair_disjoint` (the cheap general half of B1a, the
 shift-gap > sumset/diffset-diameter ⟹ disjoint translate-images spacing lemmas) are now proved
 **sorry-free and axiom-clean**, and `griego_ak_disjoint` (B1a) is reassembled with a sorry-free proof

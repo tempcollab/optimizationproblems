@@ -16,6 +16,54 @@ commits multiple rounds to the real-analysis read-off.
 Borrows: `lean-native-decide-smallmt` (`theta`, `theta_gt` — the certified θ>1.1771), the cached
 `tensor-multiplicativity` lemmas (`sumset`/`diffset`, `tensor_pow_*_card`), `log-bridge`.
 
+## R18 — `an_separated` CLOSED (the residual construction obligation of B1a)
+
+**Closed this round (3 R18 holes, sorry-free on their own path):**
+- `box_elem_range` — the `box`/`emb` step element-range bound (`U⊆[0,maxU] ∧ V⊆[0,maxV] ∧ 0≤Q ⟹
+  box Q U V ⊆ [0, maxU+Q·maxV]`). **Axiom-clean `[propext, Classical.choice, Quot.sound]`, NO sorryAx
+  — fully general, PROMOTABLE.**
+- `tpow_elem_range` — the induction on the `tpow` recursion (`tpow Qbase Ubase n ⊆ [0, maxbk maxU
+  Qbase n]`), carrying the base bound `hbase` parametrically. Mirrors `tensor_pow_sumset_card`.
+  `[propext, sorryAx, …]` where sorryAx traces ONLY to the witness-data sorries (`Ubase`/`Qbase`).
+- `an_separated` — assembled from the above plus the helpers `setSum_bk_within`/`setDiff_bk_within`
+  (WithinDiam windows `[0,2·maxbk]` / `[−maxbk,maxbk]`), `an_shift_spacing` (AP gap `|i−j|·(2·maxbk+1)
+  > 2·maxbk`), `an_shift_nonneg`, and `interval_union_disjoint_sum`/`_diff` (interval band placed
+  strictly below all translate windows). Proof TERM sorry-free; sorryAx via documented witness data
+  only. `griego_ak_disjoint` (B1a) is now fully reassembled from `an_separated` + the cached spacing
+  lemmas → B1a→B1 is a sorry-free chain modulo numeric data.
+
+**Witness-data shapes PINNED this round** (only the numeric counts stay `sorry`): the AP
+`an_shift n i = i·(2·maxbk maxUbase Qbase n + 1)`, `an_index n = range (mnData n)`,
+`an_interval n = Icc (negLoData n) (−(2·maxbk n + 1))` (band below all translates). New documented
+witness sorries added for the numeric data: `maxUbase : ℤ`, `Ubase_range : 0≤maxUbase ∧ Ubase⊆
+[0,maxUbase]`, `mnData : ℕ→ℕ`, `negLoData : ℕ→ℤ`. The `maxbk` closed-form def moved up before the
+witness block (single def; the later duplicate removed).
+
+**Intermediate-statement note (mine):** `tpow_elem_range`'s `hmaxU : 0 ≤ maxU` hypothesis turned out
+unnecessary for the bound itself (the base case only needs `hbase`, the step only needs `0 ≤ Qbase`),
+so it was dropped — `maxbk_nonneg` (which DOES need `0≤maxU`) is a separate helper used by the
+spacing lemma. This is a faithful tightening, not a weakening: the conclusion is unchanged.
+
+**Build:** `lake build C3a` EXIT 0, 2970 jobs. `#print axioms`: `box_elem_range`/`maxbk_nonneg` clean;
+all other R18 lemmas + `an_separated` show sorryAx tracing ONLY to documented witness data. No
+native_decide/admit/axiom smuggled (grep-clean). Top-level `c3a_lower_bound_def` and `C3aRealDef :=
+sSup RealizableSet` UNTOUCHED.
+
+**Remaining holes (next gaps):** witness data `Ubase`/`Qbase`/`Ubase_carryfree`/`maxUbase`/
+`Ubase_range`/`mnData`/`negLoData` (numeric — the explicit Griego digit set + dilution counts; a
+finite check once pinned, but large); B2 `griego_bounded_doubling` (floor-dilution doubling algebra),
+B3 `griego_diff_lower_bound` (log-bridge θ reconciliation), B4 `griego_card_tendsto` (Filter.atTop
+sup packaging); `realizes_one`, `realizableSet_bddAbove` (4/3 cap). B2/B3/B4 are the multi-round
+real-analysis residue — do NOT gate a round on them.
+
+**Claimed value (clearly a CLAIM until hole-free):** still θ>1.1771 (the native_decide integer-core
+literals), NOT held 1.1781. This round advances the CERT PATH structurally; it does not move the held
+number. Even fully wired the bridge certifies 1.1771, which is BELOW the verified held 1.1781 — so
+this is not a held-raiser, it is the path to a self-contained machine-checked C_3a bound.
+
+**Promotable lemmas:** `box_elem_range`, `maxbk_nonneg` (both axiom-clean general — see Promotable
+line at the very bottom).
+
 ## R12 — FAITHFULNESS FIX (this round's deliverable)
 
 The R12 outline-reviewer's load-bearing finding: the R11 draft predicate **dropped the doubling
@@ -296,3 +344,11 @@ named as the residual.)
   `setSum_tr`/`setDiff_tr` (translate-pushout). All sorry-free, axiom-clean.
 
 (The earlier R12 "None this round" note is superseded.)
+
+## Promotable lemmas (R18, for reviewer to certify into `lemmas/`)
+- `box_elem_range` (C3aDef.lean ~L468) — `0≤Q ∧ U⊆[0,maxU] ∧ V⊆[0,maxV] ⟹ box Q U V ⊆ [0, maxU+Q·maxV]`.
+  Element-range bound for the carry-free `box`/`emb` step. Axiom-clean `[propext, Classical.choice,
+  Quot.sound]` (NO sorryAx). General (no witness data).
+- `maxbk_nonneg` (C3aDef.lean ~L482) — `0≤maxU ∧ 0≤Q ⟹ 0 ≤ maxbk maxU Q n`. Axiom-clean
+  `[propext, Classical.choice, Quot.sound]` (NO sorryAx). General; depends on the `maxbk` closed-form
+  def (also general). Reusable element-range nonnegativity for the digit-tensor tower bound.

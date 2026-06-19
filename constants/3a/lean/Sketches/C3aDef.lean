@@ -303,12 +303,36 @@ def Ubase : Finset ℤ := sorry
 def Qbase : ℤ := sorry
 theorem Ubase_carryfree : CarryFree Qbase Ubase := sorry
 
-/-- The dilution data: the interval `[1,Lₙ]` and the `mₙ` separated shifts `aᵢ`, indexed over a
-    `Finset` of cardinality `mₙ`. Left as documented witness-data holes (the explicit shift choice
-    realising the separation `aᵢ − aⱼ ∉ Bₙ − Bₙ` is the genuine uncached combinatorial choice). -/
-def an_interval (n : ℕ) : Finset ℤ := sorry
-def an_index (n : ℕ) : Finset ℕ := sorry
-def an_shift (n : ℕ) : ℕ → ℤ := sorry
+/-- The closed-form element-range bound for the digit-tensor tower (parametric in the base bound
+    `maxU`). `maxbk maxU Q 0 = maxU`, `maxbk maxU Q (k+1) = maxU + Q·(maxbk maxU Q k)`. -/
+def maxbk (maxU Q : ℤ) : ℕ → ℤ
+  | 0 => maxU
+  | (k + 1) => maxU + Q * maxbk maxU Q k
+
+/-- The element-range bound `maxUbase` of the base digit set: every `u ∈ Ubase` lies in
+    `[0, maxUbase]`. The numeric literal comes from the scan row (the Griego digit set is
+    nonnegative with explicit max digit). DOCUMENTED WITNESS DATA (numeric). HOLE. -/
+def maxUbase : ℤ := sorry
+/-- The base set is nonnegative and bounded by `maxUbase`. DOCUMENTED WITNESS DATA (numeric);
+    once `Ubase`/`maxUbase` are pinned to the explicit Griego digit set this is a finite check. HOLE. -/
+theorem Ubase_range : 0 ≤ maxUbase ∧ (∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxUbase) := sorry
+
+/-- The dilution counts: `mₙ = ⌊qⁿ/sⁿ⌋` (number of separated shifts) and `negLoₙ` (the bottom of the
+    interval band, placed strictly below all translate windows). DOCUMENTED WITNESS DATA (numeric);
+    only the literal values are open — the SHAPE below is what makes `an_separated` provable. HOLE. -/
+def mnData : ℕ → ℕ := sorry
+def negLoData : ℕ → ℤ := sorry
+
+/-- The dilution data, now PINNED to the AP shape (only the counts `mnData`/`negLoData` stay open):
+    `an_shift n i = i·(2·maxbk n + 1)` is an arithmetic progression with spacing strictly exceeding
+    the sum/diffset diameter `2·maxbk n`; `an_index n = {0,…,mₙ−1}`; `an_interval n` is a band placed
+    ENTIRELY BELOW the lowest translate window (every element `≤ −(2·maxbk n + 1)`), so its sum/diff
+    with `bk n` is disjoint from every translate's. Pinning the SHAPE (not the numeric counts) is what
+    makes the spacing + interval-vs-union disjointness in `an_separated` computable. -/
+def an_shift (n : ℕ) : ℕ → ℤ := fun i => (i : ℤ) * (2 * maxbk maxUbase Qbase n + 1)
+def an_index (n : ℕ) : Finset ℕ := Finset.range (mnData n)
+noncomputable def an_interval (n : ℕ) : Finset ℤ :=
+  Finset.Icc (negLoData n) (-(2 * maxbk maxUbase Qbase n + 1))
 
 /-- **The composite witness sets, now PINNED to the GHR composite shape** (no longer opaque):
     `bk n = U^{⊗n}` (the cached tensor power) and
@@ -317,7 +341,7 @@ def an_shift (n : ℕ) : ℕ → ℤ := sorry
     provable from the general decomposition lemmas above; only the disjointness of the pieces (which
     needs the separation choice) stays a documented hole. -/
 def bk (n : ℕ) : Finset ℤ := tpow Qbase Ubase n
-def ak (n : ℕ) : Finset ℤ :=
+noncomputable def ak (n : ℕ) : Finset ℤ :=
   an_interval n ∪ (an_index n).biUnion (fun i => tr (an_shift n i) (bk n))
 
 /- ============================================================================================
@@ -393,13 +417,200 @@ theorem setDiff_tr_pair_disjoint (c c' : ℤ) (B : Finset ℤ) (lo diam : ℤ)
     constructor <;> omega
   linarith
 
-/-- **RESIDUAL CONSTRUCTION OBLIGATION (the harder, uncached half of B1a).** The explicit shifts
-    and interval realise the separation: there is a low point/diameter `lo diam` for `bk n ± bk n`,
-    the shifts are spaced wider than `diam` (`i ≠ j ⟹ diam < |aᵢ − aⱼ|`), and the interval sits
-    below all translate images. The concrete realisation is the AP `an_shift n i = i·(2·maxbk n+1)`
-    plus `an_interval n` placed below; closing it needs an element-range bound on
-    `bk n = tpow Qbase Ubase n`. Left documented `sorry` (the natural next sub-target after this
-    round). The shape is what the reassembly below consumes. -/
+/- ============================================================================================
+    R18 OUTLINER (an_separated SET-UP) — the `maxbk` element-range bound + AP shift-spacing.
+
+    `an_separated` reduces to ONE genuinely-new finite fact: an element-range bound on
+    `bk n = tpow Qbase Ubase n`. Everything else (`WithinDiam` for the sum/diffset, the
+    shift-spacing, the interval-vs-union disjointness) follows from it by ℤ interval arithmetic
+    and the already-cached `setSum_tr`/`setDiff_tr` rewrites + `disjoint_biUnion_right`.
+
+    The decomposition the builder should close (named sub-holes below, all `sorry` for now):
+
+      (R18-1) `box_elem_range` — the `box`/`emb` step bound: if `U ⊆ [0,maxU]`, `V ⊆ [0,maxV]`,
+              `0 ≤ Q`, then `box Q U V ⊆ [0, maxU + Q·maxV]`. Pure `rintro` + `mem_image`/
+              `mem_product` + `nlinarith`/`mul_le_mul` (the `emb (u,v) = u + Q·v` value bound).
+      (R18-2) `tpow_elem_range` — the induction: carrying a BASE element-range hypothesis
+              `hbase : ∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxU` (parametric; the numeric `maxU` literal is
+              left as documented witness data), `tpow Qbase Ubase n ⊆ [0, maxbk maxU Qbase n]`
+              where `maxbk maxU Q 0 = maxU`, `maxbk maxU Q (k+1) = maxU + Q·(maxbk maxU Q k)`.
+              `induction n` exactly as `tensor_pow_sumset_card` (line 226) — base = hbase, step =
+              R18-1 with `U := Ubase`, `V := tpow … k`, IH the range of the tower. Needs
+              `0 ≤ Qbase` (from `Ubase_carryfree.1 : 0 < Qbase`) and `0 ≤ maxbk` (induction).
+      (R18-3) `bk_within_diam` — from R18-2: `WithinDiam (setSum (bk n) (bk n)) 0 (2·maxbk…)` and
+              `WithinDiam (setDiff (bk n) (bk n)) (−maxbk…) (2·maxbk…)`. `setSum`/`setDiff` are
+              `image₂ (±)`; `rintro z; mem_image₂` gives `z = a±b`, each in `[0,maxbk]`, so the
+              ± value lands in the stated window — `omega` after the two range facts.
+
+    Then PIN the witness data (still documented numeric `sorry`, but the SHAPE is fixed so the
+    spacing computes):
+      `an_index n  := Finset.range (mn n)`            -- the mₙ shifts, 0..mₙ−1
+      `an_shift n i := (i : ℤ) · (2·maxbk… + 1)`      -- AP with spacing `> diam = 2·maxbk…`
+      `an_interval n := Finset.Icc (negLo n) (negLo n + (Lₙ−1))`  -- placed BELOW all translates
+                                                                   -- (negLo ≪ 0, or i starts at 1)
+    With this shape:
+      - spacing: `i≠j ⟹ |an_shift n i − an_shift n j| = |i−j|·(2·maxbk…+1) ≥ 2·maxbk…+1 > diam`,
+        an `omega`/`nlinarith` over ℤ once `maxbk… ≥ 0` and `|i−j| ≥ 1`.
+      - interval-vs-union: `disjoint_biUnion_right`; each `setSum/Diff (tr (an_shift n i) (bk n))
+        (bk n)` rewrites via `setSum_tr`/`setDiff_tr` to a window `[an_shift n i + lo, …]` strictly
+        ABOVE `an_interval n ± bk n` (which sits in the negative/low band), so `disjoint_left` +
+        a value bound closes it.
+
+    RECOMMENDED (watchdog-cheap, reviewer-cheap, matches R14/R15): prove R18-1/2/3 PARAMETRICALLY,
+    carrying `maxU`/`hbase` as hypotheses, and leave only the numeric `maxU`/`negLo`/`Lₙ`/`mn`
+    literals as documented witness `sorry`. That closes the STRUCTURAL content of `an_separated`
+    (the spacing + disjointness logic) this round; only the numeric digit-set literals stay open.
+    ============================================================================================ -/
+
+/-- (R18-1) **`box`/`emb` step range bound — CLOSED R18.** An element of `box Q U V` is
+    `emb Q (u,v) = u + Q·v` with `u ∈ [0,maxU]`, `v ∈ [0,maxV]`, `0 ≤ Q`, so it lands in
+    `[0, maxU + Q·maxV]`. Pure `mem_image`/`mem_product` + `mul_le_mul_of_nonneg_left` value bound. -/
+theorem box_elem_range (Q maxU maxV : ℤ) (U V : Finset ℤ) (hQ : 0 ≤ Q)
+    (hU : ∀ u ∈ U, 0 ≤ u ∧ u ≤ maxU) (hV : ∀ v ∈ V, 0 ≤ v ∧ v ≤ maxV) :
+    ∀ z ∈ box Q U V, 0 ≤ z ∧ z ≤ maxU + Q * maxV := by
+  intro z hz
+  simp only [box, mem_image, mem_product] at hz
+  obtain ⟨⟨u, v⟩, ⟨hu, hv⟩, rfl⟩ := hz
+  simp only [emb]
+  obtain ⟨hu0, huM⟩ := hU u hu
+  obtain ⟨hv0, hvM⟩ := hV v hv
+  have hQv : Q * v ≤ Q * maxV := mul_le_mul_of_nonneg_left hvM hQ
+  have hQv0 : 0 ≤ Q * v := mul_nonneg hQ hv0
+  exact ⟨by linarith, by linarith⟩
+
+/-- `maxbk` is nonnegative when the base bound and `Q` are. -/
+theorem maxbk_nonneg (maxU Q : ℤ) (hmaxU : 0 ≤ maxU) (hQ : 0 ≤ Q) (n : ℕ) :
+    0 ≤ maxbk maxU Q n := by
+  induction n with
+  | zero => simpa [maxbk] using hmaxU
+  | succ k ih =>
+    simp only [maxbk]
+    have : 0 ≤ Q * maxbk maxU Q k := mul_nonneg hQ ih
+    linarith
+
+/-- (R18-2) **`tpow` element-range bound by induction — CLOSED R18.** Carries the base hypothesis
+    `hbase` (`Ubase ⊆ [0,maxU]`) parametrically — the numeric `maxU` literal stays documented witness
+    data (`maxUbase`/`Ubase_range`). `induction n`; base = `hbase`; step = `box_elem_range` with the
+    IH range of the tower as the second factor and `0 ≤ Qbase`. -/
+theorem tpow_elem_range (maxU : ℤ) (hQ : 0 ≤ Qbase)
+    (hbase : ∀ u ∈ Ubase, 0 ≤ u ∧ u ≤ maxU) (n : ℕ) :
+    (∀ z ∈ tpow Qbase Ubase n, 0 ≤ z ∧ z ≤ maxbk maxU Qbase n) := by
+  induction n with
+  | zero =>
+    intro z hz
+    simpa [tpow, maxbk] using hbase z hz
+  | succ k ih =>
+    intro z hz
+    rw [tpow] at hz
+    have := box_elem_range Qbase maxU (maxbk maxU Qbase k) Ubase (tpow Qbase Ubase k)
+      hQ hbase ih z hz
+    simpa [maxbk] using this
+
+/- ---------- R18 helper lemmas for `an_separated` (all sorry-free) ---------- -/
+
+/-- The sumset of `bk n` lies in the window `[0, 2·maxbk n]`. -/
+theorem setSum_bk_within (n : ℕ) :
+    WithinDiam (setSum (bk n) (bk n)) 0 (2 * maxbk maxUbase Qbase n) := by
+  have hmaxU := Ubase_range.1
+  have hbase := Ubase_range.2
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  intro z hz
+  simp only [setSum, bk, mem_image₂] at hz
+  obtain ⟨a, ha, b, hb, rfl⟩ := hz
+  have hra := tpow_elem_range maxUbase hQ hbase n a ha
+  have hrb := tpow_elem_range maxUbase hQ hbase n b hb
+  exact ⟨by omega, by omega⟩
+
+/-- The diffset of `bk n` lies in the window `[−maxbk n, maxbk n]` (diam `2·maxbk n`). -/
+theorem setDiff_bk_within (n : ℕ) :
+    WithinDiam (setDiff (bk n) (bk n)) (-(maxbk maxUbase Qbase n)) (2 * maxbk maxUbase Qbase n) := by
+  have hmaxU := Ubase_range.1
+  have hbase := Ubase_range.2
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  intro z hz
+  simp only [setDiff, bk, mem_image₂] at hz
+  obtain ⟨a, ha, b, hb, rfl⟩ := hz
+  have hra := tpow_elem_range maxUbase hQ hbase n a ha
+  have hrb := tpow_elem_range maxUbase hQ hbase n b hb
+  exact ⟨by omega, by omega⟩
+
+/-- The AP shifts are spaced strictly wider than the diameter `2·maxbk n`. -/
+theorem an_shift_spacing (n : ℕ) (i j : ℕ) (hij : i ≠ j) :
+    2 * maxbk maxUbase Qbase n < |an_shift n i - an_shift n j| := by
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  have hmb : 0 ≤ maxbk maxUbase Qbase n := maxbk_nonneg maxUbase Qbase Ubase_range.1 hQ n
+  set s : ℤ := 2 * maxbk maxUbase Qbase n + 1 with hs
+  have hdij : (1 : ℤ) ≤ |(i : ℤ) - (j : ℤ)| := by
+    have : (i : ℤ) ≠ (j : ℤ) := by exact_mod_cast hij
+    rcases lt_or_gt_of_ne this with h | h
+    · rw [abs_of_neg (by omega)]; omega
+    · rw [abs_of_pos (by omega)]; omega
+  have hrw : an_shift n i - an_shift n j = ((i : ℤ) - (j : ℤ)) * s := by
+    show (i : ℤ) * s - (j : ℤ) * s = ((i : ℤ) - (j : ℤ)) * s
+    ring
+  rw [hrw, abs_mul, abs_of_nonneg (by omega : (0:ℤ) ≤ s)]
+  have : s * 1 ≤ |(i:ℤ) - (j:ℤ)| * s := by
+    rw [mul_comm s 1]
+    exact mul_le_mul_of_nonneg_right hdij (by omega : (0:ℤ) ≤ s)
+  omega
+
+/-- Each AP shift is nonnegative (`i : ℕ`). -/
+theorem an_shift_nonneg (n : ℕ) (i : ℕ) : 0 ≤ an_shift n i := by
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  have hmb : 0 ≤ maxbk maxUbase Qbase n := maxbk_nonneg maxUbase Qbase Ubase_range.1 hQ n
+  simp only [an_shift]
+  apply mul_nonneg (by positivity)
+  omega
+
+/-- The interval-band sumset is disjoint from the union of translate sumsets:
+    the interval band sits strictly below `0` (the bottom of the lowest translate window). -/
+theorem interval_union_disjoint_sum (n : ℕ) :
+    Disjoint (setSum (an_interval n) (bk n))
+      ((an_index n).biUnion (fun i => setSum (tr (an_shift n i) (bk n)) (bk n))) := by
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  have hbase := Ubase_range.2
+  rw [Finset.disjoint_biUnion_right]
+  intro i _
+  rw [Finset.disjoint_left]
+  intro z hzI hzU
+  simp only [setSum, an_interval, bk, mem_image₂, mem_Icc] at hzI
+  obtain ⟨x, ⟨_, hxhi⟩, y, hy, rfl⟩ := hzI
+  have hry := tpow_elem_range maxUbase hQ hbase n y hy
+  rw [setSum_tr, mem_image] at hzU
+  obtain ⟨w, hw, hwq⟩ := hzU
+  have hwwd := (setSum_bk_within n) w (by simpa [bk] using hw)
+  have hsh := an_shift_nonneg n i
+  omega
+
+/-- The interval-band diffset is disjoint from the union of translate diffsets:
+    the interval band's diff window lies strictly below `−maxbk n` (the bottom of the lowest
+    translate diff window). -/
+theorem interval_union_disjoint_diff (n : ℕ) :
+    Disjoint (setDiff (an_interval n) (bk n))
+      ((an_index n).biUnion (fun i => setDiff (tr (an_shift n i) (bk n)) (bk n))) := by
+  have hQ : (0:ℤ) ≤ Qbase := le_of_lt Ubase_carryfree.1
+  have hbase := Ubase_range.2
+  rw [Finset.disjoint_biUnion_right]
+  intro i _
+  rw [Finset.disjoint_left]
+  intro z hzI hzU
+  simp only [setDiff, an_interval, bk, mem_image₂, mem_Icc] at hzI
+  obtain ⟨x, ⟨_, hxhi⟩, y, hy, rfl⟩ := hzI
+  have hry := tpow_elem_range maxUbase hQ hbase n y hy
+  rw [setDiff_tr, mem_image] at hzU
+  obtain ⟨w, hw, hwq⟩ := hzU
+  have hwwd := (setDiff_bk_within n) w (by simpa [bk] using hw)
+  have hsh := an_shift_nonneg n i
+  omega
+
+/-- **RESIDUAL CONSTRUCTION OBLIGATION (the harder, uncached half of B1a) — CLOSED R18.** The
+    explicit shifts and interval realise the separation: `bk n ± bk n` sits in a window of diameter
+    `2·maxbk n`, the AP shifts `an_shift n i = i·(2·maxbk n+1)` are spaced wider than that diameter,
+    and the interval band `an_interval n` sits strictly below all translate windows. Assembled from
+    the R18 helpers (all sorry-free): `setSum/setDiff_bk_within` (range from `tpow_elem_range`),
+    `an_shift_spacing` (AP gap), `interval_union_disjoint_sum/diff` (band below). The only remaining
+    `sorry` it depends on is the documented numeric witness data (`Ubase`/`Qbase`/`maxUbase`/
+    `mnData`/`negLoData` and their range/carry-free facts) — the STRUCTURAL content is closed. -/
 theorem an_separated (n : ℕ) :
     ∃ loS diamS loD diamD : ℤ,
       WithinDiam (setSum (bk n) (bk n)) loS diamS ∧
@@ -411,7 +622,12 @@ theorem an_separated (n : ℕ) :
                ((an_index n).biUnion (fun i => setSum (tr (an_shift n i) (bk n)) (bk n))) ∧
       Disjoint (setDiff (an_interval n) (bk n))
                ((an_index n).biUnion (fun i => setDiff (tr (an_shift n i) (bk n)) (bk n))) := by
-  sorry
+  refine ⟨0, 2 * maxbk maxUbase Qbase n, -(maxbk maxUbase Qbase n), 2 * maxbk maxUbase Qbase n,
+    setSum_bk_within n, setDiff_bk_within n, ?_,
+    interval_union_disjoint_sum n, interval_union_disjoint_diff n⟩
+  intro i _ j _ hij
+  have hsp := an_shift_spacing n i j hij
+  exact ⟨hsp, hsp⟩
 
 /-- **SUB-HOLE B1a — REASSEMBLED sorry-free from the general spacing lemmas + the residual
     `an_separated` obligation.** The `mₙ` translate images and the interval piece are pairwise
