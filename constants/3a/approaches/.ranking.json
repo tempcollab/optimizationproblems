@@ -1,0 +1,46 @@
+{
+  "asymmetric-AB-digits": {
+    "elo": 1454.0430238262613,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "asymmetric-AB-digits",
+    "stale": false,
+    "summary": "Use distinct digit sets A_L != A_R for the two factors; first establish which certifiable inequality the GHR single-U lemma supports under asymmetry (risk: collapses to single-U), then an adapted DP counts |A_L+A_R|/|A_L-A_R|."
+  },
+  "digit-set-hole-search": {
+    "elo": 1515.362039086379,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "digit-set-hole-search",
+    "stale": false,
+    "summary": "Sweep drop-1 contiguous digit sets {0,2..M}/base 2M+1 for M=9..13 (+ single-hole variants) to find the best max-digit M (interior optimum near M=11, verified M11/b23 > M10/b21 at d=40,50), then push the winner to large d."
+  },
+  "gapped-large-deviation-ceiling": {
+    "elo": 1484.7671167591582,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "gapped-large-deviation-ceiling",
+    "stale": false,
+    "summary": "Extend Zheng's Cramer/large-deviation rate-function optimization from uniform digits {0..B} to gapped digit sets, deriving a closed-form theta_inf(A) to locate a family whose asymptotic limit provably exceeds the record; round-1 deliverable is the formula (reproduce Zheng 1.173077 + predict gapped ceiling), not a bound."
+  },
+  "push-d-cotuned-T": {
+    "elo": 1545.8278203282016,
+    "expanded": 0,
+    "last_note": null,
+    "last_outcome": null,
+    "last_round": null,
+    "selected": 0,
+    "slug": "push-d-cotuned-T",
+    "stale": false,
+    "summary": "Scale the record family A={0,2..10}/base21 to larger d (d=90,T=172 already gives verified 1.174899 > 1.1740744) with co-tuned T; exact integer sum/diff DP + directed-rounded ln certificate."
+  }
+}
