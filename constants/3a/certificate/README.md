@@ -16,23 +16,29 @@ Construction (G2026 family, depth pushed this round):
 
 ## Reproduce (one command)
 
+Run the certifying DP **ALONE** — CPU contention from parallel runs multiplies its runtime
+5–10×.
+
 ```
 cd constants/3a/certificate
-python3 certify_3a.py            # default d=90, T=172   (~35s)
+python3 certify_3a.py 110 210    # round-2 claim: d=110, T=210   (~78s)
 ```
 
-Optionally pass `d T` on the command line, e.g. `python3 certify_3a.py 90 172`.
+The depth `d` and digit-sum cap `T` are command-line args (default `90 172`, ~35s).
+Fallback if d=110 overruns budget: `python3 certify_3a.py 100 192` (θ ≥ 1.175495, ~55s).
 
-## Claimed result (this round, d=90, T=172)
+## Claimed result (round 2, d=110, T=210)
 
-- `S = |U+U|` : 88-digit integer (printed exactly by the script)
-- `D = |U-U|` : 109-digit integer
-- `max(U)`    : 119-digit integer; `q = 2*max(U)+1`
-- **Certified theta (rigorous lower bound): 1.1748992466319329...** (lower endpoint of an
-  mpmath interval enclosure at `iv.prec=400`).
-- Record to beat [G2026]: **1.1740744**. Margin: **+0.000824847**. BEATS RECORD: **YES**.
+- `S = |U+U|` : 107-digit integer (printed exactly by the script)
+- `D = |U-U|` : 133-digit integer
+- `max(U)`    : 146-digit integer; `q = 2*max(U)+1`
+- **Certified theta (rigorous lower bound): 1.1760055927978140029771014788...** (lower endpoint
+  of an mpmath interval enclosure at `iv.prec=400`).
+- Record to beat [G2026]: **1.1740744**. Margin: **+0.0019311927978139...**. BEATS RECORD: **YES**.
+- Counting runtime here: 78.4 s.
 
-This is a builder's CLAIM until the proof-reviewer re-runs and confirms it.
+This is a builder's CLAIM until the proof-reviewer re-runs and confirms it. (Round-1 d=90/T=172
+gave θ = 1.1748992466319329..., margin +0.000824847 — superseded by the round-2 d=110 run.)
 
 ## How the load-bearing steps are certified (for the reviewer)
 
@@ -58,8 +64,8 @@ This is a builder's CLAIM until the proof-reviewer re-runs and confirms it.
 
 ## Re-establish target (what the reviewer re-runs)
 
-- Command: `python3 certify_3a.py` (default d=90 T=172), runtime ~35s.
-- Check the printed `BEATS RECORD 1.1740744: YES` and that the printed `theta_lower_bound`
-  strictly exceeds 1.1740744.
+- Command: `python3 certify_3a.py 110 210` (run ALONE), runtime ~78s.
+- Check the printed `BEATS RECORD 1.1740744: YES`, the validity-guard line `21 >= 21 : OK`,
+  and that the printed `theta_lower_bound` (= 1.1760055927978140...) strictly exceeds 1.1740744.
 - Independently re-derive: the two DP recurrences (documented inline), the validity guard,
   and that `theta_iv.a <= true theta` (positive-interval division rounds the quotient down).

@@ -13,20 +13,34 @@ family* — no new validity question, only DP runtime.
 The record used `T/d = 150/80 = 1.875`; the per-`d` optimum ratio is slightly higher
 (~1.91–1.95). At `d=90` the optimum is `T=172` (ratio 1.911), beating `T=170` and `T=174`.
 
-## Chosen parameters (this round)
+## Chosen parameters (round 2)
 
-- base `b = 21`, `A = {0,2,...,10}`, `d = 90`, `T = 172`.
-- This is a single ~35s exact-counting run, the safe certifiable increment for round 1.
+- base `b = 21`, `A = {0,2,...,10}`, `d = 110`, `T = 210` (ratio T/d ≈ 1.909, the per-`d`
+  optimum the explorer/outline-reviewer measured around 1.91·d).
+- A single ~78s exact-counting run — the safe certifiable increment for round 2.
+- The d=90 / T=172 result below is the round-1 claim (never reviewer-verified); d=110 / T=210
+  is the stronger round-2 claim that supersedes it on the same artifact.
 
-## Claimed result (UNVERIFIED — reviewer to confirm)
+## Claimed result — round 2 (UNVERIFIED — reviewer to confirm)
 
-- `S = |U+U|` = 88-digit integer; `D = |U-U|` = 109-digit; `max(U)` = 119-digit (all exact).
-- **Certified theta (rigorous lower bound) = 1.1748992466319329...**
+- `S = |U+U|` = 107-digit integer; `D = |U-U|` = 133-digit; `max(U)` = 146-digit (all exact,
+  printed by the script).
+- **Certified theta (rigorous lower bound) = 1.1760055927978140029771014788...**
   (lower endpoint of an mpmath interval enclosure, `iv.prec=400`).
-- Record to beat [G2026]: **1.1740744**. Margin: **+0.000824847**. Strictly beats: **YES**.
+- Record to beat [G2026]: **1.1740744**. Margin: **+0.0019311927978139...**. Strictly beats: **YES**.
+- Reproduce command (run ALONE — CPU contention multiplies runtime 5–10×):
+  `cd constants/3a/certificate && python3 certify_3a.py 110 210`  (counting runtime 78.4 s here).
+- Brute-force re-validated both DPs vs full enumeration at (d,T) ∈ {(2,8),(3,8),(2,20),(3,10),(4,10)} —
+  S, D, max(U) all match exactly before this run.
 
-Certificate: `constants/3a/certificate/certify_3a.py` (+ `README.md`). Reproduce:
-`cd constants/3a/certificate && python3 certify_3a.py`.
+### Prior round-1 claim (superseded, d=90 / T=172)
+
+- `S` = 88-digit, `D` = 109-digit, `max(U)` = 119-digit; theta = 1.1748992466319329...;
+  margin +0.000824847. Never reviewer-verified.
+
+## Fallback (if d=110 overruns budget)
+
+- `python3 certify_3a.py 100 192` → theta ≥ 1.175495346956…, margin +0.00142, ~55 s.
 
 ## Why it is valid (GHR-lemma hypotheses + validity guard)
 
@@ -38,8 +52,9 @@ Certificate: `constants/3a/certificate/certify_3a.py` (+ `README.md`). Reproduce
 
 ## Status
 
-CLAIMED (built, reproducible, beats record by +0.000825). Awaiting proof-reviewer verification.
-The record at `d=80` reproduces exactly (1.1740744477) with the same harness, anchoring the family.
+CLAIMED (round 2: built, reproducible, d=110/T=210, beats record by +0.0019312). Awaiting
+proof-reviewer verification. The record at `d=80` reproduces exactly (1.1740744477) with the
+same harness, anchoring the family.
 
 ## How to push further next round
 
