@@ -90,16 +90,17 @@ half's proven base case lives just outside the clean region. The atlas (`Generic
 covers the even stratum uniformly; the odd-feasible extension is a bonus, and the odd-INfeasible
 stratum is the true Near region. -/
 
-/-- Sign of `pᵢ` relative to the bottleneck `1/2`: `1` if `pᵢ > 1/2`, else `0`. (For the corner
-atlas `pᵢ ∈ {1/10,9/10}`; in general the builder reads off the box's side.) -/
-noncomputable def coordSign (p : P6) (i : Fin 6) : ℕ := if (1 : ℝ) / 2 < p i then 1 else 0
+/-- Sign of `pᵢ` relative to the bottleneck `1/2`: `1` if `pᵢ > 1/2`, else `0`. Re-exported from
+`GenericThirteenLP.coordSign` so the two files' parity predicates are DEFINITIONALLY EQUAL (the R5
+interface collapse — no transport lemma needed). -/
+noncomputable abbrev coordSign (p : P6) (i : Fin 6) : ℕ := GenericThirteenLP.coordSign p i
 
-/-- **The TRUE generic region (RE-PLANNED).** The even-parity stratum: the sum of the six coordinate
-signs is even. This is the clean combinatorial condition under which the merge structure gives a
-uniform 13-cover (all 32 even-popcount corner boxes verified 13-feasible, exact-rational). Replaces
-the false `ball-off-1/2` generic region. (Builder may widen to include the 8 odd-feasible boxes; the
-even stratum is the certified-uniform core.) -/
-def EvenParity (p : P6) : Prop := (∑ i, coordSign p i) % 2 = 0
+/-- **The TRUE generic region (RE-PLANNED R4, interface-collapsed R5).** The even-parity stratum:
+the sum of the six coordinate signs is even. R5 makes this DEFEQ to `GenericThirteenLP.Generic`
+(both are `(∑ i, coordSign p i) % 2 = 0` over the same `coordSign`), so the partition-fit hole
+`evenParity_generic` closes by `id` instead of awaiting the sibling to pin an opaque `Generic`.
+All 32 even-popcount corner boxes verified 13-feasible, exact-rational. -/
+abbrev EvenParity (p : P6) : Prop := GenericThirteenLP.Generic p
 
 /-- The near-`1/2` region: the complement of the TRUE generic region (the odd-parity stratum, which
 contains all 24 verified-infeasible corner boxes). This is the correct Near region for the direct
@@ -136,22 +137,23 @@ noncomputable def pStar : P6 := ![9/10, 1/10, 9/10, 9/10, 1/10, 1/10]
 theorem coordSign_evenBox : ∀ i, coordSign evenBox i = ![1, 1, 0, 0, 0, 0] i := by
   intro i
   fin_cases i <;>
-    simp only [coordSign, evenBox, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-      Matrix.cons_val] <;> norm_num
+    simp only [coordSign, GenericThirteenLP.coordSign, evenBox, Matrix.cons_val_zero,
+      Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val] <;> norm_num
 
 /-- `coordSign` reads off the sign-vector of the witness `p*` exactly (popcount 3). CLOSED. -/
 theorem coordSign_pStar : ∀ i, coordSign pStar i = ![1, 0, 1, 1, 0, 0] i := by
   intro i
   fin_cases i <;>
-    simp only [coordSign, pStar, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
-      Matrix.cons_val] <;> norm_num
+    simp only [coordSign, GenericThirteenLP.coordSign, pStar, Matrix.cons_val_zero,
+      Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val] <;> norm_num
 
 /-- **Partition validation (CLOSED).** The sample even-popcount box lies in the generic region — its
 sign-popcount `2` is even. (Certificate: this box, and all 32 even boxes, are 13-feasible.) -/
 theorem evenBox_mem_generic : EvenParity evenBox := by
   have h : (∑ i, coordSign evenBox i) = ∑ i, (![1, 1, 0, 0, 0, 0] : Fin 6 → ℕ) i :=
     Finset.sum_congr rfl (fun i _ => coordSign_evenBox i)
-  rw [EvenParity, h]; decide
+  show (∑ i, coordSign evenBox i) % 2 = 0
+  rw [h]; decide
 
 /-- **Partition validation (CLOSED).** The witness `p*` lies in the `Near` region — its sign-popcount
 `3` is ODD. So the proven `GenericThirteenLP` witness box is in the *odd-feasible extension*, NOT the
@@ -159,7 +161,8 @@ clean even stratum: the even stratum's base case must come from an even box (e.g
 `p*` a bonus. This is the in-Lean check that the witness/partition geometry is the way the certificate
 classified it. -/
 theorem pStar_mem_near : Near pStar := by
-  rw [Near, EvenParity]
+  rw [Near]
+  show ¬ ((∑ i, coordSign pStar i) % 2 = 0)
   have h : (∑ i, coordSign pStar i) = ∑ i, (![1, 0, 1, 1, 0, 0] : Fin 6 → ℕ) i :=
     Finset.sum_congr rfl (fun i _ => coordSign_pStar i)
   rw [h]; decide
@@ -206,28 +209,14 @@ generic `p` (its own holes H_GEN_*). Transporting that `E ∪ V_p`-by-`int(O_p)`
 `generic_branch_cover` hole here, with the re-export `generic_cover_le_13'` recording the imported
 content it rests on. -/
 
-/-- **H_PARITY_FIT (hole, R4 — REFINED).** The even-parity stratum is contained in
-`GenericThirteenLP`'s generic LP region: `EvenParity p → Generic p`. This is the interface fact that
-the re-planned partition matches the region where the 13-cover actually exists.
-
-WHAT IT REQUIRES (the honest open content — this is NOT `id`-closable from this file).
-`GenericThirteenLP.Generic` is currently an OPAQUE placeholder `def Generic : Prop := sorry`, so this
-file cannot derive `Generic p` for any `p`. Closing H_PARITY_FIT requires `GenericThirteenLP` to first
-*instantiate* `Generic` as a predicate implied by `EvenParity` — i.e. to land its atlas hole
-`H_GEN_ATLAS` over the even-parity stratum (proving the 13-cover holds throughout `EvenParity`, not
-only at the single witness box `p*`, which is itself ODD-parity, cf. `pStar_mem_near`). Only THEN does
-this become `fun h => h` (or a short combinatorial implication). Until the sibling pins `Generic`, this
-stays an honest hole; the *partition predicate itself is already validated CLOSED* above
-(`evenBox_mem_generic`, `pStar_mem_near`, the sign-vector lemmas) — what is open is the LP-region/atlas
-side owned by `GenericThirteenLP`, not the predicate's soundness.
-
-(Spec note for the outliner: the proven `GenericThirteenLP` witness `p*` is ODD-parity → it sits in
-`Near`, not the even stratum. The even stratum's base case needs an EVEN-parity witness box;
-`evenBox = (9/10,9/10,1/10,1/10,1/10,1/10)` is a concrete one. The certificate confirms all 32 even
-boxes are 13-feasible, so such a witness exists — but `GenericThirteenLP`'s formalized concrete cover
-is at the odd `p*`, which does not directly seed the even stratum.) -/
-theorem evenParity_generic (p : P6) (hp : EvenParity p) : Generic p := by
-  sorry
+/-- **H_PARITY_FIT (CLOSED R5).** The even-parity stratum equals `GenericThirteenLP`'s generic
+region: `EvenParity p → Generic p`. R5 made `GenericThirteenLP.Generic` CONCRETE (defined as the
+even-parity predicate over the same `coordSign`), and this file's `EvenParity` an `abbrev` for it,
+so the two are DEFINITIONALLY EQUAL and the fit closes by `id` (`hp`). This resolves the R4
+witness/interface mismatch — the partition now matches the sibling's region by definition, not by
+an unproved transport. The even-stratum BASE CASE is `GenericThirteenLP.target_even_covered_by_thirteen`
+at `evenBox` (an even box, popcount 2), replacing the odd `p*` which sat in `Near`. -/
+theorem evenParity_generic (p : P6) (hp : EvenParity p) : Generic p := hp
 
 /-- **H_GENERIC re-export.** The generic-regime 13-cover of `E ∪ V_p` by `int(O_p)`, imported
 verbatim from `GenericThirteenLP`, for the even-parity stratum (via `evenParity_generic`). -/

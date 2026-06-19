@@ -94,9 +94,24 @@ def CoverTarget (p : P6) : Set (Fin 3 → ℝ) := sorry
 /-- The covering piece `int(O_p) ⊆ ℝ³`, `O_p = conv(V_p)`. (Builder instantiates from `A_p`.) -/
 def Piece (p : P6) : Set (Fin 3 → ℝ) := sorry
 
-/-- The "generic regime": parameters bounded away from the bottleneck `p=(1/2,…,1/2)` by a fixed
-rational margin `δ`. (Builder fixes `δ`; abstract here.) -/
-def Generic (p : P6) : Prop := sorry
+/-! ### The generic regime is the EVEN-PARITY stratum (re-anchored R5)
+
+R4 verified (exact-rational, reviewer-reproduced) that the TRUE 13-feasible region is the
+**even-popcount corner stratum**, NOT a ball off `1/2`. So we make `Generic` CONCRETE here —
+`Generic p := EvenParity p` — instead of an opaque `sorry`-def. This resolves the R4
+witness/interface mismatch: `lassak-glue`'s `evenParity_generic : EvenParity p → Generic p`
+collapses to `id` once `Generic` is literally `EvenParity` (the predicate is defined identically
+in both files; the sibling re-exports this one). -/
+
+/-- Sign of `pᵢ` relative to the bottleneck `1/2`: `1` if `pᵢ > 1/2`, else `0`. (Mirrors
+`LassakGlue.coordSign`; kept here so `Generic` is self-contained and concrete.) -/
+noncomputable def coordSign (p : P6) (i : Fin 6) : ℕ := if (1 : ℝ) / 2 < p i then 1 else 0
+
+/-- **The generic regime = the even-parity stratum (CONCRETE, no longer a `sorry`-def).** The sum
+of the six coordinate signs is even. R4 verified all 32 even-popcount corner boxes are 13-feasible.
+This is the clean combinatorial predicate the atlas tiles; it is defeq to `LassakGlue.EvenParity`,
+so the partition interface needs no transport lemma. -/
+def Generic (p : P6) : Prop := (∑ i, coordSign p i) % 2 = 0
 
 /-! ## Concrete witness at the off-center box `p* = (9/10,1/10,9/10,9/10,1/10,1/10)`
 
@@ -465,11 +480,69 @@ theorem target_star_covered_by_thirteen :
   rw [Set.union_subset_iff]
   exact ⟨hE, hM⟩
 
+/-! ## EVEN-PARITY base case — re-anchor the witness to an EVEN box (R5)
+
+The proven witness `p* = (9/10,1/10,9/10,9/10,1/10,1/10)` is ODD-parity (popcount 3) → it lands in
+`Near`, the WRONG stratum for the generic/even branch (the R4 mismatch). For `lassak-glue`'s even
+branch to transport, the even stratum needs its OWN concrete base case. We re-anchor to
+
+    evenBox = (9/10, 9/10, 1/10, 1/10, 1/10, 1/10)   (signs (1,1,0,0,0,0), popcount 2 — EVEN)
+
+which R4's exact-rational screen confirmed is 13-feasible. The concrete 13-cover at `evenBox` (its
+own `int(O_{evenBox})` facets `inOpEven`, 13 rational translates `centerEven`, duty map
+`assignEven` with the merge, and the 12 edge splits) is the EVEN analogue of the `*Star` data —
+a HOLE for the builder to fill by the same exact LP/Farkas search (`generic-thirteen-lp.py`,
+`verify_witness` re-pointed at `evenBox`). Once filled, `target_even_covered_by_thirteen` is the
+even-stratum base case `marked_points_covered_by_thirteen`/`target_star_covered_by_thirteen` was
+for the odd box, and the even branch has a concrete anchor inside the clean stratum.
+
+HOLE H_GEN_EVEN_WITNESS: supply `inOpEven`, `centerEven`, `assignEven`, the edge splits, and prove
+`target_even_covered_by_thirteen` sorry-free (exact-rational, the same `norm_num`/`linarith`
+pattern as the `*Star` proofs). The certificate must first produce the exact rational 13-cover at
+`evenBox` (currently only `p*` is computed). -/
+
+/-- The even-parity base box `evenBox = (9/10,9/10,1/10,1/10,1/10,1/10)` (signs (1,1,0,0,0,0)). -/
+noncomputable def evenBox : P6 := ![9/10, 9/10, 1/10, 1/10, 1/10, 1/10]
+
+/-- `evenBox` lies in the generic (even-parity) region. CLOSED — popcount 2 is even. -/
+theorem evenBox_generic : Generic evenBox := by
+  have h : ∀ i, coordSign evenBox i = ![1, 1, 0, 0, 0, 0] i := by
+    intro i
+    fin_cases i <;>
+      simp only [coordSign, evenBox, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+        Matrix.cons_val] <;> norm_num
+  have hsum : (∑ i, coordSign evenBox i) = ∑ i, (![1, 1, 0, 0, 0, 0] : Fin 6 → ℕ) i :=
+    Finset.sum_congr rfl (fun i _ => h i)
+  rw [Generic, hsum]; decide
+
+/-- The 14 marked points at `evenBox` (8 cube vertices + the 6 contact points `V_{evenBox}`).
+Vertices are box-independent; the contact points are read off `A_{evenBox}` by the builder. The
+contact rows below are the HOLE part (placeholder coordinates `sorry`). -/
+noncomputable def markedEven : Fin 14 → (Fin 3 → ℝ)
+  | 0 => ![0, 0, 0] | 1 => ![0, 0, 1] | 2 => ![0, 1, 0] | 3 => ![0, 1, 1]
+  | 4 => ![1, 0, 0] | 5 => ![1, 0, 1] | 6 => ![1, 1, 0] | 7 => ![1, 1, 1]
+  | 8 => sorry | 9 => sorry | 10 => sorry | 11 => sorry | 12 => sorry | 13 => sorry
+
+/-- **H_GEN_EVEN_WITNESS (HOLE).** The full target `E ∪ V_{evenBox}` (cube 1-skeleton + 14 marked
+points) is covered by **13** translates of `int(O_{evenBox})`. The EVEN-stratum base case that
+`lassak-glue`'s generic branch transports. Builder fills the concrete rational cover (the even
+analogue of `target_star_covered_by_thirteen`); the existence is confirmed by R4's exact screen. -/
+theorem target_even_covered_by_thirteen :
+    IsCoveredBy 13 (Set.range markedEven) (Piece evenBox) := by
+  sorry
+
 /-! ## The 13-piece local bound (the load-bearing claim)
 
 For every generic `p`, the target `E ∪ V_p` is covered by 13 translates of `int(O_p)`. This is the
 union over the atlas of per-box feasible LP solutions; the per-box step is the rational Farkas
-membership, the atlas step is the finite box decomposition. -/
+membership, the atlas step is the finite box decomposition.
+
+H_GEN_ATLAS (the hard step) — UNIFORM PARAMETERIZED cover, not 32 separate LPs. Prymak's
+intersection polytope `Q_P = ⋂_{v∈P} O_v` (Lemma 2.4 / Cor 2.5) lets ONE LP over a box-intersection
+polytope certify a whole `p`-box. The opening: a SINGLE parameterized translate assignment with
+`p`-dependent rational centers, valid across all 32 even boxes by the sign of a few linear forms
+(case analysis on the 3 axis-parities), collapsing 32 box-LPs to one cert. The even-box witness
+above is the popcount-2 representative; the uniform argument lifts it across the stratum. -/
 
 /-- **H_GEN (load-bearing).** Every generic-regime covering subproblem needs at most 13 translates.
 Status after R3: the per-box MARKED-POINT core is CLOSED concretely at the witness box `p*`
