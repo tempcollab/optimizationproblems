@@ -17,6 +17,11 @@ case, but your output is candidate plans, not a result and not a ranking.
 3. **Sample the population.** `sample_approaches(constant_id=<id>, k=5)`; Read each
    returned `path`. Use `last_outcome`/`reviewer_note` to see what's live and what stalled,
    so you build the field from real standing, not memory.
+4. **Mine the literature digests.** Skim `constants/<id>/literature/` — the papers the
+   explorer (this round and earlier) digested: how the record was reached, techniques from
+   neighbouring constants, where the slack is. This is raw material for *new* angles, not a
+   prompt to repeat old ones — let a borrowable technique or an untried opening suggest a
+   line nobody has run yet.
 
 ## Design the field — several angles, not one
 
