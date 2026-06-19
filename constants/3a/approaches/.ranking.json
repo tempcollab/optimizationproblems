@@ -1,6 +1,6 @@
 {
   "asymmetric-AB-digits": {
-    "elo": 1403.5660912641079,
+    "elo": 1381.7311350109012,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
@@ -11,58 +11,58 @@
     "summary": "Use distinct digit sets A_L != A_R for the two factors; first establish which certifiable inequality the GHR single-U lemma supports under asymmetry (risk: collapses to single-U), then an adapted DP counts |A_L+A_R|/|A_L-A_R|."
   },
   "digit-set-hole-search": {
-    "elo": 1451.5103616690774,
+    "elo": 1421.287692195992,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 3,
+    "selected": 5,
     "slug": "digit-set-hole-search",
     "stale": false,
     "summary": "Sweep drop-1 contiguous digit sets {0,2..M}/base 2M+1 for M=9..13 (+ single-hole variants) to find the best max-digit M (interior optimum near M=11, verified M11/b23 > M10/b21 at d=40,50), then push the winner to large d."
   },
   "dp-speedup-prune": {
-    "elo": 1485.742571686698,
+    "elo": 1478.598924239268,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 2,
+    "selected": 4,
     "slug": "dp-speedup-prune",
     "stale": false,
     "summary": "Prune unreachable bitset states in count_sum and fold the symmetric (l,r) diff-DP onto l<=r to roughly halve state space, enabling d>=130 within budget; validated by exact agreement with the unpruned DP at d<=90. Enabling lever toward the ~1.1778 family asymptote, not a bound by itself."
   },
   "gapped-large-deviation-ceiling": {
-    "elo": 1485.0343678201964,
+    "elo": 1490.0098829225183,
     "expanded": 0,
     "last_note": null,
     "last_outcome": null,
     "last_round": null,
-    "selected": 3,
+    "selected": 5,
     "slug": "gapped-large-deviation-ceiling",
     "stale": false,
     "summary": "Extend Zheng's Cramer/large-deviation rate-function optimization from uniform digits {0..B} to gapped digit sets, deriving a closed-form theta_inf(A) to locate a family whose asymptotic limit provably exceeds the record; round-1 deliverable is the formula (reproduce Zheng 1.173077 + predict gapped ceiling), not a bound."
   },
   "lean-formalize-interval-ln": {
-    "elo": 1534.306218043615,
+    "elo": 1559.776442268811,
     "expanded": 1,
     "last_note": "R3 reviewer: sorry-free Lean proof at constants/3a/lean/C3a.lean compiles clean (lake build, 8559 jobs); #print axioms = [propext, Classical.choice, Quot.sound] only on all 4 theorems (no sorryAx). Literals S,D,q match certify_3a.py 110 210 exactly; integer reduction S^40\u00b7q^7 \u2264 D^40 (slack 7.08e5) is sound and proves 1.175 > 1.1740744. Does NOT raise held (1.175 < held by design). APPROVED gold-standard hardening.",
     "last_outcome": "verified-milestone",
     "last_round": 3,
-    "selected": 0,
+    "selected": 2,
     "slug": "lean-formalize-interval-ln",
-    "stale": true,
+    "stale": false,
     "summary": "Lean re-derivation of the interval-ln endpoint: take the verified exact bignums S, D, q=2m+1 as Lean literals and prove 1 + Real.log(D/S)/Real.log(q) >= held via Mathlib directed rational log bounds. Lean-fit gold-standard hardening of the continuum half (does not raise theta; DP counting stays numerical)."
   },
   "push-d-cotuned-T": {
-    "elo": 1639.8403895163053,
+    "elo": 1668.5959233625097,
     "expanded": 2,
     "last_note": "R3 reviewer reproduced certify_3a.py 150 285 ALONE (305.7s): held raised to verified \u03b8 \u2265 1.1774273905511207 (+0.0014218 over prior held, +0.0033530 over record). Interval-ln endpoint independently re-derived at 2000/4000-bit (\u03b8_iv.a \u2264 true \u03b8); DP byte-identical to R2-verified version, re-spot-checked vs brute force. APPROVED.",
     "last_outcome": "verified-milestone",
     "last_round": 3,
-    "selected": 3,
+    "selected": 5,
     "slug": "push-d-cotuned-T",
-    "stale": true,
+    "stale": false,
     "summary": "Scale the record family A={0,2..10}/base21 to larger d (d=90,T=172 already gives verified 1.174899 > 1.1740744) with co-tuned T; exact integer sum/diff DP + directed-rounded ln certificate."
   }
 }
