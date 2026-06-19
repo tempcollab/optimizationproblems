@@ -1,0 +1,10 @@
+name = "C3a"
+defaultTargets = ["C3a"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.31.0"
+
+[[lean_lib]]
+name = "C3a"

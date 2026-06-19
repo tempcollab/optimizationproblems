@@ -1,0 +1,46 @@
+========================================================================
+EXACT-INTEGER-COUNTING CERTIFICATE for a lower bound on C_3a
+========================================================================
+Engine: GHR2007 lemma  C_3a >= 1 + ln(|U-U|/|U+U|) / ln(2*max(U)+1)
+
+Construction:
+  base b            = 21
+  digit set A       = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10]  (digit 1 dropped; max digit = 10 )
+  depth d           = 150
+  digit-sum cap T   = 285
+  U = { sum_i a_i*b^i : a_i in A, sum_i a_i <= T }
+
+GHR-lemma hypotheses on U:
+  U finite?            YES (a_i range over the finite set A, d digits)
+  U non-negative?      YES (0 = min(A), base^i > 0  =>  every element >= 0)
+  0 in U?              YES (all a_i = 0 gives 0, and sum 0 <= T)
+
+VALIDITY GUARD (carry-free / no base-20 trap):
+  require base >= 2*max(A)+1  =>  21 >= 21 : OK
+  (At base = 2*max(A) the per-digit sums reach the base and carries
+   collide, so the DP would overcount |U+U|/|U-U|.  Guard rules it out;
+   with the guard the base-b digit reps of U+U and U-U are carry-free,
+   so the two DPs below count DISTINCT INTEGERS.)
+
+Exact integer counts (Python big integers, no floats):
+  S = |U+U| = 96715660603655210677044248671576568169933388872640999924585847417058380682057529057446557253407092490201108126186878472198314208589407958624751026
+           (146 decimal digits)
+  D = |U-U| = 14968720620716469085409870807074010257668705850195327125332240688765777278138244356743703360338938081567187420709698914087494230754870989329078805794205593599096736184608272375951851
+           (182 decimal digits)
+  max(U)    = 1076128700947105424942699934266586023493514707038075421436495161973608063696140089446079885194048292342593826418518013364071745848629263994263097136420000108763110087156640538343205161736882407131185
+           (199 decimal digits)
+  q = 2*max(U)+1 = 2152257401894210849885399868533172046987029414076150842872990323947216127392280178892159770388096584685187652837036026728143491697258527988526194272840000217526220174313281076686410323473764814262371
+  D > S ? True  (required for theta > 1)
+  counting runtime: 300.6 s
+
+Certified theta (RIGOROUS LOWER bound via mpmath interval arithmetic):
+  method: theta_iv = 1 + iv.log(D/S) / iv.log(q) at iv.prec=400 bits;
+          report the lower endpoint theta_iv.a  (<= true theta).
+  theta_lower_bound = 1.1774273905511207333163761169274037138206151764288896650900195130100984810470904300490855548874785997598537109375104148
+
+------------------------------------------------------------------------
+  record to beat [G2026] : 1.1740744
+  certified theta (lower): 1.1774273905511207333163761169274037138206151764288896650900195130100984810470904300490855548874785997598537109375104148
+  margin over record     : 0.0033529905511206597979403333013576821071294586554521650900195130100984810470904300490855548874785997598537109375104147545
+  BEATS RECORD 1.1740744: YES
+------------------------------------------------------------------------

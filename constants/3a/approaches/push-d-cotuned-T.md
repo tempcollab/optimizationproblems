@@ -13,6 +13,28 @@ family* — no new validity question, only DP runtime.
 The record used `T/d = 150/80 = 1.875`; the per-`d` optimum ratio is slightly higher
 (~1.91–1.95). At `d=90` the optimum is `T=172` (ratio 1.911), beating `T=170` and `T=174`.
 
+## Chosen parameters (round 3) — d=150, co-tuned T=285
+
+- base `b = 21`, `A = {0,2,...,10}`, `d = 150`, **`T = 285`** (ratio T/d = 1.900).
+- T co-tuned by a SOLO sweep at fixed d=150 (each T a separate run, no parallelism per role
+  memory): T ∈ {283,284,285,286,287,289}. The verified interval-ln lower endpoint peaks at
+  **T=285**:
+
+  | T   | θ_lower (interval lower endpoint) | runtime |
+  |-----|-----------------------------------|---------|
+  | 283 | 1.1774227596708463…               | 296.0 s |
+  | 284 | 1.1774273365700025…               | 295.0 s |
+  | **285** | **1.1774273905511207…**       | 300.6 s |
+  | 286 | 1.1774229226713084…               | 299.1 s |
+  | 287 | 1.1774139340143219…               | 302.6 s |
+  | 289 | 1.1773823988412312…               | 314.1 s |
+
+  T=285 is the local optimum (strictly above both neighbours 284 and 286, and well above the
+  explorer's predicted 287). The explorer's T≈1.91·d guess slightly overshoots at d=150; the
+  per-d optimum ratio is ~1.90 here.
+- Full certificate output captured at
+  `constants/3a/certificate/cert_output_d150_T285.txt`.
+
 ## Chosen parameters (round 2)
 
 - base `b = 21`, `A = {0,2,...,10}`, `d = 110`, `T = 210` (ratio T/d ≈ 1.909, the per-`d`
@@ -20,6 +42,22 @@ The record used `T/d = 150/80 = 1.875`; the per-`d` optimum ratio is slightly hi
 - A single ~78s exact-counting run — the safe certifiable increment for round 2.
 - The d=90 / T=172 result below is the round-1 claim (never reviewer-verified); d=110 / T=210
   is the stronger round-2 claim that supersedes it on the same artifact.
+
+## Claimed result — round 3 (UNVERIFIED — reviewer to confirm)
+
+- d=150, T=285, same exact valid family (A={0,2,…,10}, base 21, drop-1).
+- `S = |U+U|` = 146-digit integer; `D = |U-U|` = 182-digit; `max(U)` = 199-digit (all exact,
+  printed by the script; full literals in `certificate/cert_output_d150_T285.txt`).
+- **Certified theta (rigorous lower bound) = 1.1774273905511207333163761169274037138206…**
+  (lower endpoint of an mpmath interval enclosure, `iv.prec=400`).
+- Bar to beat this round = our verified **held θ ≥ 1.1760055927978140** (d=110/T=210). Margin
+  over held: **+0.0014217977533067** (strictly beats: **YES**). Margin over table record
+  1.1740744 [G2026]: **+0.0033529906**.
+- `D > S ? True` and validity guard `21 >= 21 : OK` both printed by the run.
+- Reproduce command (run ALONE — CPU contention multiplies runtime 5–10×):
+  `cd constants/3a/certificate && python3 certify_3a.py 150 285`  (counting runtime ~300 s here).
+- Same brute-force-validated DP recurrences as the verified d=110 build; only (d,T) changed, so
+  no new validity question (the carry-free guard 21≥2·max(A)+1 is d-independent).
 
 ## Claimed result — round 2 (UNVERIFIED — reviewer to confirm)
 
@@ -52,16 +90,21 @@ The record used `T/d = 150/80 = 1.875`; the per-`d` optimum ratio is slightly hi
 
 ## Status
 
-CLAIMED (round 2: built, reproducible, d=110/T=210, beats record by +0.0019312). Awaiting
-proof-reviewer verification. The record at `d=80` reproduces exactly (1.1740744477) with the
-same harness, anchoring the family.
+CLAIMED (round 3: built, reproducible, d=150/T=285, θ ≥ 1.1774273905511207, beats verified held
+1.1760055927978140 by +0.0014218 and table record 1.1740744 by +0.0033530). Awaiting
+proof-reviewer verification. T co-tuned by a solo sweep (T=285 is the local optimum at d=150).
+Supersedes the round-2 d=110/T=210 claim on the same artifact. The record at `d=80` reproduces
+exactly (1.1740744477) with the same harness, anchoring the family.
 
 ## How to push further next round
 
-- **Larger `d` (the dominant lever).** `theta(d)` keeps rising. The bottleneck is DP runtime
-  (state count grows with `T`, hence with `d`). Estimate: `d=90` ≈ 35s; `d=100–110` is a few
-  minutes — feasible if the round budget allows a longer single run. Co-tune `T ≈ 1.91·d`
-  (sweep a small window ±2 around it). Expected: `d≈110–120` → ~1.1755–1.176.
+- **Larger `d` (the dominant lever), but runtime now bites.** `theta(d)` keeps rising toward the
+  family asymptote θ_∞ ≈ 1.1786 (explorer's geometric-decay fit). At d=150 the counting run is
+  ~300 s (sum-DP dominates, growing ~quadratically), so a single d=170 run (~7–8 min) and even
+  d=200 (~12–15 min) still fit one tool call WITHOUT a speedup — these are the next d-pushes.
+  Co-tune `T ≈ 1.90·d` (the per-d optimum ratio measured ~1.90 at d=150, slightly below the
+  earlier 1.91 estimate); sweep ±2 around it as SEPARATE solo runs. Expected: d=170 → ~1.17775,
+  d=200 → ~1.17810. Beyond d≳200 the `dp-speedup-prune` lever becomes necessary.
 - **Compose with digit-set-hole-search (the companion build).** If `M=11`/base-23 (or another
   hole pattern) is confirmed to keep its small edge at large `d`, swap the family and re-run the
   same certificate — the M-knob shifts the whole family's asymptote, compounding the d-push.
