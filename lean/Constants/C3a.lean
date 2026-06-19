@@ -233,4 +233,77 @@ theorem c3a_ge_2353_2000' (c3a : ℝ) (hbridge : GHR_lower c3a) :
   norm_num at h ⊢
   linarith
 
+/-! ## R23 strict improvement: the `d = 140` beat cell, wedge `c = 1177/1000`.
+
+PRIMARY R23 beat cell: `A = {0,2,3,4,5,6,7,8,9,10}`, base `B = 21`, `d = 140`, `T = 263`,
+density `≈ 1.8786`. The carry-free digit-DP integers are copied verbatim from the
+reviewer-re-derivable numerical certificate
+(`constants/3a/certificate/beat_d140/beat_d140.json`, cell `d140_T263`). The cell's GHR
+value is `value_new ≈ 1.1771186319558`, strictly above the wedge `c = 1177/1000 = 1.1770`.
+
+The same monotone log-free chain as above gives:
+`θ(U) ≥ 1177/1000  ⟺  |U−U|^Q ≥ |U+U|^Q · (2·max(U)+1)^P` with `c − 1 = 177/1000`,
+so `P = 177`, `Q = 1000`. These exponents keep `decide` fast (`Q = 1000 < R22's Q = 2000`,
+which decided in ~11.5 s; R21's Q=10000 was the kernel blowup).
+
+Provenance/trust split: exactly as the R19/R22 cells — the three big integers are TRUSTED
+literals whose provenance is re-derived OUT of Lean by `verify_beat.py` / `digit_dp.py`
+(the carry-free DP is an OOM hazard inside the kernel and is NOT recomputed here). All the
+load-bearing arithmetic (the power inequalities) lives inside the formalization as
+axiom-free `decide`. -/
+
+/-- `|U+U|` for the R23 d=140 beat cell (136 digits). Source: `beat_d140.json::d140_T263`. -/
+def Nplus140 : ℕ := 3134964631416341157347896012445129330079198543361818679368635051359477236592630515798738179031612773450441996030492777384237480067723465
+
+/-- `|U−U|` for the R23 d=140 beat cell (169 digits). Source: `beat_d140.json::d140_T263`. -/
+def Nminus140 : ℕ := 1917727135747547616406943410757865790239803964286902231799394250495503136907988109943303932312311534932990938532498712842732855094364549316265313097912793764577082149931
+
+/-- `max(U)` for the R23 d=140 beat cell (185 digits). Source: `beat_d140.json::d140_T263`. -/
+def maxU140 : ℕ := 64516569533889487833393828142223439783902685347643508039836208175980509513559182519359802979879314759887696623968078168342677322038173530072092398992745205512807139631466507280163106443
+
+/-- The R23 wedge numerator `P₃` (with `c = 1 + P₃/Q₃ = 1177/1000`, so `P₃ = 177`). -/
+def P3 : ℕ := 177
+
+/-- The R23 wedge denominator `Q₃` (`Q₃ = 1000`). -/
+def Q3 : ℕ := 1000
+
+/-- **Load-bearing kernel check (the d=140 beat cell passes the wedge).**
+`|U+U|^Q₃ · (2·max(U)+1)^P₃ ≤ |U−U|^Q₃`, i.e. `θ(U) ≥ 1 + P₃/Q₃ = 1177/1000`. Log-free
+`Nat` powers via GMP, no `native_decide`. Axiom-free (`[propext]`). -/
+theorem newGE140 : Nplus140 ^ Q3 * (2 * maxU140 + 1) ^ P3 ≤ Nminus140 ^ Q3 := by decide
+
+/-- **Strictness witness (the d=80 record cell FAILS the R23 wedge).**
+`|U−U|^Q₃ < |U+U|^Q₃ · (2·max(U)+1)^P₃` for the d=80 record cell, i.e. the record value
+`1.1740744476935212 < 1177/1000`. With `newGE140` this certifies a STRICT improvement over
+the record (`value_record < 1177/1000 ≤ value_new`). Axiom-free `decide`. -/
+theorem recLT140 : recNminus ^ Q3 < recNplus ^ Q3 * (2 * recMaxU + 1) ^ P3 := by decide
+
+/-- `0 < |U+U|` for the R23 d=140 beat cell. -/
+theorem Nplus140_pos : 0 < Nplus140 := by decide
+
+/-- `|U+U| ≤ |U−U|` for the R23 d=140 beat cell. -/
+theorem Nplus140_le_Nminus140 : Nplus140 ≤ Nminus140 := by decide
+
+/-- `0 < Q₃`. -/
+theorem Q3_pos : 0 < Q3 := by decide
+
+/-- **R23 main theorem.** Under the named GHR bridge, the d=140 beat cell's verified counts
+give `C_3a ≥ 1 + 177/1000 = 1177/1000`. Strictly beats the previously held & Lean-checked
+`2353/2000 = 1.1765` (R22), `5877/5000 = 1.1754` (R18/R19), and the true record
+`1.1740744476935212` (via `recLT140`). The discrete content (`newGE140`) is axiom-free; the
+only trust boundary is `GHR_lower`. -/
+theorem c3a_ge_1177_1000 (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 1 + (177 : ℝ) / 1000 := by
+  have h := hbridge Nplus140 Nminus140 maxU140 P3 Q3 Nplus140_pos Q3_pos
+    Nplus140_le_Nminus140 newGE140
+  simpa [P3, Q3] using h
+
+/-- **R23 numeric form.** Under the bridge, `C_3a ≥ 1177/1000` (`= 1.1770`), strictly above
+the held `2353/2000 = 1.1765`. -/
+theorem c3a_ge_1177_1000' (c3a : ℝ) (hbridge : GHR_lower c3a) :
+    c3a ≥ 1177 / 1000 := by
+  have h := c3a_ge_1177_1000 c3a hbridge
+  norm_num at h ⊢
+  linarith
+
 end C3a
