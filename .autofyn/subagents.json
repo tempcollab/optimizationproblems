@@ -2,27 +2,27 @@
   {
     "name": "math-explorer",
     "type": "explore",
-    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, and reports where the gap is most exploitable and which bound is the softer target. Call at the start of each round before any attempt. Does NOT attempt the improvement.",
+    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, samples the existing sketches to see what was tried and what the last round's outcome was, and reports the lay of the land — where the gap is exploitable, which bound is softer, what worked and what dead-ended, and relevant papers or analogous angles. Call at the start of each round before any attempt. Pure scouting: does NOT attempt the improvement and does NOT rank.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "WebSearch", "WebFetch", "mcp__approach-ranker__sample_approaches"],
     "prompt_file": ".autofyn/subagents/math-explorer.md",
     "needs_run_state": true
   },
   {
     "name": "proof-outliner",
     "type": "plan",
-    "description": "Surveys multiple attack angles for improving one bound: how the current record was achieved, analogous results and techniques worth borrowing, and the skeleton of each candidate line (analytic argument, explicit construction, or computational certificate). Produces a ranked set of approaches with the hard steps identified, not a single finished plan. Call after the explorer, once per problem per round.",
+    "description": "Assembles the round's candidate field. Samples the existing population (up to ~5), and surveys several attack lines (analytic argument, explicit construction, computational certificate) — revising stuck sketches and/or opening new ones — with the hard step named in each. Hands the field, each slugged, to the outline-reviewer, which ranks and narrows it. Does NOT rank and does NOT register; it proposes the candidates, not a single finished plan. Call after the explorer, once per problem per round.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "WebSearch", "WebFetch", "mcp__approach-ranker__sample_approaches"],
     "prompt_file": ".autofyn/subagents/proof-outliner.md",
     "needs_run_state": true
   },
   {
     "name": "outline-reviewer",
     "type": "review",
-    "description": "Reviews a proof outline BEFORE the details are filled in. Checks for the wrong technique, unjustified leaps, missing cases, and circular reasoning. Call on every outline the proof-outliner marks 'Spec review: required'.",
+    "description": "The selection layer. Reviews the outliner's field of candidate angles BEFORE any compute is spent: kills the unworkable (wrong technique, can't beat the record, circular), registers approved new angles into the population, and ranks the whole field head-to-head — this is where ranking has signal, with several live approaches side by side pre-build. Narrows the field to the few (1-3) worth building in parallel. Holds both the gate (register_approach) and the ranking (update_ranking).",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__approach-ranker__register_approach", "mcp__approach-ranker__update_ranking"],
     "prompt_file": ".autofyn/subagents/outline-reviewer.md",
     "needs_run_state": true
   },
@@ -38,9 +38,9 @@
   {
     "name": "proof-reviewer",
     "type": "review",
-    "description": "Adversarially verifies a candidate bound improvement: re-runs the certificate, independently re-derives the key inequality, confirms the claimed bound actually beats the value in the canonical table, and assigns a verification level (the repo's * minimally-verified convention). Decides whether the improvement holds and returns an APPROVE / CHANGES REQUESTED / RETHINK verdict. Call after every proof-builder attempt.",
+    "description": "Adversarially verifies the candidate bound improvements from the parallel builders: re-runs each certificate, independently re-derives the key inequality, confirms the claimed bound actually beats the value in the canonical table, and assigns a verification level (the repo's * minimally-verified convention). Calls record_outcome once per built approach (marking each stale so next round's outline-reviewer folds the result into the ranking). Does NOT rank. Returns an APPROVE / CHANGES REQUESTED / RETHINK verdict per approach. Call after the proof-builders.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "WebSearch", "WebFetch", "mcp__approach-ranker__record_outcome"],
     "prompt_file": ".autofyn/subagents/proof-reviewer.md",
     "needs_run_state": true
   }
