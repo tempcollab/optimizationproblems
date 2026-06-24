@@ -151,8 +151,8 @@ Then $\log h$ is right-differentiable at $q_Q=0$, and
   =\frac1D\Bigl[\int_{\ACT}\log|Q(\chi(s))|\,ds-\log h\cdot s_Q\Bigr].
 \end{equation}
 Here $\ACT$ is the active arc of the branch to which $Q$ is adjoined, and
-$s_Q=\deg Q$ precisely when that branch attains the denominator maximum for the
-right-hand perturbation; otherwise $s_Q=0$.
+$s_Q=\deg Q$ if that branch attains $D$ at $q_Q=0$ (at a tie, the perturbed side attains
+it for $q_Q>0$) and $s_Q=0$ otherwise.
 \end{theorem}
 
 Two points make the proof transparent.  First, the derivative of $\Phi$ is a
@@ -211,13 +211,11 @@ coordinates and Doche's coordinates describe the same surface, since
 \]
 Consequently the first-variation criterion applies directly to the record.
 
-\begin{proposition}[Diagnostic for the record; proved in Section~\ref{sec:record}]
-\label{prop:record-intro}
 On the candidate-free anchors for the \citet{Gri26} construction, the regime-correct
 one-sided marginal fires on all six denominator blocks and keeps natural control blocks
-inert.  The values in this diagnostic are fine-grid evaluations; they are not used as
-certified interval enclosures.
-\end{proposition}
+inert; the values in this diagnostic are fine-grid evaluations, not certified interval
+enclosures.  This is stated and proved as Proposition~\ref{thm:record-fires} in
+Section~\ref{sec:record}.
 
 \emph{A generator for the near-cancellation factors.}  The diagnostic becomes
 constructive once a firing seed and a bridge ansatz are supplied.  Let $Q^*$ be one of
@@ -545,7 +543,7 @@ re-optimized to
 \begin{align*}
   q&=(14.011500,13.443930,2.643590,2.299880,0.252420),\\
   q_E&=0.575080,\qquad q_F=0.568800,\qquad
-  q_G=0.891590,\qquad q_H=0.066860.
+  q_G=0.891590,\qquad q_H=0.066860,
 \end{align*}
 giving $D=\max(\dA,\dB)=\max(61.65784,72.00176)=72.00176$, the perturbing branch
 attaining $D$. Admissibility holds by Lemma~\ref{lem:doche}: $j_9$ is irreducible
@@ -676,7 +674,7 @@ than freely optimized.
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{@{}lrrcrrc@{}}
 \toprule
-block & degree & $\dB$ & regime & $m_Q$ (cand.-free) & $\rQ-\log h$ at opt. & fires?\\
+block & degree & $\dB$ (cand.-free) & regime & $m_Q$ (cand.-free) & $\rQ-\log h$ at opt. & fires?\\
 \midrule
 $Q_1$ & $28$ & $112$ & base & $-1.015$ & $+0.0069$ & yes\\
 $Q_2$ & $28$ & $112$ & base & $-0.980$ & $+0.0075$ & yes\\
@@ -761,15 +759,10 @@ $\deg g_a=2a+16$. Hence, since $\deg Q^*=28$,
 \]
 with the top $28-(2a+16)$ coefficients of $Q^*$ preserved; taking the primitive part does
 not change the degree. So $a=5$ is the largest exponent at which the displacement is
-guaranteed to fix the degree and leading coefficient \emph{for either sign}. The
-behaviour at the boundary $a=6$ is sign-dependent, and this is where the two record
-factors differ: for the subtraction $\pp(Q_1-g_6)$ with tail $P_8$ the degree-$28$
-leading terms cancel ($1-1=0$) and the degree drops to $27$, so $a=5$ is sharply maximal;
-for the addition $\pp(Q_2+g_6)$ with tail $P_7$ they add ($1+1=2$) and $a=6$ still has
-degree $28$ but leading coefficient $2$, so there $a=5$ is the maximal
-\emph{monic}-preserving exponent (degree alone is not maximal at $a=5$ on this side).
-In both cases $a=5$ is the maximal exponent preserving the \emph{monic leading
-coefficient} of $Q^*$, and $R_0,R_2$ are the instances $a=5$.
+guaranteed to fix the degree and leading coefficient \emph{for either sign}, and it is
+the maximal exponent preserving the \emph{monic leading coefficient} of $Q^*$ on both
+sides; the boundary $a=6$ behaves differently for the two signs, as the proof records.
+The record factors $R_0,R_2$ are the instances $a=5$.
 \end{proposition}
 
 \begin{proof}
@@ -854,7 +847,8 @@ $m_{Q^*}(\Omega_F)+\mathrm{RHS}<0$ then $m_R(\Omega_F)<0$: the sibling $R$ fires
 
 \begin{proof}
 Start from \eqref{eq:transfer-id} and bound the integrand in absolute value on each
-piece. The content term contributes $-\log c$ uniformly, hence $\log c\,|\Omega_F|$ in
+piece. The content term contributes $-\log c$ uniformly; since $c\in\Z_{>0}$ we have
+$\log c\ge0$, so $|{-}\log c|=\log c$ and this term contributes $\log c\,|\Omega_F|$ in
 absolute value. On $\Omega_0$, with $u=g/Q^*$ and $|u|\le\theta<1$,
 \[
   \bigl|\log|1\mp u|\bigr|\le-\log(1-|u|)\le\frac{|u|}{1-|u|}\le\frac{\theta}{1-\theta},
@@ -876,8 +870,10 @@ enclosures give $\log|R|\in[\ell_R,L_R]$ and $\log|Q^*|\in[\ell_{Q^*},L_{Q^*}]$,
 integrand's supremum is at most $\max\{L_R-\ell_{Q^*},\,L_{Q^*}-\ell_R\}$, a valid
 per-cell bound whether or not $\log|R|>\log|Q^*|$ there. As a cell shrinks around a
 shared well of $R,Q^*$ this bound grows only like $\log(1/\text{width})$, so its
-width-weighted contribution vanishes, and refining the well cells drives the certified
-integral to the true marginal shift ($\approx10^{-2}$, cf.\ \eqref{eq:transfer-id}).
+width-weighted contribution vanishes; hence the sum of the per-cell caps is a sound
+upper bound on $\int_W|\log|R/Q^*||\,ds$ that converges to it as the well cells are
+refined, driving the certified integral to the true marginal shift ($\approx10^{-2}$,
+cf.\ \eqref{eq:transfer-id}).
 Summing the three pieces gives \eqref{eq:transfer-bound}; the firing conclusion combines
 it with the base-regime entry test \eqref{eq:mdef} (Theorem~\ref{thm:unified}, $s_Q=0$)
 applied to $R$ on $\Omega_F$.
