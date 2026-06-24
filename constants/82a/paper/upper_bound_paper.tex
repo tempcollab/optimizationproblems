@@ -65,27 +65,30 @@ perturbed polynomials, first variations, nonsmooth optimization, interval arithm
 Doche's perturbed-polynomial construction gives explicit upper bounds for the
 essential minimum $\essmin$ of the Zhang--Zagier height by optimizing real exponent
 vectors in a finite dictionary of integer blocks.  Until now, the choice of new blocks
-has largely been guided by search.  We recast Doche's value as the nonsmooth ratio
+has largely been guided by search.  We develop a nonsmooth first-variation calculus for
+this selection problem.  Doche's value is recast as the ratio
 \[
   \log h(q)=\frac{\int_0^1\max(A_q(s),B_q(s))\,ds}{\max(D_A(q),D_B(q))}
 \]
-and prove a branch-sensitive one-sided first-variation formula for adjoining a new
-block $Q$.  The formula is valid in all denominator regimes, including the tie
-$D_A=D_B$, where the outer maximum produces a genuine kink.  It yields an explicit
-``firing'' criterion: a base-side block lowers the bound to first order exactly when
-its active-arc integral is negative, while a perturbing-side block in the
-$D_B$-attaining regime fires exactly when its normalized active potential is below the
-current value $\log h$.
+and the directional derivative of its numerator is first proved in an abstract
+two-branch model.  Positive-measure branch ties contribute the term
+$\int_{\{A=B\}}\max(v_A,v_B)$; the familiar active-arc formula is the non-degenerate
+special case.  Combining this with the directional derivative of
+$\max(D_A,D_B)$ gives a branch-sensitive one-sided formula in every denominator regime,
+including the tie $D_A=D_B$, where the outer maximum produces a genuine kink.  The
+result is a regime-correct ``firing'' criterion for deciding whether an absent block
+lowers the bound to first order.
 
 We then use this criterion in three ways.  First, it predicts two additional
 Flammang-table blocks and gives a certified bound
 \[
   \essmin\le 0.2538893183,
 \]
-strictly improving Doche's longstanding $0.25443677$ bound, though not the present
-record.  Second, applied diagnostically to the current record of \citet{Gri26}, the
-criterion fires on each of its six denominator blocks while natural controls remain
-inert.  Third, under an explicit bridge ansatz, it becomes constructive: from the
+strictly improving Doche's longstanding $0.25443677$ bound.  This is not the present
+record, and the point is methodological rather than record-setting.  Second, applied
+diagnostically to the current record of \citet{Gri26}, the criterion fires on each of
+its six denominator blocks while natural controls remain inert.  Third, under an
+explicit bridge ansatz, it becomes constructive: from the
 firing seeds $Q_1,Q_2$ it produces the near-cancellation siblings
 $R_0=\pp(Q_1-P_1^5P_2^5P_4P_8)$ and
 $R_2=\pp(Q_2+P_1^5P_2^5P_4P_7)$, with firing transferred by a certified
@@ -136,16 +139,28 @@ where $\chi(s)=z(1-z)$ and $z=e^{2\pi i s}$, and the value is the nonsmooth rati
   \Phi(q)=\int_0^1\max(A(s),B(s))\,ds,
   \qquad D(q)=\max(\dA(q),\dB(q)).
 \end{equation}
-Both maxima matter.  The numerator has moving switching points, while the denominator
-has a possible one-sided kink when $\dA=\dB$.  The first contribution is to compute the
-right derivative of \eqref{eq:ratio} when a block is adjoined at exponent zero.
+Both maxima matter.  The numerator has moving switching points and may have genuine
+tie sets; the denominator has a possible one-sided kink when $\dA=\dB$.  The first
+contribution is to compute the directional derivative of the two-max ratio, and then to
+specialize it to the one-block entry tests used in block selection.
 
-\begin{theorem}[First variation; proved in Sections~\ref{sec:firstvar}--\ref{sec:unified}]
+\begin{theorem}[Directional first variation; proved in Sections~\ref{sec:firstvar}--\ref{sec:unified}]
 \label{thm:main}
-Let $Q\in\Z[X]$ be adjoined to one branch of an admissible Doche family with exponent
-$q_Q\ge0$.  Assume $\log|Q(\chi(\cdot))|\in L^1[0,1]$ and that the two branches do not
-coincide on a set of positive measure, the hypotheses \emph{(L)} and \emph{(N)} below.
-Then $\log h$ is right-differentiable at $q_Q=0$, and
+Let $A_t=A+t v_A$, $B_t=B+t v_B$ be an integrable one-sided perturbation of the two
+branches.  Then
+\[
+  \Phi'(0;v)=
+  \int_{\{A>B\}}v_A\,ds+\int_{\{B>A\}}v_B\,ds
+  +\int_{\{A=B\}}\max(v_A,v_B)\,ds .
+\]
+If $D(t)=\max(D_A(t),D_B(t))$ has one-sided slope $D'(0;v)$ and $D(0)>0$, then
+\[
+  (\Phi/D)'(0;v)=\frac{1}{D(0)}
+  \bigl[\Phi'(0;v)-\log h\cdot D'(0;v)\bigr].
+\]
+In particular, if a block $Q\in\Z[X]$ is adjoined to one branch of an admissible Doche
+family with exponent $q_Q\ge0$, $\log h$ is right-differentiable at $q_Q=0$, and in the
+non-degenerate case $\{A=B\}$ is null,
 \begin{equation}\label{eq:main}
   \dplus\!\log h/\partial q_Q\big|_0
   =\frac1D\Bigl[\int_{\ACT}\log|Q(\chi(s))|\,ds-\log h\cdot s_Q\Bigr].
@@ -156,11 +171,12 @@ it for $q_Q>0$) and $s_Q=0$ otherwise.
 \end{theorem}
 
 Two points make the proof transparent.  First, the derivative of $\Phi$ is a
-dominated-convergence form of the Danskin envelope principle: the moving-boundary term
-vanishes because the two branches agree on the switching set.  Second, the term
-$-\log h\cdot s_Q$ is contributed solely by the denominator.  This separation is
-important at a tie $\dA=\dB$, where the right derivative and left derivative differ by
-$\log h\cdot\deg Q/D$.
+dominated-convergence form of the Danskin envelope principle.  When the switching set
+has positive measure it is retained explicitly through $\max(v_A,v_B)$; when it is
+null, the moving-boundary term vanishes because the two branches agree at the switching
+points.  Second, the term $-\log h\cdot s_Q$ is contributed solely by the denominator.
+This separation is important at a tie $\dA=\dB$, where the right derivative and left
+derivative differ by $\log h\cdot\deg Q/D$.
 
 Theorem~\ref{thm:main} turns block selection into a reduced-cost computation.
 Throughout the applications the perturbing branch is the $D$-attaining branch.  If a
@@ -173,9 +189,11 @@ exactly when
 \begin{equation}\label{eq:intro-pert-test}
   r_Q:=\frac1{\deg Q}\int_{\{B>A\}}\log|Q(\chi(s))|\,ds<\log h.
 \end{equation}
-At an interior optimum this is the complementary-slackness condition
-$r_Q=\log h$ for active perturbing blocks, matching the linear-programming duality
-framework of \citet{BMQS} restricted to Doche's family.
+At an interior optimum inside a fixed finite dictionary this has the expected
+reduced-cost reading: active perturbing blocks in the $D_B$-attaining regime sit at
+$r_Q=\log h$, and absent blocks must have nonnegative one-sided marginal.  We use only
+this first-order interpretation here, not a full KKT or subgradient optimality theorem
+for the enlarged infinite block-search problem.
 
 \begin{corollary}[Selection criterion; proved in Section~\ref{sec:criterion}]
 \label{cor:criterion}
@@ -206,7 +224,7 @@ certified denominator-first computation using six denominator blocks, including 
 near-cancellation factors $R_0,R_2$ of a degree-$140$ denominator.  The denominator-first
 coordinates and Doche's coordinates describe the same surface, since
 \[
-  \frac{\log M(Q)+\int_0^1(A-B)^+\,ds}{\deg Q}
+  \frac{\log M_z(Q(z(1-z)))+\int_0^1(A-B)^+\,ds}{\deg Q}
   =\frac{\int_0^1\max(A,B)\,ds}{\deg Q}.
 \]
 Consequently the first-variation criterion applies directly to the record.
@@ -248,12 +266,13 @@ orientation, but it is not a non-existence theorem.
 
 The rest of the paper is organized as follows.  Section~\ref{sec:functional} fixes the
 Doche functional and admissibility conventions.  Sections~\ref{sec:firstvar} and
-\ref{sec:unified} prove the first-variation formula, and Section~\ref{sec:criterion}
-derives the selection criterion.  Section~\ref{sec:bound} gives the certified
-improvement over Doche.  Sections~\ref{sec:record} and \ref{sec:generator} diagnose and
-then generate the near-cancellation blocks in the current record.  Section~\ref{sec:verify}
-collects the certification protocol, and Appendix~\ref{app:data} lists the polynomial
-data needed to reproduce the computations.
+\ref{sec:unified} prove the abstract envelope derivative and the directional ratio
+formula, and Section~\ref{sec:criterion} derives the regime-correct selection
+criterion.  Section~\ref{sec:bound} gives the certified improvement over Doche.
+Sections~\ref{sec:record} and \ref{sec:generator} diagnose and then generate the
+near-cancellation blocks in the current record.  Section~\ref{sec:verify} collects the
+certification protocol, and Appendix~\ref{app:data} lists the polynomial data needed to
+reproduce the computations.
 
 %==============================================================================
 \section{The Doche functional}\label{sec:functional}
@@ -315,6 +334,31 @@ condition follows from unique factorization.  Base-side blocks need not satisfy 
 endpoint condition; for example $P_1=X$ is a base block.
 \end{definition}
 
+\begin{proposition}[Admissibility check in the present notation]\label{prop:admissibility}
+For the Doche families used in Sections~\ref{sec:bound}--\ref{sec:generator}, the
+conditions listed in Definition~\ref{def:admissible} are sufficient for Doche's
+perturbed-polynomial construction.  The endpoint condition is imposed on the active
+perturbing product $W$ appearing in the perturbed denominator factor; factors adjoined
+only to the base branch enter the numerator branch and are not subject to this endpoint
+restriction.  Thus the base-side blocks $j_3,j_9$ used in Theorem~\ref{thm:upper} do not
+have to satisfy $P(0)=P(1)=1$.
+\end{proposition}
+
+\begin{proof}
+This is the translation of \citet[Lemmas 2--5]{Doc01a} into the two-branch notation
+\eqref{eq:AB}--\eqref{eq:Dformula}.  The hypotheses involving the perturbing factor
+concern the product $W$ multiplying the distinguished perturbing block in Doche's
+perturbed denominator.  In our notation, $W$ is exactly the product of positive-exponent
+$B$-side blocks.  Doche's hypotheses for this product are squarefreeness, coprimality
+from the base and from the distinguished factor, nonzero degree, and the endpoint
+normalization $W(0)=W(1)=1$.  The factors $j_3,j_9$ used in
+Theorem~\ref{thm:upper} are adjoined to the $A$-branch, not to $W$; they play the same
+role as Doche's original base factors, including $P_1=X$.  Thus the endpoint
+normalization is not a condition on base-side factors.  The finite checks recorded in
+Table~\ref{tab:verify} verify these algebraic conditions for each active family used
+below.
+\end{proof}
+
 \begin{lemma}[Doche's upper-bound lemma, \citealp{Doc01a,Doc01b}]\label{lem:doche}
 For every admissible Doche family and every nonnegative real exponent vector in that
 family, the value $\log h$ in \eqref{eq:ratio} is a limit point of the
@@ -332,6 +376,42 @@ lower the bound.
 %==============================================================================
 \section{First variations of the numerator}\label{sec:firstvar}
 %==============================================================================
+
+We first isolate the analytic fact from Doche's notation.  Let $(X,\mu)$ be a finite
+measure space, let $A,B:X\to\R$ be measurable, finite a.e., with
+$\max(A,B)\in L^1(\mu)$, and let $v_A,v_B\in L^1(\mu)$.  Define
+\[
+  \Phi(t)=\int_X\max(A+t v_A,\,B+t v_B)\,d\mu,\qquad t\ge0.
+\]
+
+\begin{theorem}[Envelope derivative with tie sets]\label{thm:abstract-envelope}
+The right derivative $\Phi'(0+)$ exists and is
+\begin{equation}\label{eq:abstract-envelope}
+  \Phi'(0+)=
+  \int_{\{A>B\}}v_A\,d\mu+\int_{\{B>A\}}v_B\,d\mu
+  +\int_{\{A=B\}}\max(v_A,v_B)\,d\mu .
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For $t>0$ set
+\[
+  \psi_t=\frac{\max(A+t v_A,B+t v_B)-\max(A,B)}{t}.
+\]
+The map $(x,y)\mapsto\max(x,y)$ is $1$-Lipschitz for the $\ell^1$ norm, hence
+$|\psi_t|\le |v_A|+|v_B|\in L^1(\mu)$.  Pointwise, if $A>B$ then the first branch
+remains dominant for all sufficiently small $t$ and $\psi_t\to v_A$; if $B>A$ then
+$\psi_t\to v_B$; and if $A=B$ then
+\[
+  \psi_t=\max(v_A,v_B)
+\]
+for every $t>0$.  Dominated convergence gives \eqref{eq:abstract-envelope}.
+\end{proof}
+
+Thus no non-degeneracy of the switching set is needed for the derivative itself.  The
+hypothesis that the switching set has measure zero is used only when one wants the
+simpler active-arc formula with no tie contribution.  We now specialize to Doche's
+branches and record the hypotheses used in all one-block applications below.
 
 Fix an admissible family with branches $A_0,B$ as in \eqref{eq:AB}, and adjoin a
 block $Q\in\Z[X]$ to the \emph{base} branch with exponent $q_Q\ge0$, so
@@ -361,10 +441,12 @@ the non-degeneracy of the two branches.
   occur. For \emph{real} exponents this is not a formal consequence of unique
   factorization---it is the statement that the functions $\log|P_i(\chi(\cdot))|$,
   $\log|Q_k(\chi(\cdot))|$ admit no real linear relation on a sub-arc with the given
-  coefficients---so we take (N) as a hypothesis, verified for each family used here by
-  auditing that the kink set $K=\{A_0=B\}$ is a finite point set: its sign-change count
-  is stable across grid refinements, the numerical fingerprint of $A_0-B\not\equiv0$
-  (certificate \texttt{firstvar\_02}).
+  coefficients---so we take (N) as a hypothesis when using the simplified active-arc
+  formula.  The full envelope formula \eqref{eq:abstract-envelope} remains valid without
+  (N).  Numerically, the kink set $K=\{A_0=B\}$ appears finite in all families used here
+  (stable sign-change counts across grid refinements, recorded in
+  \texttt{firstvar\_02}), but this numerical audit is only a check on the displayed
+  simplification, not an independent algebraic proof of nonidentity.
 \end{itemize}
 We assume throughout this section that the perturbing branch attains the denominator,
 $\dA(0)<\dB$, so that $D\equiv\dB$ is locally constant in $q_Q$; this regime
@@ -381,55 +463,74 @@ and consequently $\dplus\!\log h/\partial q_Q|_0=\Phi^{+\prime}(0)/D$.
 \end{theorem}
 
 \begin{proof}
-For $q_Q\ne0$ set $\psi_q(s)=\bigl[\max(A_0+q_Q\log|Q|,B)-\max(A_0,B)\bigr]/q_Q$,
-evaluated at $\chi(s)$.
-
-\emph{Domination.} The map $t\mapsto\max(a+t,b)$ is $1$-Lipschitz, so
-$|\psi_q(s)|\le|\log|Q(\chi(s))||$ pointwise; by (L) this dominator lies in $L^1[0,1]$
-uniformly in $q_Q$. The bound holds everywhere off the finite structural singular set
-$S$ (the contour roots of $A_0,B$, where one branch is $-\infty$); $S$ is null and so
-does not affect dominated convergence, and no directional assumption about which branch
-is attained there is needed.
-
-\emph{Pointwise limit off the switching set.} Let $K=\{s:A_0(s)=B(s)\}$. For
-$s\notin K\cup S$ and $s$ not a contour root of $Q$: if $A_0(s)>B(s)$ then the first
-branch dominates for small $|q_Q|$ and $\psi_q(s)\to\log|Q(\chi(s))|$; if $A_0(s)<B(s)$
-then $\psi_q(s)\to0$. Thus $\psi_q\to\log|Q(\chi)|\cdot\mathbf 1_{\{A_0>B\}}$ a.e.\ off
-$K\cup S$.
-
-\emph{The switching set is null.} On each of the finitely many closed sub-arcs into
-which the structural singular set $S$ divides $[0,1]$, $A_0-B$ is real-analytic and, by
-(N), not identically zero; a real-analytic function $\not\equiv0$ has isolated
-zeros, and isolated zeros in a compact arc are finite in number, so $K$ is finite,
-hence null. Thus $K\cup S$ is null.
-
-\emph{Conclusion.} Dominated convergence gives
-$\Phi^{+\prime}(0)=\lim_{q_Q\to0^+}\int_0^1\psi_q\,ds
-=\int_{\{A_0>B\}}\log|Q(\chi)|\,ds$. The moving boundary of the active set needs no
-separate treatment: the a.e.\ limit is already the fixed-set integrand
-$\mathbf 1_{\{A_0>B\}}$, and dominated convergence equates the limit of the quotient
-with its integral. The first-order boundary term vanishes \emph{because $A_0=B$ on
-$K$}---the envelope cancellation---not because the boundary is fixed. Finally
-$\log h=\Phi/D$ with $D$ constant near $0$ since the perturbing branch attains $D$.
+Apply Theorem~\ref{thm:abstract-envelope} on $X=[0,1]$ with Lebesgue measure,
+$v_A(s)=\log|Q(\chi(s))|$ and $v_B(s)=0$.  Hypothesis (L) gives the required
+integrability.  The theorem gives
+\[
+  \Phi^{+\prime}(0)=
+  \int_{\{A_0>B\}}\log|Q(\chi)|\,ds
+  +\int_{\{A_0=B\}}\max(\log|Q(\chi)|,0)\,ds .
+\]
+By (N), the switching set is null: on each of the finitely many analytic sub-arcs cut
+out by the structural singular set, $A_0-B$ is real-analytic and not identically zero,
+so its zeros are isolated, hence finite on compact sub-arcs.  The tie integral therefore
+vanishes and \eqref{eq:Phiprime} follows.  Finally $\log h=\Phi/D$ with $D$ constant
+near $0$ since the perturbing branch attains $D$.
 \end{proof}
 
 The vanishing of the moving-boundary term is the substance of the lemma: a direct
 ``differentiate under the integral and add a boundary term'' argument must establish
 it by hand, whereas here the $1$-Lipschitz bound and the finiteness of $K$ let
-dominated convergence absorb it, with the $-\infty$ singularities of $A_0$ controlled
-by the same dominator. This is the Danskin/envelope phenomenon for a parametric
-integral of a maximum \citep{Ber99}, made rigorous for the present non-smooth
-integrand.
+dominated convergence absorb it.  If $K$ had positive measure, the correct term would
+be the explicit tie-set contribution in \eqref{eq:abstract-envelope}.  This is the
+Danskin/envelope phenomenon for a parametric integral of a maximum \citep{Ber99}, made
+rigorous for the present non-smooth integrand.
 
 %==============================================================================
 \section{The unified one-sided marginal}\label{sec:unified}
 %==============================================================================
 
-Theorem~\ref{thm:firstvar} assumed the perturbing branch attains $D$. We
-remove that regime assumption. Since $\dA,\dB$ are affine (the $D$-formula \eqref{eq:Dformula}),
-$D=\max(\dA,\dB)$ is convex and piecewise-linear, with one-sided derivatives
-everywhere. At $q_Q=0$ exactly one of three regimes holds:
-$\dA(0)>\dB$ (I), $\dA(0)<\dB$ (II), or $\dA(0)=\dB$ (III, a tie).
+Theorem~\ref{thm:firstvar} assumed the perturbing branch attains $D$. We now remove
+that regime assumption.  The natural statement is directional.  Suppose the numerator
+branches are perturbed by $A_t=A+t v_A$, $B_t=B+t v_B$, and the denominator arguments
+by affine slopes
+\[
+  D_A(t)=D_A+t\delta_A,\qquad D_B(t)=D_B+t\delta_B .
+\]
+Let $\Phi=\int\max(A,B)\,d\mu$, let $D=\max(D_A,D_B)>0$, let $\log h=\Phi/D$, and let
+$I_D=\{\sigma\in\{A,B\}:D_\sigma=D\}$ be the active denominator set.
+
+\begin{theorem}[Directional derivative of the ratio]\label{thm:ratio-directional}
+Under the hypotheses of Theorem~\ref{thm:abstract-envelope}, the one-sided derivative
+of
+\[
+  H(t)=\frac{\int\max(A_t,B_t)\,d\mu}{\max(D_A(t),D_B(t))}
+\]
+exists and is
+\begin{equation}\label{eq:ratio-directional}
+  H'(0+)=\frac1D\left[
+    \Phi'(0+)-\log h\cdot D'(0+)
+  \right],
+  \qquad
+  D'(0+)=\max_{\sigma\in I_D}\delta_\sigma .
+\end{equation}
+Equivalently, at a denominator tie,
+$\partial D=\operatorname{conv}\{\nabla D_A,\nabla D_B\}$ and the operative feasible
+one-sided derivative is the support function
+$D'(0+)=\max(\delta_A,\delta_B)$.
+\end{theorem}
+
+\begin{proof}
+The numerator derivative is Theorem~\ref{thm:abstract-envelope}.  The denominator is
+the maximum of two affine functions, so its right derivative is the largest slope among
+the affine functions active at $t=0$ \citep[Thm.~23.4]{Roc70}.  Since $D>0$, the
+ordinary one-sided quotient rule gives \eqref{eq:ratio-directional}.
+\end{proof}
+
+For a single block adjoined at exponent $q_Q=0$, the affine slopes are particularly
+simple: only the side to which $Q$ is adjoined has denominator slope $\deg Q$.  Since
+$\dA,\dB$ are affine (the $D$-formula \eqref{eq:Dformula}), at $q_Q=0$ exactly one of
+three regimes holds: $\dA(0)>\dB$ (I), $\dA(0)<\dB$ (II), or $\dA(0)=\dB$ (III, a tie).
 
 \begin{theorem}[Unified one-sided marginal]\label{thm:unified}
 Let $Q$ be adjoined to side $X\in\{A,B\}$ with exponent $q_Q\ge0$, under
@@ -444,12 +545,12 @@ $q_Q=0$ (at a tie, the perturbed side attains it for $q_Q>0$) and $s_Q=0$ otherw
 \end{theorem}
 
 \begin{proof}
-\emph{The inner derivative is regime-independent.} The proof of
-Theorem~\ref{thm:firstvar} uses only the inner $\max(A,B)$: the $1$-Lipschitz
-dominator, the a.e.\ limit, and the finiteness of $K=\{A_0=B\}$. It never references
-$\dA,\dB$ or which attains $D$. Hence
-$\Phi^{+\prime}(0)=\int_{\ACT(X)}\log|Q(\chi)|\,ds$ in every regime (with $\ACT(B)$
-for a $B$-side block, the inner branches swapped).
+\emph{The inner derivative is regime-independent.} Apply
+Theorem~\ref{thm:abstract-envelope} with $v_X(s)=\log|Q(\chi(s))|$ and with the
+direction on the other branch equal to $0$.  By (N), the tie set has measure zero, so
+the tie contribution in \eqref{eq:abstract-envelope} vanishes.  Hence
+$\Phi^{+\prime}(0)=\int_{\ACT(X)}\log|Q(\chi)|\,ds$ in every denominator regime (with
+$\ACT(B)$ for a $B$-side block).
 
 \emph{Quotient rule.} $D(0)\ge56>0$, and both $\Phi,D$ are right-differentiable at
 $0$. For $f,g$ right-differentiable with $g(0)\ne0$,
@@ -484,9 +585,47 @@ $\frac1D\bigl[\int_{\{B>A_0\}}\log|Q|-\log h\cdot\deg Q\bigr]$.
 \section{The selection criterion}\label{sec:criterion}
 %==============================================================================
 
-Throughout this section the perturbing branch attains $D$ (the regime of every family
-we construct). The two firing tests of Corollary~\ref{cor:criterion} are the two
-cases of \eqref{eq:unified} read off by the side $Q$ joins.
+The sign of \eqref{eq:unified} is the block-selection test.  It is important not to
+normalize blindly: the correct reduced cost depends on which denominator argument is
+active at the candidate-free anchor.  Write
+\[
+  m_A(Q):=\int_{\{A_0>B\}}\log|Q(\chi(s))|\,ds,\qquad
+  m_B(Q):=\int_{\{B>A_0\}}\log|Q(\chi(s))|\,ds .
+\]
+For a block of positive degree, \eqref{eq:unified} gives the following table.
+
+\begin{proposition}[Regime-correct firing tests]\label{prop:regime-table}
+Let $Q$ be adjoined to side $X\in\{A,B\}$ at exponent $0$, under \emph{(L)} and
+\emph{(N)}.  Then $Q$ fires, i.e. lowers $\log h$ to first order, exactly under the
+condition displayed below:
+\begin{center}
+\begin{tabular}{@{}ccl@{}}
+\toprule
+side of $Q$ & denominator regime at the anchor & firing condition\\
+\midrule
+$A$ & $\dA>\dB$ & $m_A(Q)/\deg Q<\log h$\\
+$A$ & $\dA<\dB$ & $m_A(Q)<0$\\
+$A$ & $\dA=\dB$ & $m_A(Q)/\deg Q<\log h$\\
+$B$ & $\dA>\dB$ & $m_B(Q)<0$\\
+$B$ & $\dA<\dB$ & $m_B(Q)/\deg Q<\log h$\\
+$B$ & $\dA=\dB$ & $m_B(Q)/\deg Q<\log h$\\
+\bottomrule
+\end{tabular}
+\end{center}
+At a denominator tie, the entered side becomes denominator-active for $q_Q>0$, so the
+right derivative uses the normalized test.
+\end{proposition}
+
+\begin{proof}
+If $Q$ enters the denominator-attaining side, or if the denominator is tied at the
+anchor, then $s_Q=\deg Q$ in \eqref{eq:unified}; the derivative is negative exactly when
+$m_X(Q)-\log h\deg Q<0$.  If $Q$ enters the denominator-losing side in a strict regime,
+then $s_Q=0$ and the derivative is negative exactly when $m_X(Q)<0$.
+\end{proof}
+
+The families constructed in Section~\ref{sec:bound} are in the perturbing-denominator
+regime $\dA<\dB$.  Corollary~\ref{cor:criterion} is the corresponding two-line
+specialization of Proposition~\ref{prop:regime-table}.
 
 \begin{definition}\label{def:rq}
 Let an admissible family have base active set $\{A_0>B\}$ and perturbing active set
@@ -513,12 +652,10 @@ $s_Q=\deg Q$ and $\Phi^{+\prime}(0)=\int_\Omega\log|Q|=(\deg Q)\rQ$, giving
 \begin{equation}\label{eq:marginal}
   \dplus\!\log h/\partial q_Q\big|_0=\frac{\deg Q}{D}\bigl(\rQ-\log h\bigr),
 \end{equation}
-firing iff $\rQ<\log h$. The optimality statements are the Karush--Kuhn--Tucker
-conditions for the minimum over $q_Q\ge0$: an interior active perturbing block has
-vanishing derivative, hence $\rQ=\log h$; one held at $q_Q=0$ has nonnegative
-derivative, hence $\rQ\ge\log h$. In the dual of the \citet[\S6]{BMQS} measure program
-restricted to Doche's family, $\rQ-\log h$ is the reduced cost of the block, so these
-are its complementary-slackness conditions.
+firing iff $\rQ<\log h$.  Thus $\rQ-\log h$ is the reduced cost in this regime.  We do
+not need a full KKT theorem in what follows; the only conclusion used is the local
+one-sided one: a negative reduced cost gives a feasible first-order descent direction
+from the candidate-free anchor.
 \end{proof}
 
 \begin{remark}[The criterion is a first variation, so the anchor matters]\label{rem:anchor}
@@ -546,7 +683,8 @@ re-optimized to
   q_G=0.891590,\qquad q_H=0.066860,
 \end{align*}
 giving $D=\max(\dA,\dB)=\max(61.65784,72.00176)=72.00176$, the perturbing branch
-attaining $D$. Admissibility holds by Lemma~\ref{lem:doche}: $j_9$ is irreducible
+attaining $D$. Admissibility holds by Proposition~\ref{prop:admissibility} and
+Lemma~\ref{lem:doche}: $j_9$ is irreducible
 hence squarefree, distinct from $j_3$, coprime to $j_3$, and the active dictionary
 $\{P_1,P_2,P_4,P_6,P_8,j_3,j_9\}\cup\{Q_1,Q_2,Q_5,Q_6\}$ is pairwise coprime; base
 blocks need not satisfy $P(0)=P(1)=1$. Setting $q_H=0$ recovers the previous family
@@ -633,14 +771,17 @@ functional. This identity is the bridge between the two constructions, so we sta
 
 \begin{proposition}[The record optimizes Doche's functional]\label{prop:samefunctional}
 The \citet{Gri26} bound, reported as
-$\bigl(\log M(Q)+\int_0^1(A-B)^+\,ds\bigr)/\deg Q$ with $A=\sum_iq_i\log|P_i(\chi)|$ and
-$B=\log|Q(\chi)|$, equals Doche's value \eqref{eq:ratio}: by Jensen
-$\int_0^1 B\,ds=\log M(Q)$, so
+$\bigl(\log M_z(Q(z(1-z)))+\int_0^1(A-B)^+\,ds\bigr)/\deg Q$ with
+$A=\sum_iq_i\log|P_i(\chi)|$ and $B=\log|Q(\chi)|$, equals Doche's value
+\eqref{eq:ratio}: by Jensen
+$\int_0^1 B\,ds=\log M_z(Q(z(1-z)))$, so
 \begin{equation}\label{eq:samefunctional}
-  \frac{\log M(Q)+\int_0^1(A-B)^+\,ds}{\deg Q}
+  \frac{\log M_z(Q(z(1-z)))+\int_0^1(A-B)^+\,ds}{\deg Q}
   =\frac{\int_0^1\bigl(B+(A-B)^+\bigr)ds}{\deg Q}
   =\frac{\int_0^1\max(A,B)\,ds}{\deg Q}=\frac{\Phi}{D}=\log h.
 \end{equation}
+Here $M_z$ denotes Mahler measure in the $z$-variable; it is not the ordinary Mahler
+measure of $Q(X)$ on the unit circle $|X|=1$.
 \end{proposition}
 
 The denominator-first search descends this surface where the first-variation calculus
@@ -664,9 +805,9 @@ the base family and from the bounded-coefficient search family have \emph{positi
 active-arc integral and so do not fire---$m_{P_3}=+0.79$, $m_{P_5}=+2.05$,
 $m_{X^2-X+1}=+0.54$ (full anchor). At the record's own \emph{full} optimum, where
 $\dB=140>\dA$ and the perturbing regime holds, the six active blocks cluster at a common
-reduced-cost level $\rQ-\log h\in[+0.0069,+0.0084]$ (spread $0.0015$): not exact KKT
-stationarity, but a diagnostic analogue, the multiplicities being fixed at one rather
-than freely optimized.
+reduced-cost level $\rQ-\log h\in[+0.0069,+0.0084]$ (spread $0.0015$): not exact
+first-order stationarity, but a diagnostic analogue, the multiplicities being fixed at
+one rather than freely optimized.
 \end{proposition}
 
 \begin{table}[ht]
@@ -709,25 +850,26 @@ that block enters at $q_Q=0^+$. The grid computation reproduces the search's
 \emph{candidate} value $\log h=0.2536269$ from \eqref{eq:samefunctional} to $10^{-9}$;
 this is the uncertified LP value, of which $0.2536331090$ is the slightly weaker
 outward-rounded interval enclosure (the certified record of \citet{Gri26}), so the
-diagnostic operates on the true optimum and the small gap is the certification margin.
+diagnostic operates on the optimized denominator-first point and the small gap is the
+certification margin.
 
 The reading of this section is a \emph{diagnostic}: the criterion fires on $R_0,R_2$
-after the fact. The next section strengthens it to a \emph{construction}---given the
-distinguished blocks $Q_1,Q_2$ and the bridge ansatz, $R_0,R_2$ are produced, with the
-firing transferred to them by a certified inequality, rather than read off a grid.
+after the fact. The next section makes the corresponding construction explicit: given
+the distinguished blocks $Q_1,Q_2$ and the bridge ansatz, $R_0,R_2$ are produced, with
+firing transferred by a certified inequality rather than read off a grid.
 
 %==============================================================================
 \section{Generating near-cancellation siblings}\label{sec:generator}
 %==============================================================================
 
-The diagnostic of Section~\ref{sec:record} fires on $R_0,R_2$ after the fact.
-This section explains how the same variational idea becomes constructive once a seed and a bridge ansatz are specified: given a firing perturbing block $Q^*$ and an
-admissible \emph{bridge} polynomial $g$, the primitive part $R=\pp(Q^*\mp g)$ is an
-explicit degree-preserving coprime firing sibling of $Q^*$, and $R_0,R_2$ are its
-instances. The construction is generative in the precise sense that its input is
-$Q^*$ and the bridge ansatz---not $R_0,R_2$---and its output is the family they belong
-to. What stays heuristic is named in the scope remark: the \emph{choice} of seed and
-bridge, not the fact that the recipe yields firing siblings.
+This section turns the diagnostic of Section~\ref{sec:record} into a conditional
+construction.  For the certified bridges considered below, starting from a firing
+perturbing block $Q^*$ and a bridge polynomial $g$, the primitive part
+$R=\pp(Q^*\mp g)$ is an explicit degree-preserving coprime firing sibling of $Q^*$, and
+$R_0,R_2$ are its instances. The construction is generative in the precise sense that
+its input is $Q^*$ and the bridge ansatz---not $R_0,R_2$---and its output is the family
+they belong to. What stays heuristic is named in the scope remark: the \emph{choice} of
+seed and bridge, not the certified firing statement for these bridges.
 
 Throughout, fix one \emph{anchor family} $F$: the record denominator with \emph{both}
 the seed block $Q^*$ and the sibling $R$ removed, with active arc
@@ -807,10 +949,11 @@ $\rb{R_a}$ is strictly decreasing (firing strength strictly increasing),
 maximised at $a=5$ (Proposition~\ref{prop:restricted-opt}); the strict ordering is
 \emph{certified} by the four signed difference enclosures $D_a<0$ of
 \texttt{firstvar\_09}. The $a=6$ entry is parenthesised: its margin is the
-\emph{unconstrained} optimum but $\deg R_6=27$ breaks degree preservation and the
-shared-normalizer identity \eqref{eq:transfer-id}, so it lies outside the comparison
-(the margin values for $a\le5$ are reproducible float midpoints; only their strict
-ordering is the certified claim). Degree data verified by \texttt{firstvar\_08} with
+\emph{unconstrained} optimum, but $\deg R_6=27$, so it lies outside the imposed monic
+degree-$28$ bridge family and outside the equal-degree comparison used in
+Proposition~\ref{prop:restricted-opt} (the margin values for $a\le5$ are reproducible
+float midpoints; only their strict ordering is the certified claim). Degree data
+verified by \texttt{firstvar\_08} with
 exact integer arithmetic.}
 \label{tab:degfloor}
 \end{table}
@@ -837,7 +980,7 @@ $\deg g<\deg Q^*$, and $R=\pp(Q^*\mp g)$ contour-root-free
 \begin{equation}\label{eq:transfer-bound}
   \bigl|m_R-m_{Q^*}\bigr|
   \;\le\;\log c\,|\Omega_F|
-  +\frac{\theta}{1-\theta}\,|\Omega_0|
+  +\int_{\Omega_0}\frac{|g/Q^*|}{1-|g/Q^*|}\,ds
   +\int_{W}\bigl|\log|R/Q^*|\bigr|\,ds\;=:\;\mathrm{RHS},
 \end{equation}
 and the well integral $\int_{W}|\log|R/Q^*||\,ds$ is finite because $\mu_R>0$, $\mu^*>0$,
@@ -851,12 +994,14 @@ piece. The content term contributes $-\log c$ uniformly; since $c\in\Z_{>0}$ we 
 $\log c\ge0$, so $|{-}\log c|=\log c$ and this term contributes $\log c\,|\Omega_F|$ in
 absolute value. On $\Omega_0$, with $u=g/Q^*$ and $|u|\le\theta<1$,
 \[
-  \bigl|\log|1\mp u|\bigr|\le-\log(1-|u|)\le\frac{|u|}{1-|u|}\le\frac{\theta}{1-\theta},
+  \bigl|\log|1\mp u|\bigr|\le-\log(1-|u|)\le\frac{|u|}{1-|u|},
 \]
 the first inequality because $1-|u|\le|1\mp u|\le 1+|u|$ and
 $\log(1+|u|)\le-\log(1-|u|)$, the second the standard bound
-$-\log(1-x)\le x/(1-x)$ for $x\in[0,1)$, the third monotonicity; integrating gives
-$\frac{\theta}{1-\theta}|\Omega_0|$.
+$-\log(1-x)\le x/(1-x)$ for $x\in[0,1)$. Integrating gives the bulk term in
+\eqref{eq:transfer-bound}.  The cruder bound
+$\frac{\theta}{1-\theta}|\Omega_0|$ is available but is not what is used in the
+certificate.
 
 On $W$ the ratio $|u|=|g/Q^*|$ may exceed $1$, so $|\log|R/Q^*||$ has no useful global
 cap and we retain the integral $\int_W|\log|R/Q^*||\,ds$. \emph{Integrability} is
@@ -898,7 +1043,8 @@ $Q^*\in\{Q_1,Q_2\}$ of this construction.
 Admissibility and degree preservation are Proposition~\ref{prop:degfloor} and the
 finite \texttt{sympy} checks (content $1$, coprimality, squarefreeness, $R(0)=R(1)=1$),
 certificate \texttt{firstvar\_08}. The contour-root-freeness $\mu_R>0$, the bulk
-constants $|\Omega_0|,m_{Q^*}(\Omega_F)$, and the cell-wise well integral
+integral $\int_{\Omega_0}|g/Q^*|/(1-|g/Q^*|)\,ds$, the value
+$m_{Q^*}(\Omega_F)$, and the cell-wise well integral
 $\int_W|\log|R/Q^*||\,ds$ entering \eqref{eq:transfer-bound} are each a directed-rounded
 interval enclosure over $\Omega_F$, computed by the same outward-rounded cell machinery
 as the bound of Section~\ref{sec:bound}. The well cells are adaptively bisected on two
@@ -968,7 +1114,7 @@ decreasing in $a$,
   >m_{R_4}(\Omega_F)>m_{R_5}(\Omega_F),
 \]
 so the firing strength $|m_{R_a}(\Omega_F)|$ is maximised at the degree boundary
-$a=5$. Thus $a=5=$ Grinsztajn's $R_0$ is the firing-optimal exponent among the
+$a=5$. Thus $a=5$ (Grinsztajn's $R_0$) is the firing-optimal exponent among the
 degree-preserving admissible siblings.
 \end{proposition}
 
@@ -1043,19 +1189,22 @@ firing-optimal'' is false without the restriction. But here
 $\deg R_6=27$ (Proposition~\ref{prop:degfloor}): $a=6$ breaks degree preservation, the
 shared leading coefficients of $Q_1$, and---decisively for the argument
 above---the equal-degree hypothesis $\deg R_{a+1}=\deg R_a$ that makes the
-shared-normalizer difference identity \eqref{eq:diff-id} hold, so no $D_5$ for the
-$a=5\leftrightarrow a=6$ pair even exists. Proposition~\ref{prop:restricted-opt} is
-therefore the sharpest defensible optimality statement, and it explains why Grinsztajn
-stopped at $a=5$: $a=5$ is the firing-best choice consistent with degree preservation
-and the transfer identity that certifies firing.
+shared-normalizer difference identity \eqref{eq:diff-id} apply.  A normalized comparison
+between $R_5$ and $R_6$ can still be made, but it belongs to a different comparison
+problem.  Proposition~\ref{prop:restricted-opt} therefore proves only the intended
+restricted statement: $a=5$ is optimal within the imposed monic degree-$28$ bridge
+family.  The $a=6$ case may have a stronger marginal, but it is outside that design
+constraint.
 \end{remark}
 
 %==============================================================================
 \section{Computational evidence for saturation}\label{sec:saturation}
 %==============================================================================
 
-We finally use the base criterion of Corollary~\ref{cor:criterion} as a design objective and ask which additional integer blocks appear capable of improving the certified family. The blocks of Section~\ref{sec:bound} enter the base branch,
-so the relevant quantity is the base marginal
+As a final application of the criterion, we use the base test of
+Corollary~\ref{cor:criterion} as a design objective and ask which additional integer
+blocks appear capable of improving the certified family. The blocks of
+Section~\ref{sec:bound} enter the base branch, so the relevant quantity is the base marginal
 $\widetilde r_Q=\int_{\{A_0>B\}}\log|Q(\chi)|\,ds$, with $Q$ firing iff
 $\widetilde r_Q<0$. The results of this section are \emph{computational evidence} over
 an explicit finite search, not a non-existence theorem; we are explicit about the
@@ -1127,9 +1276,11 @@ arithmetic with an explicit accounting of floating-point round-off in the cell s
 ruling out a grid fallback. The \emph{grid diagnostics}---the record marginals of
 Proposition~\ref{thm:record-fires}---are fine-grid evaluations, not interval certificates,
 and are labelled as such in their statement; the programs reproduce their displayed
-values but do not enclose them rigorously. The scientific Python stack
-(\texttt{numpy}, \texttt{scipy}, \texttt{mpmath}, \texttt{sympy}) suffices.
-Table~\ref{tab:verify} keys each statement to its check, marking the grid diagnostics.
+values but do not enclose them rigorously. The verifier is implemented in Python using
+\texttt{numpy}, \texttt{scipy}, \texttt{mpmath}, and \texttt{sympy}; interval endpoints
+and directed roundings are handled explicitly by the certificate routines, not assumed
+from generic floating-point calls. Table~\ref{tab:verify} keys each statement to its
+check, marking the grid diagnostics.
 
 \begin{table}[ht]
 \centering\small
@@ -1139,14 +1290,14 @@ Table~\ref{tab:verify} keys each statement to its check, marking the grid diagno
 statement & program & verdict\\
 \midrule
 Thm.~\ref{thm:firstvar} & \texttt{firstvar\_01\_lemma} & sign $=$ fired/dry on all blocks\\
-\quad hypotheses (L), (N) & \texttt{firstvar\_02\_hypotheses} & $K$ finite, dominator $L^1$\\
+\quad active-arc simplification & \texttt{firstvar\_02\_hypotheses} & $K$ appears finite, dominator $L^1$\\
 Thm.~\ref{thm:unified} & \texttt{firstvar\_03\_unified} & three regimes \texttt{PASS}, tie kink\\
 Cor.~\ref{cor:criterion} & \texttt{firstvar\_04\_perturbing\_marginal} & marginal matches finite difference\\
 Prop.~\ref{thm:record-fires} & \texttt{firstvar\_07\_record\_blocks} & fires on all 6, dry on controls\\
 Thm.~\ref{thm:generator}, Lem.~\ref{lem:transfer} & \texttt{firstvar\_08\_sibling\_generator} & firing-transfer bound clears gap\\
 \quad degree floor (Prop.~\ref{prop:degfloor}) & \texttt{firstvar\_08\_sibling\_generator} & $\deg R_a{=}28\!\iff\!a{\le}5$, admissible\\
 Prop.~\ref{prop:restricted-opt} & \texttt{firstvar\_09\_restricted\_optimality} & $D_a^{\mathrm{hi}}{<}0$, $a{=}1..4$: $\rb{R_a}$ $\downarrow$, opt.\ $a{=}5$\\
-\quad dictionary admissibility & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree\\
+Prop.~\ref{prop:admissibility} & \texttt{firstvar\_06\_dictionary} & pairwise coprime, squarefree, endpoints\\
 \S\ref{sec:saturation} (evidence) & \texttt{firstvar\_05\_numerator\_split} & active-set decomposition\\
 \quad finite firing search & (saturation search) & cheapest new factor $\widetilde r=+0.013$\\
 Thm.~\ref{thm:upper} & \texttt{bound\_07\_block\_j9} & \texttt{CERTIFIED} $\le0.2538893183$\\
