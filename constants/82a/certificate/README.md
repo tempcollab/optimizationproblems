@@ -6,8 +6,9 @@ result; the lower-bound re-certification is recorded below it.
 
 All programs print a `PASS`/`FAIL` verdict or a `CERTIFIED` value, use outward-directed
 interval rounding, and reject a deliberately understated target (no grid fallback).
-Run from this directory; the scientific Python stack (`numpy`, `scipy`, `mpmath`,
-`sympy`) suffices.
+Run from this directory. The verifier is implemented in Python using `numpy`, `scipy`,
+`mpmath`, and `sympy`; interval endpoints and directed roundings are handled explicitly
+by the certificate routines, not assumed from generic floating-point calls.
 
 ---
 
@@ -20,12 +21,12 @@ from a diagnostic to a generative construction. A complementary *root-localisati
 obstruction* (`firstvar_09`/`firstvar_11`) says where any firing block must place a
 root. The certified bound `0.2538893183` improves Doche `0.25443677` but is **not the
 record** — the standing record is Grinsztajn's `0.2536331090` (`[Gri26]`), which this
-work diagnoses and explains rather than beats. Paper: `../upper_bound_paper.tex`.
+work diagnoses and explains rather than beats. Paper: `../paper/upper_bound_paper.tex`.
 
 ### The bound certificate
 
 ```
-cd constants/82a/certificate
+cd certificate
 python3 bound_07_block_j9.py certify \
   14.011500 13.443930 2.643590 2.299880 0.252420 0 0 \
   0.575080 0.568800 0.891590 0.066860 200000 14 1e-10
