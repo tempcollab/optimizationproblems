@@ -3,3 +3,6 @@
 .DS_store
 /tmp
 .claude/
+# Python bytecode
+__pycache__/
+*.pyc
